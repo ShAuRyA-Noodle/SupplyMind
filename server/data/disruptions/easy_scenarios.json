@@ -1,0 +1,34 @@
+{
+  "_metadata": {
+    "calibration_source": "Typhoon Gaemi July 24-25, 2024 — Taiwan",
+    "references": [
+      "Central Weather Administration Taiwan: Category 4 equivalent, 185 km/h sustained winds",
+      "Kaohsiung Port Authority: ~2 day port closure (July 24-25)",
+      "TSMC official statement July 25 2024: 'minimal impact', precautionary tool shutdowns",
+      "AON/Swiss Re: $1-2 billion estimated insured losses across Taiwan",
+      "Freightos: 3-5 day shipping delays for vessels waiting to berth post-reopening",
+      "Reuters/Nikkei Asia: TSMC share price brief ~2% dip, recovered within days"
+    ]
+  },
+  "disruptions": [
+    {
+      "signal_id": "TYPHOON_GAEMI_2024",
+      "disruption_type": "cyclone",
+      "trigger_day": 2,
+      "warning_severity": 0.4,
+      "warning_confidence": 0.7,
+      "peak_severity": 0.85,
+      "impact_day": 5,
+      "recovery_start_day": 10,
+      "resolved_day": 17,
+      "affected_region": "Taiwan",
+      "affected_node_ids": ["SUP_TSMC", "PORT_KAOHSIUNG"],
+      "estimated_duration_days": 15,
+      "description": "Category 4 Typhoon Gaemi approaching Taiwan manufacturing corridor with 185 km/h sustained winds. JTWC tracking shows direct path over Kaohsiung Port and southern Taiwan industrial zone. TSMC Fab 14 implementing precautionary wafer evacuation and tool shutdowns. Kaohsiung Port Authority ordering 2-day closure. Historical precedent: $1-2B insured losses across Taiwan from similar events (AON/Swiss Re estimates). Post-reopening vessel backlog expected to cause 3-5 day additional delays (Freightos maritime tracking).",
+      "commodity_effects": {
+        "semiconductors": 1.15,
+        "shipping_container_40ft": 1.25
+      }
+    }
+  ]
+}

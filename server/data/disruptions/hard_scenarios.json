@@ -1,0 +1,181 @@
+{
+  "_metadata": {
+    "calibration_sources": {
+      "Taiwan_Strait": [
+        "August 2022 Pelosi visit: PLA exercises Aug 4-10, 6 exclusion zones (PLA Eastern Theater Command)",
+        "War risk premiums surged 50-100 bps (Lloyd's of London insurance market)",
+        "Evergreen/Yang Ming rerouted vessels, +1-3 day transit (carrier advisories, Reuters)",
+        "Bloomberg Economics 2024: Full blockade scenario = $2.5T+ global GDP impact Year 1",
+        "SIA data: 60%+ of sub-7nm chips manufactured in Taiwan"
+      ],
+      "Commodity_shocks": [
+        "Russia-Ukraine 2022: Palladium +80% in 2 weeks, Nickel +250% in 2 days (LME, FT)",
+        "Lithium peak Nov 2022: $80,000/MT vs $14,000 baseline = 5.7x (Trading Economics)",
+        "COVID lumber: +300% peak (CME May 2021)"
+      ],
+      "Cyber_attacks": [
+        "2021-2023 port ransomware incidents: 50-300% dwell time increases (maritime industry reports)",
+        "NotPetya 2017 hit Maersk: $300M loss, manual operations for weeks (Maersk annual report)"
+      ],
+      "Auto_chip_shortage": [
+        "2021 global shortage: $210B lost auto revenue, 7.7M vehicles not produced (AlixPartners)",
+        "Lead times peaked at 40-52+ weeks vs 12-16 normal (Susquehanna Financial Group)"
+      ]
+    }
+  },
+  "disruptions": [
+    {
+      "signal_id": "MILITARY_EXERCISES_TAIWAN",
+      "disruption_type": "geopolitical",
+      "trigger_day": 2,
+      "warning_severity": 0.3,
+      "warning_confidence": 0.4,
+      "peak_severity": 0.5,
+      "impact_day": 3,
+      "recovery_start_day": 10,
+      "resolved_day": 15,
+      "affected_region": "Taiwan Strait",
+      "affected_node_ids": ["PORT_KAOHSIUNG"],
+      "estimated_duration_days": 13,
+      "description": "PLA Eastern Theater Command announcing live-fire military exercises in waters surrounding Taiwan. Six exclusion zones declared in Taiwan Strait shipping lanes. Calibrated from August 2022 Pelosi visit response: exercises lasted Aug 4-10 (7 days), war risk premiums surged 50-100 bps (Lloyd's of London). Commercial vessel operators advised to reroute, adding 1-3 day transit delays (Reuters, carrier advisories).",
+      "commodity_effects": {
+        "shipping_container_40ft": 1.3
+      }
+    },
+    {
+      "signal_id": "SHIPPING_RESTRICTIONS_STRAIT",
+      "disruption_type": "shipping_disruption",
+      "trigger_day": 5,
+      "warning_severity": 0.5,
+      "warning_confidence": 0.7,
+      "peak_severity": 0.7,
+      "impact_day": 6,
+      "recovery_start_day": 20,
+      "resolved_day": 45,
+      "affected_region": "Taiwan Strait",
+      "affected_node_ids": ["PORT_KAOHSIUNG", "WH_TAIWAN"],
+      "estimated_duration_days": 40,
+      "description": "Maritime safety authorities issuing transit restrictions through Taiwan Strait. Major shipping lines (Maersk, MSC, CMA CGM) suspending direct calls to Kaohsiung Port — pattern matches actual carrier responses during 2022 exercises (Evergreen, Yang Ming rerouted). Insurance premiums for Taiwan-origin cargo surging — real 2022 war risk premiums jumped 50-100 basis points (Lloyd's of London insurance market reports).",
+      "commodity_effects": {
+        "shipping_container_40ft": 2.0,
+        "semiconductors": 1.2
+      }
+    },
+    {
+      "signal_id": "NAVAL_BLOCKADE_PARTIAL",
+      "disruption_type": "blockade",
+      "trigger_day": 8,
+      "warning_severity": 0.7,
+      "warning_confidence": 0.8,
+      "peak_severity": 0.95,
+      "impact_day": 9,
+      "recovery_start_day": 35,
+      "resolved_day": 52,
+      "affected_region": "Taiwan",
+      "affected_node_ids": ["PORT_KAOHSIUNG", "SUP_TSMC_AUTO", "WH_TAIWAN"],
+      "estimated_duration_days": 44,
+      "description": "De facto naval blockade around Taiwan's western coast. All commercial shipping halted at Kaohsiung Port. TSMC facilities operational but cannot ship product. Bloomberg Economics 2024 study estimates full Taiwan blockade would cost $2.5 trillion+ in global GDP in first year. Taiwan produces 60%+ of sub-7nm semiconductors globally (SIA). Air freight severely restricted.",
+      "commodity_effects": {
+        "semiconductors": 1.8,
+        "shipping_container_40ft": 3.0,
+        "rare_earths": 1.4
+      }
+    },
+    {
+      "signal_id": "TSMC_PRODUCTION_HALT",
+      "disruption_type": "production_halt",
+      "trigger_day": 10,
+      "warning_severity": 0.8,
+      "warning_confidence": 0.9,
+      "peak_severity": 0.95,
+      "impact_day": 10,
+      "recovery_start_day": 38,
+      "resolved_day": 55,
+      "affected_region": "Taiwan",
+      "affected_node_ids": ["SUP_TSMC_AUTO"],
+      "estimated_duration_days": 45,
+      "description": "TSMC announcing emergency production suspension across all Taiwan fabs. Chemical supply disruptions and workforce safety concerns cited. Calibrated from 2021 auto chip shortage: TSMC shutdowns contributed to $210B in lost auto industry revenue and 7.7M vehicles not produced globally (AlixPartners). Lead times from 12-16 weeks to 40-52+ weeks (Susquehanna Financial Group semiconductor tracker).",
+      "commodity_effects": {
+        "semiconductors": 2.5
+      }
+    },
+    {
+      "signal_id": "SAMSUNG_CASCADE_DELAYS",
+      "disruption_type": "supply_shortage",
+      "trigger_day": 12,
+      "warning_severity": 0.5,
+      "warning_confidence": 0.7,
+      "peak_severity": 0.7,
+      "impact_day": 14,
+      "recovery_start_day": 30,
+      "resolved_day": 42,
+      "affected_region": "South Korea",
+      "affected_node_ids": ["SUP_SAMSUNG_SDI", "SUP_SK_HYNIX", "WH_KOREA"],
+      "estimated_duration_days": 30,
+      "description": "Samsung SDI and SK Hynix reporting cascading supply shortages from Taiwan crisis. Raw wafer substrate deliveries halted. Secondary material sourcing adding 3-4 week delays. Korean semiconductor output reduced 20%. Pattern mirrors 2021 shortage cascades where single-point failures propagated across the entire semiconductor supply chain within weeks.",
+      "commodity_effects": {
+        "semiconductors": 1.6
+      }
+    },
+    {
+      "signal_id": "COMMODITY_PRICE_SPIKE",
+      "disruption_type": "commodity_shock",
+      "trigger_day": 15,
+      "warning_severity": 0.6,
+      "warning_confidence": 0.85,
+      "peak_severity": 0.8,
+      "impact_day": 15,
+      "recovery_start_day": 35,
+      "resolved_day": 48,
+      "affected_region": "Global",
+      "affected_node_ids": ["SUP_CATL", "SUP_BOSCH", "SUP_CONTINENTAL", "SUP_INFINEON"],
+      "estimated_duration_days": 33,
+      "description": "Global commodity markets in turmoil. Calibrated from real crisis data: Lithium up 80% (2022 saw 5.7x peak, Fastmarkets); rare earths up 120% (2023-24 China controls caused 25-40% spikes, Asian Metal); copper up 45%. Russia-Ukraine 2022 precedent: palladium +80% in 2 weeks, nickel +250% in 2 days on LME (Financial Times). Automotive component manufacturers announcing force majeure. CATL halting new battery pack orders.",
+      "commodity_effects": {
+        "lithium": 1.8,
+        "rare_earths": 2.2,
+        "copper": 1.45,
+        "semiconductors": 1.4,
+        "aluminum": 1.3,
+        "steel": 1.2
+      }
+    },
+    {
+      "signal_id": "CYBER_ATTACK_LOGISTICS",
+      "disruption_type": "cyber_attack",
+      "trigger_day": 20,
+      "warning_severity": 0.7,
+      "warning_confidence": 0.75,
+      "peak_severity": 0.85,
+      "impact_day": 20,
+      "recovery_start_day": 28,
+      "resolved_day": 35,
+      "affected_region": "Global Logistics",
+      "affected_node_ids": ["PORT_HAMBURG", "PORT_LONG_BEACH", "PORT_BUSAN"],
+      "estimated_duration_days": 15,
+      "description": "Coordinated ransomware attack targeting port management systems. Hamburg, Long Beach, and Busan terminal operating systems encrypted. Calibrated from real incidents: NotPetya 2017 cost Maersk $300M with weeks of manual operations (Maersk annual report). 2021-2023 port ransomware incidents caused 50-300% dwell time increases (maritime industry reports). Container tracking systems offline. Average port dwell time increased 300%.",
+      "commodity_effects": {
+        "shipping_container_40ft": 2.5
+      }
+    },
+    {
+      "signal_id": "PARTIAL_REOPENING",
+      "disruption_type": "recovery_signal",
+      "trigger_day": 30,
+      "warning_severity": 0.2,
+      "warning_confidence": 0.6,
+      "peak_severity": 0.3,
+      "impact_day": 32,
+      "recovery_start_day": 32,
+      "resolved_day": 45,
+      "affected_region": "Taiwan Strait",
+      "affected_node_ids": ["PORT_KAOHSIUNG", "SUP_TSMC_AUTO", "WH_TAIWAN"],
+      "estimated_duration_days": 15,
+      "description": "Diplomatic de-escalation signals emerging. Military exercises winding down. Limited commercial shipping resuming through Taiwan Strait under escort. TSMC announcing phased restart at 30% capacity. Post-2022 exercises, normalization took ~2 weeks for shipping routes (Reuters maritime tracking). Full industrial normalization expected in 4-6 weeks.",
+      "commodity_effects": {
+        "semiconductors": 0.85,
+        "shipping_container_40ft": 0.9
+      }
+    }
+  ]
+}

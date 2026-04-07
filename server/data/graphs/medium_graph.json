@@ -1,0 +1,577 @@
+{
+  "_metadata": {
+    "calibration_date": "2024-12",
+    "description": "Medium difficulty supply chain graph - Global electronics/semiconductor supply chain",
+    "sources": [
+      "TSMC 2024 Annual Report (revenue $87B, Apple ~25% of revenue)",
+      "Susquehanna International Group semiconductor lead time tracker (2024)",
+      "Foxconn 2023 Annual Report (Thailand operations ~$8.5B)",
+      "Delta Electronics 2023 Annual Report (Thailand segment ~$3.2B)",
+      "USGS Mineral Commodity Summaries 2024 (rare earth market)",
+      "Intel 2024 Annual Report ($54B revenue, foundry segment)",
+      "Micron FY2024 Annual Report ($25B revenue, DRAM segment)",
+      "SemiAnalysis wafer pricing reports (TSMC N7 ~$9,500-$10,000/wafer)",
+      "Freightos Baltic Index 2024 (container shipping rates)",
+      "Asian Metal rare earth pricing index 2024"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "SUP_TSMC",
+      "name": "TSMC Fab 18",
+      "node_type": "supplier",
+      "tier": 1,
+      "lat": 23.56,
+      "lng": 120.32,
+      "country": "Taiwan",
+      "lead_time_days": 84,
+      "annual_spend": 18000000000,
+      "single_source": true,
+      "backup_supplier_ids": ["SUP_SAMSUNG"],
+      "components": ["advanced_logic_chips", "7nm_wafers"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "TSMC 2024 Annual Report: $87B revenue, Apple ~25% ($18B). Lead time 16-20 weeks per Susquehanna tracker."
+    },
+    {
+      "id": "SUP_SAMSUNG",
+      "name": "Samsung Semiconductor",
+      "node_type": "supplier",
+      "tier": 1,
+      "lat": 37.44,
+      "lng": 127.00,
+      "country": "South Korea",
+      "lead_time_days": 70,
+      "annual_spend": 4500000000,
+      "single_source": false,
+      "backup_supplier_ids": [],
+      "components": ["advanced_logic_chips", "memory_chips"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "Samsung Semiconductor 2024: $4.5B foundry segment estimate. Lead time 14-18 weeks per Susquehanna."
+    },
+    {
+      "id": "SUP_FOXCONN_TH",
+      "name": "Foxconn Thailand",
+      "node_type": "supplier",
+      "tier": 2,
+      "lat": 13.76,
+      "lng": 100.50,
+      "country": "Thailand",
+      "lead_time_days": 35,
+      "annual_spend": 8500000000,
+      "single_source": false,
+      "backup_supplier_ids": ["SUP_SHENZHEN"],
+      "components": ["pcb_assemblies", "connectors"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "Foxconn 2023 Annual Report: Thailand operations revenue ~$8.5B. Lead time 5-6 weeks for electronics assembly."
+    },
+    {
+      "id": "SUP_DELTA_TH",
+      "name": "Delta Electronics Thailand",
+      "node_type": "supplier",
+      "tier": 2,
+      "lat": 13.69,
+      "lng": 100.75,
+      "country": "Thailand",
+      "lead_time_days": 28,
+      "annual_spend": 3200000000,
+      "single_source": false,
+      "backup_supplier_ids": [],
+      "components": ["power_supplies", "thermal_modules"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "Delta Electronics 2023 Annual Report: Thailand operations ~$3.2B."
+    },
+    {
+      "id": "SUP_CHINA_RE",
+      "name": "China Rare Earth Corp",
+      "node_type": "supplier",
+      "tier": 1,
+      "lat": 23.13,
+      "lng": 113.26,
+      "country": "China",
+      "lead_time_days": 42,
+      "annual_spend": 950000000,
+      "single_source": true,
+      "backup_supplier_ids": [],
+      "components": ["rare_earth_elements", "neodymium", "dysprosium"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "USGS 2024: China ~90% global rare earth supply. Segment value ~$950M. Lead time 6 weeks for processed rare earths."
+    },
+    {
+      "id": "SUP_SHENZHEN",
+      "name": "Shenzhen Electronics Co",
+      "node_type": "supplier",
+      "tier": 2,
+      "lat": 22.54,
+      "lng": 114.06,
+      "country": "China",
+      "lead_time_days": 21,
+      "annual_spend": 1800000000,
+      "single_source": false,
+      "backup_supplier_ids": [],
+      "components": ["pcb_assemblies", "passive_components"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "Shenzhen electronics cluster aggregate: ~$1.8B passive components segment."
+    },
+    {
+      "id": "SUP_INTEL",
+      "name": "Intel Chandler",
+      "node_type": "supplier",
+      "tier": 1,
+      "lat": 33.30,
+      "lng": -111.84,
+      "country": "United States",
+      "lead_time_days": 84,
+      "annual_spend": 12000000000,
+      "single_source": false,
+      "backup_supplier_ids": ["SUP_TSMC"],
+      "components": ["cpu_processors", "chipsets"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "Intel 2024 Annual Report: $54B revenue, foundry segment ~$12B. CPU lead time 16-20 weeks."
+    },
+    {
+      "id": "SUP_MICRON",
+      "name": "Micron Boise",
+      "node_type": "supplier",
+      "tier": 1,
+      "lat": 43.62,
+      "lng": -116.21,
+      "country": "United States",
+      "lead_time_days": 56,
+      "annual_spend": 6500000000,
+      "single_source": false,
+      "backup_supplier_ids": ["SUP_SAMSUNG"],
+      "components": ["dram_memory", "nand_flash"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "Micron FY2024: $25B revenue, DRAM segment ~$6.5B. DRAM lead time 8-12 weeks."
+    },
+    {
+      "id": "PORT_KAOHSIUNG",
+      "name": "Kaohsiung Port",
+      "node_type": "port",
+      "country": "Taiwan",
+      "lat": 22.62,
+      "lng": 120.31,
+      "port_type": "sea",
+      "avg_dwell_time_hours": 36,
+      "congestion_score": 0.25,
+      "is_operational": true
+    },
+    {
+      "id": "PORT_LONG_BEACH",
+      "name": "Long Beach Port",
+      "node_type": "port",
+      "country": "United States",
+      "lat": 33.75,
+      "lng": -118.19,
+      "port_type": "sea",
+      "avg_dwell_time_hours": 48,
+      "congestion_score": 0.35,
+      "is_operational": true
+    },
+    {
+      "id": "PORT_OAKLAND",
+      "name": "Oakland Port",
+      "node_type": "port",
+      "country": "United States",
+      "lat": 37.80,
+      "lng": -122.27,
+      "port_type": "sea",
+      "avg_dwell_time_hours": 42,
+      "congestion_score": 0.28,
+      "is_operational": true
+    },
+    {
+      "id": "PORT_LAEM_CHABANG",
+      "name": "Laem Chabang Port",
+      "node_type": "port",
+      "country": "Thailand",
+      "lat": 13.08,
+      "lng": 100.88,
+      "port_type": "sea",
+      "avg_dwell_time_hours": 30,
+      "congestion_score": 0.20,
+      "is_operational": true
+    },
+    {
+      "id": "WH_TAIWAN",
+      "name": "Taiwan Regional Warehouse",
+      "node_type": "warehouse",
+      "country": "Taiwan",
+      "inventory_days_cover": 25,
+      "capacity_units": 10000,
+      "current_inventory_units": 6000,
+      "daily_consumption_rate": 250
+    },
+    {
+      "id": "WH_US_WEST",
+      "name": "US West Coast Warehouse",
+      "node_type": "warehouse",
+      "country": "United States",
+      "inventory_days_cover": 22,
+      "capacity_units": 20000,
+      "current_inventory_units": 8000,
+      "daily_consumption_rate": 400
+    },
+    {
+      "id": "WH_THAILAND",
+      "name": "Thailand Regional Warehouse",
+      "node_type": "warehouse",
+      "country": "Thailand",
+      "inventory_days_cover": 18,
+      "capacity_units": 6000,
+      "current_inventory_units": 3500,
+      "daily_consumption_rate": 180
+    },
+    {
+      "id": "WH_CHINA",
+      "name": "Shenzhen Warehouse",
+      "node_type": "warehouse",
+      "country": "China",
+      "inventory_days_cover": 20,
+      "capacity_units": 12000,
+      "current_inventory_units": 5000,
+      "daily_consumption_rate": 300
+    },
+    {
+      "id": "FAC_SUZHOU",
+      "name": "Assembly Plant Suzhou",
+      "node_type": "factory",
+      "country": "China",
+      "production_capacity_daily": 3000,
+      "utilization_pct": 0.90,
+      "is_operational": true
+    },
+    {
+      "id": "FAC_AUSTIN",
+      "name": "Assembly Plant Austin",
+      "node_type": "factory",
+      "country": "United States",
+      "production_capacity_daily": 2500,
+      "utilization_pct": 0.82,
+      "is_operational": true
+    },
+    {
+      "id": "FAC_GUADALAJARA",
+      "name": "Assembly Plant Guadalajara",
+      "node_type": "factory",
+      "country": "Mexico",
+      "production_capacity_daily": 1800,
+      "utilization_pct": 0.78,
+      "is_operational": true
+    },
+    {
+      "id": "CUST_APPLE",
+      "name": "Apple Inc",
+      "node_type": "customer",
+      "country": "United States",
+      "revenue_contribution": 22000000000,
+      "sla_days": 10,
+      "_source": "Apple ~25% of TSMC revenue, semiconductor + component procurement estimate."
+    },
+    {
+      "id": "CUST_SAMSUNG_MOBILE",
+      "name": "Samsung Mobile",
+      "node_type": "customer",
+      "country": "South Korea",
+      "revenue_contribution": 8500000000,
+      "sla_days": 12,
+      "_source": "Samsung mobile chip procurement estimate based on Samsung Electronics semiconductor division."
+    },
+    {
+      "id": "CUST_DELL",
+      "name": "Dell Technologies",
+      "node_type": "customer",
+      "country": "United States",
+      "revenue_contribution": 3500000000,
+      "sla_days": 14
+    },
+    {
+      "id": "CUST_HP",
+      "name": "HP Inc",
+      "node_type": "customer",
+      "country": "United States",
+      "revenue_contribution": 2800000000,
+      "sla_days": 14
+    },
+    {
+      "id": "CUST_LENOVO",
+      "name": "Lenovo Group",
+      "node_type": "customer",
+      "country": "China",
+      "revenue_contribution": 3200000000,
+      "sla_days": 12
+    },
+    {
+      "id": "CUST_CISCO",
+      "name": "Cisco Systems",
+      "node_type": "customer",
+      "country": "United States",
+      "revenue_contribution": 4100000000,
+      "sla_days": 14
+    }
+  ],
+  "edges": [
+    {
+      "source": "SUP_TSMC",
+      "target": "WH_TAIWAN",
+      "edge_type": "supplies",
+      "lead_time_days": 3,
+      "cost_per_unit": 10500.00,
+      "quantity": 250,
+      "is_active": true,
+      "_source": "SemiAnalysis: TSMC N7 wafer ~$9,500-$10,000 per wafer"
+    },
+    {
+      "source": "SUP_SAMSUNG",
+      "target": "WH_TAIWAN",
+      "edge_type": "supplies",
+      "lead_time_days": 7,
+      "cost_per_unit": 9000.00,
+      "quantity": 200,
+      "is_active": true,
+      "_source": "Samsung 5nm competitive pricing vs TSMC"
+    },
+    {
+      "source": "SUP_FOXCONN_TH",
+      "target": "WH_THAILAND",
+      "edge_type": "supplies",
+      "lead_time_days": 4,
+      "cost_per_unit": 85.00,
+      "quantity": 180,
+      "is_active": true,
+      "_source": "PCB assembly per-unit cost estimate"
+    },
+    {
+      "source": "SUP_DELTA_TH",
+      "target": "WH_THAILAND",
+      "edge_type": "supplies",
+      "lead_time_days": 3,
+      "cost_per_unit": 120.00,
+      "quantity": 150,
+      "is_active": true,
+      "_source": "Power supply unit average wholesale cost"
+    },
+    {
+      "source": "SUP_CHINA_RE",
+      "target": "WH_CHINA",
+      "edge_type": "supplies",
+      "lead_time_days": 5,
+      "cost_per_unit": 280.00,
+      "quantity": 50,
+      "is_active": true,
+      "_source": "Asian Metal 2024: NdPr oxide ~$280/kg"
+    },
+    {
+      "source": "SUP_SHENZHEN",
+      "target": "WH_CHINA",
+      "edge_type": "supplies",
+      "lead_time_days": 2,
+      "cost_per_unit": 35.00,
+      "quantity": 300,
+      "is_active": true,
+      "_source": "Passive components lot pricing"
+    },
+    {
+      "source": "SUP_INTEL",
+      "target": "WH_US_WEST",
+      "edge_type": "supplies",
+      "lead_time_days": 5,
+      "cost_per_unit": 420.00,
+      "quantity": 200,
+      "is_active": true,
+      "_source": "Intel CPU wholesale ~$300-$550, midpoint ~$420"
+    },
+    {
+      "source": "SUP_MICRON",
+      "target": "WH_US_WEST",
+      "edge_type": "supplies",
+      "lead_time_days": 4,
+      "cost_per_unit": 45.00,
+      "quantity": 250,
+      "is_active": true,
+      "_source": "DRAM module pricing ~$40-$50 per module"
+    },
+    {
+      "source": "WH_TAIWAN",
+      "target": "PORT_KAOHSIUNG",
+      "edge_type": "stores_at",
+      "lead_time_days": 1,
+      "cost_per_unit": 2.00,
+      "quantity": 250,
+      "is_active": true
+    },
+    {
+      "source": "WH_THAILAND",
+      "target": "PORT_LAEM_CHABANG",
+      "edge_type": "stores_at",
+      "lead_time_days": 1,
+      "cost_per_unit": 1.50,
+      "quantity": 180,
+      "is_active": true
+    },
+    {
+      "source": "PORT_KAOHSIUNG",
+      "target": "PORT_LONG_BEACH",
+      "edge_type": "ships_via",
+      "transit_time_days": 14,
+      "cost_per_unit": 4200.00,
+      "quantity": 250,
+      "is_active": true,
+      "_source": "Freightos Baltic Index 2024: Kaohsiung-Long Beach ~$4,200/FEU"
+    },
+    {
+      "source": "PORT_KAOHSIUNG",
+      "target": "PORT_OAKLAND",
+      "edge_type": "ships_via",
+      "transit_time_days": 15,
+      "cost_per_unit": 4400.00,
+      "quantity": 200,
+      "is_active": true,
+      "_source": "Freightos Baltic Index 2024: Kaohsiung-Oakland ~$4,400/FEU"
+    },
+    {
+      "source": "PORT_LAEM_CHABANG",
+      "target": "PORT_LONG_BEACH",
+      "edge_type": "ships_via",
+      "transit_time_days": 18,
+      "cost_per_unit": 4800.00,
+      "quantity": 180,
+      "is_active": true,
+      "_source": "Freightos Baltic Index 2024: Laem Chabang-Long Beach ~$4,800/FEU"
+    },
+    {
+      "source": "PORT_LONG_BEACH",
+      "target": "WH_US_WEST",
+      "edge_type": "ships_via",
+      "transit_time_days": 2,
+      "cost_per_unit": 1.50,
+      "quantity": 300,
+      "is_active": true
+    },
+    {
+      "source": "PORT_OAKLAND",
+      "target": "WH_US_WEST",
+      "edge_type": "ships_via",
+      "transit_time_days": 2,
+      "cost_per_unit": 1.60,
+      "quantity": 200,
+      "is_active": true
+    },
+    {
+      "source": "WH_CHINA",
+      "target": "FAC_SUZHOU",
+      "edge_type": "stores_at",
+      "lead_time_days": 1,
+      "cost_per_unit": 0.80,
+      "quantity": 300,
+      "is_active": true
+    },
+    {
+      "source": "WH_US_WEST",
+      "target": "FAC_AUSTIN",
+      "edge_type": "stores_at",
+      "lead_time_days": 3,
+      "cost_per_unit": 1.20,
+      "quantity": 400,
+      "is_active": true
+    },
+    {
+      "source": "WH_US_WEST",
+      "target": "FAC_GUADALAJARA",
+      "edge_type": "stores_at",
+      "lead_time_days": 4,
+      "cost_per_unit": 1.80,
+      "quantity": 200,
+      "is_active": true
+    },
+    {
+      "source": "WH_THAILAND",
+      "target": "FAC_SUZHOU",
+      "edge_type": "stores_at",
+      "lead_time_days": 5,
+      "cost_per_unit": 2.50,
+      "quantity": 150,
+      "is_active": true
+    },
+    {
+      "source": "FAC_SUZHOU",
+      "target": "CUST_APPLE",
+      "edge_type": "delivers_to",
+      "lead_time_days": 5,
+      "cost_per_unit": 1.00,
+      "quantity": 120,
+      "is_active": true
+    },
+    {
+      "source": "FAC_SUZHOU",
+      "target": "CUST_SAMSUNG_MOBILE",
+      "edge_type": "delivers_to",
+      "lead_time_days": 4,
+      "cost_per_unit": 0.90,
+      "quantity": 100,
+      "is_active": true
+    },
+    {
+      "source": "FAC_SUZHOU",
+      "target": "CUST_LENOVO",
+      "edge_type": "delivers_to",
+      "lead_time_days": 2,
+      "cost_per_unit": 0.60,
+      "quantity": 80,
+      "is_active": true
+    },
+    {
+      "source": "FAC_AUSTIN",
+      "target": "CUST_APPLE",
+      "edge_type": "delivers_to",
+      "lead_time_days": 3,
+      "cost_per_unit": 0.75,
+      "quantity": 150,
+      "is_active": true
+    },
+    {
+      "source": "FAC_AUSTIN",
+      "target": "CUST_DELL",
+      "edge_type": "delivers_to",
+      "lead_time_days": 3,
+      "cost_per_unit": 0.75,
+      "quantity": 100,
+      "is_active": true
+    },
+    {
+      "source": "FAC_AUSTIN",
+      "target": "CUST_CISCO",
+      "edge_type": "delivers_to",
+      "lead_time_days": 4,
+      "cost_per_unit": 0.80,
+      "quantity": 60,
+      "is_active": true
+    },
+    {
+      "source": "FAC_GUADALAJARA",
+      "target": "CUST_HP",
+      "edge_type": "delivers_to",
+      "lead_time_days": 5,
+      "cost_per_unit": 0.85,
+      "quantity": 80,
+      "is_active": true
+    },
+    {
+      "source": "FAC_GUADALAJARA",
+      "target": "CUST_DELL",
+      "edge_type": "delivers_to",
+      "lead_time_days": 5,
+      "cost_per_unit": 0.85,
+      "quantity": 60,
+      "is_active": true
+    }
+  ]
+}

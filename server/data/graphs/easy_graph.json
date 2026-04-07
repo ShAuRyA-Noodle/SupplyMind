@@ -1,0 +1,273 @@
+{
+  "_metadata": {
+    "calibration_sources": [
+      "TSMC 2024 annual report: $87.1B revenue, Apple ~25% share (~$22B/yr)",
+      "TSMC investor conference: 2.1M wafers/month capacity, N5 wafer $16-17K (SemiAnalysis)",
+      "Susquehanna Financial Group: semiconductor lead times 14-20 weeks (2024 normalized)",
+      "Kaohsiung Port Authority: avg container dwell 24-48 hours",
+      "Port of Long Beach: avg container dwell 3-5 days (72-120 hours)",
+      "Apple 10-K: $394B revenue FY2024; TSMC represents largest single supplier relationship"
+    ]
+  },
+  "nodes": [
+    {
+      "id": "SUP_TSMC",
+      "name": "TSMC Fab 14 (Tainan)",
+      "node_type": "supplier",
+      "tier": 1,
+      "lat": 24.79,
+      "lng": 120.99,
+      "country": "Taiwan",
+      "lead_time_days": 84,
+      "annual_spend": 18000000000,
+      "single_source": true,
+      "backup_supplier_ids": ["SUP_SAMSUNG"],
+      "components": ["advanced_logic_chips", "5nm_wafers"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "TSMC investor relations: N5 lead time 16-20 weeks (~84 days avg); Apple ~$18-22B annual spend (25% of $87B)"
+    },
+    {
+      "id": "SUP_SAMSUNG",
+      "name": "Samsung Semiconductor (Pyeongtaek)",
+      "node_type": "supplier",
+      "tier": 1,
+      "lat": 37.44,
+      "lng": 127.00,
+      "country": "South Korea",
+      "lead_time_days": 98,
+      "annual_spend": 4500000000,
+      "single_source": false,
+      "backup_supplier_ids": [],
+      "components": ["advanced_logic_chips", "memory_chips"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "Samsung foundry: 4nm lead time ~14-18 weeks; Qualcomm/Google contract values estimated $3-6B/yr"
+    },
+    {
+      "id": "SUP_ASE",
+      "name": "ASE Group (Kaohsiung)",
+      "node_type": "supplier",
+      "tier": 2,
+      "lat": 22.63,
+      "lng": 120.33,
+      "country": "Taiwan",
+      "lead_time_days": 28,
+      "annual_spend": 2800000000,
+      "single_source": false,
+      "backup_supplier_ids": [],
+      "components": ["ic_packaging", "testing_services"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "ASE 2023 revenue ~$18B; OSAT lead times 4-6 weeks (IC Insights)"
+    },
+    {
+      "id": "SUP_SILTRONIC",
+      "name": "Siltronic AG (Munich)",
+      "node_type": "supplier",
+      "tier": 2,
+      "lat": 48.14,
+      "lng": 11.58,
+      "country": "Germany",
+      "lead_time_days": 70,
+      "annual_spend": 1200000000,
+      "single_source": false,
+      "backup_supplier_ids": [],
+      "components": ["silicon_wafers", "300mm_wafer_substrates"],
+      "is_operational": true,
+      "risk_score": 0.0,
+      "_source": "Siltronic 2023 revenue ~€1.5B; 300mm silicon wafer lead times 8-12 weeks"
+    },
+    {
+      "id": "PORT_KAOHSIUNG",
+      "name": "Kaohsiung Port",
+      "node_type": "port",
+      "country": "Taiwan",
+      "lat": 22.62,
+      "lng": 120.31,
+      "port_type": "sea",
+      "avg_dwell_time_hours": 36,
+      "congestion_score": 0.25,
+      "is_operational": true,
+      "_source": "Kaohsiung Port Authority: world's 15th largest container port, avg dwell 24-48hrs"
+    },
+    {
+      "id": "PORT_LONG_BEACH",
+      "name": "Port of Long Beach",
+      "node_type": "port",
+      "country": "United States",
+      "lat": 33.75,
+      "lng": -118.19,
+      "port_type": "sea",
+      "avg_dwell_time_hours": 72,
+      "congestion_score": 0.30,
+      "is_operational": true,
+      "_source": "Port of Long Beach: 2nd largest US port, avg container dwell 3-5 days"
+    },
+    {
+      "id": "WH_TAIWAN",
+      "name": "Taiwan Regional Warehouse",
+      "node_type": "warehouse",
+      "country": "Taiwan",
+      "inventory_days_cover": 25,
+      "capacity_units": 8000,
+      "current_inventory_units": 5000,
+      "daily_consumption_rate": 200
+    },
+    {
+      "id": "WH_US_WEST",
+      "name": "US West Coast Distribution Center",
+      "node_type": "warehouse",
+      "country": "United States",
+      "inventory_days_cover": 20,
+      "capacity_units": 15000,
+      "current_inventory_units": 6000,
+      "daily_consumption_rate": 300
+    },
+    {
+      "id": "FAC_PHOENIX",
+      "name": "Assembly Plant Phoenix (TSMC Arizona)",
+      "node_type": "factory",
+      "country": "United States",
+      "production_capacity_daily": 2000,
+      "utilization_pct": 0.85,
+      "is_operational": true,
+      "_source": "TSMC Arizona fab under construction; represents US domestic assembly capacity"
+    },
+    {
+      "id": "CUST_APPLE",
+      "name": "Apple Inc",
+      "node_type": "customer",
+      "country": "United States",
+      "revenue_contribution": 22000000000,
+      "sla_days": 10,
+      "_source": "Apple 10-K FY2024: $394B revenue; TSMC ~25% of TSMC revenue = ~$22B (TrendForce)"
+    },
+    {
+      "id": "CUST_DELL",
+      "name": "Dell Technologies",
+      "node_type": "customer",
+      "country": "United States",
+      "revenue_contribution": 3500000000,
+      "sla_days": 14,
+      "_source": "Dell FY2024 revenue $88B; semiconductor procurement estimated ~$3-5B/yr"
+    },
+    {
+      "id": "CUST_HP",
+      "name": "HP Inc",
+      "node_type": "customer",
+      "country": "United States",
+      "revenue_contribution": 2800000000,
+      "sla_days": 14,
+      "_source": "HP FY2024 revenue $54B; semiconductor procurement estimated ~$2-4B/yr"
+    }
+  ],
+  "edges": [
+    {
+      "source": "SUP_TSMC",
+      "target": "WH_TAIWAN",
+      "edge_type": "supplies",
+      "lead_time_days": 3,
+      "cost_per_unit": 16500.00,
+      "quantity": 200,
+      "is_active": true,
+      "_source": "SemiAnalysis: TSMC N5 wafer ~$16,000-17,000 per 300mm wafer"
+    },
+    {
+      "source": "SUP_SAMSUNG",
+      "target": "WH_TAIWAN",
+      "edge_type": "supplies",
+      "lead_time_days": 7,
+      "cost_per_unit": 14500.00,
+      "quantity": 200,
+      "is_active": false,
+      "_source": "Samsung 4nm wafer estimated ~$14,000-15,000 (TrendForce); backup inactive"
+    },
+    {
+      "source": "SUP_ASE",
+      "target": "SUP_TSMC",
+      "edge_type": "supplies",
+      "lead_time_days": 5,
+      "cost_per_unit": 850.00,
+      "quantity": 250,
+      "is_active": true,
+      "_source": "OSAT packaging cost ~$800-1,200 per lot (IC Insights)"
+    },
+    {
+      "source": "SUP_SILTRONIC",
+      "target": "SUP_TSMC",
+      "edge_type": "supplies",
+      "lead_time_days": 21,
+      "cost_per_unit": 450.00,
+      "quantity": 250,
+      "is_active": true,
+      "_source": "300mm bare silicon wafer ~$400-500 (SEMI/Siltronic pricing)"
+    },
+    {
+      "source": "WH_TAIWAN",
+      "target": "PORT_KAOHSIUNG",
+      "edge_type": "stores_at",
+      "lead_time_days": 1,
+      "cost_per_unit": 200.00,
+      "quantity": 200,
+      "is_active": true,
+      "_source": "Local trucking + port handling fees"
+    },
+    {
+      "source": "PORT_KAOHSIUNG",
+      "target": "PORT_LONG_BEACH",
+      "edge_type": "ships_via",
+      "transit_time_days": 14,
+      "cost_per_unit": 4200.00,
+      "quantity": 200,
+      "is_active": true,
+      "_source": "Freightos Baltic Index 2024: Shanghai/Kaohsiung-LA ~$3,800-$4,500 per 40ft container"
+    },
+    {
+      "source": "PORT_LONG_BEACH",
+      "target": "WH_US_WEST",
+      "edge_type": "ships_via",
+      "transit_time_days": 2,
+      "cost_per_unit": 350.00,
+      "quantity": 200,
+      "is_active": true,
+      "_source": "Last-mile drayage from port to inland warehouse"
+    },
+    {
+      "source": "WH_US_WEST",
+      "target": "FAC_PHOENIX",
+      "edge_type": "stores_at",
+      "lead_time_days": 2,
+      "cost_per_unit": 150.00,
+      "quantity": 300,
+      "is_active": true
+    },
+    {
+      "source": "FAC_PHOENIX",
+      "target": "CUST_APPLE",
+      "edge_type": "delivers_to",
+      "lead_time_days": 3,
+      "cost_per_unit": 75.00,
+      "quantity": 150,
+      "is_active": true
+    },
+    {
+      "source": "FAC_PHOENIX",
+      "target": "CUST_DELL",
+      "edge_type": "delivers_to",
+      "lead_time_days": 4,
+      "cost_per_unit": 75.00,
+      "quantity": 80,
+      "is_active": true
+    },
+    {
+      "source": "FAC_PHOENIX",
+      "target": "CUST_HP",
+      "edge_type": "delivers_to",
+      "lead_time_days": 4,
+      "cost_per_unit": 75.00,
+      "quantity": 70,
+      "is_active": true
+    }
+  ]
+}

@@ -1,0 +1,161 @@
+spec_version: "0.1"
+environment_id: supplymind
+name: supplymind
+version: "1.0.0"
+type: space
+runtime: fastapi
+app: server.app:app
+port: 8000
+action: SupplyMindAction
+observation: SupplyMindObservation
+description: >
+  Supply chain risk management environment. An AI agent manages a global supply
+  chain network through real-world disruptions — typhoons, port strikes, sanctions,
+  and cascading geopolitical crises. The agent takes actions like activating backup
+  suppliers, rerouting shipments, hedging commodity exposure, and expediting orders
+  to minimize financial impact while staying within budget. Based on real supply
+  chain data: actual company coordinates (TSMC, Samsung), real trade routes, and
+  historical disruption parameters calibrated from events like the 2021 Suez
+  blockage, Thailand floods, and Taiwan Strait tensions.
+tags:
+  - openenv
+  - supply-chain
+  - risk-management
+  - real-world
+  - multi-task
+  - simulation
+author: SupplyMind Team
+license: MIT
+python_version: ">=3.11"
+tasks:
+  - id: easy_typhoon_response
+    name: "Typhoon Response"
+    difficulty: easy
+    description: >
+      Manage a semiconductor supply chain (12 nodes, 2 tiers) through a single
+      typhoon disruption affecting Taiwan. Agent receives 72-hour warning signals,
+      must activate backup supplier and expedite critical orders before impact.
+      Budget: $5M. Episode: 30 steps.
+    episode_length: 30
+    budget: 5000000
+  - id: medium_multi_front
+    name: "Multi-Front Crisis"
+    difficulty: medium
+    description: >
+      Triage three concurrent disruptions across a multi-region electronics supply
+      chain (25 nodes, 3 tiers): US port strike, Thailand flooding, and Chinese
+      supplier sanctions. Budget only covers ~2 of 3 — agent must prioritize.
+      Budget: $8M. Episode: 45 steps.
+    episode_length: 45
+    budget: 8000000
+  - id: hard_cascading_crisis
+    name: "Cascading Crisis"
+    difficulty: hard
+    description: >
+      Navigate a cascading geopolitical crisis in a global automotive supply chain
+      (40 nodes, 3 tiers, 6 countries). Taiwan Strait escalation triggers shipping
+      disruption, semiconductor cutoff, commodity spikes, and a cyber attack.
+      Very tight budget forces hard trade-offs. Budget: $10M. Episode: 60 steps.
+    episode_length: 60
+    budget: 10000000
+action_schema:
+  type: object
+  required:
+    - action_type
+  properties:
+    action_type:
+      type: string
+      enum:
+        - do_nothing
+        - activate_backup_supplier
+        - reroute_shipment
+        - increase_safety_stock
+        - expedite_order
+        - hedge_commodity
+        - issue_supplier_alert
+      description: "The type of action to take"
+    target_node_id:
+      type: string
+      description: "Target supply chain node ID (supplier/warehouse/port)"
+    backup_supplier_id:
+      type: string
+      description: "Backup supplier to activate (for activate_backup_supplier)"
+    reroute_via:
+      type: array
+      items:
+        type: string
+      description: "Port IDs for alternative route (for reroute_shipment)"
+    additional_stock_days:
+      type: integer
+      minimum: 1
+      maximum: 90
+      description: "Extra days of inventory to order (for increase_safety_stock)"
+    expedite_mode:
+      type: string
+      enum: [air, rail, express_sea]
+      description: "Transport mode upgrade (for expedite_order)"
+    commodity:
+      type: string
+      description: "Commodity to hedge (for hedge_commodity)"
+    hedge_amount_usd:
+      type: number
+      minimum: 0
+      description: "Hedge notional amount in USD (for hedge_commodity)"
+observation_schema:
+  type: object
+  properties:
+    current_day:
+      type: integer
+      description: "Current simulation day (0-based)"
+    days_remaining:
+      type: integer
+      description: "Days left in episode"
+    active_signals:
+      type: array
+      description: "All currently active disruption signals"
+    new_signals:
+      type: array
+      description: "Signals that appeared this step"
+    node_statuses:
+      type: array
+      description: "Current status of all supply chain nodes"
+    financials:
+      type: object
+      description: "Financial state: budget, costs, revenue at risk"
+    situation_summary:
+      type: string
+      description: "Full natural language summary for LLM agents (~1500 tokens)"
+    compact_summary:
+      type: string
+      description: "Token-efficient summary (~100-200 tokens) with top risks, budget, and urgent action"
+    reward:
+      type: number
+      description: "Per-step reward in [-1.0, 1.0]"
+    done:
+      type: boolean
+      description: "Whether the episode is over"
+    info:
+      type: object
+      description: "Additional metadata"
+endpoints:
+  - path: /reset
+    method: POST
+    description: "Reset environment. Accepts optional seed for episode variation. Returns initial observation"
+  - path: /step
+    method: POST
+    description: "Execute action, returns observation with reward and done"
+  - path: /state
+    method: GET
+    description: "Return current episode metadata"
+  - path: /tasks
+    method: GET
+    description: "List tasks and action schema"
+  - path: /grader
+    method: POST
+    description: "Grade completed episode, returns score 0.0-1.0"
+  - path: /baseline
+    method: POST
+    description: "Run baseline inference on all tasks (requires OPENAI_API_KEY)"
+  - path: /health
+    method: GET
+    description: "Health check"

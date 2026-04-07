@@ -1,0 +1,63 @@
+{
+  "_metadata": {
+    "calibration_date": "2024-Q4",
+    "sources": [
+      "LME (London Metal Exchange) spot prices",
+      "Freightos Baltic Index (FBX) container rates",
+      "ICE/NYMEX crude oil futures",
+      "Asian Metal rare earth oxide prices",
+      "Fastmarkets lithium carbonate index",
+      "TSMC investor relations / SemiAnalysis wafer cost estimates"
+    ]
+  },
+  "commodities": {
+    "semiconductors": {
+      "baseline_price": 16000.00,
+      "unit": "per_300mm_wafer_5nm",
+      "volatility": 0.15,
+      "source": "SemiAnalysis 2024 TSMC N5 wafer revenue estimate: $16,000-$17,000/wafer"
+    },
+    "rare_earths": {
+      "baseline_price": 280.00,
+      "unit": "per_kg_NdPr_oxide",
+      "volatility": 0.30,
+      "source": "Asian Metal 2024 Q4: Neodymium oxide $65-75/kg, Dysprosium oxide $280-320/kg"
+    },
+    "shipping_container_40ft": {
+      "baseline_price": 4200.00,
+      "unit": "per_40ft_container_Shanghai_LA",
+      "volatility": 0.35,
+      "source": "Freightos Baltic Index 2024: Shanghai-LA $3,800-$4,500 post-Red Sea disruptions"
+    },
+    "crude_oil_barrel": {
+      "baseline_price": 75.00,
+      "unit": "per_barrel_Brent",
+      "volatility": 0.18,
+      "source": "ICE Brent crude 2024 Q4: $70-$80/barrel"
+    },
+    "steel": {
+      "baseline_price": 750.00,
+      "unit": "per_metric_ton_HRC",
+      "volatility": 0.14,
+      "source": "Platts 2024 Q4: US HRC $700-$800/short ton; China export $480-$550/MT"
+    },
+    "aluminum": {
+      "baseline_price": 2600.00,
+      "unit": "per_metric_ton",
+      "volatility": 0.14,
+      "source": "LME 2024 Q4: $2,500-$2,700/metric ton"
+    },
+    "copper": {
+      "baseline_price": 9100.00,
+      "unit": "per_metric_ton",
+      "volatility": 0.16,
+      "source": "LME 2024 Q4: $8,800-$9,400/metric ton"
+    },
+    "lithium": {
+      "baseline_price": 14000.00,
+      "unit": "per_metric_ton_Li2CO3",
+      "volatility": 0.45,
+      "source": "Fastmarkets 2024 Q4: $13,000-$15,000/MT (down from $80,000 peak Nov 2022)"
+    }
+  }
+}

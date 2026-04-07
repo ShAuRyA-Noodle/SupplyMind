@@ -1,0 +1,79 @@
+{
+  "_metadata": {
+    "calibration_sources": {
+      "ILWU_strike": [
+        "2002 ILWU lockout: 10 days, $1B/day, 29 West Coast ports (Anderson Economic Group)",
+        "2014-15 ILWU slowdown: 9 months, $2.5B/day peak, 2-3 week vessel waits (NRF, Marine Exchange)",
+        "6-8 week backlog clearance post-resolution (Port of LA/Long Beach)"
+      ],
+      "Thailand_floods": [
+        "2011 Thailand floods: $45.7B total losses, $16B insured (World Bank 2012, Swiss Re Sigma)",
+        "7 major industrial estates inundated, 14,500 factories flooded (Thai Ministry of Industry)",
+        "HDD prices doubled; 40-45% of global production affected (IHS iSuppli)",
+        "6-9 month full production recovery (DRAMeXchange)"
+      ],
+      "China_sanctions": [
+        "2023-24 China gallium/germanium export controls: 25-40% price impact (Asian Metal, Reuters)",
+        "US Entity List additions: gradual supply disruption over weeks-months, not sudden"
+      ]
+    }
+  },
+  "disruptions": [
+    {
+      "signal_id": "ILWU_STRIKE_WEST_COAST",
+      "disruption_type": "labor_strike",
+      "trigger_day": 3,
+      "warning_severity": 0.3,
+      "warning_confidence": 0.5,
+      "peak_severity": 0.8,
+      "impact_day": 7,
+      "recovery_start_day": 17,
+      "resolved_day": 28,
+      "affected_region": "US West Coast",
+      "affected_node_ids": ["PORT_LONG_BEACH", "PORT_OAKLAND"],
+      "estimated_duration_days": 25,
+      "description": "ILWU initiating work stoppage at West Coast ports after contract negotiations stall over automation provisions. Precedent: 2002 lockout cost $1B/day across 29 ports (Anderson Economic Group); 2014-15 slowdown caused 2-3 week vessel wait times at LA/Long Beach (Marine Exchange of Southern California). Long Beach and Oakland handle 40% of US-bound Asian imports. Expected 6-8 week backlog clearance post-resolution.",
+      "commodity_effects": {
+        "shipping_container_40ft": 1.80
+      }
+    },
+    {
+      "signal_id": "FLOOD_THAILAND_2011_TYPE",
+      "disruption_type": "flood",
+      "trigger_day": 5,
+      "warning_severity": 0.35,
+      "warning_confidence": 0.55,
+      "peak_severity": 0.9,
+      "impact_day": 9,
+      "recovery_start_day": 23,
+      "resolved_day": 35,
+      "affected_region": "Thailand",
+      "affected_node_ids": ["SUP_FOXCONN_TH", "SUP_DELTA_TH", "WH_THAILAND", "PORT_LAEM_CHABANG"],
+      "estimated_duration_days": 30,
+      "description": "Severe monsoon flooding in Thailand's central industrial corridor, Ayutthaya and Pathum Thani provinces. Calibrated from 2011 Thailand floods: $45.7B total economic loss, 7 industrial estates inundated, 14,500 factories flooded (World Bank 2012 report). HDD industry saw 40-45% global production loss (IHS iSuppli). Foxconn and Delta Electronics Thailand facilities in flood zone. Laem Chabang port access roads submerged. Historical recovery: 6-9 months for full production (DRAMeXchange).",
+      "commodity_effects": {
+        "semiconductors": 1.15,
+        "shipping_container_40ft": 1.25
+      }
+    },
+    {
+      "signal_id": "CHINA_EXPORT_CONTROLS",
+      "disruption_type": "sanctions",
+      "trigger_day": 12,
+      "warning_severity": 0.25,
+      "warning_confidence": 0.4,
+      "peak_severity": 0.75,
+      "impact_day": 18,
+      "recovery_start_day": 40,
+      "resolved_day": 44,
+      "affected_region": "China",
+      "affected_node_ids": ["SUP_CHINA_RE", "SUP_SHENZHEN", "WH_CHINA", "FAC_SUZHOU"],
+      "estimated_duration_days": 32,
+      "description": "US Commerce Department expanding export controls targeting Chinese rare earth processing and electronics manufacturing. New Entity List additions affecting Shenzhen Electronics Co. Chinese Ministry of Commerce imposing retaliatory export quotas. Calibrated from 2023-24 gallium/germanium controls: 25-40% price impact (Asian Metal, Reuters). Rare earth supply disruption gradual over weeks, not sudden — pattern matches historical sanctions timeline.",
+      "commodity_effects": {
+        "rare_earths": 1.35,
+        "semiconductors": 1.10
+      }
+    }
+  ]
+}
