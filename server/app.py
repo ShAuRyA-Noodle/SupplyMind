@@ -442,6 +442,17 @@ async def run_baseline() -> dict:
 
 
 # ---------------------------------------------------------------------------
+# OpenEnv SDK integration: register /ws and /mcp WebSocket endpoints
+# Registered AFTER custom routes so our endpoints take priority
+# ---------------------------------------------------------------------------
+try:
+    from server.openenv_adapter import register_openenv_routes
+    register_openenv_routes(app)
+except ImportError:
+    pass  # openenv-core not installed; WebSocket endpoints unavailable
+
+
+# ---------------------------------------------------------------------------
 # Run directly with: python -m server.app
 # Or via entry point: supplymind-server
 # ---------------------------------------------------------------------------

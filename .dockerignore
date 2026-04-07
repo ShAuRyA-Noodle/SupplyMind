@@ -1,0 +1,17 @@
+.git
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+tests/
+.env
+.env.*
+*.egg-info
+dist/
+build/
+.vscode/
+.idea/
+*.md
+!README.md
+LICENSE

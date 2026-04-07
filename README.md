@@ -279,10 +279,10 @@ All scores below are reproducible by running the corresponding script in this re
 
 | Task | Do-Nothing | Scripted Agent | Gemini 3 Flash |
 |---|---|---|---|
-| Typhoon Response (Easy) | 0.3211 | 0.5961 | 0.6527 |
-| Multi-Front Crisis (Medium) | 0.1650 | **0.7747** | 0.5613 |
-| Cascading Crisis (Hard) | 0.3221 | **0.6872** | ~0.65* |
-| **Average** | 0.2694 | **0.6860** | ~0.62 |
+| Typhoon Response (Easy) | 0.3211 | **0.7711** | 0.6527 |
+| Multi-Front Crisis (Medium) | 0.1650 | **0.6962** | 0.5613 |
+| Cascading Crisis (Hard) | 0.3211 | **0.6715** | ~0.65* |
+| **Average** | 0.2694 | **0.7129** | ~0.62 |
 
 *Hard task Gemini score estimated from 21/60 steps completed (free-tier API quota limit).
 
@@ -316,6 +316,9 @@ The do-nothing scores are nonzero because some revenue is naturally preserved ev
 
 SupplyMind fully implements the [OpenEnv specification](https://github.com/meta-llama/open-env):
 
+- **OpenEnv SDK integration**: Subclasses `openenv.core.Environment[ActT, ObsT, StateT]` with typed generics
+- **OpenEnv Rubric framework**: Grading uses `openenv.core.rubrics.TrajectoryRubric` with `RubricDict` for task-specific sub-rubrics
+- **WebSocket support**: `/ws` (persistent sessions) and `/mcp` (MCP JSON-RPC) WebSocket endpoints via `openenv.core.env_server.HTTPEnvServer`
 - Typed Pydantic v2 models for actions, observations, and state
 - `step(action)` returns observation, reward, done, info
 - `reset(task_id, seed?)` returns a clean initial observation; optional seed enables episode variation
@@ -347,7 +350,8 @@ supplymind/
 │   ├── tasks/             # Task definitions (easy, medium, hard)
 │   ├── graders/           # Deterministic grading logic
 │   └── data/              # JSON data files (graphs, disruption scenarios, commodities)
-├── tests/                 # 139 pytest tests
+├── scripted_agent.py      # Deterministic rule-based agent (no LLM needed)
+├── tests/                 # 154 pytest tests
 ├── Dockerfile             # Multi-stage Docker build
 ├── pyproject.toml         # Project config with entry points
 ├── requirements.txt       # Python dependencies

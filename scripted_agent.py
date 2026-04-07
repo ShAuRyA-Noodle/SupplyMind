@@ -43,28 +43,70 @@ TASK_IDS = [
 # ---------------------------------------------------------------------------
 
 
-def choose_action(obs: SupplyMindObservation, step: int) -> SupplyMindAction:
-    """Pick the best action using deterministic heuristics."""
-    budget = obs.financials.budget_remaining
+def _has_warning_signals(obs: SupplyMindObservation) -> bool:
+    """Check if any disruption is in warning phase."""
+    return any(s.lifecycle_phase == "warning" for s in obs.active_signals)
 
-    # ── Phase 1 (steps 0-2): free intel gathering ──
-    if step < 3:
-        # Alert on the highest-risk supplier we haven't alerted yet
-        suppliers = [
+
+def _affected_supplier_ids(obs: SupplyMindObservation) -> set[str]:
+    """Get all supplier IDs affected by any active disruption."""
+    ids: set[str] = set()
+    for sig in obs.active_signals:
+        ids.update(sig.affected_node_ids)
+    return ids
+
+
+def choose_action(obs: SupplyMindObservation, step: int) -> SupplyMindAction:
+    """Pick the best action using deterministic proactive heuristics.
+
+    Key strategy: act DURING warning phase (before disruptions hit) to
+    maximize timeliness and proactive grader components.
+    """
+    budget = obs.financials.budget_remaining
+    affected = _affected_supplier_ids(obs)
+    has_warning = _has_warning_signals(obs)
+
+    # ── Step 0: free alert on first at-risk supplier ──
+    if step == 0:
+        for n in obs.node_statuses:
+            if n.node_type == "supplier" and (n.node_id in affected or n.current_risk_score > 0.1):
+                return SupplyMindAction(
+                    action_type="issue_supplier_alert",
+                    target_node_id=n.node_id,
+                )
+
+    # ── PROACTIVE: during warning phase, activate backups immediately ──
+    # This is critical for timeliness scoring — act before impact, not after
+    if has_warning:
+        for n in obs.node_statuses:
+            if n.node_type == "supplier" and n.has_backup and n.node_id in affected:
+                for backup_id in n.backup_supplier_ids:
+                    return SupplyMindAction(
+                        action_type="activate_backup_supplier",
+                        target_node_id=n.node_id,
+                        backup_supplier_id=backup_id,
+                    )
+
+    # ── PROACTIVE: increase safety stock at warehouses before disruption hits ──
+    if has_warning and budget > 200_000:
+        warehouses = [
             n for n in obs.node_statuses
-            if n.node_type == "supplier" and n.current_risk_score > 0.1
+            if n.node_type == "warehouse" and n.inventory_days_cover < 15
         ]
-        if suppliers:
-            suppliers.sort(key=lambda n: n.current_risk_score, reverse=True)
+        if warehouses:
+            warehouses.sort(key=lambda n: n.inventory_days_cover)
+            target = warehouses[0]
+            extra = min(10, max(5, 15 - int(target.inventory_days_cover)))
             return SupplyMindAction(
-                action_type="issue_supplier_alert",
-                target_node_id=suppliers[0].node_id,
+                action_type="increase_safety_stock",
+                target_node_id=target.node_id,
+                additional_stock_days=extra,
             )
 
     # ── Activate backups for disrupted/high-risk suppliers ──
     for n in obs.node_statuses:
         if n.node_type == "supplier" and n.has_backup and (
-            not n.is_operational or n.current_risk_score > 0.5
+            not n.is_operational or n.current_risk_score > 0.4
         ):
             for backup_id in n.backup_supplier_ids:
                 return SupplyMindAction(
@@ -91,7 +133,7 @@ def choose_action(obs: SupplyMindObservation, step: int) -> SupplyMindAction:
     # ── Reroute past disrupted ports ──
     disrupted_ports = [
         n for n in obs.node_statuses
-        if n.node_type == "port" and (not n.is_operational or n.current_risk_score > 0.6)
+        if n.node_type == "port" and (not n.is_operational or n.current_risk_score > 0.5)
     ]
     operational_ports = [
         n for n in obs.node_statuses
@@ -107,9 +149,9 @@ def choose_action(obs: SupplyMindObservation, step: int) -> SupplyMindAction:
     # ── Hedge spiking commodities ──
     spikes = {
         k: v for k, v in obs.financials.commodity_price_changes.items()
-        if v > 1.15
+        if v > 1.10
     }
-    if spikes and budget > 300_000:
+    if spikes and budget > 200_000:
         commodity = max(spikes, key=spikes.get)
         hedge_amt = min(budget * 0.05, 500_000)
         return SupplyMindAction(
