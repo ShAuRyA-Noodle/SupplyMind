@@ -5,7 +5,7 @@
     "sources": [
       "TSMC 2024 Annual Report / IR presentations (automotive revenue ~$8-10B)",
       "Samsung SDI 2023 Annual Report (revenue ~$20B)",
-      "Denso FY2023 Annual Report (revenue ~$45B / ¥6.4T)",
+      "Denso FY2023 Annual Report (revenue ~$45B / \u00a56.4T)",
       "Robert Bosch GmbH 2023 Annual Report (automotive revenue ~EUR55B)",
       "Continental AG 2023 Annual Report (automotive ~EUR22B)",
       "Renesas Electronics 2023 Annual Report (~$10.5B)",
@@ -31,8 +31,13 @@
       "lead_time_days": 112,
       "annual_spend": 8500000000,
       "single_source": true,
-      "backup_supplier_ids": ["SUP_SAMSUNG_SDI"],
-      "components": ["automotive_mcu", "power_management_ic"],
+      "backup_supplier_ids": [
+        "SUP_SAMSUNG_SDI"
+      ],
+      "components": [
+        "automotive_mcu",
+        "power_management_ic"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "TSMC IR 2024: automotive revenue ~$8-10B. Lead time 16-24 weeks per S&P Global Mobility."
@@ -43,13 +48,18 @@
       "node_type": "supplier",
       "tier": 1,
       "lat": 37.44,
-      "lng": 127.00,
+      "lng": 127.0,
       "country": "South Korea",
       "lead_time_days": 56,
       "annual_spend": 20000000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_CATL"],
-      "components": ["ev_batteries", "battery_cells"],
+      "backup_supplier_ids": [
+        "SUP_CATL"
+      ],
+      "components": [
+        "ev_batteries",
+        "battery_cells"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Samsung SDI 2023 Annual Report: revenue ~$20B."
@@ -65,8 +75,14 @@
       "lead_time_days": 42,
       "annual_spend": 45000000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_CONTINENTAL"],
-      "components": ["engine_ecu", "sensors", "thermal_systems"],
+      "backup_supplier_ids": [
+        "SUP_CONTINENTAL"
+      ],
+      "components": [
+        "engine_ecu",
+        "sensors",
+        "thermal_systems"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Denso FY2023 Annual Report: revenue ~$45B (JPY 6.4T)."
@@ -82,8 +98,14 @@
       "lead_time_days": 42,
       "annual_spend": 55000000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_CONTINENTAL"],
-      "components": ["abs_systems", "fuel_injection", "adas_sensors"],
+      "backup_supplier_ids": [
+        "SUP_CONTINENTAL"
+      ],
+      "components": [
+        "abs_systems",
+        "fuel_injection",
+        "adas_sensors"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Robert Bosch 2023 Annual Report: automotive revenue ~EUR55B."
@@ -99,8 +121,14 @@
       "lead_time_days": 42,
       "annual_spend": 22000000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_BOSCH"],
-      "components": ["brake_systems", "tire_pressure_sensors", "instrument_clusters"],
+      "backup_supplier_ids": [
+        "SUP_BOSCH"
+      ],
+      "components": [
+        "brake_systems",
+        "tire_pressure_sensors",
+        "instrument_clusters"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Continental AG 2023 Annual Report: automotive segment ~EUR22B."
@@ -116,8 +144,13 @@
       "lead_time_days": 84,
       "annual_spend": 10500000000,
       "single_source": true,
-      "backup_supplier_ids": ["SUP_INFINEON"],
-      "components": ["automotive_mcu", "soc_processors"],
+      "backup_supplier_ids": [
+        "SUP_INFINEON"
+      ],
+      "components": [
+        "automotive_mcu",
+        "soc_processors"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Renesas Electronics 2023 Annual Report: ~$10.5B revenue."
@@ -128,13 +161,19 @@
       "node_type": "supplier",
       "tier": 1,
       "lat": 26.08,
-      "lng": 119.30,
+      "lng": 119.3,
       "country": "China",
       "lead_time_days": 42,
       "annual_spend": 50000000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_SAMSUNG_SDI"],
-      "components": ["ev_batteries", "battery_packs", "bms"],
+      "backup_supplier_ids": [
+        "SUP_SAMSUNG_SDI"
+      ],
+      "components": [
+        "ev_batteries",
+        "battery_packs",
+        "bms"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "CATL 2023 Annual Report: revenue ~$50B (CNY ~400B)."
@@ -151,7 +190,11 @@
       "annual_spend": 150000000,
       "single_source": false,
       "backup_supplier_ids": [],
-      "components": ["castings", "forgings", "stampings"],
+      "components": [
+        "castings",
+        "forgings",
+        "stampings"
+      ],
       "is_operational": true,
       "risk_score": 0.0
     },
@@ -166,8 +209,14 @@
       "lead_time_days": 70,
       "annual_spend": 16500000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_NXP"],
-      "components": ["power_semiconductors", "igbt_modules", "automotive_mcu"],
+      "backup_supplier_ids": [
+        "SUP_NXP"
+      ],
+      "components": [
+        "power_semiconductors",
+        "igbt_modules",
+        "automotive_mcu"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Infineon FY2023 Annual Report: ~EUR16.3B revenue."
@@ -183,8 +232,14 @@
       "lead_time_days": 84,
       "annual_spend": 13300000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_INFINEON"],
-      "components": ["radar_processors", "secure_car_access", "can_transceivers"],
+      "backup_supplier_ids": [
+        "SUP_INFINEON"
+      ],
+      "components": [
+        "radar_processors",
+        "secure_car_access",
+        "can_transceivers"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "NXP 2023 Annual Report: ~$13.3B revenue."
@@ -195,13 +250,18 @@
       "node_type": "supplier",
       "tier": 1,
       "lat": 37.39,
-      "lng": 127.10,
+      "lng": 127.1,
       "country": "South Korea",
       "lead_time_days": 56,
       "annual_spend": 27000000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_SAMSUNG_SDI"],
-      "components": ["automotive_memory", "lpddr_modules"],
+      "backup_supplier_ids": [
+        "SUP_SAMSUNG_SDI"
+      ],
+      "components": [
+        "automotive_memory",
+        "lpddr_modules"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "SK hynix 2024: revenue recovery to ~$27B."
@@ -211,14 +271,18 @@
       "name": "Murata Manufacturing",
       "node_type": "supplier",
       "tier": 2,
-      "lat": 35.00,
+      "lat": 35.0,
       "lng": 135.77,
       "country": "Japan",
       "lead_time_days": 28,
       "annual_spend": 12500000000,
       "single_source": false,
       "backup_supplier_ids": [],
-      "components": ["mlcc_capacitors", "ceramic_filters", "rf_modules"],
+      "components": [
+        "mlcc_capacitors",
+        "ceramic_filters",
+        "rf_modules"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Murata FY2023 Annual Report: ~JPY 1.68T (~$12.5B)."
@@ -240,11 +304,11 @@
       "name": "Busan Port",
       "node_type": "port",
       "country": "South Korea",
-      "lat": 35.10,
+      "lat": 35.1,
       "lng": 129.03,
       "port_type": "sea",
       "avg_dwell_time_hours": 30,
-      "congestion_score": 0.20,
+      "congestion_score": 0.2,
       "is_operational": true
     },
     {
@@ -280,7 +344,7 @@
       "lng": 72.95,
       "port_type": "sea",
       "avg_dwell_time_hours": 60,
-      "congestion_score": 0.40,
+      "congestion_score": 0.4,
       "is_operational": true
     },
     {
@@ -388,7 +452,7 @@
       "node_type": "factory",
       "country": "South Korea",
       "production_capacity_daily": 5000,
-      "utilization_pct": 0.90,
+      "utilization_pct": 0.9,
       "is_operational": true
     },
     {
@@ -497,7 +561,7 @@
       "target": "WH_TAIWAN",
       "edge_type": "supplies",
       "lead_time_days": 4,
-      "cost_per_unit": 55.00,
+      "cost_per_unit": 55.0,
       "quantity": 350,
       "is_active": true,
       "_source": "Automotive MCU $30-100 per chip, midpoint ~$55"
@@ -507,7 +571,7 @@
       "target": "WH_KOREA",
       "edge_type": "supplies",
       "lead_time_days": 3,
-      "cost_per_unit": 135.00,
+      "cost_per_unit": 135.0,
       "quantity": 400,
       "is_active": true,
       "_source": "BNEF 2024: EV battery ~$100-150/kWh, Samsung SDI premium pricing"
@@ -517,7 +581,7 @@
       "target": "WH_KOREA",
       "edge_type": "supplies",
       "lead_time_days": 3,
-      "cost_per_unit": 25.00,
+      "cost_per_unit": 25.0,
       "quantity": 300,
       "is_active": true
     },
@@ -526,7 +590,7 @@
       "target": "WH_JAPAN",
       "edge_type": "supplies",
       "lead_time_days": 2,
-      "cost_per_unit": 85.00,
+      "cost_per_unit": 85.0,
       "quantity": 450,
       "is_active": true,
       "_source": "Automotive component average (ECU + sensor mix)"
@@ -536,7 +600,7 @@
       "target": "WH_JAPAN",
       "edge_type": "supplies",
       "lead_time_days": 5,
-      "cost_per_unit": 48.00,
+      "cost_per_unit": 48.0,
       "quantity": 300,
       "is_active": true
     },
@@ -545,7 +609,7 @@
       "target": "WH_JAPAN",
       "edge_type": "supplies",
       "lead_time_days": 3,
-      "cost_per_unit": 6.50,
+      "cost_per_unit": 6.5,
       "quantity": 500,
       "is_active": true,
       "_source": "MLCC per shipment unit pricing ~$6-7"
@@ -555,7 +619,7 @@
       "target": "WH_GERMANY",
       "edge_type": "supplies",
       "lead_time_days": 3,
-      "cost_per_unit": 85.00,
+      "cost_per_unit": 85.0,
       "quantity": 500,
       "is_active": true,
       "_source": "Automotive component average (ABS, fuel injection, ADAS mix)"
@@ -565,7 +629,7 @@
       "target": "WH_GERMANY",
       "edge_type": "supplies",
       "lead_time_days": 3,
-      "cost_per_unit": 85.00,
+      "cost_per_unit": 85.0,
       "quantity": 400,
       "is_active": true,
       "_source": "Automotive component average (brake systems, sensors, clusters)"
@@ -575,7 +639,7 @@
       "target": "WH_GERMANY",
       "edge_type": "supplies",
       "lead_time_days": 4,
-      "cost_per_unit": 38.00,
+      "cost_per_unit": 38.0,
       "quantity": 350,
       "is_active": true
     },
@@ -584,7 +648,7 @@
       "target": "WH_GERMANY",
       "edge_type": "supplies",
       "lead_time_days": 4,
-      "cost_per_unit": 42.00,
+      "cost_per_unit": 42.0,
       "quantity": 300,
       "is_active": true
     },
@@ -593,7 +657,7 @@
       "target": "WH_TAIWAN",
       "edge_type": "supplies",
       "lead_time_days": 7,
-      "cost_per_unit": 120.00,
+      "cost_per_unit": 120.0,
       "quantity": 200,
       "is_active": true,
       "_source": "BNEF 2024: LFP battery ~$100-130/kWh"
@@ -603,7 +667,7 @@
       "target": "WH_INDIA",
       "edge_type": "supplies",
       "lead_time_days": 5,
-      "cost_per_unit": 28.00,
+      "cost_per_unit": 28.0,
       "quantity": 250,
       "is_active": true
     },
@@ -612,7 +676,7 @@
       "target": "PORT_KAOHSIUNG",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 2.00,
+      "cost_per_unit": 2.0,
       "quantity": 350,
       "is_active": true
     },
@@ -621,7 +685,7 @@
       "target": "PORT_BUSAN",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 1.80,
+      "cost_per_unit": 1.8,
       "quantity": 400,
       "is_active": true
     },
@@ -630,7 +694,7 @@
       "target": "PORT_YOKOHAMA",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 2.20,
+      "cost_per_unit": 2.2,
       "quantity": 450,
       "is_active": true
     },
@@ -639,7 +703,7 @@
       "target": "PORT_HAMBURG",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 2.50,
+      "cost_per_unit": 2.5,
       "quantity": 500,
       "is_active": true
     },
@@ -648,7 +712,7 @@
       "target": "PORT_MUMBAI",
       "edge_type": "stores_at",
       "lead_time_days": 2,
-      "cost_per_unit": 1.50,
+      "cost_per_unit": 1.5,
       "quantity": 250,
       "is_active": true
     },
@@ -657,7 +721,7 @@
       "target": "PORT_LONG_BEACH",
       "edge_type": "ships_via",
       "transit_time_days": 14,
-      "cost_per_unit": 4200.00,
+      "cost_per_unit": 4200.0,
       "quantity": 350,
       "is_active": true,
       "_source": "Freightos 2024: Kaohsiung-Long Beach ~$4,200/FEU"
@@ -667,7 +731,7 @@
       "target": "PORT_YOKOHAMA",
       "edge_type": "ships_via",
       "transit_time_days": 4,
-      "cost_per_unit": 1800.00,
+      "cost_per_unit": 1800.0,
       "quantity": 200,
       "is_active": true,
       "_source": "Freightos 2024: Intra-Asia short haul ~$1,800/FEU"
@@ -677,7 +741,7 @@
       "target": "PORT_LONG_BEACH",
       "edge_type": "ships_via",
       "transit_time_days": 12,
-      "cost_per_unit": 4500.00,
+      "cost_per_unit": 4500.0,
       "quantity": 300,
       "is_active": true,
       "_source": "Freightos 2024: Busan-Long Beach ~$4,500/FEU"
@@ -687,7 +751,7 @@
       "target": "PORT_HAMBURG",
       "edge_type": "ships_via",
       "transit_time_days": 28,
-      "cost_per_unit": 5500.00,
+      "cost_per_unit": 5500.0,
       "quantity": 200,
       "is_active": true,
       "_source": "Freightos 2024: Busan-Hamburg ~$5,500/FEU (longer route via Suez)"
@@ -697,7 +761,7 @@
       "target": "PORT_LONG_BEACH",
       "edge_type": "ships_via",
       "transit_time_days": 11,
-      "cost_per_unit": 4300.00,
+      "cost_per_unit": 4300.0,
       "quantity": 300,
       "is_active": true,
       "_source": "Freightos 2024: Yokohama-Long Beach ~$4,300/FEU"
@@ -707,7 +771,7 @@
       "target": "PORT_LONG_BEACH",
       "edge_type": "ships_via",
       "transit_time_days": 18,
-      "cost_per_unit": 4800.00,
+      "cost_per_unit": 4800.0,
       "quantity": 250,
       "is_active": true,
       "_source": "Freightos 2024: Hamburg-Long Beach ~$4,800/FEU (transatlantic)"
@@ -717,7 +781,7 @@
       "target": "PORT_HAMBURG",
       "edge_type": "ships_via",
       "transit_time_days": 20,
-      "cost_per_unit": 4600.00,
+      "cost_per_unit": 4600.0,
       "quantity": 200,
       "is_active": true,
       "_source": "Freightos 2024: Mumbai-Hamburg ~$4,600/FEU"
@@ -727,7 +791,7 @@
       "target": "WH_US",
       "edge_type": "ships_via",
       "transit_time_days": 2,
-      "cost_per_unit": 1.50,
+      "cost_per_unit": 1.5,
       "quantity": 600,
       "is_active": true
     },
@@ -736,7 +800,7 @@
       "target": "FAC_TOYOTA_AICHI",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 1.00,
+      "cost_per_unit": 1.0,
       "quantity": 450,
       "is_active": true
     },
@@ -745,7 +809,7 @@
       "target": "FAC_BMW_MUNICH",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 1.20,
+      "cost_per_unit": 1.2,
       "quantity": 400,
       "is_active": true
     },
@@ -754,7 +818,7 @@
       "target": "FAC_VW_WOLFSBURG",
       "edge_type": "stores_at",
       "lead_time_days": 2,
-      "cost_per_unit": 1.30,
+      "cost_per_unit": 1.3,
       "quantity": 500,
       "is_active": true
     },
@@ -763,7 +827,7 @@
       "target": "FAC_TESLA_AUSTIN",
       "edge_type": "stores_at",
       "lead_time_days": 2,
-      "cost_per_unit": 1.10,
+      "cost_per_unit": 1.1,
       "quantity": 500,
       "is_active": true
     },
@@ -772,7 +836,7 @@
       "target": "FAC_HYUNDAI_ULSAN",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 0.90,
+      "cost_per_unit": 0.9,
       "quantity": 500,
       "is_active": true
     },
@@ -781,7 +845,7 @@
       "target": "FAC_TATA_PUNE",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 0.70,
+      "cost_per_unit": 0.7,
       "quantity": 250,
       "is_active": true
     },
@@ -790,7 +854,7 @@
       "target": "CUST_TOYOTA",
       "edge_type": "delivers_to",
       "lead_time_days": 2,
-      "cost_per_unit": 0.50,
+      "cost_per_unit": 0.5,
       "quantity": 200,
       "is_active": true
     },
@@ -799,7 +863,7 @@
       "target": "CUST_HONDA",
       "edge_type": "delivers_to",
       "lead_time_days": 3,
-      "cost_per_unit": 0.60,
+      "cost_per_unit": 0.6,
       "quantity": 80,
       "is_active": true
     },
@@ -817,7 +881,7 @@
       "target": "CUST_MERCEDES",
       "edge_type": "delivers_to",
       "lead_time_days": 3,
-      "cost_per_unit": 0.60,
+      "cost_per_unit": 0.6,
       "quantity": 100,
       "is_active": true
     },
@@ -835,7 +899,7 @@
       "target": "CUST_FORD",
       "edge_type": "delivers_to",
       "lead_time_days": 4,
-      "cost_per_unit": 0.70,
+      "cost_per_unit": 0.7,
       "quantity": 100,
       "is_active": true
     },
@@ -844,7 +908,7 @@
       "target": "CUST_GM",
       "edge_type": "delivers_to",
       "lead_time_days": 4,
-      "cost_per_unit": 0.70,
+      "cost_per_unit": 0.7,
       "quantity": 90,
       "is_active": true
     },
@@ -853,7 +917,7 @@
       "target": "CUST_HYUNDAI",
       "edge_type": "delivers_to",
       "lead_time_days": 2,
-      "cost_per_unit": 0.50,
+      "cost_per_unit": 0.5,
       "quantity": 200,
       "is_active": true
     },
@@ -862,7 +926,7 @@
       "target": "CUST_STELLANTIS",
       "edge_type": "delivers_to",
       "lead_time_days": 6,
-      "cost_per_unit": 0.90,
+      "cost_per_unit": 0.9,
       "quantity": 60,
       "is_active": true
     },
@@ -871,7 +935,7 @@
       "target": "CUST_FORD",
       "edge_type": "delivers_to",
       "lead_time_days": 8,
-      "cost_per_unit": 1.10,
+      "cost_per_unit": 1.1,
       "quantity": 50,
       "is_active": true
     },
@@ -880,7 +944,7 @@
       "target": "CUST_VW",
       "edge_type": "delivers_to",
       "lead_time_days": 2,
-      "cost_per_unit": 0.50,
+      "cost_per_unit": 0.5,
       "quantity": 200,
       "is_active": true
     },
@@ -901,6 +965,36 @@
       "cost_per_unit": 0.55,
       "quantity": 100,
       "is_active": true
+    },
+    {
+      "source": "WH_TAIWAN",
+      "target": "PORT_BUSAN",
+      "edge_type": "ships_via",
+      "transit_time_days": 3,
+      "cost_per_unit": 1800.0,
+      "quantity": 150,
+      "is_active": false,
+      "_source": "Taiwan-Busan feeder route; cross-geography fallback when Kaohsiung is blocked"
+    },
+    {
+      "source": "PORT_MUMBAI",
+      "target": "PORT_LONG_BEACH",
+      "edge_type": "ships_via",
+      "transit_time_days": 30,
+      "cost_per_unit": 6800.0,
+      "quantity": 100,
+      "is_active": false,
+      "_source": "Mumbai-Long Beach direct route via Suez Canal; slow but available when European ports are congested"
+    },
+    {
+      "source": "WH_GERMANY",
+      "target": "PORT_LONG_BEACH",
+      "edge_type": "ships_via",
+      "transit_time_days": 22,
+      "cost_per_unit": 6200.0,
+      "quantity": 80,
+      "is_active": false,
+      "_source": "Hamburg-Long Beach transatlantic dormant route; bypass for when Hamburg is congested"
     }
   ]
 }

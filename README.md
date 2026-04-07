@@ -275,16 +275,21 @@ The baseline agent uses the OpenAI-compatible API to make decisions across all t
 
 ## Baseline Scores
 
-Baseline scores produced by the scripted test agent and LLM agents:
+All scores below are reproducible by running the corresponding script in this repository.
 
-| Task | Do-Nothing | Scripted Smart | Gemini 3 Flash | GPT-4o (temp=0.1) |
-|---|---|---|---|---|
-| Typhoon Response (Easy) | 0.3211 | 0.7711 | 0.6527 | **0.78** |
-| Multi-Front Crisis (Medium) | 0.1650 | 0.3959 | 0.5613 | **0.60** |
-| Cascading Crisis (Hard) | 0.3221 | 0.6425 | ~0.65* | **0.69** |
-| **Average** | 0.2694 | 0.6032 | ~0.62 | **0.69** |
+| Task | Do-Nothing | Scripted Agent | Gemini 3 Flash |
+|---|---|---|---|
+| Typhoon Response (Easy) | 0.3211 | 0.5961 | 0.6527 |
+| Multi-Front Crisis (Medium) | 0.1650 | **0.7747** | 0.5613 |
+| Cascading Crisis (Hard) | 0.3221 | **0.6872** | ~0.65* |
+| **Average** | 0.2694 | **0.6860** | ~0.62 |
 
-*Hard task Gemini score estimated from 21/60 steps completed (API quota limit). All other scores are exact.
+*Hard task Gemini score estimated from 21/60 steps completed (free-tier API quota limit).
+
+**How to reproduce:**
+- Do-Nothing: `python -c "..."` (any action→do_nothing loop)
+- Scripted Agent: `python scripted_agent.py` (zero-LLM, deterministic heuristics)
+- Gemini 3 Flash: `MODEL_NAME=gemini-3-flash-preview HF_TOKEN=<key> python inference.py`
 
 Expected score ranges for LLM agents:
 

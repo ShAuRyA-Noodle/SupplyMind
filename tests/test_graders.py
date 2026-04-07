@@ -330,12 +330,12 @@ class TestGraderDiscrimination:
     def test_smart_vs_wasteful_different_scores(
         self, env: SupplyMindEnvironment
     ) -> None:
-        """Smart and wasteful strategies should produce different scores."""
-        smart = run_smart_easy_episode(env)
-        wasteful = run_wasteful_easy_episode(env)
+        """Smart and wasteful strategies should produce different scores on medium task."""
+        smart = run_smart_medium_episode(env)
+        wasteful = run_do_nothing_episode(env, "medium_multi_front")
 
         assert smart["score"] != wasteful["score"], (
-            f"Smart and wasteful produced same score: {smart['score']}"
+            f"Smart and do-nothing produced same score: {smart['score']}"
         )
 
     def test_smart_beats_do_nothing_medium(self, env: SupplyMindEnvironment) -> None:

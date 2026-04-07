@@ -65,8 +65,8 @@ class TestSupplyChainGraph:
         assert easy_graph.G.number_of_nodes() == 12
 
     def test_load_easy_graph_edge_count(self, easy_graph: SupplyChainGraph) -> None:
-        """Easy graph should have 11 edges."""
-        assert easy_graph.G.number_of_edges() == 11
+        """Easy graph should have 12 edges (11 active + 1 dormant cross-geography)."""
+        assert easy_graph.G.number_of_edges() == 12
 
     def test_all_node_ids_present(self, easy_graph: SupplyChainGraph) -> None:
         expected_ids = {

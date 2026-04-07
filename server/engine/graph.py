@@ -637,13 +637,20 @@ class SupplyChainGraph:
             if edge_data.get("edge_type", "").lower() != "ships_via":
                 downstream_nodes.append(neighbor)
 
-        # Create new shipping path (degraded ports get 2x transit time)
+        # Create new shipping path — prefer activating existing dormant edges
+        # over synthesizing new ones (degraded ports get 2x transit time)
         for port_id in reroute_via:
             is_degraded = port_id in degraded_ids
             inbound_transit = 10 if is_degraded else 5
             outbound_transit = 14 if is_degraded else 7
 
-            if not self.G.has_edge(target, port_id):
+            if self.G.has_edge(target, port_id):
+                # Activate existing dormant edge
+                edge = self.G.edges[target, port_id]
+                edge["is_active"] = True
+                if is_degraded:
+                    edge["transit_time_days"] = max(edge.get("transit_time_days", inbound_transit), inbound_transit)
+            else:
                 self.G.add_edge(target, port_id,
                                 edge_type="ships_via",
                                 transit_time_days=inbound_transit,
@@ -653,7 +660,12 @@ class SupplyChainGraph:
 
             # Connect reroute port to downstream warehouses/factories
             for downstream in downstream_nodes:
-                if not self.G.has_edge(port_id, downstream):
+                if self.G.has_edge(port_id, downstream):
+                    edge = self.G.edges[port_id, downstream]
+                    edge["is_active"] = True
+                    if is_degraded:
+                        edge["transit_time_days"] = max(edge.get("transit_time_days", outbound_transit), outbound_transit)
+                else:
                     self.G.add_edge(port_id, downstream,
                                     edge_type="ships_via",
                                     transit_time_days=outbound_transit,

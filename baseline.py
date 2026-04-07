@@ -466,10 +466,14 @@ def get_action(
 # ---------------------------------------------------------------------------
 
 
+BASELINE_SEEDS = [42, 99, 7]  # Run 3 seeds per task to showcase episode variation
+
+
 def run_task(
     env: Any,
     task_id: str,
     client: OpenAI,
+    seed: int | None = None,
 ) -> dict[str, Any]:
     """
     Run a single task to completion using the LLM agent.
@@ -478,6 +482,7 @@ def run_task(
         env: SupplyMindEnvironment instance.
         task_id: Task identifier.
         client: OpenAI client.
+        seed: Optional episode variation seed.
 
     Returns:
         Dict with task_id, score, steps, cumulative_reward, and breakdown.
@@ -485,7 +490,7 @@ def run_task(
     logger.info("Starting task: %s", task_id)
     start = time.time()
 
-    obs = env.reset(task_id=task_id)
+    obs = env.reset(task_id=task_id, seed=seed)
     conversation_history: list[dict[str, str]] = []
     step_count = 0
 
@@ -558,7 +563,8 @@ def run_all_baselines(env: Any) -> dict[str, Any]:
     total_score = 0.0
     for task_id in TASK_IDS:
         try:
-            task_result = run_task(env, task_id, client)
+            # Run with a seed to exercise episode variation (jitter/cascades)
+            task_result = run_task(env, task_id, client, seed=BASELINE_SEEDS[0])
         except Exception as e:
             logger.error("Task %s failed with unrecoverable error: %s", task_id, e)
             task_result = {

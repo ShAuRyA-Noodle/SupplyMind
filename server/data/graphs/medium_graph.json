@@ -27,8 +27,13 @@
       "lead_time_days": 84,
       "annual_spend": 18000000000,
       "single_source": true,
-      "backup_supplier_ids": ["SUP_SAMSUNG"],
-      "components": ["advanced_logic_chips", "7nm_wafers"],
+      "backup_supplier_ids": [
+        "SUP_SAMSUNG"
+      ],
+      "components": [
+        "advanced_logic_chips",
+        "7nm_wafers"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "TSMC 2024 Annual Report: $87B revenue, Apple ~25% ($18B). Lead time 16-20 weeks per Susquehanna tracker."
@@ -39,13 +44,16 @@
       "node_type": "supplier",
       "tier": 1,
       "lat": 37.44,
-      "lng": 127.00,
+      "lng": 127.0,
       "country": "South Korea",
       "lead_time_days": 70,
       "annual_spend": 4500000000,
       "single_source": false,
       "backup_supplier_ids": [],
-      "components": ["advanced_logic_chips", "memory_chips"],
+      "components": [
+        "advanced_logic_chips",
+        "memory_chips"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Samsung Semiconductor 2024: $4.5B foundry segment estimate. Lead time 14-18 weeks per Susquehanna."
@@ -56,13 +64,18 @@
       "node_type": "supplier",
       "tier": 2,
       "lat": 13.76,
-      "lng": 100.50,
+      "lng": 100.5,
       "country": "Thailand",
       "lead_time_days": 35,
       "annual_spend": 8500000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_SHENZHEN"],
-      "components": ["pcb_assemblies", "connectors"],
+      "backup_supplier_ids": [
+        "SUP_SHENZHEN"
+      ],
+      "components": [
+        "pcb_assemblies",
+        "connectors"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Foxconn 2023 Annual Report: Thailand operations revenue ~$8.5B. Lead time 5-6 weeks for electronics assembly."
@@ -79,7 +92,10 @@
       "annual_spend": 3200000000,
       "single_source": false,
       "backup_supplier_ids": [],
-      "components": ["power_supplies", "thermal_modules"],
+      "components": [
+        "power_supplies",
+        "thermal_modules"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Delta Electronics 2023 Annual Report: Thailand operations ~$3.2B."
@@ -96,7 +112,11 @@
       "annual_spend": 950000000,
       "single_source": true,
       "backup_supplier_ids": [],
-      "components": ["rare_earth_elements", "neodymium", "dysprosium"],
+      "components": [
+        "rare_earth_elements",
+        "neodymium",
+        "dysprosium"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "USGS 2024: China ~90% global rare earth supply. Segment value ~$950M. Lead time 6 weeks for processed rare earths."
@@ -113,7 +133,10 @@
       "annual_spend": 1800000000,
       "single_source": false,
       "backup_supplier_ids": [],
-      "components": ["pcb_assemblies", "passive_components"],
+      "components": [
+        "pcb_assemblies",
+        "passive_components"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Shenzhen electronics cluster aggregate: ~$1.8B passive components segment."
@@ -123,14 +146,19 @@
       "name": "Intel Chandler",
       "node_type": "supplier",
       "tier": 1,
-      "lat": 33.30,
+      "lat": 33.3,
       "lng": -111.84,
       "country": "United States",
       "lead_time_days": 84,
       "annual_spend": 12000000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_TSMC"],
-      "components": ["cpu_processors", "chipsets"],
+      "backup_supplier_ids": [
+        "SUP_TSMC"
+      ],
+      "components": [
+        "cpu_processors",
+        "chipsets"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Intel 2024 Annual Report: $54B revenue, foundry segment ~$12B. CPU lead time 16-20 weeks."
@@ -146,8 +174,13 @@
       "lead_time_days": 56,
       "annual_spend": 6500000000,
       "single_source": false,
-      "backup_supplier_ids": ["SUP_SAMSUNG"],
-      "components": ["dram_memory", "nand_flash"],
+      "backup_supplier_ids": [
+        "SUP_SAMSUNG"
+      ],
+      "components": [
+        "dram_memory",
+        "nand_flash"
+      ],
       "is_operational": true,
       "risk_score": 0.0,
       "_source": "Micron FY2024: $25B revenue, DRAM segment ~$6.5B. DRAM lead time 8-12 weeks."
@@ -181,7 +214,7 @@
       "name": "Oakland Port",
       "node_type": "port",
       "country": "United States",
-      "lat": 37.80,
+      "lat": 37.8,
       "lng": -122.27,
       "port_type": "sea",
       "avg_dwell_time_hours": 42,
@@ -197,7 +230,7 @@
       "lng": 100.88,
       "port_type": "sea",
       "avg_dwell_time_hours": 30,
-      "congestion_score": 0.20,
+      "congestion_score": 0.2,
       "is_operational": true
     },
     {
@@ -246,7 +279,7 @@
       "node_type": "factory",
       "country": "China",
       "production_capacity_daily": 3000,
-      "utilization_pct": 0.90,
+      "utilization_pct": 0.9,
       "is_operational": true
     },
     {
@@ -324,7 +357,7 @@
       "target": "WH_TAIWAN",
       "edge_type": "supplies",
       "lead_time_days": 3,
-      "cost_per_unit": 10500.00,
+      "cost_per_unit": 10500.0,
       "quantity": 250,
       "is_active": true,
       "_source": "SemiAnalysis: TSMC N7 wafer ~$9,500-$10,000 per wafer"
@@ -334,7 +367,7 @@
       "target": "WH_TAIWAN",
       "edge_type": "supplies",
       "lead_time_days": 7,
-      "cost_per_unit": 9000.00,
+      "cost_per_unit": 9000.0,
       "quantity": 200,
       "is_active": true,
       "_source": "Samsung 5nm competitive pricing vs TSMC"
@@ -344,7 +377,7 @@
       "target": "WH_THAILAND",
       "edge_type": "supplies",
       "lead_time_days": 4,
-      "cost_per_unit": 85.00,
+      "cost_per_unit": 85.0,
       "quantity": 180,
       "is_active": true,
       "_source": "PCB assembly per-unit cost estimate"
@@ -354,7 +387,7 @@
       "target": "WH_THAILAND",
       "edge_type": "supplies",
       "lead_time_days": 3,
-      "cost_per_unit": 120.00,
+      "cost_per_unit": 120.0,
       "quantity": 150,
       "is_active": true,
       "_source": "Power supply unit average wholesale cost"
@@ -364,7 +397,7 @@
       "target": "WH_CHINA",
       "edge_type": "supplies",
       "lead_time_days": 5,
-      "cost_per_unit": 280.00,
+      "cost_per_unit": 280.0,
       "quantity": 50,
       "is_active": true,
       "_source": "Asian Metal 2024: NdPr oxide ~$280/kg"
@@ -374,7 +407,7 @@
       "target": "WH_CHINA",
       "edge_type": "supplies",
       "lead_time_days": 2,
-      "cost_per_unit": 35.00,
+      "cost_per_unit": 35.0,
       "quantity": 300,
       "is_active": true,
       "_source": "Passive components lot pricing"
@@ -384,7 +417,7 @@
       "target": "WH_US_WEST",
       "edge_type": "supplies",
       "lead_time_days": 5,
-      "cost_per_unit": 420.00,
+      "cost_per_unit": 420.0,
       "quantity": 200,
       "is_active": true,
       "_source": "Intel CPU wholesale ~$300-$550, midpoint ~$420"
@@ -394,7 +427,7 @@
       "target": "WH_US_WEST",
       "edge_type": "supplies",
       "lead_time_days": 4,
-      "cost_per_unit": 45.00,
+      "cost_per_unit": 45.0,
       "quantity": 250,
       "is_active": true,
       "_source": "DRAM module pricing ~$40-$50 per module"
@@ -404,7 +437,7 @@
       "target": "PORT_KAOHSIUNG",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 2.00,
+      "cost_per_unit": 2.0,
       "quantity": 250,
       "is_active": true
     },
@@ -413,7 +446,7 @@
       "target": "PORT_LAEM_CHABANG",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 1.50,
+      "cost_per_unit": 1.5,
       "quantity": 180,
       "is_active": true
     },
@@ -422,7 +455,7 @@
       "target": "PORT_LONG_BEACH",
       "edge_type": "ships_via",
       "transit_time_days": 14,
-      "cost_per_unit": 4200.00,
+      "cost_per_unit": 4200.0,
       "quantity": 250,
       "is_active": true,
       "_source": "Freightos Baltic Index 2024: Kaohsiung-Long Beach ~$4,200/FEU"
@@ -432,7 +465,7 @@
       "target": "PORT_OAKLAND",
       "edge_type": "ships_via",
       "transit_time_days": 15,
-      "cost_per_unit": 4400.00,
+      "cost_per_unit": 4400.0,
       "quantity": 200,
       "is_active": true,
       "_source": "Freightos Baltic Index 2024: Kaohsiung-Oakland ~$4,400/FEU"
@@ -442,7 +475,7 @@
       "target": "PORT_LONG_BEACH",
       "edge_type": "ships_via",
       "transit_time_days": 18,
-      "cost_per_unit": 4800.00,
+      "cost_per_unit": 4800.0,
       "quantity": 180,
       "is_active": true,
       "_source": "Freightos Baltic Index 2024: Laem Chabang-Long Beach ~$4,800/FEU"
@@ -452,7 +485,7 @@
       "target": "WH_US_WEST",
       "edge_type": "ships_via",
       "transit_time_days": 2,
-      "cost_per_unit": 1.50,
+      "cost_per_unit": 1.5,
       "quantity": 300,
       "is_active": true
     },
@@ -461,7 +494,7 @@
       "target": "WH_US_WEST",
       "edge_type": "ships_via",
       "transit_time_days": 2,
-      "cost_per_unit": 1.60,
+      "cost_per_unit": 1.6,
       "quantity": 200,
       "is_active": true
     },
@@ -470,7 +503,7 @@
       "target": "FAC_SUZHOU",
       "edge_type": "stores_at",
       "lead_time_days": 1,
-      "cost_per_unit": 0.80,
+      "cost_per_unit": 0.8,
       "quantity": 300,
       "is_active": true
     },
@@ -479,7 +512,7 @@
       "target": "FAC_AUSTIN",
       "edge_type": "stores_at",
       "lead_time_days": 3,
-      "cost_per_unit": 1.20,
+      "cost_per_unit": 1.2,
       "quantity": 400,
       "is_active": true
     },
@@ -488,7 +521,7 @@
       "target": "FAC_GUADALAJARA",
       "edge_type": "stores_at",
       "lead_time_days": 4,
-      "cost_per_unit": 1.80,
+      "cost_per_unit": 1.8,
       "quantity": 200,
       "is_active": true
     },
@@ -497,7 +530,7 @@
       "target": "FAC_SUZHOU",
       "edge_type": "stores_at",
       "lead_time_days": 5,
-      "cost_per_unit": 2.50,
+      "cost_per_unit": 2.5,
       "quantity": 150,
       "is_active": true
     },
@@ -506,7 +539,7 @@
       "target": "CUST_APPLE",
       "edge_type": "delivers_to",
       "lead_time_days": 5,
-      "cost_per_unit": 1.00,
+      "cost_per_unit": 1.0,
       "quantity": 120,
       "is_active": true
     },
@@ -515,7 +548,7 @@
       "target": "CUST_SAMSUNG_MOBILE",
       "edge_type": "delivers_to",
       "lead_time_days": 4,
-      "cost_per_unit": 0.90,
+      "cost_per_unit": 0.9,
       "quantity": 100,
       "is_active": true
     },
@@ -524,7 +557,7 @@
       "target": "CUST_LENOVO",
       "edge_type": "delivers_to",
       "lead_time_days": 2,
-      "cost_per_unit": 0.60,
+      "cost_per_unit": 0.6,
       "quantity": 80,
       "is_active": true
     },
@@ -551,7 +584,7 @@
       "target": "CUST_CISCO",
       "edge_type": "delivers_to",
       "lead_time_days": 4,
-      "cost_per_unit": 0.80,
+      "cost_per_unit": 0.8,
       "quantity": 60,
       "is_active": true
     },
@@ -572,6 +605,26 @@
       "cost_per_unit": 0.85,
       "quantity": 60,
       "is_active": true
+    },
+    {
+      "source": "WH_THAILAND",
+      "target": "PORT_KAOHSIUNG",
+      "edge_type": "ships_via",
+      "transit_time_days": 5,
+      "cost_per_unit": 2200.0,
+      "quantity": 100,
+      "is_active": false,
+      "_source": "Thailand-Taiwan feeder route via regional carrier; dormant fallback"
+    },
+    {
+      "source": "PORT_LAEM_CHABANG",
+      "target": "PORT_OAKLAND",
+      "edge_type": "ships_via",
+      "transit_time_days": 20,
+      "cost_per_unit": 5500.0,
+      "quantity": 100,
+      "is_active": false,
+      "_source": "Laem Chabang-Oakland direct route (dormant fallback for Long Beach disruption)"
     }
   ]
 }
