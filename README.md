@@ -282,7 +282,7 @@ All scores below are reproducible by running the corresponding script in this re
 | Typhoon Response (Easy) | 0.3211 | **0.7711** | 0.6527 |
 | Multi-Front Crisis (Medium) | 0.1650 | **0.6962** | 0.5613 |
 | Cascading Crisis (Hard) | 0.3211 | **0.6715** | ~0.65* |
-| **Average** | 0.2694 | **0.7129** | ~0.62 |
+| **Average** | 0.2691 | **0.7129** | ~0.62 |
 
 *Hard task Gemini score estimated from 21/60 steps completed (free-tier API quota limit).
 
