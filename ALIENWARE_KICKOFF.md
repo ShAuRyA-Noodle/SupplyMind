@@ -532,6 +532,258 @@ W&B free tier: unlimited runs, unlimited storage, public dashboards. Create acco
 # Calibrates disruption probability in environment
 ```
 
+### Blueprint-Sourced Enrichments (from SUPPLYMIND_BLUEPRINT.md)
+
+**1. Dependency Scoring Formula (rl/data/dependency_scoring.py)**
+
+Add as per-node feature in state vector. Quantifies how critical each supplier is.
+
+```python
+def dependency_score(node):
+    """Score 0-100 indicating criticality of this supplier."""
+    single_source_penalty = 40 if node.single_source else 0
+    revenue_exposure = min(30, (node.downstream_revenue / total_revenue) * 100)
+    lead_time_risk = min(15, node.lead_time_days / 7 * 5)
+    geographic_concentration = min(15, country_concentration_score(node.country))
+    return single_source_penalty + revenue_exposure + lead_time_risk + geographic_concentration
+```
+
+**2. 15-Type Disruption Taxonomy with Real-World Calibration Data**
+
+Use to calibrate environment disruption parameters to real-world frequency and severity:
+
+```
+| # | Type                     | Frequency    | Duration   | Severity  | Historical Reference                              |
+|---|--------------------------|-------------|------------|-----------|---------------------------------------------------|
+| 1 | Tropical Cyclone         | 85/yr global | 3-14d      | 0.3-0.9   | Typhoon Hagibis 2019: $15B damage Japan           |
+| 2 | Earthquake               | 15 major/yr  | 7-90d      | 0.2-1.0   | Tohoku 2011: 6-month auto supply disruption       |
+| 3 | Flooding                 | 200+/yr      | 7-30d      | 0.2-0.8   | Thailand 2011: 25% global HDD production halted   |
+| 4 | Wildfire                 | 50+/yr       | 7-60d      | 0.1-0.6   | California 2020: semiconductor fab evacuations    |
+| 5 | Volcanic Eruption        | 50-70/yr     | 1-180d     | 0.1-0.9   | Eyjafjallajokull 2010: 6-day airspace closure     |
+| 6 | Port Congestion          | Ongoing      | 7-90d      | 0.2-0.7   | LA/LB 2021: 100+ vessels, 2-week delays          |
+| 7 | Canal Disruption         | 1-2/yr       | 1-14d      | 0.3-0.8   | Suez 2021: 6 days, $9.6B/day blocked             |
+| 8 | Labor Strike             | 50+/yr       | 1-60d      | 0.2-0.7   | US rail 2022: $2B/day economic impact threat      |
+| 9 | Geopolitical Conflict    | Ongoing      | 30-365+d   | 0.3-1.0   | Russia-Ukraine: global grain/energy disruption    |
+| 10| Sanctions/Trade Policy   | 10-20/yr     | 90-365+d   | 0.3-0.9   | US-China chip export controls: $50B+ restructure  |
+| 11| Pandemic                 | 1-2/decade   | 90-730d    | 0.5-1.0   | COVID-19: 2-year global disruption                |
+| 12| Cyber Attack             | 1000+/yr     | 3-30d      | 0.2-0.8   | NotPetya 2017: Maersk $300M, global shipping chaos|
+| 13| Supplier Financial Distress| Ongoing    | 30-180d    | 0.3-0.7   | Hanjin Shipping 2016: cargo stranded globally     |
+| 14| Raw Material Shortage    | 5-10/yr      | 30-365d    | 0.2-0.8   | Semi shortage 2020-23: $500B auto revenue lost    |
+| 15| Infrastructure Failure   | 10+/yr       | 1-30d      | 0.1-0.5   | Texas freeze 2021: petrochemical plant shutdowns  |
+```
+
+Store as `rl/data/disruption_taxonomy.json`. Use freq/duration/severity ranges to validate that your environment's disruption parameters are realistic.
+
+**3. Political Risk Score — Per-Country Feature (rl/data/political_risk.py)**
+
+8-component weighted index. Add as per-node feature based on supplier country.
+
+```python
+def political_risk_score(country_code):
+    """Composite political risk 0-100 (higher = riskier)."""
+    components = {
+        'governance_index': get_world_bank_governance(country_code),       # 0.15
+        'fragile_state_index': get_fsi_score(country_code),                # 0.10
+        'ease_of_business': get_doing_business_score(country_code),        # 0.05
+        'conflict_intensity': get_acled_intensity(country_code, days=30),  # 0.20
+        'gdelt_stability_tone': get_gdelt_stability(country_code),         # 0.15
+        'sanctions_risk': get_sanctions_exposure(country_code),             # 0.15
+        'travel_advisory': get_state_dept_level(country_code),             # 0.10
+        'currency_volatility': get_fx_volatility(country_code, days=30),   # 0.10
+    }
+    weights = [0.15, 0.10, 0.05, 0.20, 0.15, 0.15, 0.10, 0.10]
+    return sum(s * w for s, w in zip(components.values(), weights))
+```
+
+Data sources: World Bank governance indicators (free API), ACLED conflict events, GDELT tone analysis, US State Dept travel advisories (free JSON), FRED currency data. All cacheable.
+
+**4. SPOF Detection Algorithm (rl/analysis/spof.py)**
+
+Articulation point analysis on supply chain graph. Useful as observation enrichment or grader input.
+
+```python
+def detect_single_points_of_failure(supply_graph):
+    """Find nodes whose removal disconnects supply paths."""
+    spofs = []
+    for component in supply_graph.get_all_components():
+        paths = supply_graph.get_all_paths(source_type='SUPPLIER', target_type='FACTORY', component=component)
+        if len(paths) == 0: continue
+        common_nodes = set(paths[0])
+        for path in paths[1:]:
+            common_nodes &= set(path)
+        for node in common_nodes:
+            if node.type != 'FACTORY':
+                spofs.append({
+                    'node': node, 'component': component,
+                    'revenue_at_risk': sum(path[-1].revenue_contribution for path in paths),
+                    'mitigation': 'CRITICAL — qualify alternative supplier'
+                })
+    return sorted(spofs, key=lambda s: s['revenue_at_risk'], reverse=True)
+```
+
+**5. EBITDA Impact Model (rl/analysis/financial_impact.py)**
+
+Richer financial impact calculation than current engine.
+
+```python
+def calculate_ebitda_impact(disruption, company_financials):
+    """Estimate daily EBITDA impact per disrupted node."""
+    revenue_per_day = disruption['revenue_at_risk'] / 365
+    lost_margin = revenue_per_day * company_financials['gross_margin']
+    expedite_premium = disruption['expedite_cost_multiplier'] * revenue_per_day * 0.3
+    penalty_fees = sum(c['sla_penalty_per_day'] for c in disruption['affected_customers']
+                       if disruption['delay_days'] > c['sla_buffer_days'])
+    reputation_cost = revenue_per_day * 0.05  # Conservative
+    return {
+        'daily_ebitda_impact': lost_margin + expedite_premium + penalty_fees + reputation_cost,
+        'total_estimate': (lost_margin + expedite_premium + penalty_fees + reputation_cost)
+                          * disruption['expected_duration_days'],
+        'breakdown': {'lost_margin': lost_margin, 'expedite': expedite_premium,
+                      'sla_penalties': penalty_fees, 'reputation': reputation_cost}
+    }
+```
+
+**6. Taiwan Strait Scenario — Specific Calibration Data**
+
+For hard task and crisis library calibration:
+
+```python
+TAIWAN_STRAIT_CALIBRATION = {
+    'tsmc_global_foundry_share': 0.54,
+    'tsmc_advanced_node_share': 0.92,  # <7nm
+    'umc_global_share': 0.07,
+    'mediatek_fabless_share': 0.15,
+    'ase_packaging_share': 0.20,
+    'shipping_reroute_delay_days': 7,  # via south of Philippines
+    'capacity_reduction_pct': 0.30,
+    'scenarios': {
+        'naval_exercise': {'duration_days': 7, 'probability': 0.15},
+        'blockade': {'duration_days': 90, 'probability': 0.05},
+        'conflict': {'duration_days': 365, 'probability': 0.02},
+    },
+    'global_economic_impact_first_year': '$2.6T (Bloomberg Economics)',
+    'monitoring_signals': [
+        'PLA naval vessel AIS gaps near strait',
+        'ROCAF ADIZ incursion reports',
+        'US carrier strike group positioning (OSINT)',
+        'Semiconductor inventory pre-stocking by major buyers',
+        'TSMC stock price volatility',
+        'Chinese state media rhetoric (GDELT tone analysis)'
+    ]
+}
+```
+
+**7. Red Sea Scenario — Specific Shipping Calibration Data**
+
+```python
+RED_SEA_CALIBRATION = {
+    'normal_route': 'Suez Canal → Red Sea → Bab el-Mandeb → Indian Ocean',
+    'reroute': 'Cape of Good Hope',
+    'additional_distance_nm': 3500,
+    'additional_transit_days': 10,
+    'fuel_cost_increase_pct': 25,
+    'affected_trade_volume': '12% of global trade',
+    'container_rate_increase': '200-300% on affected lanes',
+    'monitoring_signals': [
+        'Vessel AIS signals disappearing in southern Red Sea',
+        'Carrier route announcements (Maersk, MSC, CMA CGM)',
+        'UKMTO/MSCHOA maritime security advisories',
+        'Houthi media statements (Arabic language monitoring)',
+        'CENTCOM press releases on military operations',
+        'Insurance premium changes for Red Sea transit (war risk)'
+    ]
+}
+```
+
+**8. Monte Carlo with Beta-Distributed Severity + Lognormal Duration**
+
+More realistic than fixed distributions currently in env:
+
+```python
+def realistic_monte_carlo(graph, scenario, n_simulations=10000):
+    """Severity from Beta dist, duration from Lognormal — matches real-world fat tails."""
+    results = []
+    for _ in range(n_simulations):
+        severity = np.random.beta(scenario['severity_alpha'], scenario['severity_beta'])
+        duration = np.random.lognormal(
+            np.log(scenario['expected_duration_days']),
+            scenario['duration_variance']
+        )
+        impact = graph.propagate_disruption(scenario['node_id'], severity=severity, duration_days=duration)
+        results.append({
+            'total_revenue_at_risk': sum(i['revenue_at_risk'] for i in impact.values()),
+            'max_delay_days': max((i['delay_days'] for i in impact.values()), default=0),
+            'nodes_affected': len(impact)
+        })
+    return {
+        'p50_revenue_at_risk': np.percentile([r['total_revenue_at_risk'] for r in results], 50),
+        'p95_revenue_at_risk': np.percentile([r['total_revenue_at_risk'] for r in results], 95),
+        'p99_revenue_at_risk': np.percentile([r['total_revenue_at_risk'] for r in results], 99),
+        'p50_max_delay': np.percentile([r['max_delay_days'] for r in results], 50),
+        'p95_max_delay': np.percentile([r['max_delay_days'] for r in results], 95),
+    }
+```
+
+**9. Leading Indicator Library (rl/data/leading_indicators.json)**
+
+Maps each of the 15 disruption types to specific early warning signals with 24-72hr lead time:
+
+```
+Tropical Cyclone    → Storm formation, track forecast cone, wind speed projections (NOAA NHC)
+Port Congestion     → Vessel queue length +20%, avg dwell time spike (MarineTraffic, port APIs)
+Labor Strike        → Strike vote announcement, union statement, social media surge (GDELT, NLRB)
+Earthquake          → NOT predictable (immediate detection + aftershock modeling only, USGS)
+Flooding            → River gauge levels exceeding flood stage, rainfall forecast >200mm (NOAA AHPS)
+Geopolitical        → Military movement reports, diplomatic recall, GDELT conflict tone spike
+Sanctions           → Legislative draft leaks, diplomatic statements, pre-announcement news
+Financial Distress  → Credit downgrade, payment delay reports, stock price drop >10%
+Wildfire            → NASA FIRMS hotspot density increase, wind forecast + low humidity
+Volcanic Eruption   → Seismic swarm detection, SO2 emission spike, aviation color code change
+Canal Disruption    → Vessel grounding report, military activity near chokepoint, draft restriction
+Cyber Attack        → Reactive only — detect via supplier communication blackout
+Pandemic            → WHO Disease Outbreak News, ProMED alerts, abnormal absenteeism
+Export Control      → Government policy announcements, trade negotiation breakdown
+Material Shortage   → Commodity price spike >2 std dev, mine/refinery incident reports
+```
+
+Store as structured JSON. Can inform disruption lifecycle warning phase timing in environment scenarios.
+
+**10. Confidence Scoring Formula (rl/analysis/confidence.py)**
+
+Multi-signal corroboration scoring for disruption predictions:
+
+```python
+def disruption_confidence(prediction_probability, indicator_count, historical_accuracy):
+    """Composite confidence for 72-hour disruption prediction."""
+    corroboration_bonus = min(0.2, indicator_count * 0.05)
+    raw_confidence = (prediction_probability * 0.5 +
+                      historical_accuracy * 0.3 +
+                      corroboration_bonus * 1.0)
+    return min(1.0, raw_confidence)
+    # >= 0.8 → RED ALERT   (immediate notification, auto-draft actions)
+    # >= 0.5 → AMBER WARNING (dashboard highlight, daily digest)
+    # >= 0.3 → YELLOW WATCH  (monitor, weekly report)
+```
+
+**11. Safety Stock Formula (rl/analysis/safety_stock.py)**
+
+Risk-adjusted inventory buffer recommendation:
+
+```python
+def recommend_buffer(component, supply_graph, risk_tolerance='moderate'):
+    paths = supply_graph.get_supply_paths(component)
+    for path in paths:
+        path.risk_adjusted_lead_time = path.base_lead_time * (
+            1 + path.disruption_probability * path.avg_disruption_duration / path.base_lead_time)
+    risk_multipliers = {'conservative': 2.5, 'moderate': 1.5, 'aggressive': 1.0}
+    max_risk_lead_time = max(p.risk_adjusted_lead_time for p in paths)
+    daily_demand = component.annual_demand / 365
+    buffer_units = max_risk_lead_time * daily_demand * risk_multipliers[risk_tolerance]
+    return {'recommended_buffer_units': int(buffer_units),
+            'buffer_cost': buffer_units * component.unit_cost,
+            'covers_disruption_days': buffer_units / daily_demand}
+```
+
 ---
 
 ## What Makes This Real (Not Fluff)
@@ -862,11 +1114,28 @@ Every item from `adaptive-tickling-bubble.md`, `supplymind_plan.md`, and `SUPPLY
 | 43 | NOAA weather calibration (IBTRACS typhoon data) | Plan | Data Enrichment Details | COVERED |
 | 44 | Forex risk (5 currency pairs from FRED) | Plan | Data Enrichment Details | COVERED |
 | 45 | Baltic Dry Index (stooq.com CSV) | ATB | Data Sources | COVERED |
-| 46 | 15-type disruption taxonomy (freq/duration/severity) | Blueprint | Data Sources table | COVERED |
+| 46 | 15-type disruption taxonomy (freq/duration/severity) | Blueprint | Blueprint Enrichments #2 | COVERED |
 | 47 | ACLED conflict events | Blueprint | Data Sources table | COVERED |
 | 48 | GDELT global news events | Blueprint | Data Sources table | COVERED |
 | 49 | USGS earthquake data | Blueprint | Data Sources table | COVERED |
 | 50 | NASA FIRMS fire hotspots | Blueprint | Data Sources table | COVERED |
+
+### Blueprint-Sourced Enrichments
+
+| # | Item | Source Doc | Section in Kickoff | Status |
+|---|------|-----------|-------------------|--------|
+| 71 | Dependency scoring formula (single-source penalty, revenue exposure, lead time, geo) | Blueprint | Blueprint Enrichments #1 | COVERED |
+| 72 | SPOF detection algorithm (articulation point analysis) | Blueprint | Blueprint Enrichments #4 | COVERED |
+| 73 | EBITDA impact model (lost margin + expedite + SLA + reputation) | Blueprint | Blueprint Enrichments #5 | COVERED |
+| 74 | Political risk score (8-component weighted index per country) | Blueprint | Blueprint Enrichments #3 | COVERED |
+| 75 | Taiwan Strait scenario (TSMC 54% global, 92% advanced, reroute data) | Blueprint | Blueprint Enrichments #6 | COVERED |
+| 76 | Red Sea scenario (+3500nm, +10 days, +25% fuel, 200-300% rate increase) | Blueprint | Blueprint Enrichments #7 | COVERED |
+| 77 | Monte Carlo with Beta severity + lognormal duration | Blueprint | Blueprint Enrichments #8 | COVERED |
+| 78 | Safety stock formula (risk-adjusted lead time x demand x multiplier) | Blueprint | Blueprint Enrichments #11 | COVERED |
+| 79 | Leading indicator library (15 types x specific early signals) | Blueprint | Blueprint Enrichments #9 | COVERED |
+| 80 | Confidence scoring formula (prediction + corroboration + historical) | Blueprint | Blueprint Enrichments #10 | COVERED |
+| 81 | Inventory cover formula (disrupted fraction, net daily drain) | Blueprint | Already in env (graph.py) | IN ENV |
+| 82 | Tier cascade timing (T3 day 0 → T2 day 15-30 → T1 day 45-90) | Blueprint | Already in env (propagation) | IN ENV |
 
 ### Production & Publication Artifacts
 
@@ -911,4 +1180,4 @@ Every item from `adaptive-tickling-bubble.md`, `supplymind_plan.md`, and `SUPPLY
 
 ---
 
-**Total: 70 items covered. 0 items missing. 1 item ditched by user decision.**
+**Total: 82 items. 80 covered in kickoff. 2 already in env (no action needed). 1 ditched (Hindi toggle). 0 missing.**
