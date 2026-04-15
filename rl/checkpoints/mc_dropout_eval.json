@@ -1,0 +1,31 @@
+{
+  "n_eval": 5000,
+  "n_passes": 50,
+  "mean_posterior_accuracy": 0.851,
+  "mean_total_entropy": 1.528255820274353,
+  "mean_aleatoric": 1.2003659009933472,
+  "mean_epistemic": 0.32788997888565063,
+  "buckets": {
+    "Q1_low_unc": {
+      "n": 1250,
+      "accuracy": 0.9976,
+      "mean_epistemic": 0.20485372841358185
+    },
+    "Q2": {
+      "n": 1250,
+      "accuracy": 0.9904,
+      "mean_epistemic": 0.26121243834495544
+    },
+    "Q3": {
+      "n": 1250,
+      "accuracy": 0.8568,
+      "mean_epistemic": 0.341152161359787
+    },
+    "Q4_high_unc": {
+      "n": 1250,
+      "accuracy": 0.5592,
+      "mean_epistemic": 0.504341721534729
+    }
+  },
+  "checkpoint": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\bc_best_real_v2.pt"
+}

@@ -1,0 +1,17 @@
+{
+  "mae_p50_usd": 7.8270111083984375,
+  "rmse_p50_usd": 8.874269485473633,
+  "best_val_quantile_loss": 0.07062085568904877,
+  "params": 90602,
+  "n_train_windows": 2254,
+  "n_val_windows": 281,
+  "n_test_windows": 283,
+  "enc_len": 60,
+  "horizon": 14,
+  "quantiles": [
+    0.1,
+    0.5,
+    0.9
+  ],
+  "target": "DCOILWTICO"
+}
