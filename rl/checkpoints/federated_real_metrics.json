@@ -1,0 +1,25 @@
+{
+  "rounds": [
+    {
+      "round": 0,
+      "global_acc": 0.011963224038481712
+    },
+    {
+      "round": 3,
+      "global_acc": 0.03629583120346069
+    },
+    {
+      "round": 6,
+      "global_acc": 0.04921906813979149
+    },
+    {
+      "round": 9,
+      "global_acc": 0.03629583120346069
+    }
+  ],
+  "clients": [
+    "Pacific Asia",
+    "Europe",
+    "LATAM"
+  ]
+}

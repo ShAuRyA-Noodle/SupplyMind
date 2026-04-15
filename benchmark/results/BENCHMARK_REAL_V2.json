@@ -1,0 +1,32 @@
+[
+  {
+    "agent": "BC_real_v2",
+    "full_match_accuracy": 0.34047189354896545,
+    "action_type_accuracy": 0.8646014332771301,
+    "target_node_accuracy": 0.35594284534454346
+  },
+  {
+    "agent": "CQL_real_v2",
+    "full_match_accuracy": 0.3491488993167877,
+    "action_type_accuracy": 0.8666691184043884,
+    "target_node_accuracy": 0.3702322542667389
+  },
+  {
+    "agent": "IQL_real_v2",
+    "full_match_accuracy": 0.00011077059025410563,
+    "action_type_accuracy": 0.13606321811676025,
+    "target_node_accuracy": 0.02577262558043003
+  },
+  {
+    "agent": "TD3BC_real_v2",
+    "full_match_accuracy": 0.00022154118050821126,
+    "action_type_accuracy": 0.005353912245482206,
+    "target_node_accuracy": 0.0399143360555172
+  },
+  {
+    "agent": "Federated_real",
+    "full_match_accuracy": 0.03629583120346069,
+    "action_type_accuracy": 0.42812833189964294,
+    "target_node_accuracy": 0.05988996848464012
+  }
+]

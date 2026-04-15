@@ -1,0 +1,13 @@
+{
+  "easy": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\bc_best_real_v2.pt",
+  "medium": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\cql_best_real_v2.pt",
+  "hard": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\iql_best_real_v2.pt",
+  "ensemble_real": {
+    "dt": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\dt_best_real_v2.pt",
+    "bc": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\bc_best_real_v2.pt",
+    "weights": {
+      "dt": 0.3,
+      "bc": 0.7
+    }
+  }
+}

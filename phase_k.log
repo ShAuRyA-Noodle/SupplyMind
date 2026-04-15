@@ -1,0 +1,58 @@
+2026-04-15 13:02:21,275 [INFO] === K/federated_real attempt 1/2 ===
+2026-04-15 13:02:22,536 [INFO]   Client Pacific Asia: 41260 orders
+2026-04-15 13:02:22,548 [INFO]   Client Europe: 50252 orders
+2026-04-15 13:02:22,565 [INFO]   Client LATAM: 51594 orders
+2026-04-15 13:02:22,647 [INFO] FRED lookup built: 2883 dates, 7 series, global median=[0.6141203  0.2929093  0.522508   0.27700642 0.22575414 0.54770195
+ 0.57227623]
+2026-04-15 13:02:26,831 [INFO] NOAA features: 1251 months aggregated
+2026-04-15 13:02:34,004 [INFO]   Pacific Asia: 20000 transitions encoded
+2026-04-15 13:02:40,650 [INFO]   Europe: 20000 transitions encoded
+2026-04-15 13:02:47,140 [INFO]   LATAM: 20000 transitions encoded
+2026-04-15 13:02:48,068 [INFO]   round 0: global test acc = 0.0120
+2026-04-15 13:02:48,244 [INFO]   round 3: global test acc = 0.0363
+2026-04-15 13:02:48,418 [INFO]   round 6: global test acc = 0.0492
+2026-04-15 13:02:48,580 [INFO]   round 9: global test acc = 0.0363
+2026-04-15 13:02:48,600 [INFO] === K/federated_real OK (27.3s) ===
+2026-04-15 13:02:48,600 [INFO] === K/specialist_router_real attempt 1/2 ===
+2026-04-15 13:02:48,600 [INFO] Specialist router manifest saved: C:\Users\Dell\Desktop\Sleep-Token\rl\checkpoints\specialist_router_real.json
+2026-04-15 13:02:48,600 [INFO] === K/specialist_router_real OK (0.0s) ===
+2026-04-15 13:02:48,600 [INFO] === K/cuda_compile attempt 1/2 ===
+2026-04-15 13:02:48,611 [INFO]   running: nvcc -c -O3 C:\Users\Dell\Desktop\Sleep-Token\rl\cuda\action_mask_kernel.cu -o C:\Users\Dell\Desktop\Sleep-Token\rl\cuda\action_mask_kernel.o
+2026-04-15 13:02:48,629 [ERROR] K/cuda_compile attempt 1 FAILED: nvcc failed: 
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_k.py", line 57, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_k.py", line 210, in compile_cuda_kernel
+    raise RuntimeError(f"nvcc failed: {r.stderr[:300]}")
+RuntimeError: nvcc failed: 
+2026-04-15 13:02:48,629 [INFO] === K/cuda_compile attempt 2/2 ===
+2026-04-15 13:02:48,629 [INFO]   running: nvcc -c -O3 C:\Users\Dell\Desktop\Sleep-Token\rl\cuda\action_mask_kernel.cu -o C:\Users\Dell\Desktop\Sleep-Token\rl\cuda\action_mask_kernel.o
+2026-04-15 13:02:48,635 [ERROR] K/cuda_compile attempt 2 FAILED: nvcc failed: 
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_k.py", line 57, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_k.py", line 210, in compile_cuda_kernel
+    raise RuntimeError(f"nvcc failed: {r.stderr[:300]}")
+RuntimeError: nvcc failed: 
+2026-04-15 13:02:48,637 [INFO] === K/fast_mc_verify attempt 1/2 ===
+2026-04-15 13:02:48,847 [INFO] Fast Monte Carlo Engine: Numba 0.65.0 compiled
+2026-04-15 13:02:48,847 [ERROR] K/fast_mc_verify attempt 1 FAILED: cannot import name 'fast_monte_carlo' from 'rl.fast_engine.fast_monte_carlo' (C:\Users\Dell\Desktop\Sleep-Token\rl\fast_engine\fast_monte_carlo.py)
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_k.py", line 57, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_k.py", line 220, in verify_fast_mc
+    from rl.fast_engine.fast_monte_carlo import fast_monte_carlo
+ImportError: cannot import name 'fast_monte_carlo' from 'rl.fast_engine.fast_monte_carlo' (C:\Users\Dell\Desktop\Sleep-Token\rl\fast_engine\fast_monte_carlo.py)
+2026-04-15 13:02:48,848 [INFO] === K/fast_mc_verify attempt 2/2 ===
+2026-04-15 13:02:48,848 [ERROR] K/fast_mc_verify attempt 2 FAILED: cannot import name 'fast_monte_carlo' from 'rl.fast_engine.fast_monte_carlo' (C:\Users\Dell\Desktop\Sleep-Token\rl\fast_engine\fast_monte_carlo.py)
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_k.py", line 57, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_k.py", line 220, in verify_fast_mc
+    from rl.fast_engine.fast_monte_carlo import fast_monte_carlo
+ImportError: cannot import name 'fast_monte_carlo' from 'rl.fast_engine.fast_monte_carlo' (C:\Users\Dell\Desktop\Sleep-Token\rl\fast_engine\fast_monte_carlo.py)
+2026-04-15 13:02:48,848 [INFO] Phase K summary: {'federated': [{'round': 0, 'global_acc': 0.011963224038481712}, {'round': 3, 'global_acc': 0.03629583120346069}, {'round': 6, 'global_acc': 0.04921906813979149}, {'round': 9, 'global_acc': 0.03629583120346069}], 'specialist_router': WindowsPath('C:/Users/Dell/Desktop/Sleep-Token/rl/checkpoints/specialist_router_real.json'), 'cuda_compile': None, 'fast_mc': None}
