@@ -1,0 +1,8 @@
+{
+  "n_queries": 50,
+  "precision_at_1": 0.92,
+  "precision_at_3": 0.94,
+  "mrr": 0.935,
+  "corpus_size": 293,
+  "embedding_model": "nomic-embed-text (768-d Ollama)"
+}
