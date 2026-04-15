@@ -1,0 +1,88 @@
+2026-04-15 12:23:34,164 [INFO] Swapped offline_buffer.npz <- real_unified.npz
+2026-04-15 12:23:34,164 [INFO] === BC attempt 1/2 ===
+2026-04-15 12:23:35,620 [INFO] ============================================================
+2026-04-15 12:23:35,622 [INFO] Behavior Cloning Training
+2026-04-15 12:23:35,622 [INFO]   Epochs: 30 | Batch: 1024 | LR: 3e-04 | Device: cuda
+2026-04-15 12:23:35,622 [INFO] ============================================================
+2026-04-15 12:23:39,991 [INFO]   Epoch 1/30 | loss=4.1671 | accuracy=0.1183
+2026-04-15 12:23:53,909 [INFO]   Epoch 10/30 | loss=2.1344 | accuracy=0.3198
+2026-04-15 12:24:17,820 [INFO]   Epoch 20/30 | loss=1.9227 | accuracy=0.3385
+2026-04-15 12:24:34,913 [INFO]   Epoch 30/30 | loss=1.8860 | accuracy=0.3400
+2026-04-15 12:24:34,913 [INFO] BC done in 0.9 min. Best loss: 1.8860. Saved: C:\Users\Dell\Desktop\Sleep-Token\rl\checkpoints\bc_best.pt
+2026-04-15 12:24:34,982 [INFO] Saved bc_best_real_v2.pt
+2026-04-15 12:24:34,982 [INFO] === BC OK (60.8s) ===
+2026-04-15 12:24:34,982 [INFO] === IQL attempt 1/2 ===
+2026-04-15 12:24:34,983 [INFO] ============================================================
+2026-04-15 12:24:34,983 [INFO] IQL Training (Implicit Q-Learning) — Pure PyTorch
+2026-04-15 12:24:34,983 [INFO]   Steps: 50,000 | expectile=0.7 | weight_temp=3.0 | Device: cuda
+2026-04-15 12:24:34,983 [INFO] ============================================================
+2026-04-15 12:24:35,859 [INFO]   Loaded 180519 transitions
+2026-04-15 12:25:50,878 [INFO]   [10k/50k] q_loss=0.0389 v_loss=0.0042 actor_loss=1.7224
+2026-04-15 12:27:05,314 [INFO]   [20k/50k] q_loss=0.0481 v_loss=0.0035 actor_loss=1.6698
+2026-04-15 12:28:13,196 [INFO]   [30k/50k] q_loss=0.0503 v_loss=0.0046 actor_loss=1.6270
+2026-04-15 12:29:23,176 [INFO]   [40k/50k] q_loss=0.0490 v_loss=0.0037 actor_loss=1.6795
+2026-04-15 12:30:34,462 [INFO]   [50k/50k] q_loss=0.0438 v_loss=0.0038 actor_loss=1.6516
+2026-04-15 12:30:34,462 [INFO] IQL done in 6.0 min. Best loss: 0.0431
+2026-04-15 12:30:34,781 [INFO] === IQL OK (359.8s) ===
+2026-04-15 12:30:34,781 [INFO] === CQL attempt 1/2 ===
+2026-04-15 12:30:34,781 [INFO] ============================================================
+2026-04-15 12:30:34,781 [INFO] CQL Training (Conservative Q-Learning) — Pure PyTorch
+2026-04-15 12:30:34,781 [INFO]   Steps: 50,000 | conservative_weight=5.0 | Device: cuda
+2026-04-15 12:30:34,783 [INFO] ============================================================
+2026-04-15 12:30:35,759 [INFO]   Loaded 180519 transitions
+2026-04-15 12:31:25,026 [INFO]   [10k/50k] bellman=0.5411 cql_penalty=3.6828 total=18.9553
+2026-04-15 12:32:13,990 [INFO]   [20k/50k] bellman=0.6166 cql_penalty=3.6245 total=18.7389
+2026-04-15 12:33:01,219 [INFO]   [30k/50k] bellman=0.4723 cql_penalty=3.5392 total=18.1685
+2026-04-15 12:33:47,920 [INFO]   [40k/50k] bellman=0.6012 cql_penalty=3.5951 total=18.5766
+2026-04-15 12:34:29,823 [INFO]   [50k/50k] bellman=0.5360 cql_penalty=3.5687 total=18.3793
+2026-04-15 12:34:29,823 [INFO] CQL done in 3.9 min. Best loss: 18.1685
+2026-04-15 12:34:29,941 [INFO] === CQL OK (235.2s) ===
+2026-04-15 12:34:29,941 [INFO] === TD3+BC attempt 1/2 ===
+2026-04-15 12:34:29,941 [INFO] ============================================================
+2026-04-15 12:34:29,941 [INFO] TD3+BC Training — Pure PyTorch
+2026-04-15 12:34:29,941 [INFO]   Steps: 50,000 | alpha=2.5 | Device: cuda
+2026-04-15 12:34:29,941 [INFO] ============================================================
+2026-04-15 12:34:30,833 [INFO]   Loaded 180519 transitions
+2026-04-15 12:35:22,013 [INFO]   [10k/50k] critic=0.0389
+2026-04-15 12:36:13,880 [INFO]   [20k/50k] critic=0.0482
+2026-04-15 12:37:04,241 [INFO]   [30k/50k] critic=0.0499
+2026-04-15 12:37:56,326 [INFO]   [40k/50k] critic=0.0489
+2026-04-15 12:38:51,157 [INFO]   [50k/50k] critic=0.0435
+2026-04-15 12:38:51,157 [INFO] TD3+BC done in 4.3 min. Best loss: 0.0389
+2026-04-15 12:38:51,242 [INFO] === TD3+BC OK (261.3s) ===
+2026-04-15 12:38:51,242 [INFO] === DT attempt 1/2 ===
+2026-04-15 12:38:51,258 [INFO] ============================================================
+2026-04-15 12:38:51,258 [INFO] Decision Transformer Training
+2026-04-15 12:38:51,258 [INFO]   Epochs: 10 | Batch: 128 | Context: 20 | LR: 1e-04
+2026-04-15 12:38:51,259 [INFO]   Device: cuda | GPU: NVIDIA GeForce RTX 4080 Laptop GPU
+2026-04-15 12:38:51,259 [INFO] ============================================================
+2026-04-15 12:38:52,286 [INFO] Loaded 150000 transitions, 150000 episodes, 150000 samples
+2026-04-15 12:38:52,311 [INFO] Model parameters: 727,832
+2026-04-15 12:39:14,904 [INFO] Epoch 1/10 | loss=2.9945 | accuracy=0.2415 | lr=9.76e-05 | 22.6s elapsed
+2026-04-15 12:39:14,910 [INFO]   \u2192 New best model saved (loss=2.9945, acc=0.2415)
+2026-04-15 12:39:37,218 [INFO] Epoch 2/10 | loss=2.0368 | accuracy=0.3387 | lr=9.05e-05 | 44.9s elapsed
+2026-04-15 12:39:37,224 [INFO]   \u2192 New best model saved (loss=2.0368, acc=0.3387)
+2026-04-15 12:39:59,404 [INFO] Epoch 3/10 | loss=1.7929 | accuracy=0.3628 | lr=7.94e-05 | 67.1s elapsed
+2026-04-15 12:39:59,411 [INFO]   \u2192 New best model saved (loss=1.7929, acc=0.3628)
+2026-04-15 12:40:21,811 [INFO] Epoch 4/10 | loss=1.6934 | accuracy=0.3697 | lr=6.55e-05 | 89.5s elapsed
+2026-04-15 12:40:21,818 [INFO]   \u2192 New best model saved (loss=1.6934, acc=0.3697)
+2026-04-15 12:40:45,860 [INFO] Epoch 5/10 | loss=1.6402 | accuracy=0.3736 | lr=5.00e-05 | 113.5s elapsed
+2026-04-15 12:40:45,867 [INFO]   \u2192 New best model saved (loss=1.6402, acc=0.3736)
+2026-04-15 12:41:08,476 [INFO] Epoch 6/10 | loss=1.6082 | accuracy=0.3778 | lr=3.45e-05 | 136.2s elapsed
+2026-04-15 12:41:08,494 [INFO]   \u2192 New best model saved (loss=1.6082, acc=0.3778)
+2026-04-15 12:41:30,473 [INFO] Epoch 7/10 | loss=1.5894 | accuracy=0.3803 | lr=2.06e-05 | 158.2s elapsed
+2026-04-15 12:41:30,477 [INFO]   \u2192 New best model saved (loss=1.5894, acc=0.3803)
+2026-04-15 12:41:53,969 [INFO] Epoch 8/10 | loss=1.5773 | accuracy=0.3823 | lr=9.55e-06 | 181.7s elapsed
+2026-04-15 12:41:53,977 [INFO]   \u2192 New best model saved (loss=1.5773, acc=0.3823)
+2026-04-15 12:42:17,013 [INFO] Epoch 9/10 | loss=1.5696 | accuracy=0.3836 | lr=2.45e-06 | 204.7s elapsed
+2026-04-15 12:42:17,020 [INFO]   \u2192 New best model saved (loss=1.5696, acc=0.3836)
+2026-04-15 12:42:39,003 [INFO] Epoch 10/10 | loss=1.5652 | accuracy=0.3840 | lr=0.00e+00 | 226.7s elapsed
+2026-04-15 12:42:39,012 [INFO]   \u2192 New best model saved (loss=1.5652, acc=0.3840)
+2026-04-15 12:42:39,012 [INFO] ============================================================
+2026-04-15 12:42:39,012 [INFO] DT training complete! Time: 3.8 minutes
+2026-04-15 12:42:39,013 [INFO]   Best loss: 1.5652 | Best checkpoint: C:\Users\Dell\Desktop\Sleep-Token\rl\checkpoints\dt_best.pt
+2026-04-15 12:42:39,013 [INFO] ============================================================
+2026-04-15 12:42:39,117 [INFO] === DT OK (227.9s) ===
+2026-04-15 12:42:39,118 [INFO] Phase B results: {'BC': WindowsPath('C:/Users/Dell/Desktop/Sleep-Token/rl/checkpoints/bc_best_real_v2.pt'), 'IQL': WindowsPath('C:/Users/Dell/Desktop/Sleep-Token/rl/checkpoints/iql_best_real_v2.pt'), 'CQL': WindowsPath('C:/Users/Dell/Desktop/Sleep-Token/rl/checkpoints/cql_best_real_v2.pt'), 'TD3+BC': WindowsPath('C:/Users/Dell/Desktop/Sleep-Token/rl/checkpoints/td3bc_best_real_v2.pt'), 'DT': WindowsPath('C:/Users/Dell/Desktop/Sleep-Token/rl/checkpoints/dt_best_real_v2.pt')}
+2026-04-15 12:42:39,130 [INFO] Restored simulated offline_buffer.npz
+2026-04-15 12:42:39,130 [INFO] Phase B done.

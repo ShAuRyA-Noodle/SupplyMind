@@ -1,0 +1,121 @@
+{
+  "n_background": 500,
+  "n_explained": 200,
+  "top20": [
+    {
+      "feature_idx": 1,
+      "name": "node0_risk",
+      "importance": 2.0770532577003666
+    },
+    {
+      "feature_idx": 407,
+      "name": "status",
+      "importance": 1.4128352188289137
+    },
+    {
+      "feature_idx": 2,
+      "name": "node0_inv_days",
+      "importance": 1.0787773776283218
+    },
+    {
+      "feature_idx": 353,
+      "name": "NOAA_3",
+      "importance": 0.45160848453374536
+    },
+    {
+      "feature_idx": 355,
+      "name": "NOAA_5",
+      "importance": 0.4486277086327374
+    },
+    {
+      "feature_idx": 356,
+      "name": "NOAA_6",
+      "importance": 0.4255671189359668
+    },
+    {
+      "feature_idx": 371,
+      "name": "NOAA_21",
+      "importance": 0.4241124442652915
+    },
+    {
+      "feature_idx": 359,
+      "name": "NOAA_9",
+      "importance": 0.4237466387752034
+    },
+    {
+      "feature_idx": 352,
+      "name": "NOAA_2",
+      "importance": 0.37585917748115405
+    },
+    {
+      "feature_idx": 379,
+      "name": "NOAA_29",
+      "importance": 0.36178056739649145
+    },
+    {
+      "feature_idx": 368,
+      "name": "NOAA_18",
+      "importance": 0.3563036796453452
+    },
+    {
+      "feature_idx": 374,
+      "name": "NOAA_24",
+      "importance": 0.35455407209278006
+    },
+    {
+      "feature_idx": 377,
+      "name": "NOAA_27",
+      "importance": 0.3495989985702651
+    },
+    {
+      "feature_idx": 361,
+      "name": "NOAA_11",
+      "importance": 0.32521142722650165
+    },
+    {
+      "feature_idx": 375,
+      "name": "NOAA_25",
+      "importance": 0.3241652812731697
+    },
+    {
+      "feature_idx": 378,
+      "name": "NOAA_28",
+      "importance": 0.3214882549383138
+    },
+    {
+      "feature_idx": 370,
+      "name": "NOAA_20",
+      "importance": 0.32131870834646076
+    },
+    {
+      "feature_idx": 350,
+      "name": "NOAA_0",
+      "importance": 0.31567888035038344
+    },
+    {
+      "feature_idx": 358,
+      "name": "NOAA_8",
+      "importance": 0.2876117237587194
+    },
+    {
+      "feature_idx": 362,
+      "name": "NOAA_12",
+      "importance": 0.2855354873011325
+    }
+  ],
+  "group_importance": {
+    "node_features": 3.1879894974840512,
+    "NOAA": 8.785581930402481,
+    "USGS": 0.0,
+    "FRED": 1.240174520823155,
+    "status": 1.4128352188289137
+  },
+  "group_shares": {
+    "node_features": 0.21795862347923745,
+    "NOAA": 0.6006586111798087,
+    "USGS": 0.0,
+    "FRED": 0.0847890909446103,
+    "status": 0.09659367439634352
+  },
+  "checkpoint": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\bc_best_real_v2.pt"
+}
