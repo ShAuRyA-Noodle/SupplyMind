@@ -1,0 +1,37 @@
+{
+  "n_total": 180519,
+  "n_train": 126360,
+  "n_val": 27076,
+  "n_test": 27083,
+  "unique_actions": 164,
+  "unique_customers": 20652,
+  "multi_step_fraction": 0.8855965300051518,
+  "reward_stats": {
+    "min": -1.0,
+    "max": 1.0,
+    "mean": 0.13161030411720276,
+    "std": 0.34873074293136597
+  },
+  "state_schema": {
+    "[0:350]": "node features (35 nodes x 10 feats, compact)",
+    "[300:304]": "access-log operational signals (vol, hour, IP)",
+    "[350:368]": "NOAA 10 wind-decile active + 4 lag months (count,wind)",
+    "[368:375]": "USGS 30d + 7d windowed features",
+    "[375:390]": "Leading indicators (15 disruption types, per market)",
+    "[390:395]": "WGI 5 governance dims (per market country)",
+    "[395:407]": "FRED 7 core + 5 extended = 12 series",
+    "[407]": "Delivery status global"
+  },
+  "data_sources_used": {
+    "dataco": "dataco.csv",
+    "noaa": "ibtracs_wp.csv",
+    "usgs": "usgs_m55_30days.csv",
+    "fred_core": "fred_cache.json",
+    "fred_extended": "fred_extended.json",
+    "leading_indicators": "leading_indicators.json",
+    "wgi": "wgidataset_with_sourcedata-2025.xlsx",
+    "dataco_access_logs": "dataco_access_logs.csv"
+  },
+  "reward_method": "learned financial_impact Ridge model on (order_total, delay, profit_ratio, late_risk)",
+  "multi_step_construction": "customer_id x chronological order"
+}
