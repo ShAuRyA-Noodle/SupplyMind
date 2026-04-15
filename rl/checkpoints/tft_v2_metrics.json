@@ -1,0 +1,107 @@
+{
+  "params": 513534,
+  "test_mae_p50": {
+    "DCOILWTICO": 52.868377685546875,
+    "PCOPPUSDM": 2165.05419921875,
+    "PPICMM": 127.1404800415039
+  },
+  "best_val_qloss": 0.024498114362359047,
+  "rolling_backtest": [
+    {
+      "fold": 0,
+      "best_val_qloss": 0.06026674062013626,
+      "mae_per_target": {
+        "DCOILWTICO": 504.5955505371094,
+        "PCOPPUSDM": 855.2738647460938,
+        "PPICMM": 471.20623779296875
+      }
+    },
+    {
+      "fold": 1,
+      "best_val_qloss": 0.06407515704631805,
+      "mae_per_target": {
+        "DCOILWTICO": 474.322021484375,
+        "PCOPPUSDM": 1710.5947265625,
+        "PPICMM": 263.55584716796875
+      }
+    },
+    {
+      "fold": 2,
+      "best_val_qloss": 0.032144758850336075,
+      "mae_per_target": {
+        "DCOILWTICO": 211.55079650878906,
+        "PCOPPUSDM": 433.71978759765625,
+        "PPICMM": 229.10092163085938
+      }
+    },
+    {
+      "fold": 3,
+      "best_val_qloss": 0.02784363552927971,
+      "mae_per_target": {
+        "DCOILWTICO": 180.49636840820312,
+        "PCOPPUSDM": 315.90533447265625,
+        "PPICMM": 153.2760009765625
+      }
+    },
+    {
+      "fold": 4,
+      "best_val_qloss": 0.022344965487718582,
+      "mae_per_target": {
+        "DCOILWTICO": 72.02142333984375,
+        "PCOPPUSDM": 538.7567138671875,
+        "PPICMM": 74.1328353881836
+      }
+    },
+    {
+      "fold": 5,
+      "best_val_qloss": 0.021536223590373993,
+      "mae_per_target": {
+        "DCOILWTICO": 69.20452880859375,
+        "PCOPPUSDM": 427.3001708984375,
+        "PPICMM": 75.58634948730469
+      }
+    },
+    {
+      "fold": 6,
+      "best_val_qloss": 0.01907423511147499,
+      "mae_per_target": {
+        "DCOILWTICO": 51.225826263427734,
+        "PCOPPUSDM": 585.4927368164062,
+        "PPICMM": 52.83491134643555
+      }
+    },
+    {
+      "fold": 7,
+      "best_val_qloss": 0.05762307345867157,
+      "mae_per_target": {
+        "DCOILWTICO": 231.06146240234375,
+        "PCOPPUSDM": 1413.4827880859375,
+        "PPICMM": 235.6634063720703
+      }
+    },
+    {
+      "fold": 8,
+      "best_val_qloss": 0.044990453869104385,
+      "mae_per_target": {
+        "DCOILWTICO": 56.47153091430664,
+        "PCOPPUSDM": 1491.9410400390625,
+        "PPICMM": 159.51954650878906
+      }
+    },
+    {
+      "fold": 9,
+      "best_val_qloss": 0.067389577627182,
+      "mae_per_target": {
+        "DCOILWTICO": 254.6227264404297,
+        "PCOPPUSDM": 1997.83544921875,
+        "PPICMM": 371.836181640625
+      }
+    }
+  ],
+  "horizon": 14,
+  "targets": [
+    "DCOILWTICO",
+    "PCOPPUSDM",
+    "PPICMM"
+  ]
+}
