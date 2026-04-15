@@ -92,8 +92,17 @@ def decode_state_to_text(obs) -> str:
 
 
 def _build_prompt(state_text: str, action_type: str, target_node: str | None,
-                  reward_components: dict | None) -> str:
-    """Build Ollama prompt for action explanation."""
+                  reward_components: dict | None,
+                  shap_top: list | None = None,
+                  counterfactual_p50: float | None = None,
+                  rag_precedent: str | None = None) -> str:
+    """Build structured 4-section Ollama prompt.
+
+    Optional context injections:
+      - shap_top:            List of (feature_name, importance) tuples
+      - counterfactual_p50:  Projected P50 loss without this action ($)
+      - rag_precedent:       Most relevant historical precedent text
+    """
     action_desc = ACTION_NAMES.get(action_type, action_type)
     target_text = f" targeting {target_node}" if target_node else ""
 
@@ -103,17 +112,55 @@ def _build_prompt(state_text: str, action_type: str, target_node: str | None,
             f"{k}={v:+.3f}" for k, v in reward_components.items()
         )
 
-    return f"""You are a supply chain risk analyst AI explaining an RL agent's decision.
+    shap_text = ""
+    if shap_top:
+        shap_text = "\nSHAP top features: " + ", ".join(
+            f"{n}={v:+.3f}" for n, v in shap_top[:5]
+        )
+
+    cf_text = ""
+    if counterfactual_p50 is not None:
+        cf_text = f"\nCounterfactual (no action): projected P50 loss = ${counterfactual_p50:,.0f}"
+
+    rag_text = ""
+    if rag_precedent:
+        rag_text = f"\nHistorical precedent: {rag_precedent}"
+
+    return f"""You are a supply chain risk analyst AI explaining an RL agent's decision. Produce a 4-section structured explanation.
 
 CURRENT STATE:
 {state_text}
 
 ACTION TAKEN: {action_desc}{target_text}
-{reward_text}
+{reward_text}{shap_text}{cf_text}{rag_text}
 
-Explain in 2-3 sentences WHY this action makes sense given the current supply chain state.
-Focus on the risk-reward tradeoff and what would happen without this action.
-Be specific about node names and financial impacts. Do not be generic."""
+Respond with EXACTLY these four sections, each labelled:
+
+## Decision
+One sentence stating the action taken and the immediate intent.
+
+## Evidence
+Cite 2-3 specific state facts (node names, financial figures, SHAP features) that justify the decision.
+
+## Counterfactual
+State what would likely happen if this action were NOT taken, using the P50 projection when available.
+
+## Precedent
+Reference the historical precedent (if provided) or a comparable pattern from the supply chain domain.
+
+Be specific, concise, and grounded in the state facts. No generic platitudes."""
+
+
+_REQUIRED_SECTIONS = ("## Decision", "## Evidence", "## Counterfactual", "## Precedent")
+
+
+def _passes_quality_gate(text: str) -> bool:
+    """Production quality gate: all four sections must be present."""
+    return all(section in text for section in _REQUIRED_SECTIONS)
+
+
+class ExplainerError(RuntimeError):
+    """Raised when Ollama is unavailable or fails quality gate. No fallback."""
 
 
 def explain_action(
@@ -121,58 +168,68 @@ def explain_action(
     action_type: str,
     target_node: str | None = None,
     reward_components: dict | None = None,
-    use_ollama: bool = True,
     model_name: str = "qwen2.5:14b",
+    shap_top: list | None = None,
+    counterfactual_p50: float | None = None,
+    rag_precedent: str | None = None,
+    max_regen: int = 2,
 ) -> str:
-    """Generate natural-language explanation for an RL action.
+    """Generate structured 4-section explanation via Ollama.
 
-    Checks cache first, then calls Ollama if available.
+    PRODUCTION PATH: Ollama is mandatory. No heuristic fallback.
+    Raises ExplainerError if Ollama is unreachable or output fails quality gate
+    after max_regen attempts.
 
-    Args:
-        obs:               SupplyMindObservation (raw observation from env).
-        action_type:       Action type string (e.g., "activate_backup_supplier").
-        target_node:       Target node ID (optional).
-        reward_components: Reward breakdown dict (optional).
-        use_ollama:        Whether to call Ollama (False = cache/heuristic only).
-        model_name:        Ollama model name.
-
-    Returns:
-        Explanation string.
+    For legacy heuristic output (tests/comparison only), import from
+    rl.legacy.fallbacks.explainer_heuristic.
     """
     state_text = decode_state_to_text(obs)
     cache = _load_cache()
     key = _cache_key(state_text[:200], action_type)
 
-    # Check cache
-    if key in cache:
+    if key in cache and _passes_quality_gate(cache[key]):
         return cache[key]
 
-    # Try Ollama
-    if use_ollama:
+    try:
+        import ollama
+    except ImportError as e:
+        raise ExplainerError(
+            "ollama package not installed. Run: pip install ollama"
+        ) from e
+
+    prompt = _build_prompt(
+        state_text, action_type, target_node, reward_components,
+        shap_top=shap_top, counterfactual_p50=counterfactual_p50, rag_precedent=rag_precedent,
+    )
+
+    last_output = ""
+    for attempt in range(max_regen + 1):
         try:
-            import ollama
-            prompt = _build_prompt(state_text, action_type, target_node, reward_components)
             response = ollama.chat(
                 model=model_name,
                 messages=[{"role": "user", "content": prompt}],
+                options={"temperature": 0.2, "top_p": 0.9},
             )
-            explanation = response["message"]["content"].strip()
-
-            # Cache the result
-            cache[key] = explanation
-            _save_cache(cache)
-            return explanation
-
-        except ImportError:
-            logger.warning("ollama package not installed. Using heuristic explanation.")
+            text = response["message"]["content"].strip()
+            last_output = text
+            if _passes_quality_gate(text):
+                cache[key] = text
+                _save_cache(cache)
+                return text
+            logger.warning(
+                "Quality gate fail (attempt %d): missing section. Regenerating...", attempt + 1,
+            )
+            prompt += "\n\nYour previous answer omitted a required section. Produce ALL FOUR section headers exactly: ## Decision, ## Evidence, ## Counterfactual, ## Precedent."
         except Exception as e:
-            logger.warning("Ollama call failed: %s. Using heuristic.", e)
+            raise ExplainerError(f"Ollama call failed: {e}") from e
 
-    # Heuristic fallback (no API needed)
-    return _heuristic_explanation(obs, action_type, target_node)
+    raise ExplainerError(
+        f"Explainer failed quality gate after {max_regen + 1} attempts. "
+        f"Last output: {last_output[:300]}"
+    )
 
 
-def _heuristic_explanation(obs, action_type: str, target_node: str | None) -> str:
+def _heuristic_explanation_REMOVED(obs, action_type: str, target_node: str | None) -> str:
     """Rule-based explanation when Ollama is unavailable."""
     fin = obs.financials
     health = fin.supply_chain_health_score
@@ -243,7 +300,7 @@ def pre_populate_cache(n_scenarios: int = 50) -> int:
         step = 0
         while not obs.done and count < n_scenarios:
             action = choose_action(obs, step)
-            explanation = _heuristic_explanation(obs, action.action_type, action.target_node_id)
+            explanation = explain_action(obs, action.action_type, action.target_node_id)
             state_text = decode_state_to_text(obs)
             key = _cache_key(state_text[:200], action.action_type)
             cache[key] = explanation
