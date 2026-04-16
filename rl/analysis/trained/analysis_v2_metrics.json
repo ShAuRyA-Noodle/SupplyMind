@@ -1,0 +1,30 @@
+{
+  "wgi_temporal": {
+    "mse": 0.00036604993510991335,
+    "mae": 0.015147487632930279,
+    "mae_ci95": [
+      0.014116183272562921,
+      0.01619899910874665
+    ],
+    "n_seq": 4226
+  },
+  "safety_stock_seasonal": {
+    "n_months": 12,
+    "p95_range": [
+      0.7466069571016093,
+      0.7920574768357423
+    ]
+  },
+  "spof_gnn": {
+    "best_f1": 0.0,
+    "n_nodes": 8,
+    "n_articulation_points": 0
+  },
+  "bootstrap_ci": {
+    "financial_impact_mae_ci95": [
+      24.804952001571657,
+      26.49261631965637
+    ],
+    "financial_impact_mae": 25.662246704101562
+  }
+}
