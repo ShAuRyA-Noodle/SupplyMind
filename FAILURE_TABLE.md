@@ -13,3 +13,8 @@ Items that hit the retry limit and need manual follow-up. All other phases compl
 - **Full online PPO/QR-DQN retrain on real-data stream**: The core env itself is calibrated from real data (NOAA, McKinsey, CSCMP constants), so existing PPO/QR-DQN checkpoints are already trained against a real-data-calibrated simulator. Only the OFFLINE agents (BC/IQL/CQL/TD3+BC/DT) needed retraining on the unified real buffer — which Phase B completed.
 - **Optuna 100-trial HPO**: AutoResearch already performed 10 experiments and its best-config report is produced in Phase I.
 - **GNN GATConv / TGN training**: Deferred; MLP fallback code remains, and the GNN/TGN modules can be trained on real supply-graph flows in a follow-up pass.
+| N Chokehold | TD3BC_v2 | CUDA error: out of memory
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+ | 2026-04-16 04:39 |

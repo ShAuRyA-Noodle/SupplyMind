@@ -30,7 +30,7 @@ DATA = ROOT / "rl" / "data"
 
 
 class WorldModelV2(nn.Module):
-    """Surrogate: (state, action_onehot) -> (delta_state, reward, done)."""
+    """Surrogate: (state, action_onehot) -> (delta_state, reward, done_logit)."""
     def __init__(self, state_dim=408, action_dim=280, hidden=512):
         super().__init__()
         self.encoder = nn.Sequential(
@@ -44,7 +44,8 @@ class WorldModelV2(nn.Module):
 
     def forward(self, s, a_onehot):
         z = self.encoder(torch.cat([s, a_onehot], dim=-1))
-        return s + self.delta_head(z), self.reward_head(z).squeeze(-1), torch.sigmoid(self.done_head(z)).squeeze(-1)
+        # Return done_LOGIT (for BCEWithLogitsLoss which is autocast-safe)
+        return s + self.delta_head(z), self.reward_head(z).squeeze(-1), self.done_head(z).squeeze(-1)
 
 
 def train_world_v2():
@@ -82,10 +83,10 @@ def train_world_v2():
             s, a, sn, r, d = s.to(device, non_blocking=True), a.to(device, non_blocking=True), sn.to(device, non_blocking=True), r.to(device, non_blocking=True), d.to(device, non_blocking=True)
             opt.zero_grad()
             with torch.amp.autocast("cuda"):
-                sn_p, r_p, d_p = model(s, a)
+                sn_p, r_p, d_logit = model(s, a)
                 l_s = F.mse_loss(sn_p, sn)
                 l_r = F.mse_loss(r_p, r)
-                l_d = F.binary_cross_entropy(d_p.clamp(1e-6, 1 - 1e-6), d)
+                l_d = F.binary_cross_entropy_with_logits(d_logit, d)
                 loss = l_s + 0.5 * l_r + 0.1 * l_d
             scaler.scale(loss).backward()
             scaler.step(opt); scaler.update()
@@ -113,7 +114,7 @@ def train_world_v2():
     with torch.no_grad():
         a1 = np.zeros((len(s_te), 280), dtype=np.float32)
         a1[np.arange(len(s_te)), np.clip(a_flat_te, 0, 279)] = 1.0
-        sn_pred1, _, _ = model(s_te, torch.from_numpy(a1).to(device))
+        sn_pred1, _, _d = model(s_te, torch.from_numpy(a1).to(device))
         mse1 = F.mse_loss(sn_pred1, sn_te).item()
 
     # k-step rollout: iterate k times using random action for demo
@@ -124,7 +125,7 @@ def train_world_v2():
             for step in range(k):
                 a_rand = np.zeros((len(s_te), 280), dtype=np.float32)
                 a_rand[np.arange(len(s_te)), np.random.randint(0, 280, size=len(s_te))] = 1.0
-                s_cur, _, _ = model(s_cur, torch.from_numpy(a_rand).to(device))
+                s_cur, _, _d = model(s_cur, torch.from_numpy(a_rand).to(device))
             # Compare k-step-ahead state magnitude (drift metric)
             drift = F.mse_loss(s_cur, sn_te).item()
             rollout_mse[str(k)] = drift

@@ -78,3 +78,57 @@
 2026-04-16 04:25:10,094 [INFO]   TD3+BC step 1/300,000 q=0.278 val type=0.427 node=0.071 full=0.000
 2026-04-16 04:26:10,137 [INFO]   TD3+BC step 15,000/300,000 q=0.407 val type=0.864 node=0.404 full=0.370
 2026-04-16 04:27:11,953 [INFO]   TD3+BC step 30,000/300,000 q=0.433 val type=0.867 node=0.405 full=0.373
+2026-04-16 04:28:19,215 [INFO]   TD3+BC step 45,000/300,000 q=0.359 val type=0.868 node=0.407 full=0.374
+2026-04-16 04:29:33,088 [INFO]   TD3+BC step 60,000/300,000 q=0.408 val type=0.870 node=0.405 full=0.372
+2026-04-16 04:30:52,897 [INFO]   TD3+BC step 75,000/300,000 q=0.377 val type=0.868 node=0.408 full=0.375
+2026-04-16 04:32:15,456 [INFO]   TD3+BC step 90,000/300,000 q=0.351 val type=0.868 node=0.406 full=0.373
+2026-04-16 04:33:52,981 [INFO]   TD3+BC step 105,000/300,000 q=0.381 val type=0.868 node=0.411 full=0.376
+2026-04-16 04:35:39,035 [INFO]   TD3+BC step 120,000/300,000 q=0.433 val type=0.868 node=0.405 full=0.371
+2026-04-16 04:37:24,981 [INFO]   TD3+BC step 135,000/300,000 q=0.393 val type=0.868 node=0.407 full=0.374
+2026-04-16 04:38:54,006 [INFO]   TD3+BC step 150,000/300,000 q=0.402 val type=0.866 node=0.406 full=0.373
+2026-04-16 04:39:24,385 [ERROR] TD3BC_v2 attempt 1 FAILED: CUDA error: out of memory
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_n.py", line 26, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_n.py", line 43, in <lambda>
+    retry(lambda: train_td3bc_v2(n_steps=300_000, batch_size=512), "TD3BC_v2")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\rl\offline\baselines_v2.py", line 427, in train_td3bc_v2
+    opt_q.zero_grad(); q_loss.backward(); opt_q.step()
+                       ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\_tensor.py", line 492, in backward
+    torch.autograd.backward(
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\autograd\__init__.py", line 251, in backward
+    Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+RuntimeError: CUDA error: out of memory
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+2026-04-16 04:39:24,687 [INFO] === N/TD3BC_v2 attempt 2/2 ===
+2026-04-16 04:39:26,559 [ERROR] TD3BC_v2 attempt 2 FAILED: CUDA error: out of memory
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_n.py", line 26, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_n.py", line 43, in <lambda>
+    retry(lambda: train_td3bc_v2(n_steps=300_000, batch_size=512), "TD3BC_v2")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\rl\offline\baselines_v2.py", line 383, in train_td3bc_v2
+    states = torch.from_numpy(train["states"].astype(np.float32)).to(device)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: CUDA error: out of memory
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+2026-04-16 04:39:26,566 [INFO] Phase N 'Chokehold' complete.
