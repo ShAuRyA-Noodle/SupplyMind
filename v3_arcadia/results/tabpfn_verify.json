@@ -1,0 +1,33 @@
+{
+  "cuda_available": true,
+  "device": "cuda",
+  "tabpfn_clf": {
+    "status": "OK",
+    "ckpt": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\models\\tabpfn-v2-clf\\tabpfn-v2-classifier.ckpt",
+    "n_train_rows": 200,
+    "proba_shape": [
+      10,
+      2
+    ],
+    "sample_pred": [
+      0.44078144431114197,
+      0.5592185854911804
+    ]
+  },
+  "tabpfn_reg": {
+    "status": "OK",
+    "ckpt": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\models\\tabpfn-v2-reg\\tabpfn-v2-regressor.ckpt",
+    "sample_pred": [
+      6.059967041015625,
+      5.586023330688477,
+      0.8607885837554932,
+      2.690855026245117,
+      -3.7222414016723633,
+      5.472109794616699,
+      2.4732282161712646,
+      6.889340400695801,
+      1.7127621173858643,
+      -3.2688167095184326
+    ]
+  }
+}

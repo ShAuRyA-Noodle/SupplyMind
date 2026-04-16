@@ -1,0 +1,9 @@
+{
+  "device": "cuda",
+  "model_dir": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\models\\qwen25-vl-7b",
+  "free_disk_gb": 20.67,
+  "qwen_vl": {
+    "status": "OK",
+    "sample_response": "The image shows a person wearing a white shirt with a black and red design on the front, standing against a plain background."
+  }
+}

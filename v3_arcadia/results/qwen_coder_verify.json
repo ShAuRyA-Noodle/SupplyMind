@@ -1,0 +1,30 @@
+{
+  "model": "qwen25-coder-local",
+  "tests": [
+    {
+      "name": "code_gen",
+      "status": "OK",
+      "response": "```python\ndef fibonacci(n):\n    fib_sequence = [0, 1]\n    while len(fib_sequence) < n:\n        fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])\n    return fib_sequence[:n]\n```",
+      "latency_s": 16.12
+    },
+    {
+      "name": "code_review",
+      "status": "OK",
+      "response": "1. Infinite loop: The function will keep appending elements to the list, causing an infinite loop.\n2. Memory overflow: As the list grows indefinitely, it will eventually consume all available memory.",
+      "latency_s": 5.31
+    },
+    {
+      "name": "json_mode",
+      "status": "OK",
+      "response": "{\"language\":\"python\",\"complexity\":\"O(n)\",\"bugs\":0}",
+      "latency_s": 3.17,
+      "json_parsed": true,
+      "keys": [
+        "bugs",
+        "complexity",
+        "language"
+      ]
+    }
+  ],
+  "all_ok": true
+}

@@ -1,0 +1,18 @@
+FROM C:/Users/Dell/Desktop/Sleep-Token/v3_arcadia/gguf_out/qwen25-coder-14b-q4km.gguf
+
+TEMPLATE """{{- if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}{{- range $i, $_ := .Messages }}
+{{- if eq .Role "user" }}<|im_start|>user
+{{ .Content }}<|im_end|>
+<|im_start|>assistant
+{{ else if eq .Role "assistant" }}{{ .Content }}<|im_end|>
+{{ end }}
+{{- end }}"""
+
+PARAMETER stop "<|im_start|>"
+PARAMETER stop "<|im_end|>"
+PARAMETER temperature 0.2
+PARAMETER top_p 0.9
+PARAMETER num_predict 2048
+PARAMETER num_ctx 16384

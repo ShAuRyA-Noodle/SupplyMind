@@ -1,0 +1,29 @@
+{
+  "model": "qwen25-14b-local",
+  "tests": [
+    {
+      "name": "factual",
+      "status": "OK",
+      "response": "Toyota did not publicly disclose an exact figure for their revenue loss due to the 2011 Tohoku earthquake and tsunami, but estimates suggested that the disaster likely cost the company billions of dollars in lost sales and production. A precise single-sentence financial impact summary is challenging without a specific sourced amount, but it was significant enough to affect Toyota's full-year profi",
+      "latency_s": 16.04
+    },
+    {
+      "name": "reasoning",
+      "status": "OK",
+      "response": "1. **Supply Chain Disruption**: A typhoon can disrupt primary suppliers, causing delays or halts in production and delivery.\n2. **Risk Mitigation**: Having a backup supplier reduces the risk of complete supply chain failure, ensuring business continuity.\n3. **Customer Satisfaction**: Activating a backup supplier helps maintain product availability, preventing stockouts that could lead to customer ",
+      "latency_s": 6.94
+    },
+    {
+      "name": "json_mode",
+      "status": "OK",
+      "response": "{\n  \"risk_level\": \"AMBER\",\n  \"recommendation\": \"Monitor the cyclone's path closely and prepare to expedite supply chain recovery efforts once the storm has passed.\"\n}",
+      "latency_s": 5.17,
+      "json_parsed": true,
+      "keys": [
+        "recommendation",
+        "risk_level"
+      ]
+    }
+  ],
+  "all_ok": true
+}

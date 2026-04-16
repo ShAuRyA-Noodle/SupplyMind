@@ -1,0 +1,23 @@
+{
+  "device": "cuda",
+  "local_dir": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\models\\timesfm-2",
+  "timesfm_2": {
+    "status": "OK",
+    "point_shape": [
+      1,
+      14
+    ],
+    "quantile_shape": [
+      1,
+      14,
+      10
+    ],
+    "sample_forecast": [
+      0.6281071901321411,
+      0.7191720604896545,
+      0.765653133392334,
+      0.5198469758033752,
+      0.4334750771522522
+    ]
+  }
+}

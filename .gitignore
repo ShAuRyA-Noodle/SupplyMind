@@ -56,3 +56,5 @@ models/
 sota-bundle/
 external_data/
 catboost_info/
+v3_arcadia/tools/
+v3_arcadia/gguf_out/

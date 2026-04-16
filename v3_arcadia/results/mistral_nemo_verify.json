@@ -1,0 +1,29 @@
+{
+  "model": "mistral-nemo-local",
+  "tests": [
+    {
+      "name": "reasoning",
+      "status": "OK",
+      "response": "Activating a backup supplier during a typhoon warning ensures business continuity by providing an alternative source of supply in case the primary supplier is affected. This proactive measure helps mitigate potential disruptions and delays caused by severe weather conditions, such as damaged infrastructure or power outages.",
+      "latency_s": 20.55
+    },
+    {
+      "name": "long_context_test",
+      "status": "OK",
+      "response": "Supply chain resilience is achieved through diversification of sources, real-time visibility into operations, and proactive identification and mitigation of potential risks.",
+      "latency_s": 4.15
+    },
+    {
+      "name": "json_mode",
+      "status": "OK",
+      "response": "{\n  \"impact\": \"HIGH\",\n  \"action\": \"Immediately assess damage to TSMC facilities and initiate business continuity plans.\"\n}",
+      "latency_s": 5.47,
+      "json_parsed": true,
+      "keys": [
+        "action",
+        "impact"
+      ]
+    }
+  ],
+  "all_ok": true
+}

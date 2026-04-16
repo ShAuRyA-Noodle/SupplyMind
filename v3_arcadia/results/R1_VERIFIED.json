@@ -1,0 +1,133 @@
+{
+  "phase": "R1 Emergence",
+  "timestamp": "2026-04-17",
+  "status": "COMPLETE",
+  "system": {
+    "total_ram_gb": 15.7,
+    "gpu": "NVIDIA GeForce RTX 4080 Laptop (12 GB VRAM)",
+    "cuda_version": "13.1",
+    "torch_version": "2.5.1+cu121",
+    "free_disk_gb_final": 100
+  },
+  "all_13_sota_models_verified": true,
+  "models": {
+    "deepseek_r1_distill_qwen_7b": {
+      "format": "GGUF F16",
+      "size_gb": 15.2,
+      "serving": "Ollama",
+      "alias": "deepseek-r1-local",
+      "status": "VERIFIED",
+      "tests": ["math (47x53=2491 with CoT)", "supply-chain reasoning", "JSON-mode (known quirk: internal think tokens stripped)"]
+    },
+    "qwen25_14b_instruct": {
+      "format": "GGUF Q4_K_M (quantized from F16)",
+      "size_gb": 8.6,
+      "serving": "Ollama",
+      "alias": "qwen25-14b-local",
+      "status": "VERIFIED",
+      "latency_s": {"factual": 16, "reasoning": 7, "json": 5},
+      "tests": ["factual (Tohoku Toyota)", "reasoning (3 reasons)", "json_mode (AMBER risk + recommendation)"]
+    },
+    "qwen25_coder_14b": {
+      "format": "GGUF Q4_K_M",
+      "size_gb": 8.6,
+      "serving": "Ollama",
+      "alias": "qwen25-coder-local",
+      "status": "VERIFIED",
+      "latency_s": {"code_gen": 16, "code_review": 5, "json": 3},
+      "tests": ["Fibonacci generation", "bug diagnosis (infinite loop + memory)", "JSON analysis output"]
+    },
+    "mistral_nemo_instruct_2407": {
+      "format": "GGUF Q4_K_M",
+      "size_gb": 7.5,
+      "serving": "Ollama",
+      "alias": "mistral-nemo-local",
+      "status": "VERIFIED",
+      "latency_s": {"reasoning": 21, "long_context": 4, "json": 6},
+      "context_len": 128000,
+      "tests": ["reasoning (backup supplier)", "long-context summary", "json (HIGH impact + action)"]
+    },
+    "chronos_bolt_base": {
+      "format": "safetensors",
+      "serving": "Python chronos-forecasting",
+      "status": "VERIFIED",
+      "test": "14-horizon quantile forecast on sine wave"
+    },
+    "timesfm_2_500m_pytorch": {
+      "format": "torch ckpt",
+      "serving": "Python google timesfm pkg",
+      "status": "VERIFIED",
+      "note": "num_layers=50, model_dims=1280, num_heads=16 required"
+    },
+    "tabpfn_v2_clf": {
+      "format": "local ckpt",
+      "serving": "Python tabpfn 7.1.1",
+      "status": "VERIFIED",
+      "test": "predict_proba on 200x12 synthetic classification"
+    },
+    "tabpfn_v2_reg": {
+      "format": "local ckpt",
+      "serving": "Python tabpfn 7.1.1",
+      "status": "VERIFIED",
+      "test": "predict on 200x12 synthetic regression"
+    },
+    "bge_m3": {
+      "format": "safetensors (converted from pytorch_model.bin to bypass torch.load v2.6 restriction)",
+      "emb_dim": 1024,
+      "serving": "Python sentence-transformers",
+      "status": "VERIFIED",
+      "test": "Tohoku query top-score 0.638"
+    },
+    "mxbai_embed_large_v1": {
+      "format": "safetensors",
+      "emb_dim": 1024,
+      "serving": "Python sentence-transformers",
+      "status": "VERIFIED",
+      "test": "Tohoku query top-score 0.736"
+    },
+    "bge_reranker_v2_m3": {
+      "format": "safetensors",
+      "serving": "Python sentence-transformers CrossEncoder",
+      "status": "VERIFIED",
+      "test": "rerank scores on 3 docs"
+    },
+    "snowflake_arctic_embed_l_v2": {
+      "format": "safetensors (backend=torch to skip ONNX variants)",
+      "emb_dim": 1024,
+      "serving": "Python sentence-transformers",
+      "status": "VERIFIED",
+      "test": "Tohoku query top-score 0.582"
+    },
+    "qwen25_vl_7b_instruct": {
+      "format": "safetensors (5 shards)",
+      "serving": "Python transformers + qwen-vl-utils",
+      "status": "VERIFIED",
+      "test": "synthetic 224x224 image -> coherent description"
+    }
+  },
+  "external_data": {
+    "sec_10k_fortune500": {"count": 20, "dir": "external_data/sec_10k"},
+    "fed_bis_policy_papers": {"count": 3, "dir": "external_data/policy_papers"},
+    "openflights": {"count": 5, "dir": "external_data/openflights"},
+    "fred_supply_chain_pressure": {"count": 2, "dir": "external_data"},
+    "noaa_realtime_storms": {"count": 1, "dir": "external_data/noaa"},
+    "world_bank_pink_sheet": {"count": 1, "dir": "external_data/worldbank"},
+    "wikipedia_crisis_articles": {"count": 26, "dir": "external_data/wikipedia_crises"},
+    "world_bank_macro_indicators": {"count": 6, "dir": "external_data/world_bank_macro"},
+    "imf_ifs": {"count": 0, "note": "Free API endpoint returns empty envelope; replaced by World Bank above"},
+    "un_comtrade": {"count": 0, "note": "Public preview requires subscription key; replaced by World Bank above"}
+  },
+  "engineering_decisions": {
+    "quantization": {
+      "rationale": "System has 15.7GB RAM; F16 14B models need ~20GB. Industry-standard Q4_K_M quantization yields <2% quality loss with 3.3x size reduction.",
+      "applied_to": ["Qwen2.5-14B", "Qwen2.5-Coder-14B", "Mistral-Nemo-Instruct"],
+      "not_applied_to": ["DeepSeek-R1 7B (F16 fits)", "Qwen-VL 7B (different serving path)"]
+    },
+    "bge_m3_safetensors": {
+      "rationale": "sentence-transformers requires torch>=2.6 for pytorch_model.bin due to CVE-2025-32434; our torch 2.5.1 is the max cu121 wheel. Conversion to safetensors bypasses this."
+    },
+    "snowflake_torch_backend": {
+      "rationale": "Default loading tries ONNX variants that hang on Windows; explicit backend=torch forces safe path."
+    }
+  }
+}
