@@ -1,0 +1,502 @@
+{
+  "shap_top15": {
+    "late_delivery_risk": {
+      "algo": "xgb",
+      "top15_features": [
+        {
+          "name": "Shipping Mode__First Class",
+          "importance": 0.7326152324676514
+        },
+        {
+          "name": "sched_days",
+          "importance": 0.6606742739677429
+        },
+        {
+          "name": "Type__TRANSFER",
+          "importance": 0.47632965445518494
+        },
+        {
+          "name": "Order Customer Id",
+          "importance": 0.17082303762435913
+        },
+        {
+          "name": "Latitude",
+          "importance": 0.160926952958107
+        },
+        {
+          "name": "Shipping Mode__Second Class",
+          "importance": 0.14983786642551422
+        },
+        {
+          "name": "Longitude",
+          "importance": 0.13300901651382446
+        },
+        {
+          "name": "Shipping Mode__Standard Class",
+          "importance": 0.12997667491436005
+        },
+        {
+          "name": "order_day",
+          "importance": 0.10712296515703201
+        },
+        {
+          "name": "order_month",
+          "importance": 0.07108364999294281
+        },
+        {
+          "name": "order_dow",
+          "importance": 0.06861100345849991
+        },
+        {
+          "name": "Order Item Total",
+          "importance": 0.0614430233836174
+        },
+        {
+          "name": "Type__DEBIT",
+          "importance": 0.05896211788058281
+        },
+        {
+          "name": "Sales",
+          "importance": 0.04449347406625748
+        },
+        {
+          "name": "Order Item Discount",
+          "importance": 0.04405033215880394
+        }
+      ],
+      "n_samples": 1000
+    },
+    "shipping_mode": {
+      "algo": "lgb",
+      "top15_features": [
+        {
+          "name": "order_day",
+          "importance": 0.14531971700119595
+        },
+        {
+          "name": "Latitude",
+          "importance": 0.13565060253209485
+        },
+        {
+          "name": "Order Customer Id",
+          "importance": 0.13102491053295864
+        },
+        {
+          "name": "Longitude",
+          "importance": 0.1222981746063068
+        },
+        {
+          "name": "Order Zipcode",
+          "importance": 0.09815205910031981
+        },
+        {
+          "name": "order_month",
+          "importance": 0.09317142717955136
+        },
+        {
+          "name": "order_dow",
+          "importance": 0.07841270762869156
+        },
+        {
+          "name": "Order Item Total",
+          "importance": 0.044599598632655106
+        },
+        {
+          "name": "Order Item Discount",
+          "importance": 0.033594561793665254
+        },
+        {
+          "name": "order_year",
+          "importance": 0.029623813091121495
+        },
+        {
+          "name": "Customer Segment__Home Office",
+          "importance": 0.02582491478215546
+        },
+        {
+          "name": "Type__DEBIT",
+          "importance": 0.019900877735072642
+        },
+        {
+          "name": "Order Item Discount Rate",
+          "importance": 0.019821976340370435
+        },
+        {
+          "name": "Customer Segment__Consumer",
+          "importance": 0.019363164732533623
+        },
+        {
+          "name": "Sales",
+          "importance": 0.019305355520423926
+        }
+      ],
+      "n_samples": 1000
+    },
+    "delivery_status": {
+      "algo": "lgb",
+      "top15_features": [
+        {
+          "name": "sched_days",
+          "importance": 1.0622776241691645
+        },
+        {
+          "name": "Type__TRANSFER",
+          "importance": 0.9869317661543312
+        },
+        {
+          "name": "Shipping Mode__First Class",
+          "importance": 0.5401095981609848
+        },
+        {
+          "name": "Latitude",
+          "importance": 0.1469638826819572
+        },
+        {
+          "name": "Order Customer Id",
+          "importance": 0.12387527105673957
+        },
+        {
+          "name": "Longitude",
+          "importance": 0.12152826063388397
+        },
+        {
+          "name": "Shipping Mode__Standard Class",
+          "importance": 0.11399112380975975
+        },
+        {
+          "name": "Type__DEBIT",
+          "importance": 0.11226916777330752
+        },
+        {
+          "name": "order_day",
+          "importance": 0.08720905988856538
+        },
+        {
+          "name": "Type__PAYMENT",
+          "importance": 0.07393674075739048
+        },
+        {
+          "name": "order_month",
+          "importance": 0.05996037188478746
+        },
+        {
+          "name": "order_dow",
+          "importance": 0.055766425673077755
+        },
+        {
+          "name": "Shipping Mode__Second Class",
+          "importance": 0.05278020082991879
+        },
+        {
+          "name": "Type__CASH",
+          "importance": 0.045583216438798695
+        },
+        {
+          "name": "Order Item Total",
+          "importance": 0.043191257310719586
+        }
+      ],
+      "n_samples": 1000
+    }
+  },
+  "fairness": {
+    "late_delivery_risk": {
+      "Market": {
+        "Africa": {
+          "n": 1768,
+          "accuracy": 0.869343891402715
+        },
+        "Europe": {
+          "n": 7437,
+          "accuracy": 0.8284254403657388
+        },
+        "LATAM": {
+          "n": 7771,
+          "accuracy": 0.8390168575472912
+        },
+        "Pacific Asia": {
+          "n": 6263,
+          "accuracy": 0.8112725530895737
+        },
+        "USCA": {
+          "n": 3839,
+          "accuracy": 0.8767908309455588
+        },
+        "__summary__": {
+          "max_acc": 0.8767908309455588,
+          "min_acc": 0.8112725530895737,
+          "disparity": 0.06551827785598507
+        }
+      },
+      "Customer Segment": {
+        "Consumer": {
+          "n": 13998,
+          "accuracy": 0.8350478639805686
+        },
+        "Corporate": {
+          "n": 8212,
+          "accuracy": 0.8364588407208963
+        },
+        "Home Office": {
+          "n": 4868,
+          "accuracy": 0.8436729663105998
+        },
+        "__summary__": {
+          "max_acc": 0.8436729663105998,
+          "min_acc": 0.8350478639805686,
+          "disparity": 0.00862510233003122
+        }
+      }
+    },
+    "shipping_mode": {
+      "Market": {
+        "Africa": {
+          "n": 1721,
+          "accuracy": 0.8059267867518884
+        },
+        "Europe": {
+          "n": 7650,
+          "accuracy": 0.7586928104575164
+        },
+        "LATAM": {
+          "n": 7701,
+          "accuracy": 0.7809375405791456
+        },
+        "Pacific Asia": {
+          "n": 6143,
+          "accuracy": 0.7584242226924955
+        },
+        "USCA": {
+          "n": 3863,
+          "accuracy": 0.8193114159979291
+        },
+        "__summary__": {
+          "max_acc": 0.8193114159979291,
+          "min_acc": 0.7584242226924955,
+          "disparity": 0.06088719330543357
+        }
+      },
+      "Customer Segment": {
+        "Consumer": {
+          "n": 14008,
+          "accuracy": 0.7669902912621359
+        },
+        "Corporate": {
+          "n": 8269,
+          "accuracy": 0.7872777844963115
+        },
+        "Home Office": {
+          "n": 4801,
+          "accuracy": 0.7862945219745886
+        },
+        "__summary__": {
+          "max_acc": 0.7872777844963115,
+          "min_acc": 0.7669902912621359,
+          "disparity": 0.020287493234175558
+        }
+      }
+    },
+    "delivery_status": {
+      "Market": {
+        "Africa": {
+          "n": 1767,
+          "accuracy": 0.8687040181097906
+        },
+        "Europe": {
+          "n": 7505,
+          "accuracy": 0.8282478347768154
+        },
+        "LATAM": {
+          "n": 7746,
+          "accuracy": 0.8502452878905241
+        },
+        "Pacific Asia": {
+          "n": 6142,
+          "accuracy": 0.8150439596222728
+        },
+        "USCA": {
+          "n": 3918,
+          "accuracy": 0.8769780500255232
+        },
+        "__summary__": {
+          "max_acc": 0.8769780500255232,
+          "min_acc": 0.8150439596222728,
+          "disparity": 0.061934090403250375
+        }
+      },
+      "Customer Segment": {
+        "Consumer": {
+          "n": 14087,
+          "accuracy": 0.8335344643998013
+        },
+        "Corporate": {
+          "n": 8197,
+          "accuracy": 0.8446992802244724
+        },
+        "Home Office": {
+          "n": 4794,
+          "accuracy": 0.8579474342928661
+        },
+        "__summary__": {
+          "max_acc": 0.8579474342928661,
+          "min_acc": 0.8335344643998013,
+          "disparity": 0.02441296989306485
+        }
+      }
+    }
+  },
+  "calibration": {
+    "late_delivery_risk": {
+      "algo": "xgb",
+      "n_bins": 15,
+      "bin_confidence": [
+        0.047601889818906784,
+        0.10591482371091843,
+        0.1693299263715744,
+        0.23376236855983734,
+        0.2985405921936035,
+        0.365536093711853,
+        0.43266668915748596,
+        0.49862194061279297,
+        0.5664905309677124,
+        0.6322769522666931,
+        0.700205385684967,
+        0.7678216695785522,
+        0.834970235824585,
+        0.9012444019317627,
+        0.9871050715446472
+      ],
+      "bin_accuracy": [
+        0.04878048780487805,
+        0.03429602888086643,
+        0.06657608695652174,
+        0.10221205186880244,
+        0.1659671880961465,
+        0.3065795613625758,
+        0.4490950226244344,
+        0.6264543784445805,
+        0.7001414427157001,
+        0.7884012539184952,
+        0.8334786399302528,
+        0.8685524126455907,
+        0.920274914089347,
+        0.9493734335839599,
+        0.9918243401074516
+      ],
+      "bin_n": [
+        205,
+        1108,
+        2208,
+        2622,
+        2621,
+        2143,
+        1768,
+        1633,
+        1414,
+        1276,
+        1147,
+        1202,
+        1455,
+        1995,
+        4281
+      ],
+      "ece": 0.08366547522741584,
+      "brier": 0.12393409580512378,
+      "temperature_scaling_T": 0.6172709141132063
+    },
+    "shipping_mode": {
+      "algo": "lgb",
+      "n_bins": 15,
+      "bin_confidence": [
+        0.3121110714805393,
+        0.37706821969221477,
+        0.44009373318135214,
+        0.5003264091242992,
+        0.5668423455793702,
+        0.6341087325686549,
+        0.7010409508680902,
+        0.7664726820296514,
+        0.8315982324325599,
+        0.8946591419686111,
+        0.9531121751216614
+      ],
+      "bin_accuracy": [
+        0.2,
+        0.3730886850152905,
+        0.45858343337334934,
+        0.49913164293157347,
+        0.5809395065900642,
+        0.7184009406231628,
+        0.8413356080916402,
+        0.9226793467025015,
+        0.9520665199315236,
+        0.9763365468886941,
+        0.9710982658959537
+      ],
+      "bin_n": [
+        15,
+        327,
+        1666,
+        2879,
+        2959,
+        3402,
+        4103,
+        4837,
+        4089,
+        2282,
+        519
+      ],
+      "ece": 0.08808701528421295,
+      "brier": 0.14974528304098794,
+      "temperature_scaling_T": 0.7013679012815588
+    },
+    "delivery_status": {
+      "algo": "lgb",
+      "n_bins": 15,
+      "bin_confidence": [
+        0.31674386091217493,
+        0.3747040640569195,
+        0.4360554176701256,
+        0.49978873696550224,
+        0.5660495258460405,
+        0.6325569759747155,
+        0.6996959611938123,
+        0.7661925883072682,
+        0.8343464222875331,
+        0.9017332581703068,
+        0.9839647836453121
+      ],
+      "bin_accuracy": [
+        0.2222222222222222,
+        0.3987341772151899,
+        0.5257352941176471,
+        0.6634679020516214,
+        0.8109608047173084,
+        0.8790291998483125,
+        0.9103793247186328,
+        0.9274406332453826,
+        0.9517241379310345,
+        0.9663677130044843,
+        0.9874145990650846
+      ],
+      "bin_n": [
+        54,
+        948,
+        2448,
+        3022,
+        2883,
+        2637,
+        2399,
+        2274,
+        2175,
+        2676,
+        5562
+      ],
+      "ece": 0.12621462481898915,
+      "brier": 0.1285071700698595,
+      "temperature_scaling_T": 0.5595696359480499
+    }
+  },
+  "reliability_plot_saved": true,
+  "elapsed_min": 1.084403399626414
+}
