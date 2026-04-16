@@ -1,0 +1,30 @@
+{
+  "BC_v2": {
+    "path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\onnx\\BC_v2.onnx",
+    "max_err_type": 3.0517578125e-05,
+    "max_err_node": 1.9073486328125e-05,
+    "verified": true
+  },
+  "CQL_v2": {
+    "path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\onnx\\CQL_v2.onnx",
+    "max_err_type": 5.21540641784668e-08,
+    "max_err_node": 3.166496753692627e-08,
+    "verified": true
+  },
+  "IQL_v2": {
+    "path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\onnx\\IQL_v2.onnx",
+    "max_err_type": 3.0517578125e-05,
+    "max_err_node": 4.57763671875e-05,
+    "verified": true
+  },
+  "TD3BC_v2": {
+    "path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\onnx\\TD3BC_v2.onnx",
+    "max_err_type": 1.52587890625e-05,
+    "max_err_node": 4.57763671875e-05,
+    "verified": true
+  },
+  "docker": {
+    "exit_code": 1,
+    "stderr_tail": "ERROR: failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.\n"
+  }
+}
