@@ -1,0 +1,69 @@
+{
+  "front": [
+    {
+      "market": "Africa",
+      "avg_cost": 177.51673780354795,
+      "resilience": 0.4541071121060789,
+      "carbon_proxy": 6504.0
+    },
+    {
+      "market": "LATAM",
+      "avg_cost": 179.00845237510603,
+      "resilience": 0.45644842423537624,
+      "carbon_proxy": 28781.0
+    },
+    {
+      "market": "USCA",
+      "avg_cost": 176.4990860504851,
+      "resilience": 0.4519942633435404,
+      "carbon_proxy": 14676.000000000002
+    }
+  ],
+  "all_markets": [
+    {
+      "Market": "Africa",
+      "avg_cost": 177.51673780354795,
+      "avg_delay": 0.5600137764766661,
+      "late_rate": 0.5458928878939211,
+      "n": 11614,
+      "resilience": 0.4541071121060789,
+      "carbon_proxy": 6504.0
+    },
+    {
+      "Market": "Europe",
+      "avg_cost": 194.40416941952066,
+      "avg_delay": 0.5708429515243174,
+      "late_rate": 0.552077529252567,
+      "n": 50252,
+      "resilience": 0.44792247074743297,
+      "carbon_proxy": 28686.0
+    },
+    {
+      "Market": "LATAM",
+      "avg_cost": 179.00845237510603,
+      "avg_delay": 0.5578361825018413,
+      "late_rate": 0.5435515757646238,
+      "n": 51594,
+      "resilience": 0.45644842423537624,
+      "carbon_proxy": 28781.0
+    },
+    {
+      "Market": "Pacific Asia",
+      "avg_cost": 180.1808689490735,
+      "avg_delay": 0.5693650024236548,
+      "late_rate": 0.5504604944255937,
+      "n": 41260,
+      "resilience": 0.44953950557440625,
+      "carbon_proxy": 23492.0
+    },
+    {
+      "Market": "USCA",
+      "avg_cost": 176.4990860504851,
+      "avg_delay": 0.5688592581107795,
+      "late_rate": 0.5480057366564596,
+      "n": 25799,
+      "resilience": 0.4519942633435404,
+      "carbon_proxy": 14676.000000000002
+    }
+  ]
+}

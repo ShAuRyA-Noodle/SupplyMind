@@ -1,0 +1,77 @@
+{
+  "cuda_compile": {
+    "obj": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\cuda\\action_mask_kernel.obj"
+  },
+  "federated_full": [
+    {
+      "round": 0,
+      "val_full": 0.0854262113571167,
+      "val_type": 0.42716798186302185
+    },
+    {
+      "round": 9,
+      "val_full": 0.27817994356155396,
+      "val_type": 0.6928645372390747
+    },
+    {
+      "round": 19,
+      "val_full": 0.2904047966003418,
+      "val_type": 0.703538179397583
+    },
+    {
+      "round": 29,
+      "val_full": 0.28264883160591125,
+      "val_type": 0.703538179397583
+    },
+    {
+      "round": 39,
+      "val_full": 0.3092406690120697,
+      "val_type": 0.7371472716331482
+    },
+    {
+      "round": 49,
+      "val_full": 0.31012704968452454,
+      "val_type": 0.7577928900718689
+    }
+  ],
+  "pareto_frontier": [
+    {
+      "market": "Africa",
+      "avg_cost": 177.51673780354795,
+      "resilience": 0.4541071121060789,
+      "carbon_proxy": 6504.0
+    },
+    {
+      "market": "LATAM",
+      "avg_cost": 179.00845237510603,
+      "resilience": 0.45644842423537624,
+      "carbon_proxy": 28781.0
+    },
+    {
+      "market": "USCA",
+      "avg_cost": 176.4990860504851,
+      "resilience": 0.4519942633435404,
+      "carbon_proxy": 14676.000000000002
+    }
+  ],
+  "fast_mc": {
+    "engine": "FastMonteCarloEngine",
+    "deployed": true,
+    "sample_result": {
+      "p50_loss": 0.0,
+      "p95_loss": 0.0,
+      "p99_loss": 0.0,
+      "avg_nodes_affected": 0.0,
+      "max_delay_days": 0.0
+    }
+  },
+  "optuna_cql": {
+    "params": {
+      "lr": 0.00035419426081085035,
+      "conservative_weight": 1.5793326947349975,
+      "batch_size": 256
+    },
+    "value": 0.37564632296562195,
+    "n_trials": 12
+  }
+}
