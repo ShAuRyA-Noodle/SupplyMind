@@ -52,47 +52,53 @@ HORIZONS = [7, 14, 28]
 
 
 def load_series() -> dict:
-    """Load all FRED time series (core + extended) as daily/monthly aligned."""
+    """Load FRED daily series + monthly aligned (outer-join then forward-fill)."""
     raw_core = json.loads((DATA / "fred_cache.json").read_text())
+    # Core daily series - these are the targets and primary covariates
+    target_keys = ["DCOILWTICO", "PCOPPUSDM", "DEXTAUS", "DEXKOUS", "DEXJPUS", "DEXUSEU", "DEXCHUS"]
+    frames = []
+    for k in target_keys:
+        if k not in raw_core:
+            continue
+        df = pd.DataFrame(raw_core[k]["data"])
+        df["date"] = pd.to_datetime(df["date"])
+        frames.append(df.set_index("date").rename(columns={"value": k}).resample("B").ffill())
+
+    # PPICMM is monthly from fred_extended; we upsample to daily via ffill.
     raw_ext = json.loads((DATA / "fred_extended.json").read_text())
-    series = {}
-    for src in [raw_core, raw_ext]:
-        for key, v in src.items():
-            if not isinstance(v, dict) or "data" not in v:
-                continue
-            df = pd.DataFrame(v["data"])
-            if df.empty:
-                continue
-            df["date"] = pd.to_datetime(df["date"])
-            df = df.set_index("date").rename(columns={"value": key}).resample("B").ffill()
-            series[key] = df
-    # Merge on business days
-    merged = pd.concat(series.values(), axis=1, join="inner").dropna().reset_index()
+    if "PPICMM" in raw_ext:
+        df = pd.DataFrame(raw_ext["PPICMM"]["data"])
+        df["date"] = pd.to_datetime(df["date"])
+        frames.append(df.set_index("date").rename(columns={"value": "PPICMM"}).resample("B").ffill())
+
+    # OUTER join + ffill to keep max date range
+    merged = pd.concat(frames, axis=1, join="outer").sort_index().ffill().dropna().reset_index()
+    merged = merged.rename(columns={"index": "date"})
     log.info(f"  merged series: {len(merged)} business days, {merged.shape[1]-1} columns")
     return merged
 
 
+_CHRONOS_PIPE = None
+
 def chronos_forecast(series: pd.Series, horizon: int):
     """Zero-shot Chronos-Bolt forecast. Returns (median, q10, q90) arrays of shape [horizon]."""
+    global _CHRONOS_PIPE
     try:
-        from chronos import ChronosBoltPipeline
-    except Exception as e:
-        log.warning(f"  chronos-bolt import failed: {e}")
-        return None, None, None
-    try:
-        pipe = ChronosBoltPipeline.from_pretrained(
-            str(CHRONOS), device_map=DEVICE, torch_dtype=torch.float32
-        )
-        ctx = torch.tensor(series.values[-512:], dtype=torch.float32)
+        if _CHRONOS_PIPE is None:
+            from chronos import ChronosBoltPipeline
+            _CHRONOS_PIPE = ChronosBoltPipeline.from_pretrained(
+                str(CHRONOS), device_map=DEVICE, torch_dtype=torch.float32
+            )
+        # Correct API: predict_quantiles(inputs, prediction_length, quantile_levels)
+        ctx = torch.tensor(series.values[-1024:], dtype=torch.float32).unsqueeze(0)  # [1, L]
         q_levels = [0.1, 0.5, 0.9]
-        quantiles, _mean = pipe.predict_quantiles(
-            context=ctx, prediction_length=horizon, quantile_levels=q_levels,
+        quantiles, _mean = _CHRONOS_PIPE.predict_quantiles(
+            inputs=ctx, prediction_length=horizon, quantile_levels=q_levels,
         )
-        # quantiles: [1, horizon, len(q_levels)]
         q = quantiles[0].cpu().numpy()  # [horizon, 3]
         return q[:, 1], q[:, 0], q[:, 2]
     except Exception as e:
-        log.warning(f"  Chronos-Bolt failed: {e}")
+        log.warning(f"  Chronos-Bolt failed: {str(e)[:160]}")
         return None, None, None
 
 
@@ -179,11 +185,11 @@ def run_backtest(series: pd.Series, dates: pd.Series, horizon: int, n_folds: int
         fold_res = {"fold": i, "ctx_end_idx": end}
         context_last = ctx.iloc[-1]
 
-        # Each model
+        # Each model (Chronos first so error prints once)
         for name, fn in [
             ("chronos", lambda: chronos_forecast(ctx, horizon)),
-            ("prophet", lambda: prophet_forecast(ctx, horizon, ctx_dates)),
             ("arima", lambda: arima_forecast(ctx, horizon)),
+            ("prophet", lambda: prophet_forecast(ctx, horizon, ctx_dates)),
         ]:
             try:
                 med, lo, hi = fn()
@@ -199,7 +205,7 @@ def run_backtest(series: pd.Series, dates: pd.Series, horizon: int, n_folds: int
 
     # Aggregate
     agg = {}
-    for name in ["chronos", "prophet", "arima"]:
+    for name in ["chronos", "arima", "prophet"]:
         maes = [f[name]["mae"] for f in folds if name in f and "mae" in f[name]]
         if maes:
             agg[name] = {
@@ -226,8 +232,8 @@ def ensemble_backtest(series: pd.Series, dates: pd.Series, horizon: int) -> dict
     names_used = []
     for name, fn in [
         ("chronos", lambda: chronos_forecast(ctx, horizon)),
-        ("prophet", lambda: prophet_forecast(ctx, horizon, ctx_dates)),
         ("arima", lambda: arima_forecast(ctx, horizon)),
+        ("prophet", lambda: prophet_forecast(ctx, horizon, ctx_dates)),
     ]:
         try:
             med, _, _ = fn()
