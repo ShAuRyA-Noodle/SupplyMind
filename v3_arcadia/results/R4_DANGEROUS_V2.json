@@ -1,0 +1,2805 @@
+{
+  "judges": [
+    "deepseek-r1-local-q4",
+    "qwen25-14b-local",
+    "mistral-nemo-local"
+  ],
+  "critic": "qwen25-coder-local",
+  "extractor": "qwen25-14b-local",
+  "n_scenarios": 26,
+  "per_scenario": {
+    "2011_T\u014dhoku_earthquake_and_tsunami": {
+      "ground_truth": "CRITICAL",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 32.29569339752197,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Economic disruption",
+              "Nuclear disaster impact",
+              "Global supply chain disruptions"
+            ],
+            "mitigations": [
+              "Improved early warning systems",
+              "Diversification of suppliers",
+              "Enhanced disaster recovery plans"
+            ],
+            "reasoning_one_line": "The Great East Japan Earthquake caused severe economic and nuclear impacts, leading to significant global supply chain disruptions."
+          },
+          "error": "",
+          "raw_preview": "Okay, so I need to figure out the supply chain risks from the 2011 Great East Japan Earthquake based on the given context. The question is asking me to classify the risk tier as LOW, MEDIUM, HIGH, or CRITICAL.\n\nFirst, let's break down what a supply-chain risk entails. It usually refers to disruption"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.2423415184021,
+          "parsed": {
+            "risk_level": "CRITICAL",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Nuclear power plant failures",
+              "Tsunami-induced infrastructure damage",
+              "Electrical generator fuel shortages"
+            ],
+            "mitigations": [
+              "Diversification of energy sources and supply chains",
+              "Enhanced early warning systems for tsunamis",
+              "Improved emergency response protocols including rapid fuel delivery"
+            ],
+            "reasoning_one_line": "The event caused widespread, multi-sector disruption across Japan with significant global economic impact."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"CRITICAL\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\"Nuclear power plant failures\", \"Tsunami-induced infrastructure damage\", \"Electrical generator fuel shortages\"],\n  \"mitigations\": [\"Diversification of energy sources and supply chains\", \"Enhanced early warning systems "
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 13.912188053131104,
+          "parsed": {
+            "risk_level": "CRITICAL",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Nuclear power plant damage and radiation leakage (Fukushima Daiichi)",
+              "Extensive infrastructure damage along the coast of Tohoku region",
+              "Disruption of electrical power generation and distribution"
+            ],
+            "mitigations": [
+              "Immediate evacuation of affected populations and provision of temporary shelters",
+              "International assistance for search, rescue, and recovery efforts",
+              "Coordination among government agencies, NGOs, and private sector to restore critical infrastructure"
+            ],
+            "reasoning_one_line": "The magnitude, scope, and cascading effects of the earthquake and tsunami resulted in widespread disruption across multiple sectors, making it a critical global event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"CRITICAL\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Nuclear power plant damage and radiation leakage (Fukushima Daiichi)\",\n    \"Extensive infrastructure damage along the coast of Tohoku region\",\n    \"Disruption of electrical power generation and distribution\"\n  ],"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        4,
+        4
+      ],
+      "risk_majority": "CRITICAL",
+      "mean_confidence": 0.7999999999999999,
+      "vulnerabilities_semantic_jaccard": 0.6380952380952382,
+      "mitigations_semantic_jaccard": 0.5555555555555555,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 32.29569339752197,
+        "qwen25-14b-local": 6.2423415184021,
+        "mistral-nemo-local": 13.912188053131104
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "CRITICAL",
+          "one_line_review": "All judges agree on a CRITICAL risk level, with high confidence in the severe impacts and disruptions caused by the T\u014dhoku earthquake and tsunami."
+        },
+        "latency_s": 9.963831186294556,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"CRITICAL\",\n  \"one_line_review\": \"All judges agree on a CRITICAL risk level, with high confidence in the severe impacts and disruptions caused by the T\u014dhoku earthquake and tsunami.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_IMMEDIATE"
+    },
+    "2020\u20132023_global_chip_shortage": {
+      "ground_truth": "CRITICAL",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 17.007470846176147,
+          "parsed": {
+            "risk_level": "CRITICAL",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Global supply chain disruption",
+              "Widespread impact across multiple industries"
+            ],
+            "mitigations": [
+              "Diversification of suppliers",
+              "Stockpiling key components"
+            ],
+            "reasoning_one_line": "Severe and broad-reaching impact with manageable but not immediate recovery."
+          },
+          "error": "",
+          "raw_preview": "Okay, so I need to figure out the supply-chain risk tier for the global chip shortage between 2020 and 2023 based on severity, breadth of impact, and recovery time. Let me break this down step by step.\n\nFirst, looking at the severity of disruption: The chip shortage caused major price increases, lon"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.0764570236206055,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "COVID-19 pandemic lockdowns",
+              "China-US trade tensions",
+              "Severe weather events in Taiwan"
+            ],
+            "mitigations": [
+              "Diversification of semiconductor manufacturing locations",
+              "Increased stockpiling and inventory management",
+              "Investment in new production capacity"
+            ],
+            "reasoning_one_line": "The global chip shortage affected over 169 industries, causing significant disruptions that took years to recover from."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"COVID-19 pandemic lockdowns\", \"China-US trade tensions\", \"Severe weather events in Taiwan\"],\n  \"mitigations\": [\"Diversification of semiconductor manufacturing locations\", \"Increased stockpiling and inventory management\", "
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 6.663038969039917,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Taiwanese semiconductor production (TSMC, UMC)",
+              "Global automotive industry supply chain",
+              "Consumer electronics manufacturing and distribution"
+            ],
+            "mitigations": [
+              "Increase fab capacity and diversify production locations",
+              "Implement strategic stockpiling of critical chips by governments and industries",
+              "Strengthen global semiconductor policy coordination to balance demand and supply"
+            ],
+            "reasoning_one_line": "The chip shortage caused widespread, multi-sector disruptions with significant economic impacts."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Taiwanese semiconductor production (TSMC, UMC)\",\n    \"Global automotive industry supply chain\",\n    \"Consumer electronics manufacturing and distribution\"\n  ],\n  \"mitigations\": [\n    \"Increase fab capacity and diversi"
+        }
+      },
+      "risk_ratings_ordinal": [
+        4,
+        3,
+        3
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.08333333333333333,
+      "mitigations_semantic_jaccard": 0.8888888888888888,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 17.007470846176147,
+        "qwen25-14b-local": 6.0764570236206055,
+        "mistral-nemo-local": 6.663038969039917
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "All judges agree on a HIGH risk level, with Judge A slightly lower due to perceived manageability of mitigations."
+        },
+        "latency_s": 3.651684284210205,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"All judges agree on a HIGH risk level, with Judge A slightly lower due to perceived manageability of mitigations.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_REVIEW"
+    },
+    "2021_Suez_Canal_obstruction": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 10.044631958007812,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Severe disruption to a major trade route",
+              "High economic impact"
+            ],
+            "mitigations": [
+              "Partial resolution through ship movement and negotiation",
+              "Eventual resumption of normal operations"
+            ],
+            "reasoning_one_line": "Significant disruption to global trade routes with high economic value, prolonged recovery period"
+          },
+          "error": "",
+          "raw_preview": "So, I need to figure out the risk level for this Suez Canal incident.\n\nOkay, let's start by understanding what happened. The Ever Given ship got stuck in the Suez Canal due to strong winds, blocking all traffic for six days. This caused a significant disruption in global trade routes because the Sue"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.534026622772217,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.9,
+            "primary_vulnerabilities": [
+              "Suez Canal narrow sections",
+              "Dependency on single shipping lanes",
+              "Human and technical errors"
+            ],
+            "mitigations": [
+              "Expand canal width to allow dual ship passage",
+              "Implement stricter navigation regulations during adverse weather conditions",
+              "Enhance emergency response protocols for rapid resolution of blockages"
+            ],
+            "reasoning_one_line": "The Suez Canal's narrow sections led to a significant global trade disruption, highlighting the vulnerability of critical maritime routes."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.9,\n  \"primary_vulnerabilities\": [\"Suez Canal narrow sections\", \"Dependency on single shipping lanes\", \"Human and technical errors\"],\n  \"mitigations\": [\"Expand canal width to allow dual ship passage\", \"Implement stricter navigation regulations during advers"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.515038013458252,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Suez Canal as a single point of failure for significant global trade",
+              "Concentration of traffic in narrow sections of the canal",
+              "Dependence on a small number of large container ships"
+            ],
+            "mitigations": [
+              "Diversify shipping routes (e.g., via Cape of Good Hope)",
+              "Expand and widen the Suez Canal to accommodate larger vessels and two-way traffic",
+              "Improve weather forecasting and vessel management practices to prevent incidents"
+            ],
+            "reasoning_one_line": "Temporary blockage of a critical global trade artery caused significant disruption."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Suez Canal as a single point of failure for significant global trade\",\n    \"Concentration of traffic in narrow sections of the canal\",\n    \"Dependence on a small number of large container ships\"\n  ],\n  \"mitigations\":"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        3,
+        3
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7833333333333332,
+      "vulnerabilities_semantic_jaccard": 0.27777777777777773,
+      "mitigations_semantic_jaccard": 0.4047619047619048,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 10.044631958007812,
+        "qwen25-14b-local": 6.534026622772217,
+        "mistral-nemo-local": 7.515038013458252
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "All judges agree on a HIGH risk level, citing significant disruption to global trade routes and the vulnerability of critical maritime infrastructure."
+        },
+        "latency_s": 3.686922550201416,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"All judges agree on a HIGH risk level, citing significant disruption to global trade routes and the vulnerability of critical maritime infrastructure.\"\n}"
+      },
+      "scenario_ordinal_alpha": 1.0,
+      "escalation": "OPS_DIRECTOR_4H"
+    },
+    "Bab-el-Mandeb": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 7.798328399658203,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "dependency on critical chokepoint",
+              "lack of infrastructure redundancy"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "Severe disruption risk due to dependency on Bab-el-Mandeb strait for global maritime trade with no immediate mitigation options."
+          },
+          "error": "",
+          "raw_preview": "The criteria for each tier are as follows:\n\n- LOW: Disruption is minimal; impact is limited to a single point or small number of points; recovery time within 10 days.\n\n- MEDIUM: Disruption is moderate; impact on multiple points; recovery time between 30 and 90 days.\n\n- HIGH: Disruption severe; impac"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.591897487640381,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.75,
+            "primary_vulnerabilities": [
+              "Bab-el-Mandeb Strait",
+              "Suez Canal",
+              "Strait of Hormuz"
+            ],
+            "mitigations": [
+              "Develop alternative shipping routes and diversification strategies",
+              "Enhance security measures around critical maritime chokepoints",
+              "Strengthen international cooperation for maritime safety and navigation"
+            ],
+            "reasoning_one_line": "The Bab-el-Mandeb Strait's strategic importance in global trade could lead to localized disruptions with potential spillover effects."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.75,\n  \"primary_vulnerabilities\": [\"Bab-el-Mandeb Strait\", \"Suez Canal\", \"Strait of Hormuz\"],\n  \"mitigations\": [\"Develop alternative shipping routes and diversification strategies\", \"Enhance security measures around critical maritime chokepoints\", \"Streng"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 8.082467079162598,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Narrow strait with potential for blockage or closure due to natural disasters or human conflict",
+              "Historical significance and strategic importance, potentially drawing military attention",
+              "Limited alternative routes for maritime traffic"
+            ],
+            "mitigations": [
+              "Regular maintenance and upgrade of navigation aids (e.g., lighthouses)",
+              "Strengthening regional cooperation on maritime security and safety",
+              "Investment in alternative transportation infrastructure to reduce dependence on the strait"
+            ],
+            "reasoning_one_line": "While historically significant, the Bab-el-Mandeb strait's current low traffic volume and lack of recent disruptions keep risk levels low."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Narrow strait with potential for blockage or closure due to natural disasters or human conflict\",\n    \"Historical significance and strategic importance, potentially drawing military attention\",\n    \"Limited alternativ"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        2,
+        1
+      ],
+      "risk_majority": "MEDIUM",
+      "mean_confidence": 0.7333333333333334,
+      "vulnerabilities_semantic_jaccard": 0.1111111111111111,
+      "mitigations_semantic_jaccard": 0.7142857142857143,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 7.798328399658203,
+        "qwen25-14b-local": 6.591897487640381,
+        "mistral-nemo-local": 8.082467079162598
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "MEDIUM",
+          "one_line_review": "Judges disagree by more than one risk level step, but MEDIUM seems the most balanced given the strategic importance and potential for localized disruptions with spillover effects."
+        },
+        "latency_s": 4.073050022125244,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"MEDIUM\",\n  \"one_line_review\": \"Judges disagree by more than one risk level step, but MEDIUM seems the most balanced given the strategic importance and potential for localized disruptions with spillover effects.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "OPS_DIRECTOR_24H"
+    },
+    "Baltic_Dry_Index": {
+      "ground_truth": "LOW",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 12.768798351287842,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Oversupply leading to reduced shipping costs",
+              "Potential operational issues for shipping companies",
+              "Disruptions in service reliability"
+            ],
+            "mitigations": [
+              "Monitoring market trends and adjusting supply chain strategies accordingly",
+              "Building resilience through diversified supplier networks"
+            ],
+            "reasoning_one_line": "Significant drop in BDI indicates potential oversupply, leading to widespread disruptions across the dry bulk shipping network."
+          },
+          "error": "",
+          "raw_preview": "So, given that the BDI is a key indicator for dry bulk shipping, if the BDI were to drop significantly below its historical average, what would be the supply-chain risk tier?\n\nOkay, so I need to figure out the supply-chain risk tier based on the impact of the BDI dropping significantly. Let's break "
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 7.245074033737183,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.9,
+            "primary_vulnerabilities": [
+              "Changes in global trade routes",
+              "Shifts in demand for different vessel sizes",
+              "Annual review and potential re-weighting of index components"
+            ],
+            "mitigations": [
+              "Regularly update supply chain risk assessments to reflect changes in the BDI composition",
+              "Diversify shipping routes and vessel types used in logistics operations",
+              "Monitor global trade trends and adjust supply chains accordingly"
+            ],
+            "reasoning_one_line": "The context describes historical and operational details of the Baltic Dry Index without indicating an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.9,\n  \"primary_vulnerabilities\": [\"Changes in global trade routes\", \"Shifts in demand for different vessel sizes\", \"Annual review and potential re-weighting of index components\"],\n  \"mitigations\": [\"Regularly update supply chain risk assessments to reflect c"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.919901371002197,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Concentration of shipbrokers in London for BDI assessment",
+              "Dependence on a single index to represent global dry bulk shipping market",
+              "Limited transparency in the methodology and weighting of the BDI"
+            ],
+            "mitigations": [
+              "Diversify data sources for freight cost assessments",
+              "Implement independent verification of BDI calculations",
+              "Regularly review and update BDI methodologies to reflect market changes"
+            ],
+            "reasoning_one_line": "The context describes the historical origin, methodology, and recent changes to the Baltic Dry Index (BDI), not an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Concentration of shipbrokers in London for BDI assessment\",\n    \"Dependence on a single index to represent global dry bulk shipping market\",\n    \"Limited transparency in the methodology and weighting of the BDI\"\n  ],\n"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7833333333333332,
+      "vulnerabilities_semantic_jaccard": 0.27777777777777773,
+      "mitigations_semantic_jaccard": 0.5436507936507936,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 12.768798351287842,
+        "qwen25-14b-local": 7.245074033737183,
+        "mistral-nemo-local": 7.919901371002197
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "Judges B and C both assess the risk level as LOW, while Judge A assigns a HIGH risk. The majority consensus is LOW, supported by reasoning that focuses on historical context rather than active disruptions."
+        },
+        "latency_s": 4.420954942703247,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"Judges B and C both assess the risk level as LOW, while Judge A assigns a HIGH risk. The majority consensus is LOW, supported by reasoning that focuses on historical context rather than active disruptions.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    },
+    "Bullwhip_effect": {
+      "ground_truth": "MEDIUM",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 10.413498640060425,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Increased variability in orders",
+              "Potential stockouts or excess inventory"
+            ],
+            "mitigations": [
+              "Adjust forecasting methods",
+              "Implement better demand planning",
+              "Enhance communication and coordination across the supply chain"
+            ],
+            "reasoning_one_line": "The Bullwhip Effect causes significant disruptions, impacts multiple tiers of the supply chain, and requires substantial efforts to mitigate."
+          },
+          "error": "",
+          "raw_preview": "The bullwhip effect is a supply chain phenomenon where orders to suppliers tend to have larger variability than sales to buyers.\n\nOkay, so I need to classify the Bullwhip Effect as a supply-chain risk tier. The options are LOW, MEDIUM, HIGH, or CRITICAL. Let me think about each aspect: severity of d"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.789191007614136,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.9,
+            "primary_vulnerabilities": [
+              "Forecast errors",
+              "Lack of communication between supply chain participants",
+              "Order batching"
+            ],
+            "mitigations": [
+              "Implementing better demand forecasting techniques",
+              "Improving communication and information sharing across the supply chain",
+              "Reducing order batching practices"
+            ],
+            "reasoning_one_line": "The bullwhip effect describes a systemic issue but does not indicate an active disruption event with broad industry impact."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.9,\n  \"primary_vulnerabilities\": [\"Forecast errors\", \"Lack of communication between supply chain participants\", \"Order batching\"],\n  \"mitigations\": [\"Implementing better demand forecasting techniques\", \"Improving communication and information sharing across "
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.961788892745972,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Lack of communication between supply chain participants",
+              "Inaccurate demand forecasting due to variability in consumer behavior",
+              "Inefficient inventory management practices"
+            ],
+            "mitigations": [
+              "Implementing robust demand forecasting models and tools",
+              "Establishing clear communication channels and protocols throughout the supply chain",
+              "Adopting efficient inventory management strategies, such as Just-In-Time (JIT) or Vendor-Managed Inventory (VMI)"
+            ],
+            "reasoning_one_line": "The bullwhip effect is a concept describing demand variability amplification in supply chains, not an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Lack of communication between supply chain participants\",\n    \"Inaccurate demand forecasting due to variability in consumer behavior\",\n    \"Inefficient inventory management practices\"\n  ],\n  \"mitigations\": [\n    \"Impl"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7833333333333332,
+      "vulnerabilities_semantic_jaccard": 0.47222222222222215,
+      "mitigations_semantic_jaccard": 0.9047619047619048,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 10.413498640060425,
+        "qwen25-14b-local": 5.789191007614136,
+        "mistral-nemo-local": 7.961788892745972
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "Judges B and C both assess the risk as LOW, while Judge A rates it as HIGH. The majority consensus is LOW, but there's a significant disagreement between Judges A and B/C."
+        },
+        "latency_s": 4.3246989250183105,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"Judges B and C both assess the risk as LOW, while Judge A rates it as HIGH. The majority consensus is LOW, but there's a significant disagreement between Judges A and B/C.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    },
+    "CHIPS_and_Science_Act": {
+      "ground_truth": "MEDIUM",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 14.327017068862915,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "bureaucratic hurdles",
+              "reliance on foreign chip suppliers for equipment",
+              "limited access to capital"
+            ],
+            "mitigations": [
+              "subsidies",
+              "tax credits",
+              "research funding",
+              "workforce training"
+            ],
+            "reasoning_one_line": "Implementation challenges could lead to significant supply-chain disruptions despite the act's positive goals."
+          },
+          "error": "",
+          "raw_preview": "The CHIPS and Science Act aims to address supply chain risks by incentivizing domestic semiconductor manufacturing through various measures. However, the act faces challenges in implementation due to bureaucratic hurdles, reliance on foreign chip suppliers for equipment, and limited access to capita"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.931775808334351,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Bureaucratic hurdles in grant disbursement",
+              "Shortages of skilled workers",
+              "Congressional funding cuts"
+            ],
+            "mitigations": [
+              "Streamlining regulatory processes for grants",
+              "Investing in workforce development programs",
+              "Securing stable and sufficient federal funding"
+            ],
+            "reasoning_one_line": "The act faces delays but does not currently pose significant broad industry impact."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Bureaucratic hurdles in grant disbursement\", \"Shortages of skilled workers\", \"Congressional funding cuts\"],\n  \"mitigations\": [\"Streamlining regulatory processes for grants\", \"Investing in workforce development programs\", \""
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.560265302658081,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Dependence on foreign semiconductor manufacturing",
+              "Shortages of skilled workers in the U.S.",
+              "Bureaucratic hurdles and funding cuts limiting project progress"
+            ],
+            "mitigations": [
+              "Accelerate workforce training and education initiatives",
+              "Streamline grant approval processes for projects",
+              "Strengthen international semiconductor supply chain partnerships to reduce dependence on a single region"
+            ],
+            "reasoning_one_line": "While the CHIPS and Science Act aims to strengthen U.S. supply chains, current challenges may cause delays and localized disruptions."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\n    \"Dependence on foreign semiconductor manufacturing\",\n    \"Shortages of skilled workers in the U.S.\",\n    \"Bureaucratic hurdles and funding cuts limiting project progress\"\n  ],\n  \"mitigations\": [\n    \"Accelerate work"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        1,
+        2
+      ],
+      "risk_majority": "MEDIUM",
+      "mean_confidence": 0.7333333333333334,
+      "vulnerabilities_semantic_jaccard": 0.47142857142857136,
+      "mitigations_semantic_jaccard": 0.47883597883597884,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 14.327017068862915,
+        "qwen25-14b-local": 5.931775808334351,
+        "mistral-nemo-local": 7.560265302658081
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "MEDIUM",
+          "one_line_review": "The judges' assessments show a range of risk levels, with Judge A seeing high risk due to implementation challenges, Judge B viewing low risk with delays but no broad impact, and Judge C identifying medium risk with current challenges causing delays and localized disruptions. The consensus suggests a moderate level of risk."
+        },
+        "latency_s": 5.415591239929199,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"MEDIUM\",\n  \"one_line_review\": \"The judges' assessments show a range of risk levels, with Judge A seeing high risk due to implementation challenges, Judge B viewing low risk with delays but no broad impact, and Judge C identifying medium risk with current challenges causing delays an"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "OPS_DIRECTOR_24H"
+    },
+    "Container_ship": {
+      "ground_truth": "LOW",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 15.306034088134766,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Severe disruption of TEU capacity",
+              "Global impact on container traffic"
+            ],
+            "mitigations": [
+              "Containment and cleanup efforts",
+              "Backup systems for essential goods transport"
+            ],
+            "reasoning_one_line": "High severity due to significant TEU loss, global impact, and moderate recovery time."
+          },
+          "error": "",
+          "raw_preview": "The container ship mentioned in the context above is involved in an accident that causes a massive oil spill into the containers. The spill affects 10% of all TEU capacity globally.\n\nAssume that:\n\n- The average recovery time for such an incident is 6 months.\n- The breadth of impact is global, affect"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.620483160018921,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Narrow shipping lanes",
+              "Port congestion",
+              "Container ship capacity constraints"
+            ],
+            "mitigations": [
+              "Invest in port infrastructure expansion",
+              "Develop alternative transportation routes",
+              "Enhance intermodal logistics coordination"
+            ],
+            "reasoning_one_line": "While container ships are critical for global trade, the described context is historical and does not indicate an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\"Narrow shipping lanes\", \"Port congestion\", \"Container ship capacity constraints\"],\n  \"mitigations\": [\"Invest in port infrastructure expansion\", \"Develop alternative transportation routes\", \"Enhance intermodal logistics coo"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.298181772232056,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Dependence on a limited number of major shipping routes",
+              "Concentration of cargo in large container ships",
+              "Vulnerability of key ports to disruptions"
+            ],
+            "mitigations": [
+              "Diversification of shipping routes and modes of transport",
+              "Investment in smaller, more agile vessels for niche markets",
+              "Improving port infrastructure resilience and redundancy"
+            ],
+            "reasoning_one_line": "While containerization has significantly improved efficiency, the system remains robust with no immediate global disruptions."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Dependence on a limited number of major shipping routes\",\n    \"Concentration of cargo in large container ships\",\n    \"Vulnerability of key ports to disruptions\"\n  ],\n  \"mitigations\": [\n    \"Diversification of shipping"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7999999999999999,
+      "vulnerabilities_semantic_jaccard": 0.6984126984126983,
+      "mitigations_semantic_jaccard": 0.5,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 15.306034088134766,
+        "qwen25-14b-local": 5.620483160018921,
+        "mistral-nemo-local": 7.298181772232056
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "Judges B and C both assess the risk as LOW with high confidence, while Judge A sees it as HIGH. The consensus is LOW due to historical context and system robustness."
+        },
+        "latency_s": 4.167853116989136,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"Judges B and C both assess the risk as LOW with high confidence, while Judge A sees it as HIGH. The consensus is LOW due to historical context and system robustness.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    },
+    "Enterprise_resource_planning": {
+      "ground_truth": "LOW",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 19.01144027709961,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "ERP system downtime",
+              "Impact on critical business processes"
+            ],
+            "mitigations": [
+              "High uptime guarantee (95%)",
+              "Defined MTTR of 3 hours per year"
+            ],
+            "reasoning_one_line": "The ERP supports multiple key business processes with a high uptime but non-zero risk of disruption."
+          },
+          "error": "",
+          "raw_preview": "The following factors must be considered:\n\n1. The ERP system is currently in use for the organization.\n2. The ERP system has a 95% uptime guarantee (MTTR of 3 hours per year).\n3. The ERP system supports multiple key business processes, including manufacturing planning and supply chain management.\n\nB"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.396034479141235,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Cloud-based ERP system outages",
+              "Data breaches compromising shared databases",
+              "Vendor lock-in and dependency on specific ERP providers"
+            ],
+            "mitigations": [
+              "Implement robust disaster recovery plans for cloud services",
+              "Encrypt sensitive data and enforce strict access controls",
+              "Diversify vendor relationships to reduce dependence on single suppliers"
+            ],
+            "reasoning_one_line": "ERP systems, while critical for business operations, have mitigations in place that limit broader systemic risks."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\"Cloud-based ERP system outages\", \"Data breaches compromising shared databases\", \"Vendor lock-in and dependency on specific ERP providers\"],\n  \"mitigations\": [\"Implement robust disaster recovery plans for cloud services\", \""
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 6.8486762046813965,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Dependence on a single ERP system vendor",
+              "Lack of redundancy in data centers or cloud services",
+              "Inadequate cybersecurity measures"
+            ],
+            "mitigations": [
+              "Diversify ERP vendors to reduce dependence on one provider",
+              "Implement redundant data centers or multi-cloud strategy for business continuity",
+              "Strengthen cybersecurity protocols and regular penetration testing"
+            ],
+            "reasoning_one_line": "The context describes the concept of ERP systems without any active disruption event mentioned."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Dependence on a single ERP system vendor\",\n    \"Lack of redundancy in data centers or cloud services\",\n    \"Inadequate cybersecurity measures\"\n  ],\n  \"mitigations\": [\n    \"Diversify ERP vendors to reduce dependence on"
+        }
+      },
+      "risk_ratings_ordinal": [
+        2,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7999999999999999,
+      "vulnerabilities_semantic_jaccard": 0.39285714285714285,
+      "mitigations_semantic_jaccard": 0.3333333333333333,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 19.01144027709961,
+        "qwen25-14b-local": 6.396034479141235,
+        "mistral-nemo-local": 6.8486762046813965
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "All judges agree on a LOW risk level with high confidence, despite minor differences in identified vulnerabilities and mitigations."
+        },
+        "latency_s": 3.537461280822754,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"All judges agree on a LOW risk level with high confidence, despite minor differences in identified vulnerabilities and mitigations.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    },
+    "Ever_Given": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 9.473984956741333,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Global shipping lane disruption",
+              "Legal and financial complications"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "Ever Given incident caused significant global disruptions with potential for long-term issues."
+          },
+          "error": "",
+          "raw_preview": "The Ever Given incident caused significant disruption, affecting multiple shipping lanes and potentially causing delays. The breadth of impact is high due to its global presence as a major container ship. Recovery took about two weeks initially, but ongoing legal and financial issues may cause longe"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.821601390838623,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Suez Canal",
+              "Container Ship Traffic Congestion",
+              "Global Trade Routes"
+            ],
+            "mitigations": [
+              "Diversification of shipping routes",
+              "Enhanced navigational aids and safety measures in strategic waterways",
+              "Improved contingency planning for maritime incidents"
+            ],
+            "reasoning_one_line": "The grounding of the Ever Given highlights systemic vulnerabilities in critical global trade arteries."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Suez Canal\", \"Container Ship Traffic Congestion\", \"Global Trade Routes\"],\n  \"mitigations\": [\"Diversification of shipping routes\", \"Enhanced navigational aids and safety measures in strategic waterways\", \"Improved contin"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 6.810071229934692,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Suez Canal as a critical global maritime chokepoint",
+              "Single point of failure due to ship size and design",
+              "Concentration of cargo in few container ships"
+            ],
+            "mitigations": [
+              "Diversify shipping routes to reduce reliance on Suez Canal",
+              "Investigate and address potential design flaws in large container ships",
+              "Promote regional port infrastructure development for cargo diversification"
+            ],
+            "reasoning_one_line": "Temporary blockage of Suez Canal by Ever Given caused significant global supply-chain disruption."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Suez Canal as a critical global maritime chokepoint\",\n    \"Single point of failure due to ship size and design\",\n    \"Concentration of cargo in few container ships\"\n  ],\n  \"mitigations\": [\n    \"Diversify shipping rou"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        2,
+        3
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.4523809523809524,
+      "mitigations_semantic_jaccard": 0.3333333333333333,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 9.473984956741333,
+        "qwen25-14b-local": 5.821601390838623,
+        "mistral-nemo-local": 6.810071229934692
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "Judges A and C both assess the risk as HIGH, while Judge B rates it MEDIUM. The consensus leans towards a HIGH risk level due to significant global disruptions and critical vulnerabilities in supply chains."
+        },
+        "latency_s": 4.459907293319702,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"Judges A and C both assess the risk as HIGH, while Judge B rates it MEDIUM. The consensus leans towards a HIGH risk level due to significant global disruptions and critical vulnerabilities in supply chains.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_REVIEW"
+    },
+    "Foxconn": {
+      "ground_truth": "MEDIUM",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 5.9175732135772705,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Dependency on semiconductor supply for critical electronics manufacturing"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "Severe disruption risk affecting multiple product lines with long recovery time."
+          },
+          "error": "",
+          "raw_preview": "The prompt is about evaluating the risk of Foxconn's semiconductor dependency.\n\nFirst, assess the severity: How significant would a disruption in semiconductor supply be for Foxconn?\n\nSecond, assess breadth: How many different products or markets could be affected by this risk?\n\nThird, assess recove"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.916214227676392,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "reliance on Chinese manufacturing",
+              "concentration in consumer electronics assembly",
+              "dependence on major tech company contracts"
+            ],
+            "mitigations": [
+              "diversify production facilities globally",
+              "invest in semiconductor and AI technologies",
+              "strengthen supplier relationships and redundancy plans"
+            ],
+            "reasoning_one_line": "Foxconn's dominance in global electronics contract manufacturing makes it a critical node with significant single-region exposure."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"reliance on Chinese manufacturing\", \"concentration in consumer electronics assembly\", \"dependence on major tech company contracts\"],\n  \"mitigations\": [\"diversify production facilities globally\", \"invest in semiconductor a"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.7714080810546875,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Concentration of manufacturing in China (70%+ revenue)",
+              "Dependence on a single company for many major electronics brands' production",
+              "Limited diversification into new technologies despite strategic shifts"
+            ],
+            "mitigations": [
+              "Diversify manufacturing locations to reduce reliance on China",
+              "Investment in R&D and partnerships to expand into new technologies (AI, robotics)",
+              "Strengthen supply chain resilience through strategic inventory management and supplier diversity"
+            ],
+            "reasoning_one_line": "Foxconn's high concentration of production in China and dependence on a few key customers pose systemic risks, but the company is taking steps to diversify."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\n    \"Concentration of manufacturing in China (70%+ revenue)\",\n    \"Dependence on a single company for many major electronics brands' production\",\n    \"Limited diversification into new technologies despite strategic shif"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        3,
+        2
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7333333333333334,
+      "vulnerabilities_semantic_jaccard": 0.5492063492063491,
+      "mitigations_semantic_jaccard": 1.0,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 5.9175732135772705,
+        "qwen25-14b-local": 5.916214227676392,
+        "mistral-nemo-local": 7.7714080810546875
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "Judges A and B consistently rate the risk as HIGH, while Judge C rates it as MEDIUM. The majority consensus is that Foxconn faces a high level of risk due to its critical role in global electronics manufacturing and concentration in China."
+        },
+        "latency_s": 4.742010831832886,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"Judges A and B consistently rate the risk as HIGH, while Judge C rates it as MEDIUM. The majority consensus is that Foxconn faces a high level of risk due to its critical role in global electronics manufacturing and concentration in China.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_REVIEW"
+    },
+    "Inventory": {
+      "ground_truth": "LOW",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 37.55600380897522,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Lead time variability",
+              "Demand variability"
+            ],
+            "mitigations": [
+              "Vendor replenishment at 100 units/day",
+              "Internal production up to 200 units/day"
+            ],
+            "reasoning_one_line": "Sudden demand increase could cause stockout within 3 days, impacting supply chain performance."
+          },
+          "error": "",
+          "raw_preview": "The following factors are considered:\n\n1. Reasons for keeping business inventory: Time, Seasonal demand, Uncertainty, Economies of scale, Appreciation in value.\n\n2. The specific inventory kept is 500 units of a product with an annual usage of 60,000 units. The inventory has a lead time of 3 days and"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.87286114692688,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.9,
+            "primary_vulnerabilities": [
+              "Uncertainty in demand and supply",
+              "Seasonal variations affecting inventory levels",
+              "Economies of scale leading to bulk storage"
+            ],
+            "mitigations": [
+              "Implementing advanced forecasting tools for better demand prediction",
+              "Adopting just-in-time (JIT) inventory systems to reduce stock holding periods",
+              "Diversifying suppliers to mitigate risks from single-source dependencies"
+            ],
+            "reasoning_one_line": "The described context outlines reasons and terms related to inventory management without indicating an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.9,\n  \"primary_vulnerabilities\": [\"Uncertainty in demand and supply\", \"Seasonal variations affecting inventory levels\", \"Economies of scale leading to bulk storage\"],\n  \"mitigations\": [\"Implementing advanced forecasting tools for better demand prediction\", \""
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 6.367799282073975,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Long lead times in supply chain",
+              "Seasonal demand fluctuations",
+              "Uncertainty in demand, supply, and movements of goods"
+            ],
+            "mitigations": [
+              "Implementing Just-In-Time (JIT) inventory management",
+              "Diversifying suppliers to reduce lead time uncertainty",
+              "Investing in robust forecasting tools for demand prediction"
+            ],
+            "reasoning_one_line": "The context describes general inventory management concepts and challenges, not an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Long lead times in supply chain\",\n    \"Seasonal demand fluctuations\",\n    \"Uncertainty in demand, supply, and movements of goods\"\n  ],\n  \"mitigations\": [\n    \"Implementing Just-In-Time (JIT) inventory management\",\n   "
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7833333333333332,
+      "vulnerabilities_semantic_jaccard": 0.7936507936507936,
+      "mitigations_semantic_jaccard": 0.3333333333333333,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 37.55600380897522,
+        "qwen25-14b-local": 6.87286114692688,
+        "mistral-nemo-local": 6.367799282073975
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "Judges B and C both assess the risk as LOW with high confidence, while Judge A sees a HIGH risk. The scenario describes general inventory management challenges without an active disruption event, supporting a LOW risk level."
+        },
+        "latency_s": 4.566197156906128,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"Judges B and C both assess the risk as LOW with high confidence, while Judge A sees a HIGH risk. The scenario describes general inventory management challenges without an active disruption event, supporting a LOW risk level.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    },
+    "Just-in-time_manufacturing": {
+      "ground_truth": "MEDIUM",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 6.621814727783203,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Dependence on external power grid",
+              "Limited backup generator capacity"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "Sudden power outage could severely disrupt production due to limited backup and reliance on another region's grid."
+          },
+          "error": "",
+          "raw_preview": "The scenario is: A company implementing Lean manufacturing in their production process faces a sudden power outage that disrupts their supply chain.\n\nAdditionally, the company has a backup generator providing 50% of their energy needs. The main power grid is dependent on another region's grid for 30"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.6506359577178955,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.9,
+            "primary_vulnerabilities": [
+              "Inaccurate demand forecasting",
+              "Reliable supplier dependency",
+              "Worker stress and inflexibility"
+            ],
+            "mitigations": [
+              "Implement robust demand forecasting tools",
+              "Diversify supply chain to ensure reliability",
+              "Enhance worker training and support systems"
+            ],
+            "reasoning_one_line": "Lean manufacturing's efficiency gains come with vulnerabilities that are manageable without broad industry impact."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.9,\n  \"primary_vulnerabilities\": [\"Inaccurate demand forecasting\", \"Reliable supplier dependency\", \"Worker stress and inflexibility\"],\n  \"mitigations\": [\"Implement robust demand forecasting tools\", \"Diversify supply chain to ensure reliability\", \"Enhance wor"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 6.1538519859313965,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Reliance on accurate demand forecasting",
+              "Single-source suppliers",
+              "Just-in-time inventory strategy"
+            ],
+            "mitigations": [
+              "Implementing safety stock strategies to buffer against disruptions",
+              "Diversifying supplier base to reduce reliance on single sources",
+              "Investing in robust demand forecasting tools and processes"
+            ],
+            "reasoning_one_line": "While Lean manufacturing has inherent vulnerabilities, the context provided does not describe an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Reliance on accurate demand forecasting\",\n    \"Single-source suppliers\",\n    \"Just-in-time inventory strategy\"\n  ],\n  \"mitigations\": [\n    \"Implementing safety stock strategies to buffer against disruptions\",\n    \"Div"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7833333333333332,
+      "vulnerabilities_semantic_jaccard": 0.32142857142857145,
+      "mitigations_semantic_jaccard": 0.7142857142857143,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 6.621814727783203,
+        "qwen25-14b-local": 5.6506359577178955,
+        "mistral-nemo-local": 6.1538519859313965
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "JUDGES B and C both assess the risk as LOW with high confidence, while JUDGE A sees a HIGH risk due to power grid dependence. The consensus leans towards LOW risk given the detailed mitigations proposed."
+        },
+        "latency_s": 4.879646301269531,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"JUDGES B and C both assess the risk as LOW with high confidence, while JUDGE A sees a HIGH risk due to power grid dependence. The consensus leans towards LOW risk given the detailed mitigations proposed.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    },
+    "Logistics": {
+      "ground_truth": "LOW",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 13.573719501495361,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "weather disruptions",
+              "reliance on trucking",
+              "seasonal demand spikes"
+            ],
+            "mitigations": [
+              "multi-modal transportation network",
+              "potential for redundancy"
+            ],
+            "reasoning_one_line": "High risk due to weather-sensitive trucking, seasonal demand variability, and impact across multiple retail chains."
+          },
+          "error": "",
+          "raw_preview": "The following factors are considered:\n\n1. The company is a logistics service provider for multiple retail chains.\n2. The company has implemented a multi-modal transportation network (ground, sea, air, rail).\n3. The company operates in an area with significant seasonal demand spikes and high variabil"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.2262187004089355,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Transportation infrastructure",
+              "Information flow disruptions",
+              "Supply line security"
+            ],
+            "mitigations": [
+              "Implement robust cybersecurity measures",
+              "Diversify transportation routes and modes",
+              "Develop contingency plans for supply chain interruptions"
+            ],
+            "reasoning_one_line": "The context describes foundational concepts of logistics without indicating an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\"Transportation infrastructure\", \"Information flow disruptions\", \"Supply line security\"],\n  \"mitigations\": [\"Implement robust cybersecurity measures\", \"Diversify transportation routes and modes\", \"Develop contingency plans "
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.166583061218262,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Dependence on efficient transportation infrastructure",
+              "Potential disruptions in military logistics impacting civil supply chains",
+              "Lack of real-time information flow and visibility in the supply chain"
+            ],
+            "mitigations": [
+              "Investment in robust and diversified transportation networks",
+              "Establishment of clear communication protocols between military and civilian logisticians",
+              "Adoption of advanced logistics simulation software for predictive analysis and optimization"
+            ],
+            "reasoning_one_line": "The context describes the fundamental aspects of logistics without specifying any active disruption events."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Dependence on efficient transportation infrastructure\",\n    \"Potential disruptions in military logistics impacting civil supply chains\",\n    \"Lack of real-time information flow and visibility in the supply chain\"\n  ],"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7999999999999999,
+      "vulnerabilities_semantic_jaccard": 0.3,
+      "mitigations_semantic_jaccard": 0.2333333333333333,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 13.573719501495361,
+        "qwen25-14b-local": 5.2262187004089355,
+        "mistral-nemo-local": 7.166583061218262
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "JUDGE A's high risk assessment is contradicted by JUDGE B and C, who both identify foundational logistics issues without active disruptions. The consensus among B and C supports a LOW risk level."
+        },
+        "latency_s": 4.658409118652344,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"JUDGE A's high risk assessment is contradicted by JUDGE B and C, who both identify foundational logistics issues without active disruptions. The consensus among B and C supports a LOW risk level.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    },
+    "Port_of_Los_Angeles": {
+      "ground_truth": "MEDIUM",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 9.743189573287964,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "strike affecting container terminal operations",
+              "reduced operational capacity to 40%"
+            ],
+            "mitigations": [
+              "assumption of timely strike resolution within one week",
+              "existing infrastructure can handle increased volume post-strike"
+            ],
+            "reasoning_one_line": "Significant disruption from trucking union strike reducing port capacity to 40%, impacting global supply chains."
+          },
+          "error": "",
+          "raw_preview": "The port is currently facing challenges with its container terminal operations due to a recent strike at a trucking union affecting the transportation of goods into and out of the port. The port has 25 cargo terminals, 82 container cranes, 8 container terminals, and 113 miles (182 km) of on-dock rai"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.918304681777954,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Union protectionism",
+              "Lack of automation",
+              "Efficiency issues"
+            ],
+            "mitigations": [
+              "Invest in port automation and technology upgrades",
+              "Enhance labor-management cooperation to improve efficiency",
+              "Implement strategic partnerships with other ports for redundancy"
+            ],
+            "reasoning_one_line": "The Port of Los Angeles faces systemic inefficiencies that could disrupt regional supply chains but has potential mitigations."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Union protectionism\", \"Lack of automation\", \"Efficiency issues\"],\n  \"mitigations\": [\"Invest in port automation and technology upgrades\", \"Enhance labor-management cooperation to improve efficiency\", \"Implement strategic"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 8.08851170539856,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Single point of failure in cargo handling with 25 terminals and 82 cranes",
+              "Dependence on a few key trading partners (China, Japan, Vietnam)",
+              "Historical labor issues affecting port efficiency"
+            ],
+            "mitigations": [
+              "Diversify trade relationships to reduce dependence on top partners",
+              "Invest in automation and infrastructure improvements to increase efficiency",
+              "Strengthen labor relations and consider alternative dispute resolution mechanisms"
+            ],
+            "reasoning_one_line": "Historical inefficiencies and concentration of cargo handling make the port vulnerable, but it's not currently experiencing a major disruption."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\n    \"Single point of failure in cargo handling with 25 terminals and 82 cranes\",\n    \"Dependence on a few key trading partners (China, Japan, Vietnam)\",\n    \"Historical labor issues affecting port efficiency\"\n  ],\n  \"mi"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        2,
+        2
+      ],
+      "risk_majority": "MEDIUM",
+      "mean_confidence": 0.7333333333333334,
+      "vulnerabilities_semantic_jaccard": 0.20952380952380953,
+      "mitigations_semantic_jaccard": 0.3333333333333333,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 9.743189573287964,
+        "qwen25-14b-local": 5.918304681777954,
+        "mistral-nemo-local": 8.08851170539856
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "MEDIUM",
+          "one_line_review": "The judges' assessments show a disagreement between HIGH and MEDIUM risk levels, but both MEDIUM assessments align on systemic inefficiencies and potential mitigations."
+        },
+        "latency_s": 4.310303449630737,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"MEDIUM\",\n  \"one_line_review\": \"The judges' assessments show a disagreement between HIGH and MEDIUM risk levels, but both MEDIUM assessments align on systemic inefficiencies and potential mitigations.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "OPS_DIRECTOR_24H"
+    },
+    "Port_of_Singapore": {
+      "ground_truth": "MEDIUM",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 15.648383140563965,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Handling significant volumes of container traffic",
+              "Transshipping half of the world's annual crude oil supplies",
+              "Critical bunkering port"
+            ],
+            "mitigations": [
+              "Alternative shipping routes in some cases",
+              "Diversification of trade hubs"
+            ],
+            "reasoning_one_line": "The Port of Singapore faces high risk due to its critical role in global trade, handling significant volumes of container traffic and crude oil."
+          },
+          "error": "",
+          "raw_preview": "The factors to consider are:\n\n1. The Port of Singapore is the world's largest bunkering port.\n2. It handles a fifth of the world's shipping containers.\n3. It transships half of the world's annual crude oil supplies.\n4. It serves as the main hub for global trade, especially in Asia-Pacific region.\n\nP"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.932801723480225,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Singapore Strait",
+              "Straits of Johor",
+              "Port of Singapore"
+            ],
+            "mitigations": [
+              "Diversify shipping routes and ports",
+              "Enhance cybersecurity for port operations",
+              "Develop alternative bunkering locations"
+            ],
+            "reasoning_one_line": "The strategic importance and high volume of global trade passing through the Port of Singapore make it a critical node with significant regional and sector-specific disruption potential."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Singapore Strait\", \"Straits of Johor\", \"Port of Singapore\"],\n  \"mitigations\": [\"Diversify shipping routes and ports\", \"Enhance cybersecurity for port operations\", \"Develop alternative bunkering locations\"],\n  \"reasoning_o"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 10.533970594406128,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "The Port of Singapore's strategic location and high volume of transshipment make it a critical global chokepoint.",
+              "Its role as the world's largest bunkering port makes it vulnerable to disruptions in marine fuel supply chains.",
+              "The narrow Singapore Strait, through which most ships pass between the Indian Ocean and Pacific Ocean, is prone to congestion and potential blockages."
+            ],
+            "mitigations": [
+              "Diversify maritime routes and ports of call to reduce reliance on a single chokepoint.",
+              "Invest in alternative bunkering facilities and fuel types to mitigate supply disruptions.",
+              "Improve traffic management and navigation systems in the Singapore Strait to prevent congestion."
+            ],
+            "reasoning_one_line": "The Port of Singapore's critical role in global maritime trade exposes it to medium-level risks due to its strategic location, high volume of transshipment, and potential bottlenecks."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\n    \"The Port of Singapore's strategic location and high volume of transshipment make it a critical global chokepoint.\",\n    \"Its role as the world's largest bunkering port makes it vulnerable to disruptions in marine f"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        3,
+        2
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7333333333333334,
+      "vulnerabilities_semantic_jaccard": 0.4047619047619048,
+      "mitigations_semantic_jaccard": 0.5238095238095238,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 15.648383140563965,
+        "qwen25-14b-local": 5.932801723480225,
+        "mistral-nemo-local": 10.533970594406128
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "All judges agree on a HIGH risk level for the Port of Singapore due to its critical role in global trade and strategic location."
+        },
+        "latency_s": 3.953153610229492,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"All judges agree on a HIGH risk level for the Port of Singapore due to its critical role in global trade and strategic location.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_REVIEW"
+    },
+    "Red_Sea_crisis": {
+      "ground_truth": "CRITICAL",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 11.99401569366455,
+          "parsed": {
+            "risk_level": "CRITICAL",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Severe disruption to shipping routes",
+              "Widespread impact on global trade"
+            ],
+            "mitigations": [
+              "Commercial vessel reroutes around South Africa",
+              "International military involvement"
+            ],
+            "reasoning_one_line": "Ongoing severe disruptions and widespread impact on global trade routes with potential for prolonged instability."
+          },
+          "error": "",
+          "raw_preview": "Okay, so I need to classify the supply-chain risk tier for the Red Sea crisis involving the Houthis in Yemen. The options are LOW, MEDIUM, HIGH, or CRITICAL.\n\nFirst, let me understand what a supply-chain risk tier means. It's about how severe the disruption is, how many parts of the supply chain it "
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.804177284240723,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Bab-el-Mandeb Strait",
+              "Suez Canal",
+              "Red Sea shipping lanes"
+            ],
+            "mitigations": [
+              "Naval escorts for commercial vessels",
+              "Alternative routing via South Africa",
+              "Enhanced maritime security measures"
+            ],
+            "reasoning_one_line": "Ongoing armed conflict and attacks on merchant ships in the Red Sea pose significant risks to global trade through critical waterways."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Bab-el-Mandeb Strait\", \"Suez Canal\", \"Red Sea shipping lanes\"],\n  \"mitigations\": [\"Naval escorts for commercial vessels\", \"Alternative routing via South Africa\", \"Enhanced maritime security measures\"],\n  \"reasoning_one_li"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.752585172653198,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Bab-el-Mandeb strait, a critical chokepoint for global maritime trade",
+              "Yemeni ports and infrastructure under Houthi control",
+              "Dependence of many countries on the Red Sea route for energy imports"
+            ],
+            "mitigations": [
+              "Establishment of international naval task forces to protect shipping",
+              "Diversion of ships around South Africa, albeit at increased cost and time",
+              "Diplomatic efforts to resolve the Yemeni conflict and stabilize the region"
+            ],
+            "reasoning_one_line": "Ongoing armed conflict and maritime attacks disrupt global trade through a critical chokepoint."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Bab-el-Mandeb strait, a critical chokepoint for global maritime trade\",\n    \"Yemeni ports and infrastructure under Houthi control\",\n    \"Dependence of many countries on the Red Sea route for energy imports\"\n  ],\n  \"m"
+        }
+      },
+      "risk_ratings_ordinal": [
+        4,
+        3,
+        3
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.32142857142857145,
+      "mitigations_semantic_jaccard": 0.6031746031746031,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 11.99401569366455,
+        "qwen25-14b-local": 5.804177284240723,
+        "mistral-nemo-local": 7.752585172653198
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "All judges agree on a HIGH risk level, with Judge A assigning a slightly lower confidence due to potential prolonged instability."
+        },
+        "latency_s": 3.830697536468506,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"All judges agree on a HIGH risk level, with Judge A assigning a slightly lower confidence due to potential prolonged instability.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_REVIEW"
+    },
+    "Samsung_Electronics": {
+      "ground_truth": "MEDIUM",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 5.7347471714019775,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Dependent on numerous suppliers across various industries and regions",
+              "Global operations in 76 countries"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "High supply-chain risk due to reliance on multiple suppliers and global presence."
+          },
+          "error": "",
+          "raw_preview": "The context is about Samsung Electronics Co., Ltd.\n</think>\n\nThe supply-chain risk for Samsung Electronics is classified as HIGH. This classification is due to the significant number of suppliers they rely on across various industries and regions, which could lead to widespread disruptions if any si"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.221423864364624,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Dependence on cross-border supply chains",
+              "Concentration of semiconductor manufacturing",
+              "Single-country operational focus"
+            ],
+            "mitigations": [
+              "Diversify supplier base globally",
+              "Invest in secondary production facilities",
+              "Enhance local market presence and R&D"
+            ],
+            "reasoning_one_line": "Samsung's global reach and critical role in tech components pose systemic risks, but are partially mitigated by existing diversification efforts."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Dependence on cross-border supply chains\", \"Concentration of semiconductor manufacturing\", \"Single-country operational focus\"],\n  \"mitigations\": [\"Diversify supplier base globally\", \"Invest in secondary production facil"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 6.397400617599487,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "High concentration of production in South Korea",
+              "Single supplier status for key components to major clients like Apple",
+              "Reliance on a few key product lines"
+            ],
+            "mitigations": [
+              "Diversify manufacturing locations globally",
+              "Develop secondary suppliers for critical components",
+              "Expand and diversify product portfolio"
+            ],
+            "reasoning_one_line": "While Samsung's concentration in South Korea poses some risk, its global presence and diverse product offerings mitigate potential disruptions."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"High concentration of production in South Korea\",\n    \"Single supplier status for key components to major clients like Apple\",\n    \"Reliance on a few key product lines\"\n  ],\n  \"mitigations\": [\n    \"Diversify manufactu"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        2,
+        1
+      ],
+      "risk_majority": "MEDIUM",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.4317460317460317,
+      "mitigations_semantic_jaccard": 1.0,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 5.7347471714019775,
+        "qwen25-14b-local": 6.221423864364624,
+        "mistral-nemo-local": 6.397400617599487
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "MEDIUM",
+          "one_line_review": "The risk levels disagree by more than one step, but the consensus leans towards MEDIUM due to Samsung's global reach and critical role in tech components, despite some mitigations."
+        },
+        "latency_s": 4.473080396652222,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"MEDIUM\",\n  \"one_line_review\": \"The risk levels disagree by more than one step, but the consensus leans towards MEDIUM due to Samsung's global reach and critical role in tech components, despite some mitigations.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "OPS_DIRECTOR_24H"
+    },
+    "Semiconductor_industry": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 12.775766611099243,
+          "parsed": {
+            "risk_level": "CRITICAL",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "cyclical nature with volatility",
+              "long lead times in supply chain",
+              "geopolitical concentration"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "Cyclical market conditions, long lead times, and geopolitical vulnerabilities create significant disruptions."
+          },
+          "error": "",
+          "raw_preview": "The factors to consider are:\n\n1. The semiconductor industry is highly cyclical with significant volatility in market conditions.\n2. The supply chain for semiconductors has a long lead time (time from order to delivery).\n3. The global semiconductor manufacturing capacity is concentrated in a few key "
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 7.07338809967041,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Geopolitical tensions affecting key manufacturing regions",
+              "High volatility and cyclical swings in market demand",
+              "Dependence on advanced technology and R&D"
+            ],
+            "mitigations": [
+              "Diversifying supply chains across multiple geographies",
+              "Investing in flexible production capabilities to adapt to market changes",
+              "Strengthening partnerships with research institutions for continuous innovation"
+            ],
+            "reasoning_one_line": "The semiconductor industry's high volatility, dependence on advanced technology, and concentration of manufacturing in specific regions pose significant systemic risks."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Geopolitical tensions affecting key manufacturing regions\", \"High volatility and cyclical swings in market demand\", \"Dependence on advanced technology and R&D\"],\n  \"mitigations\": [\"Diversifying supply chains across mult"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.979139566421509,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Concentration of semiconductor production in a few countries (Taiwan, South Korea, Japan)",
+              "High volatility and cyclical nature of the industry",
+              "Rapid pace of technological change leading to short product life cycles"
+            ],
+            "mitigations": [
+              "Diversification of semiconductor manufacturing locations",
+              "Investment in R&D for continuous innovation and adaptation to market changes",
+              "Stockpiling of critical components during peak production periods to mitigate supply shortages during downturns"
+            ],
+            "reasoning_one_line": "The industry's growth, while volatile, is sustained and driven by global demand, with no immediate or widespread disruption events indicated."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Concentration of semiconductor production in a few countries (Taiwan, South Korea, Japan)\",\n    \"High volatility and cyclical nature of the industry\",\n    \"Rapid pace of technological change leading to short product l"
+        }
+      },
+      "risk_ratings_ordinal": [
+        4,
+        2,
+        1
+      ],
+      "risk_majority": "MEDIUM",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.39999999999999997,
+      "mitigations_semantic_jaccard": 1.0,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 12.775766611099243,
+        "qwen25-14b-local": 7.07338809967041,
+        "mistral-nemo-local": 7.979139566421509
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "MEDIUM",
+          "one_line_review": "The risk levels assigned by the analysts differ significantly, with Judge A seeing CRITICAL risks due to market volatility and geopolitical factors, Judge B identifying MEDIUM risks with a focus on systemic vulnerabilities and mitigations, and Judge C viewing LOW risks based on sustained growth and global demand. The consensus leans towards MEDIUM risk given the significant but manageable challenges identified."
+        },
+        "latency_s": 6.321201324462891,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"MEDIUM\",\n  \"one_line_review\": \"The risk levels assigned by the analysts differ significantly, with Judge A seeing CRITICAL risks due to market volatility and geopolitical factors, Judge B identifying MEDIUM risks with a focus on systemic vulnerabilities and mitigations, and Judge C "
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "OPS_DIRECTOR_24H"
+    },
+    "Strait_of_Hormuz": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 14.57474160194397,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Choke point for global energy trade",
+              "Historical disruptions due to conflicts"
+            ],
+            "mitigations": [
+              "Diversification of supply routes",
+              "Enhanced security measures in the strait"
+            ],
+            "reasoning_one_line": "High volume of critical goods, historical disruptions, and long recovery times indicate significant risk."
+          },
+          "error": "",
+          "raw_preview": "The factors to consider are:\n\n1. The strait is a choke point for multiple nations' imports and exports.\n2. 20% of the world's liquefied natural gas (LNG) and 25% of seaborne oil trade passed through it annually during 2023\u20132025.\n3. It supplies critical energy to Europe, Asia, and Gulf countries like"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.242544412612915,
+          "parsed": {
+            "risk_level": "CRITICAL",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Strait of Hormuz",
+              "Oil and LNG trade routes through the strait",
+              "Energy supply to Europe and Asia"
+            ],
+            "mitigations": [
+              "Diversification of energy sources and routes",
+              "Enhanced maritime security measures",
+              "Development of alternative shipping lanes"
+            ],
+            "reasoning_one_line": "The Strait of Hormuz is a critical global chokepoint for oil and LNG trade, essential for multiple sectors worldwide."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"CRITICAL\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\"Strait of Hormuz\", \"Oil and LNG trade routes through the strait\", \"Energy supply to Europe and Asia\"],\n  \"mitigations\": [\"Diversification of energy sources and routes\", \"Enhanced maritime security measures\", \"Developm"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.060839414596558,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Strait of Hormuz",
+              "LNG and oil export infrastructure in the Persian Gulf",
+              "Key maritime routes for several Gulf countries"
+            ],
+            "mitigations": [
+              "Diversify energy imports away from reliance on a single route",
+              "Invest in alternative transportation corridors (e.g., pipelines, railways)",
+              "Strengthen diplomatic efforts to maintain open dialogue and prevent conflict escalation"
+            ],
+            "reasoning_one_line": "Conflict in the Strait of Hormuz threatens 20-25% of global LNG and oil trade."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Strait of Hormuz\",\n    \"LNG and oil export infrastructure in the Persian Gulf\",\n    \"Key maritime routes for several Gulf countries\"\n  ],\n  \"mitigations\": [\n    \"Diversify energy imports away from reliance on a singl"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        4,
+        3
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7999999999999999,
+      "vulnerabilities_semantic_jaccard": 0.32142857142857145,
+      "mitigations_semantic_jaccard": 0.6428571428571429,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 14.57474160194397,
+        "qwen25-14b-local": 6.242544412612915,
+        "mistral-nemo-local": 7.060839414596558
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "Judges A and C both assess the risk as HIGH, while Judge B considers it CRITICAL. The scenario's high volume of critical goods and historical disruptions support a HIGH risk level."
+        },
+        "latency_s": 4.667428255081177,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"Judges A and C both assess the risk as HIGH, while Judge B considers it CRITICAL. The scenario's high volume of critical goods and historical disruptions support a HIGH risk level.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_REVIEW"
+    },
+    "Strait_of_Malacca": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 14.191077947616577,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Critical maritime route",
+              "High traffic volume",
+              "Significant share of global trade",
+              "Security concerns (piracy and smuggling)"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "The strait's critical role in global trade, high traffic volume, significant share of global goods, and security concerns classify it as a HIGH risk."
+          },
+          "error": "",
+          "raw_preview": "The factors to consider are:\n\n1. The strait is a critical maritime route.\n2. It handles over 94,000 vessels annually, making it the busiest in the world.\n3. It carries about 25% of global traded goods.\n4. Modern piracy and smuggling are significant concerns.\n\nBased on these factors alone, what tier "
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 6.220377445220947,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Strait of Malacca",
+              "Oil and gas transport routes through the strait",
+              "High volume shipping traffic"
+            ],
+            "mitigations": [
+              "Enhanced maritime security measures",
+              "Development of alternative trade routes",
+              "Increased surveillance and anti-piracy patrols"
+            ],
+            "reasoning_one_line": "The Strait of Malacca's strategic importance for global trade, particularly oil and gas, makes it a critical vulnerability."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Strait of Malacca\", \"Oil and gas transport routes through the strait\", \"High volume shipping traffic\"],\n  \"mitigations\": [\"Enhanced maritime security measures\", \"Development of alternative trade routes\", \"Increased survei"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 9.281156539916992,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Narrow width and high traffic volume making it susceptible to disruptions from accidents, piracy or political instability.",
+              "Concentration of oil and gas transportation, making it a critical chokepoint for global energy supply.",
+              "Historical and ongoing geopolitical tensions in the region."
+            ],
+            "mitigations": [
+              "Strengthening maritime security cooperation among regional countries to combat piracy and smuggling.",
+              "Diversifying shipping routes and investing in alternative energy sources to reduce dependence on the strait for oil and gas transportation.",
+              "Promoting diplomatic dialogue and conflict resolution mechanisms to address geopolitical tensions."
+            ],
+            "reasoning_one_line": "The Strait of Malacca's high traffic volume, concentration of critical resources, and historical geopolitical tensions make it a HIGH risk chokepoint in global supply chains."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Narrow width and high traffic volume making it susceptible to disruptions from accidents, piracy or political instability.\",\n    \"Concentration of oil and gas transportation, making it a critical chokepoint for globa"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        3,
+        3
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.40740740740740744,
+      "mitigations_semantic_jaccard": 0.7142857142857143,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 14.191077947616577,
+        "qwen25-14b-local": 6.220377445220947,
+        "mistral-nemo-local": 9.281156539916992
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "All judges agree on a HIGH risk level for the Strait of Malacca, citing its critical role in global trade, high traffic volume, and security concerns."
+        },
+        "latency_s": 4.194069147109985,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"All judges agree on a HIGH risk level for the Strait of Malacca, citing its critical role in global trade, high traffic volume, and security concerns.\"\n}"
+      },
+      "scenario_ordinal_alpha": 1.0,
+      "escalation": "OPS_DIRECTOR_4H"
+    },
+    "Suez_Canal": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 6.642077922821045,
+          "parsed": {
+            "risk_level": "CRITICAL",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "severe disruption to Suez Canal's operation",
+              "broad impact on multiple tiers or regions",
+              "prolonged recovery time"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "Severe potential impact and prolonged recovery time elevate risk to critical level."
+          },
+          "error": "",
+          "raw_preview": "The classification should be based on three factors: \n1. The potential for severe disruption to the Suez Canal's operation (e.g., flooding, natural disasters, etc.)\n2. The breadth of impact if disrupted (affecting multiple tiers or regions)\n3. The time it would take to recover from a disruption once"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.9745094776153564,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Suez Canal",
+              "Ballah Bypass",
+              "Great Bitter Lake"
+            ],
+            "mitigations": [
+              "Develop alternative shipping routes and logistics plans",
+              "Increase stockpiling of critical goods in affected regions",
+              "Enhance infrastructure resilience at key chokepoints"
+            ],
+            "reasoning_one_line": "The Suez Canal is a vital global trade route, with historical disruptions causing significant economic impacts."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Suez Canal\", \"Ballah Bypass\", \"Great Bitter Lake\"],\n  \"mitigations\": [\"Develop alternative shipping routes and logistics plans\", \"Increase stockpiling of critical goods in affected regions\", \"Enhance infrastructure resili"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.984260559082031,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Single-lane waterway with limited passing locations",
+              "Dependence on a single route for maritime traffic between Europe and Asia via the Suez Canal",
+              "Potential political instability or conflict in Egypt"
+            ],
+            "mitigations": [
+              "Diversification of shipping routes, e.g., using the Cape of Good Hope or the Panama Canal as alternatives",
+              "Investment in infrastructure to increase canal capacity and efficiency",
+              "Strengthening diplomatic relations with Egypt to ensure stable canal operations"
+            ],
+            "reasoning_one_line": "While the Suez Canal is a critical chokepoint, its operation has been consistently maintained over time, with only brief disruptions due to conflict."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Single-lane waterway with limited passing locations\",\n    \"Dependence on a single route for maritime traffic between Europe and Asia via the Suez Canal\",\n    \"Potential political instability or conflict in Egypt\"\n  ],"
+        }
+      },
+      "risk_ratings_ordinal": [
+        4,
+        3,
+        1
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.20000000000000004,
+      "mitigations_semantic_jaccard": 0.2,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 6.642077922821045,
+        "qwen25-14b-local": 5.9745094776153564,
+        "mistral-nemo-local": 7.984260559082031
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "Judges A and B assess the risk as CRITICAL and HIGH respectively, while Judge C sees it as LOW. The consensus leans towards a HIGH risk level due to the Suez Canal's critical role in global trade and historical disruptions."
+        },
+        "latency_s": 4.703810691833496,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"Judges A and B assess the risk as CRITICAL and HIGH respectively, while Judge C sees it as LOW. The consensus leans towards a HIGH risk level due to the Suez Canal's critical role in global trade and historical disruptions.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_REVIEW"
+    },
+    "Supply_chain_attack": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 38.181437730789185,
+          "parsed": {
+            "risk_level": "CRITICAL",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Weak security in third-party software",
+              "High vulnerability scores of supply chain components"
+            ],
+            "mitigations": [
+              "Implement robust security measures for all components",
+              "Regularly assess and update the security posture of each component"
+            ],
+            "reasoning_one_line": "The calculated risk factor R exceeds 20, indicating a CRITICAL risk level due to high vulnerability scores in the supply chain."
+          },
+          "error": "",
+          "raw_preview": "The attack framework mentions that APTs target third-party software with the weakest security first.\n\nAssume that each component in a supply chain has a certain level of vulnerability (V) which is an integer from 1 to 5, where 1 is least vulnerable and 5 most vulnerable. The supply chain consists of"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 7.6942970752716064,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Third-party software providers with weaker security",
+              "Physical tampering of hardware during manufacturing or distribution",
+              "Supply chain nodes with less robust cybersecurity measures"
+            ],
+            "mitigations": [
+              "Implement regular security audits and penetration testing for all supply chain partners",
+              "Enhance physical security protocols at critical production and distribution points",
+              "Promote industry-wide standards for cybersecurity in software and hardware components"
+            ],
+            "reasoning_one_line": "Supply chain attacks pose a significant threat due to the interconnected nature of modern technology, but are currently not demonstrating widespread systemic disruption."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"MEDIUM\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Third-party software providers with weaker security\", \"Physical tampering of hardware during manufacturing or distribution\", \"Supply chain nodes with less robust cybersecurity measures\"],\n  \"mitigations\": [\"Implement re"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.111137866973877,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Weak cybersecurity in small firms within the supply network",
+              "Lack of protection for third-party software used by larger entities",
+              "Physical tampering with product production or distribution"
+            ],
+            "mitigations": [
+              "Implement robust cybersecurity measures across all levels of the supply chain",
+              "Conduct thorough security assessments of third-party software vendors and suppliers",
+              "Establish secure manufacturing and distribution processes to prevent physical tampering"
+            ],
+            "reasoning_one_line": "Supply chain attacks can cause significant disruption, targeting weak links in complex networks."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Weak cybersecurity in small firms within the supply network\",\n    \"Lack of protection for third-party software used by larger entities\",\n    \"Physical tampering with product production or distribution\"\n  ],\n  \"mitiga"
+        }
+      },
+      "risk_ratings_ordinal": [
+        4,
+        2,
+        3
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.7777777777777777,
+      "mitigations_semantic_jaccard": 1.0,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 38.181437730789185,
+        "qwen25-14b-local": 7.6942970752716064,
+        "mistral-nemo-local": 7.111137866973877
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "The risk levels assigned by the analysts differ significantly, with Judge A identifying a CRITICAL risk, Judge B a MEDIUM risk, and Judge C a HIGH risk. Despite these differences, the consensus leans towards a HIGH risk level due to the identified vulnerabilities and potential for significant disruption."
+        },
+        "latency_s": 5.1796605587005615,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"The risk levels assigned by the analysts differ significantly, with Judge A identifying a CRITICAL risk, Judge B a MEDIUM risk, and Judge C a HIGH risk. Despite these differences, the consensus leans towards a HIGH risk level due to the identified vulner"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "C_SUITE_REVIEW"
+    },
+    "Supply_chain_management": {
+      "ground_truth": "LOW",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 12.603448629379272,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Three nodes each with a 5% reduction in production capacity",
+              "Six-month recovery time"
+            ],
+            "mitigations": [
+              "Increase inventory levels during disruption period",
+              "Identify and strengthen backup suppliers or alternative supply routes"
+            ],
+            "reasoning_one_line": "Significant impact from multiple affected nodes and prolonged recovery time."
+          },
+          "error": "",
+          "raw_preview": "The following factors are considered:\n\n1. Number of affected nodes in the supply chain: 3\n2. Impact on each node's operations: 5% reduction in production capacity per node (e.g., from 100 units to 95)\n3. Time to recover from disruption: 6 months\n\nAssume that each node is equally important, and the i"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 7.496089696884155,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Lack of transparency and visibility in supply chains",
+              "Underrepresentation of ethical issues, internal integration, and human capital management in research",
+              "Conflicts between departments regarding inventory levels"
+            ],
+            "mitigations": [
+              "Implementing transparent systems for tracking materials and products",
+              "Focusing on sustainability, resilience, and risk management in SCM research",
+              "Enhancing communication and collaboration within the organization to resolve conflicts"
+            ],
+            "reasoning_one_line": "The context describes foundational concepts of supply chain management without indicating an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\"Lack of transparency and visibility in supply chains\", \"Underrepresentation of ethical issues, internal integration, and human capital management in research\", \"Conflicts between departments regarding inventory levels\"],\n "
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 6.425360202789307,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Single points of failure in logistics and transportation networks",
+              "Lack of transparency and visibility across the entire supply chain",
+              "Inadequate risk management strategies for potential disruptions"
+            ],
+            "mitigations": [
+              "Implementing robust business continuity plans",
+              "Diversifying suppliers and transportation routes",
+              "Investing in advanced analytics for real-time supply chain monitoring"
+            ],
+            "reasoning_one_line": "The context describes the concept of supply chain management without mentioning any active disruption events."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Single points of failure in logistics and transportation networks\",\n    \"Lack of transparency and visibility across the entire supply chain\",\n    \"Inadequate risk management strategies for potential disruptions\"\n  ],\n"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7999999999999999,
+      "vulnerabilities_semantic_jaccard": 0.06666666666666667,
+      "mitigations_semantic_jaccard": 0.30952380952380953,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 12.603448629379272,
+        "qwen25-14b-local": 7.496089696884155,
+        "mistral-nemo-local": 6.425360202789307
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": true,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "JUDGE A assesses a HIGH risk due to multiple affected nodes and prolonged recovery time, while JUDGE B and C both assess LOW risk citing lack of active disruption events. The consensus is LOW risk."
+        },
+        "latency_s": 4.447388172149658,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": true,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"JUDGE A assesses a HIGH risk due to multiple affected nodes and prolonged recovery time, while JUDGE B and C both assess LOW risk citing lack of active disruption events. The consensus is LOW risk.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    },
+    "TSMC": {
+      "ground_truth": "HIGH",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 10.58341908454895,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Large market share",
+              "Critical customer base",
+              "Diverse process nodes"
+            ],
+            "mitigations": [],
+            "reasoning_one_line": "High risk due to significant market share, critical customers, and broad impact on global chip production."
+          },
+          "error": "",
+          "raw_preview": "So, TSMC is a key player in the global semiconductor supply chain. Given that it's the largest foundry company globally, if their operations are disrupted, it could cause significant issues for many device manufacturers relying on them.\n\nThe user has provided detailed information about TSMC, includi"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 7.1573805809021,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "Dependence on advanced technology and equipment",
+              "Geopolitical tensions involving Taiwan",
+              "Concentration of global semiconductor manufacturing capacity"
+            ],
+            "mitigations": [
+              "Diversification of production facilities globally",
+              "Investment in alternative technologies and suppliers",
+              "Enhancement of geopolitical risk management strategies"
+            ],
+            "reasoning_one_line": "TSMC's dominance in semiconductor foundry services makes it a critical node for multiple sectors, with potential for widespread disruption due to technological or geopolitical issues."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"Dependence on advanced technology and equipment\", \"Geopolitical tensions involving Taiwan\", \"Concentration of global semiconductor manufacturing capacity\"],\n  \"mitigations\": [\"Diversification of production facilities glob"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 7.936481237411499,
+          "parsed": {
+            "risk_level": "HIGH",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "TSMC's dominance in global semiconductor foundry market (70% share)",
+              "Concentration of TSMC's production capacity in Taiwan, a geopolitically sensitive region",
+              "Dependence of major tech companies on TSMC for advanced chip production"
+            ],
+            "mitigations": [
+              "Diversification of foundry services among multiple suppliers to reduce dependence on TSMC",
+              "Investment in regional semiconductor manufacturing capabilities outside of Taiwan",
+              "Strengthening geopolitical relations and security measures to protect Taiwanese semiconductor industry"
+            ],
+            "reasoning_one_line": "TSMC's dominance and concentration of production in a single region pose significant risk of disruption with global impact."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\n    \"TSMC's dominance in global semiconductor foundry market (70% share)\",\n    \"Concentration of TSMC's production capacity in Taiwan, a geopolitically sensitive region\",\n    \"Dependence of major tech companies on TSMC fo"
+        }
+      },
+      "risk_ratings_ordinal": [
+        3,
+        3,
+        3
+      ],
+      "risk_majority": "HIGH",
+      "mean_confidence": 0.7333333333333334,
+      "vulnerabilities_semantic_jaccard": 0.3333333333333333,
+      "mitigations_semantic_jaccard": 0.5,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 10.58341908454895,
+        "qwen25-14b-local": 7.1573805809021,
+        "mistral-nemo-local": 7.936481237411499
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "HIGH",
+          "one_line_review": "All judges agree on a HIGH risk level for TSMC due to its dominant market share, critical customer base, geopolitical tensions, and concentration of production capacity."
+        },
+        "latency_s": 4.07862401008606,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"HIGH\",\n  \"one_line_review\": \"All judges agree on a HIGH risk level for TSMC due to its dominant market share, critical customer base, geopolitical tensions, and concentration of production capacity.\"\n}"
+      },
+      "scenario_ordinal_alpha": 1.0,
+      "escalation": "OPS_DIRECTOR_4H"
+    },
+    "Warehouse": {
+      "ground_truth": "LOW",
+      "per_judge": {
+        "deepseek-r1-local-q4": {
+          "ok": true,
+          "latency_s": 13.936901569366455,
+          "parsed": {
+            "risk_level": "MEDIUM",
+            "confidence": 0.5,
+            "primary_vulnerabilities": [
+              "Key link in supply chain"
+            ],
+            "mitigations": [
+              "Use of ISO pallets and forklifts",
+              "Godown-style storage for peak demand periods"
+            ],
+            "reasoning_one_line": "Critical supply chain link with mitigating factors like reliable equipment and flexible storage."
+          },
+          "error": "",
+          "raw_preview": "The following factors are considered:\n\n1. The warehouse is a key link in the supply chain.\n2. The warehouse uses ISO pallets with forklifts.\n3. The warehouse has godown-style storage (as per India/Hong Kong) which can be used as emergency storage during peak demand periods.\n\nPlease reason step by st"
+        },
+        "qwen25-14b-local": {
+          "ok": true,
+          "latency_s": 5.368817567825317,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.85,
+            "primary_vulnerabilities": [
+              "loading docks",
+              "pallet racks",
+              "cranes and forklifts"
+            ],
+            "mitigations": [
+              "implementing robust inventory management systems",
+              "training staff on safety protocols",
+              "regular maintenance of equipment"
+            ],
+            "reasoning_one_line": "The historical context describes warehouse infrastructure without indicating an active disruption event."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.85,\n  \"primary_vulnerabilities\": [\"loading docks\", \"pallet racks\", \"cranes and forklifts\"],\n  \"mitigations\": [\"implementing robust inventory management systems\", \"training staff on safety protocols\", \"regular maintenance of equipment\"],\n  \"reasoning_one_lin"
+        },
+        "mistral-nemo-local": {
+          "ok": true,
+          "latency_s": 6.204860687255859,
+          "parsed": {
+            "risk_level": "LOW",
+            "confidence": 0.95,
+            "primary_vulnerabilities": [
+              "Single warehouse failure",
+              "Limited automation and technology use",
+              "Dependence on manual labor (cranes, forklifts)"
+            ],
+            "mitigations": [
+              "Implement automated systems for inventory management",
+              "Diversify storage locations to reduce single-point failures",
+              "Invest in training programs to improve workforce skills"
+            ],
+            "reasoning_one_line": "The context describes historical and functional aspects of warehouses without mentioning any active disruption events."
+          },
+          "error": "",
+          "raw_preview": "{\n  \"risk_level\": \"LOW\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Single warehouse failure\",\n    \"Limited automation and technology use\",\n    \"Dependence on manual labor (cranes, forklifts)\"\n  ],\n  \"mitigations\": [\n    \"Implement automated systems for inventory management\",\n    \"Div"
+        }
+      },
+      "risk_ratings_ordinal": [
+        2,
+        1,
+        1
+      ],
+      "risk_majority": "LOW",
+      "mean_confidence": 0.7666666666666666,
+      "vulnerabilities_semantic_jaccard": 0.06666666666666667,
+      "mitigations_semantic_jaccard": 0.25,
+      "latencies_s": {
+        "deepseek-r1-local-q4": 13.936901569366455,
+        "qwen25-14b-local": 5.368817567825317,
+        "mistral-nemo-local": 6.204860687255859
+      },
+      "critic": {
+        "parsed": {
+          "levels_disagree_by_more_than_one_step": false,
+          "any_internal_contradiction": false,
+          "best_consensus_level": "LOW",
+          "one_line_review": "Judges B and C both assign a LOW risk level with high confidence, while Judge A assigns MEDIUM risk. The consensus is LOW risk due to the presence of mitigating factors and no indication of active disruption events."
+        },
+        "latency_s": 4.55349063873291,
+        "ok": true,
+        "raw": "{\n  \"levels_disagree_by_more_than_one_step\": false,\n  \"any_internal_contradiction\": false,\n  \"best_consensus_level\": \"LOW\",\n  \"one_line_review\": \"Judges B and C both assign a LOW risk level with high confidence, while Judge A assigns MEDIUM risk. The consensus is LOW risk due to the presence of mitigating factors and no indication of active disruption events.\"\n}"
+      },
+      "scenario_ordinal_alpha": 0.0,
+      "escalation": "FYI_DASHBOARD"
+    }
+  },
+  "agreement": {
+    "krippendorff_alpha_ordinal": 0.2097498396407953,
+    "fleiss_kappa_nominal": 0.01601164483260553,
+    "pairwise_cohen_weighted_kappa": {
+      "deepseek-r1-local-q4_vs_qwen25-14b-local": 0.15756035578144856,
+      "deepseek-r1-local-q4_vs_mistral-nemo-local": 0.09466811751904236,
+      "qwen25-14b-local_vs_mistral-nemo-local": 0.7473841554559043
+    }
+  },
+  "accuracy_vs_ground_truth": {
+    "deepseek-r1-local-q4": {
+      "correct": 8,
+      "total": 26,
+      "accuracy": 0.3076923076923077
+    },
+    "qwen25-14b-local": {
+      "correct": 14,
+      "total": 26,
+      "accuracy": 0.5384615384615384
+    },
+    "mistral-nemo-local": {
+      "correct": 18,
+      "total": 26,
+      "accuracy": 0.6923076923076923
+    },
+    "majority_vote": {
+      "correct": 18,
+      "total": 26,
+      "accuracy": 0.6923076923076923
+    }
+  },
+  "confusion_matrices": {
+    "deepseek-r1-local-q4": [
+      [
+        0,
+        2,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        7,
+        0
+      ],
+      [
+        0,
+        0,
+        6,
+        3
+      ],
+      [
+        0,
+        0,
+        1,
+        2
+      ]
+    ],
+    "qwen25-14b-local": [
+      [
+        7,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        2,
+        2,
+        0
+      ],
+      [
+        0,
+        4,
+        4,
+        1
+      ],
+      [
+        0,
+        0,
+        2,
+        1
+      ]
+    ],
+    "mistral-nemo-local": [
+      [
+        7,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        4,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        6,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        1
+      ]
+    ],
+    "majority_vote": [
+      [
+        7,
+        0,
+        0,
+        0
+      ],
+      [
+        2,
+        3,
+        2,
+        0
+      ],
+      [
+        0,
+        2,
+        7,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        1
+      ]
+    ]
+  },
+  "calibration_ece": {
+    "deepseek-r1-local-q4": {
+      "ece": 0.1923076923076923,
+      "n_predictions": 26,
+      "bins": [
+        {
+          "bin_lo": 0.0,
+          "bin_hi": 0.1,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.1,
+          "bin_hi": 0.2,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.2,
+          "bin_hi": 0.30000000000000004,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.30000000000000004,
+          "bin_hi": 0.4,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.4,
+          "bin_hi": 0.5,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.5,
+          "bin_hi": 0.6000000000000001,
+          "n": 26,
+          "mean_conf": 0.5,
+          "accuracy": 0.3076923076923077
+        },
+        {
+          "bin_lo": 0.6000000000000001,
+          "bin_hi": 0.7000000000000001,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.7000000000000001,
+          "bin_hi": 0.8,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.8,
+          "bin_hi": 0.9,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.9,
+          "bin_hi": 1.0,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        }
+      ]
+    },
+    "qwen25-14b-local": {
+      "ece": 0.3403846153846153,
+      "n_predictions": 26,
+      "bins": [
+        {
+          "bin_lo": 0.0,
+          "bin_hi": 0.1,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.1,
+          "bin_hi": 0.2,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.2,
+          "bin_hi": 0.30000000000000004,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.30000000000000004,
+          "bin_hi": 0.4,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.4,
+          "bin_hi": 0.5,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.5,
+          "bin_hi": 0.6000000000000001,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.6000000000000001,
+          "bin_hi": 0.7000000000000001,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.7000000000000001,
+          "bin_hi": 0.8,
+          "n": 1,
+          "mean_conf": 0.75,
+          "accuracy": 0.0
+        },
+        {
+          "bin_lo": 0.8,
+          "bin_hi": 0.9,
+          "n": 14,
+          "mean_conf": 0.8499999999999999,
+          "accuracy": 0.42857142857142855
+        },
+        {
+          "bin_lo": 0.9,
+          "bin_hi": 1.0,
+          "n": 11,
+          "mean_conf": 0.9272727272727272,
+          "accuracy": 0.7272727272727273
+        }
+      ]
+    },
+    "mistral-nemo-local": {
+      "ece": 0.29615384615384605,
+      "n_predictions": 26,
+      "bins": [
+        {
+          "bin_lo": 0.0,
+          "bin_hi": 0.1,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.1,
+          "bin_hi": 0.2,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.2,
+          "bin_hi": 0.30000000000000004,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.30000000000000004,
+          "bin_hi": 0.4,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.4,
+          "bin_hi": 0.5,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.5,
+          "bin_hi": 0.6000000000000001,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.6000000000000001,
+          "bin_hi": 0.7000000000000001,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.7000000000000001,
+          "bin_hi": 0.8,
+          "n": 0,
+          "mean_conf": null,
+          "accuracy": null
+        },
+        {
+          "bin_lo": 0.8,
+          "bin_hi": 0.9,
+          "n": 5,
+          "mean_conf": 0.85,
+          "accuracy": 1.0
+        },
+        {
+          "bin_lo": 0.9,
+          "bin_hi": 1.0,
+          "n": 21,
+          "mean_conf": 0.9499999999999998,
+          "accuracy": 0.6190476190476191
+        }
+      ]
+    }
+  },
+  "escalation_distribution": {
+    "C_SUITE_IMMEDIATE": 1,
+    "C_SUITE_REVIEW": 8,
+    "OPS_DIRECTOR_4H": 3,
+    "OPS_DIRECTOR_24H": 5,
+    "FYI_DASHBOARD": 9
+  },
+  "summary": {
+    "parse_success_rate_per_judge": {
+      "deepseek-r1-local-q4": 1.0,
+      "qwen25-14b-local": 1.0,
+      "mistral-nemo-local": 1.0
+    },
+    "mean_latency_s_per_judge": {
+      "deepseek-r1-local-q4": 14.566354458148663,
+      "qwen25-14b-local": 6.26995863364293,
+      "mistral-nemo-local": 7.722575517801138
+    },
+    "critic_success_rate": 1.0,
+    "mean_vulnerabilities_semantic_jaccard": 0.37617012617012613,
+    "mean_mitigations_semantic_jaccard": 0.5775132275132275,
+    "total_elapsed_min": 15.338657979170481
+  }
+}
