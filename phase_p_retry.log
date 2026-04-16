@@ -1,0 +1,273 @@
+2026-04-16 06:46:27,652 [INFO] === P/PPO_easy attempt 1/2 ===
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+Users of this version of Gym should be able to simply replace 'import gym' with 'import gymnasium as gym' in the vast majority of cases.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+2026-04-16 06:46:31,108 [INFO] PPO easy: 150,000 steps on SupplyMind-Easy-v1
+2026-04-16 06:46:31,245 [ERROR] PPO_easy attempt 1 FAILED: shape '[-1, 47]' is invalid for input of size 1120
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 39, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 195, in <lambda>
+    retry(lambda t=task, s=suffix: ppo_task(t, n_steps=150_000, suffix=s), f"PPO_{suffix}")
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 78, in ppo_task
+    model.learn(total_timesteps=n_steps, progress_bar=False)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 526, in learn
+    continue_training = self.collect_rollouts(self.env, callback, self.rollout_buffer, self.n_steps, use_masking)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 303, in collect_rollouts
+    actions, values, log_probs = self.policy(obs_tensor, action_masks=action_masks)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\policies.py", line 139, in forward
+    distribution.apply_masking(action_masks)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\distributions.py", line 240, in apply_masking
+    masks = masks.view(-1, sum(self.action_dims))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: shape '[-1, 47]' is invalid for input of size 1120
+2026-04-16 06:46:31,272 [INFO] === P/PPO_easy attempt 2/2 ===
+2026-04-16 06:46:31,287 [INFO] PPO easy: 150,000 steps on SupplyMind-Easy-v1
+2026-04-16 06:46:31,294 [ERROR] PPO_easy attempt 2 FAILED: shape '[-1, 47]' is invalid for input of size 1120
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 39, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 195, in <lambda>
+    retry(lambda t=task, s=suffix: ppo_task(t, n_steps=150_000, suffix=s), f"PPO_{suffix}")
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 78, in ppo_task
+    model.learn(total_timesteps=n_steps, progress_bar=False)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 526, in learn
+    continue_training = self.collect_rollouts(self.env, callback, self.rollout_buffer, self.n_steps, use_masking)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 303, in collect_rollouts
+    actions, values, log_probs = self.policy(obs_tensor, action_masks=action_masks)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\policies.py", line 139, in forward
+    distribution.apply_masking(action_masks)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\distributions.py", line 240, in apply_masking
+    masks = masks.view(-1, sum(self.action_dims))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: shape '[-1, 47]' is invalid for input of size 1120
+2026-04-16 06:46:31,296 [INFO] === P/PPO_medium attempt 1/2 ===
+2026-04-16 06:46:31,310 [INFO] PPO medium: 150,000 steps on SupplyMind-Medium-v1
+2026-04-16 06:46:31,318 [ERROR] PPO_medium attempt 1 FAILED: shape '[-1, 47]' is invalid for input of size 1120
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 39, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 195, in <lambda>
+    retry(lambda t=task, s=suffix: ppo_task(t, n_steps=150_000, suffix=s), f"PPO_{suffix}")
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 78, in ppo_task
+    model.learn(total_timesteps=n_steps, progress_bar=False)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 526, in learn
+    continue_training = self.collect_rollouts(self.env, callback, self.rollout_buffer, self.n_steps, use_masking)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 303, in collect_rollouts
+    actions, values, log_probs = self.policy(obs_tensor, action_masks=action_masks)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\policies.py", line 139, in forward
+    distribution.apply_masking(action_masks)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\distributions.py", line 240, in apply_masking
+    masks = masks.view(-1, sum(self.action_dims))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: shape '[-1, 47]' is invalid for input of size 1120
+2026-04-16 06:46:31,318 [INFO] === P/PPO_medium attempt 2/2 ===
+2026-04-16 06:46:31,338 [INFO] PPO medium: 150,000 steps on SupplyMind-Medium-v1
+2026-04-16 06:46:31,347 [ERROR] PPO_medium attempt 2 FAILED: shape '[-1, 47]' is invalid for input of size 1120
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 39, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 195, in <lambda>
+    retry(lambda t=task, s=suffix: ppo_task(t, n_steps=150_000, suffix=s), f"PPO_{suffix}")
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 78, in ppo_task
+    model.learn(total_timesteps=n_steps, progress_bar=False)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 526, in learn
+    continue_training = self.collect_rollouts(self.env, callback, self.rollout_buffer, self.n_steps, use_masking)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 303, in collect_rollouts
+    actions, values, log_probs = self.policy(obs_tensor, action_masks=action_masks)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\policies.py", line 139, in forward
+    distribution.apply_masking(action_masks)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\distributions.py", line 240, in apply_masking
+    masks = masks.view(-1, sum(self.action_dims))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: shape '[-1, 47]' is invalid for input of size 1120
+2026-04-16 06:46:31,348 [INFO] === P/PPO_hard attempt 1/2 ===
+2026-04-16 06:46:31,363 [INFO] PPO hard: 150,000 steps on SupplyMind-Hard-v1
+2026-04-16 06:46:31,374 [ERROR] PPO_hard attempt 1 FAILED: shape '[-1, 47]' is invalid for input of size 1120
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 39, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 195, in <lambda>
+    retry(lambda t=task, s=suffix: ppo_task(t, n_steps=150_000, suffix=s), f"PPO_{suffix}")
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 78, in ppo_task
+    model.learn(total_timesteps=n_steps, progress_bar=False)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 526, in learn
+    continue_training = self.collect_rollouts(self.env, callback, self.rollout_buffer, self.n_steps, use_masking)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 303, in collect_rollouts
+    actions, values, log_probs = self.policy(obs_tensor, action_masks=action_masks)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\policies.py", line 139, in forward
+    distribution.apply_masking(action_masks)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\distributions.py", line 240, in apply_masking
+    masks = masks.view(-1, sum(self.action_dims))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: shape '[-1, 47]' is invalid for input of size 1120
+2026-04-16 06:46:31,375 [INFO] === P/PPO_hard attempt 2/2 ===
+2026-04-16 06:46:31,390 [INFO] PPO hard: 150,000 steps on SupplyMind-Hard-v1
+2026-04-16 06:46:31,400 [ERROR] PPO_hard attempt 2 FAILED: shape '[-1, 47]' is invalid for input of size 1120
+Traceback (most recent call last):
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 39, in retry
+    r = fn()
+        ^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 195, in <lambda>
+    retry(lambda t=task, s=suffix: ppo_task(t, n_steps=150_000, suffix=s), f"PPO_{suffix}")
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\train_phase_p.py", line 78, in ppo_task
+    model.learn(total_timesteps=n_steps, progress_bar=False)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 526, in learn
+    continue_training = self.collect_rollouts(self.env, callback, self.rollout_buffer, self.n_steps, use_masking)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\ppo_mask\ppo_mask.py", line 303, in collect_rollouts
+    actions, values, log_probs = self.policy(obs_tensor, action_masks=action_masks)
+                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1518, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\torch\nn\modules\module.py", line 1527, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\policies.py", line 139, in forward
+    distribution.apply_masking(action_masks)
+  File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sb3_contrib\common\maskable\distributions.py", line 240, in apply_masking
+    masks = masks.view(-1, sum(self.action_dims))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: shape '[-1, 47]' is invalid for input of size 1120
+2026-04-16 06:46:31,401 [INFO] === P/QRDQN_easy attempt 1/2 ===
+2026-04-16 06:46:31,403 [INFO] ============================================================
+2026-04-16 06:46:31,403 [INFO] QR-DQN Training
+2026-04-16 06:46:31,403 [INFO]   Task: easy | Steps: 60,000 | Quantiles: 51 | CVaR alpha: 0.10
+2026-04-16 06:46:31,403 [INFO]   Device: cuda | GPU: NVIDIA GeForce RTX 4080 Laptop GPU
+2026-04-16 06:46:31,403 [INFO] ============================================================
+2026-04-16 06:46:53,628 [INFO] [10k/60k] eps=0.683 | avg_reward=0.9144 | loss=0.0436 | 451 steps/s
+2026-04-16 06:46:53,648 [INFO]   \u2192 New best model saved (reward=0.9144)
+2026-04-16 06:47:26,806 [INFO] [20k/60k] eps=0.367 | avg_reward=1.0501 | loss=0.0081 | 361 steps/s
+2026-04-16 06:47:26,824 [INFO]   \u2192 New best model saved (reward=1.0501)
+2026-04-16 06:48:02,386 [INFO] [30k/60k] eps=0.050 | avg_reward=1.3078 | loss=0.0036 | 330 steps/s
+2026-04-16 06:48:02,395 [INFO]   \u2192 New best model saved (reward=1.3078)
+2026-04-16 06:48:36,572 [INFO] [40k/60k] eps=0.050 | avg_reward=1.3614 | loss=0.0005 | 320 steps/s
+2026-04-16 06:48:36,589 [INFO]   \u2192 New best model saved (reward=1.3614)
+2026-04-16 06:49:11,042 [INFO] [50k/60k] eps=0.050 | avg_reward=1.3677 | loss=0.0004 | 313 steps/s
+2026-04-16 06:49:11,050 [INFO]   \u2192 New best model saved (reward=1.3677)
+2026-04-16 06:49:48,079 [INFO] [60k/60k] eps=0.050 | avg_reward=1.3591 | loss=0.0004 | 305 steps/s
+2026-04-16 06:49:48,097 [INFO] ============================================================
+2026-04-16 06:49:48,099 [INFO] QR-DQN training complete!
+2026-04-16 06:49:48,099 [INFO]   Time: 3.3 minutes
+2026-04-16 06:49:48,099 [INFO]   Episodes: 3000 | Final avg reward: 1.3591
+2026-04-16 06:49:48,099 [INFO]   Best checkpoint: C:\Users\Dell\Desktop\Sleep-Token\rl\checkpoints\qrdqn_best_easy.pt
+2026-04-16 06:49:48,099 [INFO] ============================================================
+2026-04-16 06:49:48,196 [INFO]   QR-DQN easy saved to qrdqn_v2_easy.pt
+2026-04-16 06:49:48,196 [INFO] === P/QRDQN_easy OK (197s) ===
+2026-04-16 06:49:48,196 [INFO] === P/QRDQN_medium attempt 1/2 ===
+2026-04-16 06:49:48,196 [INFO] ============================================================
+2026-04-16 06:49:48,196 [INFO] QR-DQN Training
+2026-04-16 06:49:48,196 [INFO]   Task: medium | Steps: 60,000 | Quantiles: 51 | CVaR alpha: 0.10
+2026-04-16 06:49:48,196 [INFO]   Device: cuda | GPU: NVIDIA GeForce RTX 4080 Laptop GPU
+2026-04-16 06:49:48,196 [INFO] ============================================================
+2026-04-16 06:51:07,874 [INFO] [10k/60k] eps=0.683 | avg_reward=0.2629 | loss=0.0579 | 126 steps/s
+2026-04-16 06:51:07,896 [INFO]   \u2192 New best model saved (reward=0.2629)
+2026-04-16 06:52:37,488 [INFO] [20k/60k] eps=0.367 | avg_reward=1.7453 | loss=0.0626 | 118 steps/s
+2026-04-16 06:52:37,499 [INFO]   \u2192 New best model saved (reward=1.7453)
+2026-04-16 06:54:06,975 [INFO] [30k/60k] eps=0.050 | avg_reward=2.6515 | loss=0.0203 | 116 steps/s
+2026-04-16 06:54:06,985 [INFO]   \u2192 New best model saved (reward=2.6515)
+2026-04-16 06:55:38,484 [INFO] [40k/60k] eps=0.050 | avg_reward=2.8498 | loss=0.0148 | 114 steps/s
+2026-04-16 06:55:38,495 [INFO]   \u2192 New best model saved (reward=2.8498)
+2026-04-16 06:57:10,657 [INFO] [50k/60k] eps=0.050 | avg_reward=2.8435 | loss=0.0121 | 113 steps/s
+2026-04-16 06:58:43,079 [INFO] [60k/60k] eps=0.050 | avg_reward=2.8371 | loss=0.0099 | 112 steps/s
+2026-04-16 06:58:43,091 [INFO] ============================================================
+2026-04-16 06:58:43,091 [INFO] QR-DQN training complete!
+2026-04-16 06:58:43,091 [INFO]   Time: 8.9 minutes
+2026-04-16 06:58:43,091 [INFO]   Episodes: 1361 | Final avg reward: 2.8371
+2026-04-16 06:58:43,091 [INFO]   Best checkpoint: C:\Users\Dell\Desktop\Sleep-Token\rl\checkpoints\qrdqn_best_medium.pt
+2026-04-16 06:58:43,091 [INFO] ============================================================
+2026-04-16 06:58:43,175 [INFO]   QR-DQN medium saved to qrdqn_v2_medium.pt
+2026-04-16 06:58:43,175 [INFO] === P/QRDQN_medium OK (535s) ===
+2026-04-16 06:58:43,175 [INFO] === P/QRDQN_hard attempt 1/2 ===
+2026-04-16 06:58:43,175 [INFO] ============================================================
+2026-04-16 06:58:43,175 [INFO] QR-DQN Training
+2026-04-16 06:58:43,175 [INFO]   Task: hard | Steps: 60,000 | Quantiles: 51 | CVaR alpha: 0.10
+2026-04-16 06:58:43,175 [INFO]   Device: cuda | GPU: NVIDIA GeForce RTX 4080 Laptop GPU
+2026-04-16 06:58:43,175 [INFO] ============================================================
+2026-04-16 07:00:44,492 [INFO] [10k/60k] eps=0.683 | avg_reward=-0.1260 | loss=0.1100 | 82 steps/s
+2026-04-16 07:00:44,513 [INFO]   \u2192 New best model saved (reward=-0.1260)
+2026-04-16 07:03:00,727 [INFO] [20k/60k] eps=0.367 | avg_reward=1.4440 | loss=0.1145 | 78 steps/s
+2026-04-16 07:03:00,748 [INFO]   \u2192 New best model saved (reward=1.4440)
+2026-04-16 07:05:09,262 [INFO] [30k/60k] eps=0.050 | avg_reward=2.2546 | loss=0.1072 | 78 steps/s
+2026-04-16 07:05:09,273 [INFO]   \u2192 New best model saved (reward=2.2546)
+2026-04-16 07:07:13,268 [INFO] [40k/60k] eps=0.050 | avg_reward=2.5145 | loss=0.0934 | 78 steps/s
+2026-04-16 07:07:13,279 [INFO]   \u2192 New best model saved (reward=2.5145)
+2026-04-16 07:09:20,809 [INFO] [50k/60k] eps=0.050 | avg_reward=2.6215 | loss=0.0617 | 78 steps/s
+2026-04-16 07:09:20,821 [INFO]   \u2192 New best model saved (reward=2.6215)
+2026-04-16 07:11:34,696 [INFO] [60k/60k] eps=0.050 | avg_reward=2.3640 | loss=0.0646 | 78 steps/s
+2026-04-16 07:11:34,707 [INFO] ============================================================
+2026-04-16 07:11:34,707 [INFO] QR-DQN training complete!
+2026-04-16 07:11:34,707 [INFO]   Time: 12.9 minutes
+2026-04-16 07:11:34,707 [INFO]   Episodes: 1090 | Final avg reward: 2.3640
+2026-04-16 07:11:34,707 [INFO]   Best checkpoint: C:\Users\Dell\Desktop\Sleep-Token\rl\checkpoints\qrdqn_best_hard.pt
+2026-04-16 07:11:34,707 [INFO] ============================================================
+2026-04-16 07:11:34,788 [INFO]   QR-DQN hard saved to qrdqn_v2_hard.pt
+2026-04-16 07:11:34,788 [INFO] === P/QRDQN_hard OK (772s) ===
+2026-04-16 07:11:34,788 [INFO] === P/DQN_HER attempt 1/2 ===
+2026-04-16 07:11:36,225 [INFO]   DQN+HER ep 25/300: mean_r=0.519 eps=0.778
+2026-04-16 07:11:37,508 [INFO]   DQN+HER ep 50/300: mean_r=0.600 eps=0.605
+2026-04-16 07:11:38,874 [INFO]   DQN+HER ep 75/300: mean_r=0.686 eps=0.471
+2026-04-16 07:11:40,241 [INFO]   DQN+HER ep 100/300: mean_r=0.688 eps=0.366
+2026-04-16 07:11:41,641 [INFO]   DQN+HER ep 125/300: mean_r=0.600 eps=0.285
+2026-04-16 07:11:43,078 [INFO]   DQN+HER ep 150/300: mean_r=0.512 eps=0.221
+2026-04-16 07:11:44,497 [INFO]   DQN+HER ep 175/300: mean_r=0.836 eps=0.172
+2026-04-16 07:11:45,968 [INFO]   DQN+HER ep 200/300: mean_r=0.857 eps=0.134
+2026-04-16 07:11:47,448 [INFO]   DQN+HER ep 225/300: mean_r=0.771 eps=0.104
+2026-04-16 07:11:48,900 [INFO]   DQN+HER ep 250/300: mean_r=0.743 eps=0.081
+2026-04-16 07:11:50,328 [INFO]   DQN+HER ep 275/300: mean_r=0.891 eps=0.063
+2026-04-16 07:11:51,796 [INFO]   DQN+HER ep 300/300: mean_r=0.939 eps=0.050
+2026-04-16 07:11:51,801 [INFO] === P/DQN_HER OK (17s) ===
+2026-04-16 07:11:51,801 [INFO] Phase P 'Granite' complete.

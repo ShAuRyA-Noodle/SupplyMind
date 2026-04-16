@@ -24,3 +24,6 @@ Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
 | P Granite | QRDQN_easy | train_qrdqn() got an unexpected keyword argument 'task_id' | 2026-04-16 05:38 |
 | P Granite | QRDQN_medium | train_qrdqn() got an unexpected keyword argument 'task_id' | 2026-04-16 05:38 |
 | P Granite | QRDQN_hard | train_qrdqn() got an unexpected keyword argument 'task_id' | 2026-04-16 05:38 |
+| P Granite | PPO_easy | shape '[-1, 47]' is invalid for input of size 1120 | 2026-04-16 06:46 |
+| P Granite | PPO_medium | shape '[-1, 47]' is invalid for input of size 1120 | 2026-04-16 06:46 |
+| P Granite | PPO_hard | shape '[-1, 47]' is invalid for input of size 1120 | 2026-04-16 06:46 |
