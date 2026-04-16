@@ -54,11 +54,18 @@ def ppo_task(task_id="SupplyMind-Easy-v1", n_steps=200_000, suffix="easy"):
     from sb3_contrib import MaskablePPO
     from sb3_contrib.common.wrappers import ActionMasker
 
-    def mask_fn(env): return env.unwrapped.action_masks() if hasattr(env.unwrapped, "action_masks") else None
+    def mask_fn(env):
+        u = env.unwrapped
+        if hasattr(u, "action_masks"):
+            return u.action_masks()
+        # Build a fully-open mask matching MultiDiscrete flat size
+        import numpy as np
+        n = int(np.prod(u.action_space.nvec)) if hasattr(u.action_space, "nvec") else u.action_space.n
+        return np.ones(n, dtype=bool)
+
     def make_env():
         env = gym.make(task_id)
-        if hasattr(env.unwrapped, "action_masks"):
-            env = ActionMasker(env, mask_fn)
+        env = ActionMasker(env, mask_fn)
         return env
 
     vec = DummyVecEnv([make_env for _ in range(4)])
@@ -79,10 +86,15 @@ def ppo_task(task_id="SupplyMind-Easy-v1", n_steps=200_000, suffix="easy"):
 
 def qrdqn_task(task_id="SupplyMind-Easy-v1", n_steps=80_000, suffix="easy"):
     from rl.distributional.train import train_qrdqn
-    path = train_qrdqn(task_id=task_id, total_steps=n_steps,
-                       checkpoint_path=str(CKPT / f"qrdqn_v2_{suffix}.pt"))
-    log.info(f"  QR-DQN {suffix} saved")
-    return path
+    path = train_qrdqn(task=suffix, total_steps=n_steps)
+    # Rename to v2
+    import shutil
+    src = CKPT / f"qrdqn_best_{suffix}.pt"
+    dst = CKPT / f"qrdqn_v2_{suffix}.pt"
+    if src.exists():
+        shutil.copy(src, dst)
+        log.info(f"  QR-DQN {suffix} saved to {dst.name}")
+    return dst
 
 
 def dqn_her():

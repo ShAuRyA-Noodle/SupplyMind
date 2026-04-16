@@ -18,3 +18,9 @@ CUDA kernel errors might be asynchronously reported at some other API call, so t
 For debugging consider passing CUDA_LAUNCH_BLOCKING=1.
 Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
  | 2026-04-16 04:39 |
+| P Granite | PPO_easy | Environment does not support action masking. Consider using ActionMasker wrapper | 2026-04-16 05:38 |
+| P Granite | PPO_medium | Environment does not support action masking. Consider using ActionMasker wrapper | 2026-04-16 05:38 |
+| P Granite | PPO_hard | Environment does not support action masking. Consider using ActionMasker wrapper | 2026-04-16 05:38 |
+| P Granite | QRDQN_easy | train_qrdqn() got an unexpected keyword argument 'task_id' | 2026-04-16 05:38 |
+| P Granite | QRDQN_medium | train_qrdqn() got an unexpected keyword argument 'task_id' | 2026-04-16 05:38 |
+| P Granite | QRDQN_hard | train_qrdqn() got an unexpected keyword argument 'task_id' | 2026-04-16 05:38 |
