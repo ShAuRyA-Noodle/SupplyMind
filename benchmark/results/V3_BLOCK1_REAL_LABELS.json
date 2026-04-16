@@ -1,0 +1,414 @@
+{
+  "tasks": {
+    "late_delivery_risk": {
+      "meta": {
+        "n_features": 109,
+        "task": "late_delivery_risk",
+        "feature_names": [
+          "Order Item Discount Rate",
+          "Order Item Discount",
+          "Order Item Product Price",
+          "Order Item Quantity",
+          "Order Item Total",
+          "Product Price",
+          "Sales per customer",
+          "Sales",
+          "Category Id",
+          "Department Id",
+          "Latitude",
+          "Longitude",
+          "Order Customer Id",
+          "Order Zipcode",
+          "Product Card Id",
+          "Product Category Id",
+          "Market__LATAM",
+          "Market__Europe",
+          "Market__Pacific Asia",
+          "Market__USCA",
+          "Market__Africa",
+          "Customer Segment__Consumer",
+          "Customer Segment__Corporate",
+          "Customer Segment__Home Office",
+          "Order Region__Central America",
+          "Order Region__Western Europe",
+          "Order Region__South America",
+          "Order Region__Oceania",
+          "Order Region__Northern Europe",
+          "Order Region__Southeast Asia",
+          "Order Region__Southern Europe",
+          "Order Region__Caribbean",
+          "Order Region__West of USA ",
+          "Order Region__South Asia",
+          "Order Region__Eastern Asia",
+          "Order Region__East of USA",
+          "Order Region__West Asia",
+          "Order Region__US Center ",
+          "Order Region__South of  USA ",
+          "Order Region__Eastern Europe",
+          "Order Region__West Africa",
+          "Order Region__North Africa",
+          "Order Region__East Africa",
+          "Order Region__Central Africa",
+          "Order Country__Estados Unidos",
+          "Order Country__Francia",
+          "Order Country__M\u00e9xico",
+          "Order Country__Alemania",
+          "Order Country__Australia",
+          "Order Country__Brasil"
+        ]
+      },
+      "models": {
+        "xgb": {
+          "accuracy": 0.8120853829677228,
+          "acc_ci95": [
+            0.8075697983602925,
+            0.8165669547233917
+          ],
+          "macro_f1": 0.8119321364194179,
+          "auc": 0.9000548185446808,
+          "log_loss": 0.4251962192563481
+        },
+        "lgb": {
+          "accuracy": 0.8081223133170841,
+          "acc_ci95": [
+            0.8037696654110348,
+            0.8127280449073049
+          ],
+          "macro_f1": 0.8081157025439579,
+          "auc": 0.9047508416001557,
+          "log_loss": 0.42698600274045945
+        },
+        "cat": {
+          "accuracy": 0.7862344338577443,
+          "acc_ci95": [
+            0.7815006647462884,
+            0.7909566807001994
+          ],
+          "macro_f1": 0.7862208421261251,
+          "auc": 0.8819939784570779,
+          "log_loss": 0.45554418282557424
+        },
+        "stack": {
+          "accuracy": 0.8078411994977474,
+          "acc_ci95": [
+            0.8037696654110348,
+            0.8124907674126597
+          ],
+          "macro_f1": 0.8078231937012895,
+          "auc": 0.9062950420123981
+        }
+      }
+    },
+    "shipping_mode": {
+      "meta": {
+        "n_features": 104,
+        "task": "shipping_mode",
+        "feature_names": [
+          "Order Item Discount Rate",
+          "Order Item Discount",
+          "Order Item Product Price",
+          "Order Item Quantity",
+          "Order Item Total",
+          "Product Price",
+          "Sales per customer",
+          "Sales",
+          "Category Id",
+          "Department Id",
+          "Latitude",
+          "Longitude",
+          "Order Customer Id",
+          "Order Zipcode",
+          "Product Card Id",
+          "Product Category Id",
+          "Market__LATAM",
+          "Market__Europe",
+          "Market__Pacific Asia",
+          "Market__USCA",
+          "Market__Africa",
+          "Customer Segment__Consumer",
+          "Customer Segment__Corporate",
+          "Customer Segment__Home Office",
+          "Order Region__Central America",
+          "Order Region__Western Europe",
+          "Order Region__South America",
+          "Order Region__Oceania",
+          "Order Region__Northern Europe",
+          "Order Region__Southeast Asia",
+          "Order Region__Southern Europe",
+          "Order Region__Caribbean",
+          "Order Region__West of USA ",
+          "Order Region__South Asia",
+          "Order Region__Eastern Asia",
+          "Order Region__East of USA",
+          "Order Region__West Asia",
+          "Order Region__US Center ",
+          "Order Region__South of  USA ",
+          "Order Region__Eastern Europe",
+          "Order Region__West Africa",
+          "Order Region__North Africa",
+          "Order Region__East Africa",
+          "Order Region__Central Africa",
+          "Order Country__Estados Unidos",
+          "Order Country__Francia",
+          "Order Country__M\u00e9xico",
+          "Order Country__Alemania",
+          "Order Country__Australia",
+          "Order Country__Brasil"
+        ]
+      },
+      "classes": [
+        "First Class",
+        "Same Day",
+        "Second Class",
+        "Standard Class"
+      ],
+      "models": {
+        "xgb": {
+          "accuracy": 0.6954360735652559,
+          "acc_ci95": [
+            0.6901155919935003,
+            0.7004422409335992
+          ],
+          "macro_f1": 0.49596213878008466,
+          "log_loss": 0.7531747817993164
+        },
+        "lgb": {
+          "accuracy": 0.7408314498855159,
+          "acc_ci95": [
+            0.7354854494423517,
+            0.7455498929019868
+          ],
+          "macro_f1": 0.607625048023873,
+          "log_loss": 0.678551427386306
+        },
+        "cat": {
+          "accuracy": 0.6344204889578254,
+          "acc_ci95": [
+            0.6292543762463992,
+            0.6400592732107246
+          ],
+          "macro_f1": 0.3169072661753633,
+          "log_loss": 0.8733546864164046
+        },
+        "stack": {
+          "accuracy": 0.686699830120393,
+          "acc_ci95": [
+            0.6813067804121428,
+            0.6920008863283846
+          ],
+          "macro_f1": 0.47282944467505195
+        }
+      }
+    },
+    "delivery_status": {
+      "meta": {
+        "n_features": 109,
+        "task": "delivery_status",
+        "feature_names": [
+          "Order Item Discount Rate",
+          "Order Item Discount",
+          "Order Item Product Price",
+          "Order Item Quantity",
+          "Order Item Total",
+          "Product Price",
+          "Sales per customer",
+          "Sales",
+          "Category Id",
+          "Department Id",
+          "Latitude",
+          "Longitude",
+          "Order Customer Id",
+          "Order Zipcode",
+          "Product Card Id",
+          "Product Category Id",
+          "Market__LATAM",
+          "Market__Europe",
+          "Market__Pacific Asia",
+          "Market__USCA",
+          "Market__Africa",
+          "Customer Segment__Consumer",
+          "Customer Segment__Corporate",
+          "Customer Segment__Home Office",
+          "Order Region__Central America",
+          "Order Region__Western Europe",
+          "Order Region__South America",
+          "Order Region__Oceania",
+          "Order Region__Northern Europe",
+          "Order Region__Southeast Asia",
+          "Order Region__Southern Europe",
+          "Order Region__Caribbean",
+          "Order Region__West of USA ",
+          "Order Region__South Asia",
+          "Order Region__Eastern Asia",
+          "Order Region__East of USA",
+          "Order Region__West Asia",
+          "Order Region__US Center ",
+          "Order Region__South of  USA ",
+          "Order Region__Eastern Europe",
+          "Order Region__West Africa",
+          "Order Region__North Africa",
+          "Order Region__East Africa",
+          "Order Region__Central Africa",
+          "Order Country__Estados Unidos",
+          "Order Country__Francia",
+          "Order Country__M\u00e9xico",
+          "Order Country__Alemania",
+          "Order Country__Australia",
+          "Order Country__Brasil"
+        ]
+      },
+      "classes": [
+        "Advance shipping",
+        "Late delivery",
+        "Shipping canceled",
+        "Shipping on time"
+      ],
+      "models": {
+        "xgb": {
+          "accuracy": 0.772630401063594,
+          "acc_ci95": [
+            0.7672649383263166,
+            0.7778288647610606
+          ],
+          "macro_f1": 0.6900021756254755,
+          "log_loss": 0.613592267036438
+        },
+        "lgb": {
+          "accuracy": 0.8212509786542581,
+          "acc_ci95": [
+            0.8170470492650861,
+            0.8254865573528326
+          ],
+          "macro_f1": 0.7762928716966014,
+          "log_loss": 0.5422756037385531
+        },
+        "cat": {
+          "accuracy": 0.705829307925253,
+          "acc_ci95": [
+            0.6998365832040772,
+            0.712031907821848
+          ],
+          "macro_f1": 0.5626184840737578,
+          "log_loss": 0.7081059666215576
+        },
+        "stack": {
+          "accuracy": 0.7891050299135829,
+          "acc_ci95": [
+            0.7845234138414949,
+            0.7936018169731885
+          ],
+          "macro_f1": 0.7138312333984279
+        }
+      }
+    },
+    "benefit_per_order": {
+      "meta": {
+        "n_features": 111,
+        "task": "benefit_per_order",
+        "feature_names": [
+          "Order Item Discount Rate",
+          "Order Item Discount",
+          "Order Item Product Price",
+          "Order Item Quantity",
+          "Order Item Total",
+          "Product Price",
+          "Sales per customer",
+          "Sales",
+          "Category Id",
+          "Department Id",
+          "Latitude",
+          "Longitude",
+          "Order Customer Id",
+          "Order Zipcode",
+          "Product Card Id",
+          "Product Category Id",
+          "Market__LATAM",
+          "Market__Europe",
+          "Market__Pacific Asia",
+          "Market__USCA",
+          "Market__Africa",
+          "Customer Segment__Consumer",
+          "Customer Segment__Corporate",
+          "Customer Segment__Home Office",
+          "Order Region__Central America",
+          "Order Region__Western Europe",
+          "Order Region__South America",
+          "Order Region__Oceania",
+          "Order Region__Northern Europe",
+          "Order Region__Southeast Asia",
+          "Order Region__Southern Europe",
+          "Order Region__Caribbean",
+          "Order Region__West of USA ",
+          "Order Region__South Asia",
+          "Order Region__Eastern Asia",
+          "Order Region__East of USA",
+          "Order Region__West Asia",
+          "Order Region__US Center ",
+          "Order Region__South of  USA ",
+          "Order Region__Eastern Europe",
+          "Order Region__West Africa",
+          "Order Region__North Africa",
+          "Order Region__East Africa",
+          "Order Region__Central Africa",
+          "Order Country__Estados Unidos",
+          "Order Country__Francia",
+          "Order Country__M\u00e9xico",
+          "Order Country__Alemania",
+          "Order Country__Australia",
+          "Order Country__Brasil"
+        ]
+      },
+      "models": {
+        "xgb": {
+          "mae": 54.39718065643311,
+          "mae_ci95": [
+            53.363134670257566,
+            55.42795248031616
+          ],
+          "r2": 0.016571903347969055,
+          "r2_ci95": [
+            0.004769191145896912,
+            0.027176089584827416
+          ]
+        },
+        "lgb": {
+          "mae": 54.299816365914104,
+          "mae_ci95": [
+            53.30071937551725,
+            55.34873326237443
+          ],
+          "r2": 0.020822080560088253,
+          "r2_ci95": [
+            0.012664216233404966,
+            0.02906744703300413
+          ]
+        },
+        "cat": {
+          "mae": 54.3500097604771,
+          "mae_ci95": [
+            53.338310448499804,
+            55.41400126238332
+          ],
+          "r2": 0.021818232163208325,
+          "r2_ci95": [
+            0.01590149032603168,
+            0.02823132793465153
+          ]
+        },
+        "stack": {
+          "mae": 54.1722977702432,
+          "mae_ci95": [
+            53.172812702667926,
+            55.24582163114343
+          ],
+          "r2": 0.02294199424428546,
+          "r2_ci95": [
+            0.01404543616549847,
+            0.03211575848928134
+          ]
+        }
+      }
+    }
+  },
+  "elapsed_min": 2.7558462341626484
+}

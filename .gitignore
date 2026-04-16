@@ -52,3 +52,7 @@ rl/autoresearch_results/
 
 # Backup files
 *.bak
+models/
+sota-bundle/
+external_data/
+catboost_info/
