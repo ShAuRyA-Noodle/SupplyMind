@@ -1,0 +1,227 @@
+{
+  "description": "Per-point Bates-Granger constrained stacking on real forecaster outputs. No synthesized folds.",
+  "per_target_horizon": {
+    "DCOILWTICO_h7": {
+      "n_cal_points": 70,
+      "n_test_points": 70,
+      "individual_mae": {
+        "chronos": 3.006047764369419,
+        "arima": 3.0841361525087674,
+        "prophet": 8.557134422551027,
+        "naive": 2.839285714285714
+      },
+      "stacking_mae": {
+        "equal": 3.381860717562512,
+        "best_on_cal": 2.839285714285714,
+        "constrained_mae": 2.839285714285714,
+        "constrained_mse": 2.839285714285714
+      },
+      "weights": {
+        "constrained_mae": {
+          "chronos": 0.0,
+          "arima": 3.8857805861880464e-16,
+          "prophet": 0.0,
+          "naive": 0.9999999999999996
+        },
+        "constrained_mse": {
+          "chronos": 1.2281842209915794e-15,
+          "arima": 1.7069679003611782e-15,
+          "prophet": 6.824272182231614e-17,
+          "naive": 0.999999999999997
+        }
+      },
+      "best_single_model": "naive",
+      "best_single_mae": 2.839285714285714,
+      "winner_method": "naive",
+      "winner_mae": 2.839285714285714,
+      "constrained_beats_best_single": false
+    },
+    "DCOILWTICO_h14": {
+      "n_cal_points": 140,
+      "n_test_points": 140,
+      "individual_mae": {
+        "chronos": 3.797937408447266,
+        "arima": 3.917782537843266,
+        "prophet": 9.218187229009528,
+        "naive": 3.6239285714285714
+      },
+      "stacking_mae": {
+        "equal": 3.9604401984158755,
+        "best_on_cal": 3.6239285714285714,
+        "constrained_mae": 3.623928571428571,
+        "constrained_mse": 3.6994484688718305
+      },
+      "weights": {
+        "constrained_mae": {
+          "chronos": 1.3877787807814454e-16,
+          "arima": 0.0,
+          "prophet": 0.0,
+          "naive": 0.9999999999999998
+        },
+        "constrained_mse": {
+          "chronos": 3.0753177782116836e-14,
+          "arima": 0.25973397692659406,
+          "prophet": 1.0636618946679322e-15,
+          "naive": 0.7402660230733741
+        }
+      },
+      "best_single_model": "naive",
+      "best_single_mae": 3.6239285714285714,
+      "winner_method": "constrained_mae",
+      "winner_mae": 3.623928571428571,
+      "constrained_beats_best_single": true
+    },
+    "DEXUSEU_h7": {
+      "n_cal_points": 70,
+      "n_test_points": 70,
+      "individual_mae": {
+        "chronos": 0.00997808286394391,
+        "arima": 0.00909829887487626,
+        "prophet": 0.04588529230089117,
+        "naive": 0.009057142857142856
+      },
+      "stacking_mae": {
+        "equal": 0.013885443002327432,
+        "best_on_cal": 0.00997808286394391,
+        "constrained_mae": 0.009495985176023706,
+        "constrained_mse": 0.013885443002327432
+      },
+      "weights": {
+        "constrained_mae": {
+          "chronos": 0.3382904222928093,
+          "arima": 0.2908333034179931,
+          "prophet": 0.07824807605162067,
+          "naive": 0.292628198237577
+        },
+        "constrained_mse": {
+          "chronos": 0.25,
+          "arima": 0.25,
+          "prophet": 0.25,
+          "naive": 0.25
+        }
+      },
+      "best_single_model": "naive",
+      "best_single_mae": 0.009057142857142856,
+      "winner_method": "naive",
+      "winner_mae": 0.009057142857142856,
+      "constrained_beats_best_single": false
+    },
+    "DEXUSEU_h14": {
+      "n_cal_points": 140,
+      "n_test_points": 140,
+      "individual_mae": {
+        "chronos": 0.013727861084256852,
+        "arima": 0.012013652348349491,
+        "prophet": 0.04736957874192551,
+        "naive": 0.01203071428571428
+      },
+      "stacking_mae": {
+        "equal": 0.015656730784239885,
+        "best_on_cal": 0.012013652348349491,
+        "constrained_mae": 0.012635021721737227,
+        "constrained_mse": 0.015656730784239885
+      },
+      "weights": {
+        "constrained_mae": {
+          "chronos": 0.3173041077741453,
+          "arima": 0.2850093471133051,
+          "prophet": 0.10822240332468126,
+          "naive": 0.28946414178786833
+        },
+        "constrained_mse": {
+          "chronos": 0.25,
+          "arima": 0.25,
+          "prophet": 0.25,
+          "naive": 0.25
+        }
+      },
+      "best_single_model": "arima",
+      "best_single_mae": 0.012013652348349491,
+      "winner_method": "arima",
+      "winner_mae": 0.012013652348349491,
+      "constrained_beats_best_single": false
+    },
+    "DEXCHUS_h7": {
+      "n_cal_points": 70,
+      "n_test_points": 70,
+      "individual_mae": {
+        "chronos": 0.019519044701712434,
+        "arima": 0.017992622791365688,
+        "prophet": 0.11663701396527856,
+        "naive": 0.01873000000000015
+      },
+      "stacking_mae": {
+        "equal": 0.03595753473515902,
+        "best_on_cal": 0.019519044701712434,
+        "constrained_mae": 0.020133491932037322,
+        "constrained_mse": 0.019334668170698382
+      },
+      "weights": {
+        "constrained_mae": {
+          "chronos": 0.7133898921965662,
+          "arima": 0.21870528495965705,
+          "prophet": 0.06790482284377684,
+          "naive": 0.0
+        },
+        "constrained_mse": {
+          "chronos": 0.935153684195057,
+          "arima": 8.998878031629688e-18,
+          "prophet": 0.008348340456592942,
+          "naive": 0.056497975348350146
+        }
+      },
+      "best_single_model": "arima",
+      "best_single_mae": 0.017992622791365688,
+      "winner_method": "arima",
+      "winner_mae": 0.017992622791365688,
+      "constrained_beats_best_single": false
+    },
+    "DEXCHUS_h14": {
+      "n_cal_points": 140,
+      "n_test_points": 140,
+      "individual_mae": {
+        "chronos": 0.03237065534319195,
+        "arima": 0.03236972869761379,
+        "prophet": 0.12129274215959333,
+        "naive": 0.03212142857142869
+      },
+      "stacking_mae": {
+        "equal": 0.043605583896191145,
+        "best_on_cal": 0.03237065534319195,
+        "constrained_mae": 0.031424293689945516,
+        "constrained_mse": 0.034848071305054344
+      },
+      "weights": {
+        "constrained_mae": {
+          "chronos": 0.6699556648170705,
+          "arima": 0.251108263144011,
+          "prophet": 0.07893607203891846,
+          "naive": 6.03983418880819e-19
+        },
+        "constrained_mse": {
+          "chronos": 0.8500735106653095,
+          "arima": 0.0,
+          "prophet": 0.14992648933469047,
+          "naive": 0.0
+        }
+      },
+      "best_single_model": "naive",
+      "best_single_mae": 0.03212142857142869,
+      "winner_method": "constrained_mae",
+      "winner_mae": 0.031424293689945516,
+      "constrained_beats_best_single": true
+    }
+  },
+  "wins": {
+    "constrained": 2,
+    "best_single": 4,
+    "equal": 0,
+    "naive": 0
+  },
+  "summary": {
+    "total_target_horizon_cells": 6,
+    "constrained_stacking_wins": 2,
+    "constrained_beats_best_single_cells": 2
+  },
+  "elapsed_min": 2.2175209800402325
+}

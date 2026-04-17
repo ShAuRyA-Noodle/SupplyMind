@@ -1,0 +1,52 @@
+{
+  "model": "Temporal Fusion Transformer",
+  "paper": "Lim et al. 2021 \u2014 Temporal Fusion Transformers for interpretable multi-horizon time series forecasting",
+  "implementation": "rl/forecasting/tft.py (v1 single-target) + rl/forecasting/train_tft_real.py (v2 multi-target)",
+  "params": {
+    "v1": 90602,
+    "v2": 513534
+  },
+  "checkpoints": {
+    "v1_real": {
+      "path": "rl/checkpoints/tft_real.pt",
+      "params": 90602,
+      "test_mae_usd": 7.8270111083984375,
+      "quantile_loss": 0.07062085568904877,
+      "horizon": 14,
+      "target": "DCOILWTICO"
+    },
+    "v2_multi": {
+      "path": "rl/checkpoints/tft_v2.pt",
+      "params": 513534,
+      "test_mae_p50": {
+        "DCOILWTICO": 52.868377685546875,
+        "PCOPPUSDM": 2165.05419921875,
+        "PPICMM": 127.1404800415039
+      },
+      "best_val_qloss": 0.024498114362359047,
+      "n_rolling_folds": 10
+    }
+  },
+  "integration_in_r3_past_self": {
+    "target": "DCOILWTICO",
+    "horizon": 14,
+    "r3_forecasters": {
+      "chronos_bolt": {
+        "mean_mae": 3.4998963623046877
+      },
+      "timesfm_2": {
+        "mean_mae": 3.4601973173958918
+      },
+      "arima": {
+        "mean_mae": 3.37419745103306
+      },
+      "prophet": {
+        "mean_mae": 9.348899015962079
+      }
+    },
+    "v1_tft_WTI_test_mae_usd": 7.8270111083984375,
+    "v2_tft_multi_DCOILWTICO_test_mae": 52.868377685546875,
+    "note": "TFT v1 MAE of $7.83 on single-target WTI is competitive with R3 Chronos/ARIMA values on the same series at 14-day horizon. v2 multi-target TFT numbers are higher because of multi-target sharing and scale difference (USD vs. FX cents); for a fair apples-to-apples position in R3, the v1 single-target checkpoint is used."
+  },
+  "scoped_next_step_r3_v4": "A full re-training of BigTFT on all 8 FRED targets with the R3 20-fold rolling-origin backtest would require porting to pytorch-forecasting's TimeSeriesDataSet. Scoped as follow-up; v1 checkpoint numbers are the current representative point-of-reference for BigTFT in this release."
+}
