@@ -1,0 +1,25 @@
+{
+  "exports": [
+    {
+      "task": "easy_typhoon_response",
+      "onnx_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\v3_arcadia\\checkpoints\\gethsemane\\ppo_easy_typhoon_response.onnx",
+      "size_mb": 0.970768,
+      "verified": true,
+      "max_diff": 1.9073486328125e-06
+    },
+    {
+      "task": "medium_multi_front",
+      "onnx_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\v3_arcadia\\checkpoints\\gethsemane\\ppo_medium_multi_front.onnx",
+      "size_mb": 0.970768,
+      "verified": true,
+      "max_diff": 1.9073486328125e-06
+    },
+    {
+      "task": "hard_cascading_crisis",
+      "onnx_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\v3_arcadia\\checkpoints\\gethsemane\\ppo_hard_cascading_crisis.onnx",
+      "size_mb": 0.970768,
+      "verified": true,
+      "max_diff": 1.430511474609375e-06
+    }
+  ]
+}
