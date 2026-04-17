@@ -1,0 +1,2463 @@
+{
+  "n_queries": 20,
+  "n_chunks": 6483,
+  "queries": [
+    {
+      "q": "In early 2011, what cataclysm in Japan rendered a coastal power facility inoperable?",
+      "gold": [
+        "2011_T\u014dhoku_earthquake_and_tsunami"
+      ],
+      "hardness": "temporal+indirect"
+    },
+    {
+      "q": "Which 2020-decade phenomenon made it nearly impossible for automakers to build cars?",
+      "gold": [
+        "2020\u20132023_global_chip_shortage"
+      ],
+      "hardness": "paraphrase"
+    },
+    {
+      "q": "Why were ships delayed for nearly a week in Egypt during spring 2021?",
+      "gold": [
+        "2021_Suez_Canal_obstruction",
+        "Ever_Given"
+      ],
+      "hardness": "temporal+indirect"
+    },
+    {
+      "q": "What narrow passage off Yemen's southwest shapes East-West trade routes?",
+      "gold": [
+        "Bab-el-Mandeb"
+      ],
+      "hardness": "indirect+geographic"
+    },
+    {
+      "q": "Which freight-rate index tracks the hiring cost for bulk cargo vessels?",
+      "gold": [
+        "Baltic_Dry_Index"
+      ],
+      "hardness": "paraphrase"
+    },
+    {
+      "q": "Why does a small demand change at the customer tier cause large order swings at the supplier tier?",
+      "gold": [
+        "Bullwhip_effect"
+      ],
+      "hardness": "causal paraphrase"
+    },
+    {
+      "q": "What US legislation aims to onshore semiconductor fabrication?",
+      "gold": [
+        "CHIPS_and_Science_Act"
+      ],
+      "hardness": "paraphrase"
+    },
+    {
+      "q": "How is the capacity of a large cargo vessel measured in standardized boxes?",
+      "gold": [
+        "Container_ship"
+      ],
+      "hardness": "paraphrase"
+    },
+    {
+      "q": "Which integrated business software replaces standalone accounting + inventory + HR tools?",
+      "gold": [
+        "Enterprise_resource_planning"
+      ],
+      "hardness": "indirect"
+    },
+    {
+      "q": "Who owns the 400-meter-long ship that ran aground and blocked Suez in 2021?",
+      "gold": [
+        "Ever_Given"
+      ],
+      "hardness": "temporal+specific"
+    },
+    {
+      "q": "Which Taiwanese contract manufacturer assembles most of Apple's hardware?",
+      "gold": [
+        "Foxconn"
+      ],
+      "hardness": "indirect"
+    },
+    {
+      "q": "What buffer protects a firm against stockouts when lead time is uncertain?",
+      "gold": [
+        "Inventory"
+      ],
+      "hardness": "paraphrase+causal"
+    },
+    {
+      "q": "Which lean production method aims to eliminate warehouse stock by synchronizing production to demand?",
+      "gold": [
+        "Just-in-time_manufacturing"
+      ],
+      "hardness": "paraphrase"
+    },
+    {
+      "q": "What West-Coast US harbor drew headlines for anchored ship queues in 2021?",
+      "gold": [
+        "Port_of_Los_Angeles"
+      ],
+      "hardness": "temporal+indirect"
+    },
+    {
+      "q": "Which Southeast Asian port is the world's busiest transshipment hub?",
+      "gold": [
+        "Port_of_Singapore"
+      ],
+      "hardness": "indirect+geographic"
+    },
+    {
+      "q": "Why did Houthi forces attack shipping near a narrow Arabian Peninsula strait in 2023?",
+      "gold": [
+        "Red_Sea_crisis",
+        "Bab-el-Mandeb"
+      ],
+      "hardness": "temporal+geopolitical"
+    },
+    {
+      "q": "Which geographic bottleneck carries most seaborne Middle Eastern crude oil?",
+      "gold": [
+        "Strait_of_Hormuz"
+      ],
+      "hardness": "paraphrase"
+    },
+    {
+      "q": "Which Indonesian-Malaysian sea lane bottlenecks Asia-Europe container traffic?",
+      "gold": [
+        "Strait_of_Malacca"
+      ],
+      "hardness": "geographic paraphrase"
+    },
+    {
+      "q": "What is SolarWinds an example of in software delivery risk?",
+      "gold": [
+        "Supply_chain_attack"
+      ],
+      "hardness": "indirect"
+    },
+    {
+      "q": "Which foundry produces most advanced logic chips globally?",
+      "gold": [
+        "TSMC"
+      ],
+      "hardness": "paraphrase"
+    }
+  ],
+  "pipelines": {
+    "P1_bge_m3_bi": {
+      "p1": 0.7,
+      "p3": 0.7166666666666666,
+      "p5": 0.6799999999999999,
+      "r5": 0.925,
+      "r10": 0.925,
+      "mrr_score": 0.797878787878788,
+      "ndcg10": 0.8266663622689141,
+      "latency_s": 0.09085943698883056
+    },
+    "P2_mxbai_bi": {
+      "p1": 0.75,
+      "p3": 0.7666666666666666,
+      "p5": 0.7299999999999999,
+      "r5": 0.95,
+      "r10": 0.95,
+      "mrr_score": 0.8299999999999998,
+      "ndcg10": 0.8615948271149045,
+      "latency_s": 0.017708194255828858
+    },
+    "P3_snowflake_bi": {
+      "p1": 0.75,
+      "p3": 0.7333333333333332,
+      "p5": 0.62,
+      "r5": 0.925,
+      "r10": 1.0,
+      "mrr_score": 0.8204166666666666,
+      "ndcg10": 0.8435248875432482,
+      "latency_s": 0.02100374698638916
+    },
+    "P4_bge_m3_rerank": {
+      "p1": 0.75,
+      "p3": 0.7333333333333333,
+      "p5": 0.6799999999999999,
+      "r5": 0.95,
+      "r10": 0.95,
+      "mrr_score": 0.8458333333333334,
+      "ndcg10": 0.8461084905681057,
+      "latency_s": 1.2283907175064086
+    },
+    "P5_mxbai_rerank": {
+      "p1": 0.75,
+      "p3": 0.7,
+      "p5": 0.63,
+      "r5": 0.95,
+      "r10": 1.0,
+      "mrr_score": 0.836309523809524,
+      "ndcg10": 0.850382526237564,
+      "latency_s": 0.995907473564148
+    },
+    "P6_snowflake_rerank": {
+      "p1": 0.75,
+      "p3": 0.7333333333333333,
+      "p5": 0.67,
+      "r5": 0.95,
+      "r10": 1.0,
+      "mrr_score": 0.8571428571428571,
+      "ndcg10": 0.8683773778199093,
+      "latency_s": 1.352079701423645
+    },
+    "P7_rrf_rerank": {
+      "p1": 0.75,
+      "p3": 0.7333333333333333,
+      "p5": 0.66,
+      "r5": 0.95,
+      "r10": 1.0,
+      "mrr_score": 0.8479166666666667,
+      "ndcg10": 0.8581038917405686,
+      "latency_s": 1.219547402858734
+    }
+  },
+  "per_pipeline_detail": {
+    "P1_bge_m3_bi": {
+      "pipeline": "P1_bge_m3_bi",
+      "per_query": [
+        {
+          "q": "In early 2011, what cataclysm in Japan rendered a coastal power facility inoperable?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.887120246887207
+        },
+        {
+          "q": "Which 2020-decade phenomenon made it nearly impossible for automakers to build cars?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 0.08188796043395996
+        },
+        {
+          "q": "Why were ships delayed for nearly a week in Egypt during spring 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9782917460822231,
+          "latency_s": 0.06593847274780273
+        },
+        {
+          "q": "What narrow passage off Yemen's southwest shapes East-West trade routes?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.3333333333333333,
+          "ndcg10": 0.6697622278142621,
+          "latency_s": 0.07196879386901855
+        },
+        {
+          "q": "Which freight-rate index tracks the hiring cost for bulk cargo vessels?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.3333333333333333,
+          "ndcg10": 0.6807182344492225,
+          "latency_s": 0.06391119956970215
+        },
+        {
+          "q": "Why does a small demand change at the customer tier cause large order swings at the supplier tier?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "hardness": "causal paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9876712785649564,
+          "latency_s": 0.06520986557006836
+        },
+        {
+          "q": "What US legislation aims to onshore semiconductor fabrication?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.8328978515038054,
+          "latency_s": 0.10476899147033691
+        },
+        {
+          "q": "How is the capacity of a large cargo vessel measured in standardized boxes?",
+          "gold": [
+            "Container_ship"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 0.06199336051940918
+        },
+        {
+          "q": "Which integrated business software replaces standalone accounting + inventory + HR tools?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9705437052559006,
+          "latency_s": 0.07768893241882324
+        },
+        {
+          "q": "Who owns the 400-meter-long ship that ran aground and blocked Suez in 2021?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "hardness": "temporal+specific",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6170963711982227,
+          "latency_s": 0.0587003231048584
+        },
+        {
+          "q": "Which Taiwanese contract manufacturer assembles most of Apple's hardware?",
+          "gold": [
+            "Foxconn"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.7701035286296694,
+          "latency_s": 0.0388181209564209
+        },
+        {
+          "q": "What buffer protects a firm against stockouts when lead time is uncertain?",
+          "gold": [
+            "Inventory"
+          ],
+          "hardness": "paraphrase+causal",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.2,
+          "ndcg10": 0.38685280723454163,
+          "latency_s": 0.03503823280334473
+        },
+        {
+          "q": "Which lean production method aims to eliminate warehouse stock by synchronizing production to demand?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9672068480996276,
+          "latency_s": 0.028246164321899414
+        },
+        {
+          "q": "What West-Coast US harbor drew headlines for anchored ship queues in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9878316351280039,
+          "latency_s": 0.025636911392211914
+        },
+        {
+          "q": "Which Southeast Asian port is the world's busiest transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9550236580992476,
+          "latency_s": 0.028322219848632812
+        },
+        {
+          "q": "Why did Houthi forces attack shipping near a narrow Arabian Peninsula strait in 2023?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "temporal+geopolitical",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.025765419006347656
+        },
+        {
+          "q": "Which geographic bottleneck carries most seaborne Middle Eastern crude oil?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8893839657191064,
+          "latency_s": 0.016916513442993164
+        },
+        {
+          "q": "Which Indonesian-Malaysian sea lane bottlenecks Asia-Europe container traffic?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "hardness": "geographic paraphrase",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8838242945899706,
+          "latency_s": 0.027513980865478516
+        },
+        {
+          "q": "What is SolarWinds an example of in software delivery risk?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9651366671790967,
+          "latency_s": 0.0265810489654541
+        },
+        {
+          "q": "Which foundry produces most advanced logic chips globally?",
+          "gold": [
+            "TSMC"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.0,
+          "r5": 0.0,
+          "r10": 0.0,
+          "mrr_score": 0.09090909090909091,
+          "ndcg10": 0.0,
+          "latency_s": 0.0251619815826416
+        }
+      ],
+      "aggregate": {
+        "p1": 0.7,
+        "p3": 0.7166666666666666,
+        "p5": 0.6799999999999999,
+        "r5": 0.925,
+        "r10": 0.925,
+        "mrr_score": 0.797878787878788,
+        "ndcg10": 0.8266663622689141,
+        "latency_s": 0.09085943698883056
+      },
+      "total_s": 1.8207223415374756
+    },
+    "P2_mxbai_bi": {
+      "pipeline": "P2_mxbai_bi",
+      "per_query": [
+        {
+          "q": "In early 2011, what cataclysm in Japan rendered a coastal power facility inoperable?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.025531768798828125
+        },
+        {
+          "q": "Which 2020-decade phenomenon made it nearly impossible for automakers to build cars?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9674679834891693,
+          "latency_s": 0.02076864242553711
+        },
+        {
+          "q": "Why were ships delayed for nearly a week in Egypt during spring 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9888026041880242,
+          "latency_s": 0.01799941062927246
+        },
+        {
+          "q": "What narrow passage off Yemen's southwest shapes East-West trade routes?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.02743053436279297
+        },
+        {
+          "q": "Which freight-rate index tracks the hiring cost for bulk cargo vessels?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.3333333333333333,
+          "ndcg10": 0.6807182344492225,
+          "latency_s": 0.02539682388305664
+        },
+        {
+          "q": "Why does a small demand change at the customer tier cause large order swings at the supplier tier?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "hardness": "causal paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9683310355387569,
+          "latency_s": 0.022576093673706055
+        },
+        {
+          "q": "What US legislation aims to onshore semiconductor fabrication?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.8165229378311881,
+          "latency_s": 0.026386737823486328
+        },
+        {
+          "q": "How is the capacity of a large cargo vessel measured in standardized boxes?",
+          "gold": [
+            "Container_ship"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.01758265495300293
+        },
+        {
+          "q": "Which integrated business software replaces standalone accounting + inventory + HR tools?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9799214801447083,
+          "latency_s": 0.013688325881958008
+        },
+        {
+          "q": "Who owns the 400-meter-long ship that ran aground and blocked Suez in 2021?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "hardness": "temporal+specific",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.2,
+          "ndcg10": 0.4736200079773859,
+          "latency_s": 0.014370918273925781
+        },
+        {
+          "q": "Which Taiwanese contract manufacturer assembles most of Apple's hardware?",
+          "gold": [
+            "Foxconn"
+          ],
+          "hardness": "indirect",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6710022092790502,
+          "latency_s": 0.014377355575561523
+        },
+        {
+          "q": "What buffer protects a firm against stockouts when lead time is uncertain?",
+          "gold": [
+            "Inventory"
+          ],
+          "hardness": "paraphrase+causal",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9493885684853097,
+          "latency_s": 0.018751144409179688
+        },
+        {
+          "q": "Which lean production method aims to eliminate warehouse stock by synchronizing production to demand?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9828920819566879,
+          "latency_s": 0.01331472396850586
+        },
+        {
+          "q": "What West-Coast US harbor drew headlines for anchored ship queues in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9918291064614978,
+          "latency_s": 0.016001462936401367
+        },
+        {
+          "q": "Which Southeast Asian port is the world's busiest transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9286241047843017,
+          "latency_s": 0.013699769973754883
+        },
+        {
+          "q": "Why did Houthi forces attack shipping near a narrow Arabian Peninsula strait in 2023?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "temporal+geopolitical",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.013242959976196289
+        },
+        {
+          "q": "Which geographic bottleneck carries most seaborne Middle Eastern crude oil?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8653082042236201,
+          "latency_s": 0.011635065078735352
+        },
+        {
+          "q": "Which Indonesian-Malaysian sea lane bottlenecks Asia-Europe container traffic?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "hardness": "geographic paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.011441946029663086
+        },
+        {
+          "q": "What is SolarWinds an example of in software delivery risk?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9674679834891693,
+          "latency_s": 0.0166928768157959
+        },
+        {
+          "q": "Which foundry produces most advanced logic chips globally?",
+          "gold": [
+            "TSMC"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.0,
+          "r5": 0.0,
+          "r10": 0.0,
+          "mrr_score": 0.06666666666666667,
+          "ndcg10": 0.0,
+          "latency_s": 0.013274669647216797
+        }
+      ],
+      "aggregate": {
+        "p1": 0.75,
+        "p3": 0.7666666666666666,
+        "p5": 0.7299999999999999,
+        "r5": 0.95,
+        "r10": 0.95,
+        "mrr_score": 0.8299999999999998,
+        "ndcg10": 0.8615948271149045,
+        "latency_s": 0.017708194255828858
+      },
+      "total_s": 0.35416388511657715
+    },
+    "P3_snowflake_bi": {
+      "pipeline": "P3_snowflake_bi",
+      "per_query": [
+        {
+          "q": "In early 2011, what cataclysm in Japan rendered a coastal power facility inoperable?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.01247715950012207
+        },
+        {
+          "q": "Which 2020-decade phenomenon made it nearly impossible for automakers to build cars?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9708923176105698,
+          "latency_s": 0.01572871208190918
+        },
+        {
+          "q": "Why were ships delayed for nearly a week in Egypt during spring 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9242560749182924,
+          "latency_s": 0.018570661544799805
+        },
+        {
+          "q": "What narrow passage off Yemen's southwest shapes East-West trade routes?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.3333333333333333,
+          "ndcg10": 0.6746579650586143,
+          "latency_s": 0.018769025802612305
+        },
+        {
+          "q": "Which freight-rate index tracks the hiring cost for bulk cargo vessels?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9565912771023182,
+          "latency_s": 0.030390262603759766
+        },
+        {
+          "q": "Why does a small demand change at the customer tier cause large order swings at the supplier tier?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "hardness": "causal paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9641803458261541,
+          "latency_s": 0.027612686157226562
+        },
+        {
+          "q": "What US legislation aims to onshore semiconductor fabrication?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.2,
+          "ndcg10": 0.45560514958746035,
+          "latency_s": 0.027933359146118164
+        },
+        {
+          "q": "How is the capacity of a large cargo vessel measured in standardized boxes?",
+          "gold": [
+            "Container_ship"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.021513700485229492
+        },
+        {
+          "q": "Which integrated business software replaces standalone accounting + inventory + HR tools?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9531641314941091,
+          "latency_s": 0.01941990852355957
+        },
+        {
+          "q": "Who owns the 400-meter-long ship that ran aground and blocked Suez in 2021?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "hardness": "temporal+specific",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.25,
+          "ndcg10": 0.499800561367962,
+          "latency_s": 0.0253293514251709
+        },
+        {
+          "q": "Which Taiwanese contract manufacturer assembles most of Apple's hardware?",
+          "gold": [
+            "Foxconn"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8072467605676945,
+          "latency_s": 0.01678752899169922
+        },
+        {
+          "q": "What buffer protects a firm against stockouts when lead time is uncertain?",
+          "gold": [
+            "Inventory"
+          ],
+          "hardness": "paraphrase+causal",
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6978817289434457,
+          "latency_s": 0.013158321380615234
+        },
+        {
+          "q": "Which lean production method aims to eliminate warehouse stock by synchronizing production to demand?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9617010886504509,
+          "latency_s": 0.018248796463012695
+        },
+        {
+          "q": "What West-Coast US harbor drew headlines for anchored ship queues in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.971476156593264,
+          "latency_s": 0.014743566513061523
+        },
+        {
+          "q": "Which Southeast Asian port is the world's busiest transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9447403758138471,
+          "latency_s": 0.018311262130737305
+        },
+        {
+          "q": "Why did Houthi forces attack shipping near a narrow Arabian Peninsula strait in 2023?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "temporal+geopolitical",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 0.5,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.024152517318725586
+        },
+        {
+          "q": "Which geographic bottleneck carries most seaborne Middle Eastern crude oil?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9219403931203303,
+          "latency_s": 0.023745059967041016
+        },
+        {
+          "q": "Which Indonesian-Malaysian sea lane bottlenecks Asia-Europe container traffic?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "hardness": "geographic paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9311777582765323,
+          "latency_s": 0.027826309204101562
+        },
+        {
+          "q": "What is SolarWinds an example of in software delivery risk?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9197207891481876,
+          "latency_s": 0.026080846786499023
+        },
+        {
+          "q": "Which foundry produces most advanced logic chips globally?",
+          "gold": [
+            "TSMC"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.0,
+          "r5": 0.0,
+          "r10": 1.0,
+          "mrr_score": 0.125,
+          "ndcg10": 0.31546487678572877,
+          "latency_s": 0.019275903701782227
+        }
+      ],
+      "aggregate": {
+        "p1": 0.75,
+        "p3": 0.7333333333333332,
+        "p5": 0.62,
+        "r5": 0.925,
+        "r10": 1.0,
+        "mrr_score": 0.8204166666666666,
+        "ndcg10": 0.8435248875432482,
+        "latency_s": 0.02100374698638916
+      },
+      "total_s": 0.421083927154541
+    },
+    "P4_bge_m3_rerank": {
+      "pipeline": "P4_bge_m3_rerank",
+      "per_query": [
+        {
+          "q": "In early 2011, what cataclysm in Japan rendered a coastal power facility inoperable?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 5.048729658126831
+        },
+        {
+          "q": "Which 2020-decade phenomenon made it nearly impossible for automakers to build cars?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9876712785649564,
+          "latency_s": 0.9733273983001709
+        },
+        {
+          "q": "Why were ships delayed for nearly a week in Egypt during spring 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9851514063429596,
+          "latency_s": 0.9462287425994873
+        },
+        {
+          "q": "What narrow passage off Yemen's southwest shapes East-West trade routes?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9391664772645913,
+          "latency_s": 0.9782087802886963
+        },
+        {
+          "q": "Which freight-rate index tracks the hiring cost for bulk cargo vessels?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.7009124514018641,
+          "latency_s": 1.0960488319396973
+        },
+        {
+          "q": "Why does a small demand change at the customer tier cause large order swings at the supplier tier?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "hardness": "causal paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9766325382721556,
+          "latency_s": 0.9438881874084473
+        },
+        {
+          "q": "What US legislation aims to onshore semiconductor fabrication?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 0.9654033184051514
+        },
+        {
+          "q": "How is the capacity of a large cargo vessel measured in standardized boxes?",
+          "gold": [
+            "Container_ship"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0075883865356445
+        },
+        {
+          "q": "Which integrated business software replaces standalone accounting + inventory + HR tools?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "hardness": "indirect",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6886007376100177,
+          "latency_s": 1.3976199626922607
+        },
+        {
+          "q": "Who owns the 400-meter-long ship that ran aground and blocked Suez in 2021?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "hardness": "temporal+specific",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.7844801364718913,
+          "latency_s": 0.9787638187408447
+        },
+        {
+          "q": "Which Taiwanese contract manufacturer assembles most of Apple's hardware?",
+          "gold": [
+            "Foxconn"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8211906546966005,
+          "latency_s": 0.9913411140441895
+        },
+        {
+          "q": "What buffer protects a firm against stockouts when lead time is uncertain?",
+          "gold": [
+            "Inventory"
+          ],
+          "hardness": "paraphrase+causal",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.9735002517700195
+        },
+        {
+          "q": "Which lean production method aims to eliminate warehouse stock by synchronizing production to demand?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9918291064614978,
+          "latency_s": 0.9662349224090576
+        },
+        {
+          "q": "What West-Coast US harbor drew headlines for anchored ship queues in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8654810349838412,
+          "latency_s": 1.4513747692108154
+        },
+        {
+          "q": "Which Southeast Asian port is the world's busiest transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.0033090114593506
+        },
+        {
+          "q": "Why did Houthi forces attack shipping near a narrow Arabian Peninsula strait in 2023?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "temporal+geopolitical",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9963488021549354,
+          "latency_s": 0.9742310047149658
+        },
+        {
+          "q": "Which geographic bottleneck carries most seaborne Middle Eastern crude oil?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6718536598421433,
+          "latency_s": 0.9618306159973145
+        },
+        {
+          "q": "Which Indonesian-Malaysian sea lane bottlenecks Asia-Europe container traffic?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "hardness": "geographic paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.3333333333333333,
+          "ndcg10": 0.5642221110316635,
+          "latency_s": 1.0008909702301025
+        },
+        {
+          "q": "What is SolarWinds an example of in software delivery risk?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.9327194690704346
+        },
+        {
+          "q": "Which foundry produces most advanced logic chips globally?",
+          "gold": [
+            "TSMC"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.0,
+          "r5": 0.0,
+          "r10": 0.0,
+          "mrr_score": 0.08333333333333333,
+          "ndcg10": 0.0,
+          "latency_s": 0.9765751361846924
+        }
+      ],
+      "aggregate": {
+        "p1": 0.75,
+        "p3": 0.7333333333333333,
+        "p5": 0.6799999999999999,
+        "r5": 0.95,
+        "r10": 0.95,
+        "mrr_score": 0.8458333333333334,
+        "ndcg10": 0.8461084905681057,
+        "latency_s": 1.2283907175064086
+      },
+      "total_s": 24.569828033447266
+    },
+    "P5_mxbai_rerank": {
+      "pipeline": "P5_mxbai_rerank",
+      "per_query": [
+        {
+          "q": "In early 2011, what cataclysm in Japan rendered a coastal power facility inoperable?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0504469871520996
+        },
+        {
+          "q": "Which 2020-decade phenomenon made it nearly impossible for automakers to build cars?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9828920819566879,
+          "latency_s": 0.9324023723602295
+        },
+        {
+          "q": "Why were ships delayed for nearly a week in Egypt during spring 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9851514063429596,
+          "latency_s": 0.9620130062103271
+        },
+        {
+          "q": "What narrow passage off Yemen's southwest shapes East-West trade routes?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9391664772645913,
+          "latency_s": 0.9956188201904297
+        },
+        {
+          "q": "Which freight-rate index tracks the hiring cost for bulk cargo vessels?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.7009124514018641,
+          "latency_s": 1.0779497623443604
+        },
+        {
+          "q": "Why does a small demand change at the customer tier cause large order swings at the supplier tier?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "hardness": "causal paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9876712785649564,
+          "latency_s": 0.9482769966125488
+        },
+        {
+          "q": "What US legislation aims to onshore semiconductor fabrication?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 0.9596042633056641
+        },
+        {
+          "q": "How is the capacity of a large cargo vessel measured in standardized boxes?",
+          "gold": [
+            "Container_ship"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 1.0400478839874268
+        },
+        {
+          "q": "Which integrated business software replaces standalone accounting + inventory + HR tools?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "hardness": "indirect",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.25,
+          "ndcg10": 0.5501555404615289,
+          "latency_s": 0.9785940647125244
+        },
+        {
+          "q": "Who owns the 400-meter-long ship that ran aground and blocked Suez in 2021?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "hardness": "temporal+specific",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.7844801364718913,
+          "latency_s": 0.9576377868652344
+        },
+        {
+          "q": "Which Taiwanese contract manufacturer assembles most of Apple's hardware?",
+          "gold": [
+            "Foxconn"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8171325454050458,
+          "latency_s": 1.0249407291412354
+        },
+        {
+          "q": "What buffer protects a firm against stockouts when lead time is uncertain?",
+          "gold": [
+            "Inventory"
+          ],
+          "hardness": "paraphrase+causal",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8712322899646365,
+          "latency_s": 0.9728975296020508
+        },
+        {
+          "q": "Which lean production method aims to eliminate warehouse stock by synchronizing production to demand?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.001133918762207
+        },
+        {
+          "q": "What West-Coast US harbor drew headlines for anchored ship queues in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8981192674612325,
+          "latency_s": 1.0089311599731445
+        },
+        {
+          "q": "Which Southeast Asian port is the world's busiest transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9782917460822231,
+          "latency_s": 1.0800955295562744
+        },
+        {
+          "q": "Why did Houthi forces attack shipping near a narrow Arabian Peninsula strait in 2023?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "temporal+geopolitical",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 1.0019824504852295
+        },
+        {
+          "q": "Which geographic bottleneck carries most seaborne Middle Eastern crude oil?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.3333333333333333,
+          "ndcg10": 0.5936788073725308,
+          "latency_s": 0.9965484142303467
+        },
+        {
+          "q": "Which Indonesian-Malaysian sea lane bottlenecks Asia-Europe container traffic?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "hardness": "geographic paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6546154994739983,
+          "latency_s": 1.0329797267913818
+        },
+        {
+          "q": "What is SolarWinds an example of in software delivery risk?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.9068541526794434
+        },
+        {
+          "q": "Which foundry produces most advanced logic chips globally?",
+          "gold": [
+            "TSMC"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.0,
+          "r5": 0.0,
+          "r10": 1.0,
+          "mrr_score": 0.14285714285714285,
+          "ndcg10": 0.3333333333333333,
+          "latency_s": 0.9891939163208008
+        }
+      ],
+      "aggregate": {
+        "p1": 0.75,
+        "p3": 0.7,
+        "p5": 0.63,
+        "r5": 0.95,
+        "r10": 1.0,
+        "mrr_score": 0.836309523809524,
+        "ndcg10": 0.850382526237564,
+        "latency_s": 0.995907473564148
+      },
+      "total_s": 19.919169425964355
+    },
+    "P6_snowflake_rerank": {
+      "pipeline": "P6_snowflake_rerank",
+      "per_query": [
+        {
+          "q": "In early 2011, what cataclysm in Japan rendered a coastal power facility inoperable?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.4260108470916748
+        },
+        {
+          "q": "Which 2020-decade phenomenon made it nearly impossible for automakers to build cars?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9876712785649564,
+          "latency_s": 0.9522194862365723
+        },
+        {
+          "q": "Why were ships delayed for nearly a week in Egypt during spring 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9851514063429596,
+          "latency_s": 0.9488856792449951
+        },
+        {
+          "q": "What narrow passage off Yemen's southwest shapes East-West trade routes?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9505310077117098,
+          "latency_s": 1.0131430625915527
+        },
+        {
+          "q": "Which freight-rate index tracks the hiring cost for bulk cargo vessels?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.7009124514018641,
+          "latency_s": 5.118389844894409
+        },
+        {
+          "q": "Why does a small demand change at the customer tier cause large order swings at the supplier tier?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "hardness": "causal paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9740298100854945,
+          "latency_s": 0.9752438068389893
+        },
+        {
+          "q": "What US legislation aims to onshore semiconductor fabrication?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9682087825918937,
+          "latency_s": 0.969428300857544
+        },
+        {
+          "q": "How is the capacity of a large cargo vessel measured in standardized boxes?",
+          "gold": [
+            "Container_ship"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.076073408126831
+        },
+        {
+          "q": "Which integrated business software replaces standalone accounting + inventory + HR tools?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "hardness": "indirect",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6955762265703532,
+          "latency_s": 1.3182718753814697
+        },
+        {
+          "q": "Who owns the 400-meter-long ship that ran aground and blocked Suez in 2021?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "hardness": "temporal+specific",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.7844801364718913,
+          "latency_s": 0.9797794818878174
+        },
+        {
+          "q": "Which Taiwanese contract manufacturer assembles most of Apple's hardware?",
+          "gold": [
+            "Foxconn"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.7920874914199381,
+          "latency_s": 1.7924244403839111
+        },
+        {
+          "q": "What buffer protects a firm against stockouts when lead time is uncertain?",
+          "gold": [
+            "Inventory"
+          ],
+          "hardness": "paraphrase+causal",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9217868789962071,
+          "latency_s": 1.5982084274291992
+        },
+        {
+          "q": "Which lean production method aims to eliminate warehouse stock by synchronizing production to demand?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.0180463790893555
+        },
+        {
+          "q": "What West-Coast US harbor drew headlines for anchored ship queues in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9099466049873365,
+          "latency_s": 1.0046939849853516
+        },
+        {
+          "q": "Which Southeast Asian port is the world's busiest transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.0242159366607666
+        },
+        {
+          "q": "Why did Houthi forces attack shipping near a narrow Arabian Peninsula strait in 2023?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "temporal+geopolitical",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9963488021549354,
+          "latency_s": 0.9982912540435791
+        },
+        {
+          "q": "Which geographic bottleneck carries most seaborne Middle Eastern crude oil?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6595293808496758,
+          "latency_s": 1.3903419971466064
+        },
+        {
+          "q": "Which Indonesian-Malaysian sea lane bottlenecks Asia-Europe container traffic?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "hardness": "geographic paraphrase",
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.7036997876179215,
+          "latency_s": 1.1000025272369385
+        },
+        {
+          "q": "What is SolarWinds an example of in software delivery risk?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.3043510913848877
+        },
+        {
+          "q": "Which foundry produces most advanced logic chips globally?",
+          "gold": [
+            "TSMC"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.0,
+          "r5": 0.0,
+          "r10": 1.0,
+          "mrr_score": 0.14285714285714285,
+          "ndcg10": 0.3889580943680543,
+          "latency_s": 1.0335721969604492
+        }
+      ],
+      "aggregate": {
+        "p1": 0.75,
+        "p3": 0.7333333333333333,
+        "p5": 0.67,
+        "r5": 0.95,
+        "r10": 1.0,
+        "mrr_score": 0.8571428571428571,
+        "ndcg10": 0.8683773778199093,
+        "latency_s": 1.352079701423645
+      },
+      "total_s": 27.0415940284729
+    },
+    "P7_rrf_rerank": {
+      "pipeline": "P7_rrf_rerank",
+      "per_query": [
+        {
+          "q": "In early 2011, what cataclysm in Japan rendered a coastal power facility inoperable?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1476778984069824
+        },
+        {
+          "q": "Which 2020-decade phenomenon made it nearly impossible for automakers to build cars?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9876712785649564,
+          "latency_s": 1.0150439739227295
+        },
+        {
+          "q": "Why were ships delayed for nearly a week in Egypt during spring 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9851514063429596,
+          "latency_s": 0.993248462677002
+        },
+        {
+          "q": "What narrow passage off Yemen's southwest shapes East-West trade routes?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9391664772645913,
+          "latency_s": 1.081695318222046
+        },
+        {
+          "q": "Which freight-rate index tracks the hiring cost for bulk cargo vessels?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.7009124514018641,
+          "latency_s": 2.6086413860321045
+        },
+        {
+          "q": "Why does a small demand change at the customer tier cause large order swings at the supplier tier?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "hardness": "causal paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9876712785649564,
+          "latency_s": 1.0210440158843994
+        },
+        {
+          "q": "What US legislation aims to onshore semiconductor fabrication?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.0557901859283447
+        },
+        {
+          "q": "How is the capacity of a large cargo vessel measured in standardized boxes?",
+          "gold": [
+            "Container_ship"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1463658809661865
+        },
+        {
+          "q": "Which integrated business software replaces standalone accounting + inventory + HR tools?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "hardness": "indirect",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.3333333333333333,
+          "ndcg10": 0.6027819274910589,
+          "latency_s": 1.160498857498169
+        },
+        {
+          "q": "Who owns the 400-meter-long ship that ran aground and blocked Suez in 2021?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "hardness": "temporal+specific",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.7844801364718913,
+          "latency_s": 1.059431791305542
+        },
+        {
+          "q": "Which Taiwanese contract manufacturer assembles most of Apple's hardware?",
+          "gold": [
+            "Foxconn"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8276904491046954,
+          "latency_s": 1.5251576900482178
+        },
+        {
+          "q": "What buffer protects a firm against stockouts when lead time is uncertain?",
+          "gold": [
+            "Inventory"
+          ],
+          "hardness": "paraphrase+causal",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8899603164338973,
+          "latency_s": 1.137639045715332
+        },
+        {
+          "q": "Which lean production method aims to eliminate warehouse stock by synchronizing production to demand?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "hardness": "paraphrase",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.1453852653503418
+        },
+        {
+          "q": "What West-Coast US harbor drew headlines for anchored ship queues in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "hardness": "temporal+indirect",
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.8654810349838412,
+          "latency_s": 1.520308017730713
+        },
+        {
+          "q": "Which Southeast Asian port is the world's busiest transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "hardness": "indirect+geographic",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.1561977863311768
+        },
+        {
+          "q": "Why did Houthi forces attack shipping near a narrow Arabian Peninsula strait in 2023?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "hardness": "temporal+geopolitical",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 0.9963488021549354,
+          "latency_s": 1.1204063892364502
+        },
+        {
+          "q": "Which geographic bottleneck carries most seaborne Middle Eastern crude oil?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.7016521873278284,
+          "latency_s": 1.1509804725646973
+        },
+        {
+          "q": "Which Indonesian-Malaysian sea lane bottlenecks Asia-Europe container traffic?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "hardness": "geographic paraphrase",
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 0.5,
+          "ndcg10": 0.6574017496914832,
+          "latency_s": 1.1864283084869385
+        },
+        {
+          "q": "What is SolarWinds an example of in software delivery risk?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "hardness": "indirect",
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr_score": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0440845489501953
+        },
+        {
+          "q": "Which foundry produces most advanced logic chips globally?",
+          "gold": [
+            "TSMC"
+          ],
+          "hardness": "paraphrase",
+          "p1": 0.0,
+          "p3": 0.0,
+          "p5": 0.0,
+          "r5": 0.0,
+          "r10": 1.0,
+          "mrr_score": 0.125,
+          "ndcg10": 0.31546487678572877,
+          "latency_s": 1.1149227619171143
+        }
+      ],
+      "aggregate": {
+        "p1": 0.75,
+        "p3": 0.7333333333333333,
+        "p5": 0.66,
+        "r5": 0.95,
+        "r10": 1.0,
+        "mrr_score": 0.8479166666666667,
+        "ndcg10": 0.8581038917405686,
+        "latency_s": 1.219547402858734
+      },
+      "total_s": 24.39196014404297
+    }
+  },
+  "reranker_lift_deltas": {
+    "P4_bge_m3_rerank": {
+      "hard_p1_lift_vs_bi": 0.050000000000000044,
+      "easy_p1_lift_vs_bi": 0.0
+    },
+    "P5_mxbai_rerank": {
+      "hard_p1_lift_vs_bi": 0.0,
+      "easy_p1_lift_vs_bi": -0.037735849056603765
+    },
+    "P6_snowflake_rerank": {
+      "hard_p1_lift_vs_bi": 0.0,
+      "easy_p1_lift_vs_bi": -0.018867924528301883
+    }
+  },
+  "elapsed_min": 2.5984286308288573
+}

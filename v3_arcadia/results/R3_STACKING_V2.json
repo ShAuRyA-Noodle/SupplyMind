@@ -1,0 +1,1188 @@
+{
+  "description": "Constrained-stacking comparison. MAE and MSE losses solved on calibration residuals under simplex constraint (w >= 0, sum = 1) via scipy SLSQP. Tested on held-out folds. NOTE: because R3 only stored fold-level aggregates, this analysis synthesizes per-fold MAE draws using the recorded (mean, std) \u2014 directional result only. A full point-level stacking would re-run the forecasters storing per-point predictions, which is scoped for R3 v3.",
+  "targets_analyzed": 21,
+  "winner_counts": {
+    "constrained (MAE or MSE)": 9,
+    "equal_weights": 2,
+    "best_individual": 10
+  },
+  "per_target_horizon": {
+    "DCOILWTICO_7": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 4.078327693241436
+        },
+        "inverse_mae": {
+          "w": [
+            0.3473502883901263,
+            0.2560874881405812,
+            0.3115195598071785,
+            0.08504266366211403
+          ],
+          "test_mae": 3.3276628679064912
+        },
+        "constrained_mae": {
+          "w": [
+            0.9999999999996985,
+            1.046385200709126e-13,
+            0.0,
+            1.9696744235629476e-13
+          ],
+          "test_mae": 2.653996344639796
+        },
+        "constrained_mse": {
+          "w": [
+            0.71816178869903,
+            6.540164218966743e-14,
+            0.2818382113009046,
+            0.0
+          ],
+          "test_mae": 2.8532434560990985
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "chronos",
+        "test_mae": 2.6539963446388284
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 2.6539963446388284
+      }
+    },
+    "DCOILWTICO_14": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 5.612792583388805
+        },
+        "inverse_mae": {
+          "w": [
+            0.28213323004306484,
+            0.22633132223221528,
+            0.4020856514147427,
+            0.0894497963099773
+          ],
+          "test_mae": 3.9445735906379418
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            5.025493909904784e-15,
+            0.9999999999999949,
+            0.0
+          ],
+          "test_mae": 2.606399976137096
+        },
+        "constrained_mse": {
+          "w": [
+            0.21952231081723392,
+            0.0,
+            0.7804776891824843,
+            2.8179414894790747e-13
+          ],
+          "test_mae": 2.6333455113190545
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 2.6063999761370877
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 2.6063999761370877
+      }
+    },
+    "DCOILWTICO_28": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 7.224652873063855
+        },
+        "inverse_mae": {
+          "w": [
+            0.23850653345434814,
+            0.3008301142852576,
+            0.32149310365193035,
+            0.13917024860846383
+          ],
+          "test_mae": 6.73982107186095
+        },
+        "constrained_mae": {
+          "w": [
+            1.4923057986615315e-14,
+            0.0,
+            0.9999999999999623,
+            2.2904834182010197e-14
+          ],
+          "test_mae": 5.30872788303258
+        },
+        "constrained_mse": {
+          "w": [
+            0.0,
+            0.5605029591213022,
+            0.4394970408771834,
+            1.5144498461763077e-12
+          ],
+          "test_mae": 6.268328694014642
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 5.308727883032449
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 5.308727883032449
+      }
+    },
+    "PCOPPUSDM_7": {
+      "n_cal_folds": 3,
+      "n_test_folds": 3,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 1490.0940767617776
+        },
+        "inverse_mae": {
+          "w": [
+            0.27104333378246154,
+            0.17597353969029747,
+            0.2509767796737437,
+            0.30200634685349736
+          ],
+          "test_mae": 1510.2305023002107
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            0.0,
+            0.0,
+            1.0
+          ],
+          "test_mae": 2368.6000030761893
+        },
+        "constrained_mse": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 1490.0940767617776
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "prophet",
+        "test_mae": 2368.6000030761893
+      },
+      "winner": {
+        "method": "equal",
+        "test_mae": 1490.0940767617776
+      }
+    },
+    "PCOPPUSDM_14": {
+      "n_cal_folds": 3,
+      "n_test_folds": 3,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 1322.8195925914633
+        },
+        "inverse_mae": {
+          "w": [
+            0.39909529037167984,
+            0.15858707123054439,
+            0.28187978431797855,
+            0.1604378540797973
+          ],
+          "test_mae": 1149.0099023538414
+        },
+        "constrained_mae": {
+          "w": [
+            1.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "test_mae": 835.4762629006885
+        },
+        "constrained_mse": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 1322.8195925914633
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "chronos",
+        "test_mae": 835.4762629006885
+      },
+      "winner": {
+        "method": "constrained_mae",
+        "test_mae": 835.4762629006885
+      }
+    },
+    "PCOPPUSDM_28": {
+      "n_cal_folds": 3,
+      "n_test_folds": 3,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 968.7983373413057
+        },
+        "inverse_mae": {
+          "w": [
+            0.24317295792125612,
+            0.28640862860805355,
+            0.1904195773780233,
+            0.2799988360926669
+          ],
+          "test_mae": 988.2430854488761
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "test_mae": 1383.8323251118418
+        },
+        "constrained_mse": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 968.7983373413057
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "timesfm",
+        "test_mae": 1383.8323251118418
+      },
+      "winner": {
+        "method": "equal",
+        "test_mae": 968.7983373413057
+      }
+    },
+    "DEXTAUS_7": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.2169347525199409
+        },
+        "inverse_mae": {
+          "w": [
+            0.34398899758591117,
+            0.2030939191106745,
+            0.3764283233385005,
+            0.07648875996491374
+          ],
+          "test_mae": 0.1658846094174201
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            7.008282842946293e-16,
+            0.9999999999999989,
+            4.579669976578766e-16
+          ],
+          "test_mae": 0.12304418839562406
+        },
+        "constrained_mse": {
+          "w": [
+            0.3806257863168961,
+            8.153200337090993e-17,
+            0.619374213683104,
+            0.0
+          ],
+          "test_mae": 0.12205338531046768
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 0.12304418839562384
+      },
+      "winner": {
+        "method": "constrained_mse",
+        "test_mae": 0.12205338531046768
+      }
+    },
+    "DEXTAUS_14": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.2936029051307666
+        },
+        "inverse_mae": {
+          "w": [
+            0.3024605314294574,
+            0.20677440280922138,
+            0.3973126914677932,
+            0.09345237429352793
+          ],
+          "test_mae": 0.24062725397849288
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "test_mae": 0.2075701838535929
+        },
+        "constrained_mse": {
+          "w": [
+            0.20409965483488535,
+            1.196959198423997e-16,
+            0.7959003451651147,
+            0.0
+          ],
+          "test_mae": 0.20767726865065442
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 0.2075701838535929
+      },
+      "winner": {
+        "method": "constrained_mae",
+        "test_mae": 0.2075701838535929
+      }
+    },
+    "DEXTAUS_28": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.35161458970616255
+        },
+        "inverse_mae": {
+          "w": [
+            0.31779598685220195,
+            0.27176079256586594,
+            0.28189025800444834,
+            0.12855296257748378
+          ],
+          "test_mae": 0.3189607034469092
+        },
+        "constrained_mae": {
+          "w": [
+            0.9999999999999998,
+            0.0,
+            0.0,
+            3.1918911957973246e-16
+          ],
+          "test_mae": 0.289064216740161
+        },
+        "constrained_mse": {
+          "w": [
+            0.45663759735298354,
+            0.10339949724699603,
+            0.4399629054000205,
+            0.0
+          ],
+          "test_mae": 0.27882969196380114
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "chronos",
+        "test_mae": 0.2890642167401609
+      },
+      "winner": {
+        "method": "constrained_mse",
+        "test_mae": 0.27882969196380114
+      }
+    },
+    "DEXKOUS_7": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 17.2493699999521
+        },
+        "inverse_mae": {
+          "w": [
+            0.22521754050965248,
+            0.2661802247036112,
+            0.3761094665932334,
+            0.1324927681935029
+          ],
+          "test_mae": 15.47479328474102
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            2.7089441800853084e-14,
+            0.9999999999999729,
+            0.0
+          ],
+          "test_mae": 14.0900150189361
+        },
+        "constrained_mse": {
+          "w": [
+            1.4068121662922204e-19,
+            0.19202529383105713,
+            0.8079747057066696,
+            4.6227315218243986e-10
+          ],
+          "test_mae": 14.093086604275276
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 14.0900150189361
+      },
+      "winner": {
+        "method": "constrained_mae",
+        "test_mae": 14.0900150189361
+      }
+    },
+    "DEXKOUS_14": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 19.357951817590667
+        },
+        "inverse_mae": {
+          "w": [
+            0.3500118447028979,
+            0.25958141131048756,
+            0.2744350765852677,
+            0.11597166740134691
+          ],
+          "test_mae": 17.40246559654232
+        },
+        "constrained_mae": {
+          "w": [
+            0.9999999999992815,
+            3.2990277176712823e-13,
+            3.88689080920988e-13,
+            0.0
+          ],
+          "test_mae": 13.478487470042296
+        },
+        "constrained_mse": {
+          "w": [
+            0.999999999787164,
+            0.0,
+            0.0,
+            2.1283591823683064e-10
+          ],
+          "test_mae": 13.478487473311748
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "chronos",
+        "test_mae": 13.4784874700395
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 13.4784874700395
+      }
+    },
+    "DEXKOUS_28": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 24.8683981319863
+        },
+        "inverse_mae": {
+          "w": [
+            0.15714338435667446,
+            0.3032008336686258,
+            0.3174445784155295,
+            0.22221120355917026
+          ],
+          "test_mae": 23.767772135429315
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "test_mae": 13.038534452266783
+        },
+        "constrained_mse": {
+          "w": [
+            0.0,
+            1.6482941097956984e-10,
+            0.9999999997453165,
+            8.9854093955618e-11
+          ],
+          "test_mae": 13.038534456323145
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 13.038534452266783
+      },
+      "winner": {
+        "method": "constrained_mae",
+        "test_mae": 13.038534452266783
+      }
+    },
+    "DEXJPUS_7": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 2.0058613373406016
+        },
+        "inverse_mae": {
+          "w": [
+            0.3311569291093271,
+            0.21966516526756977,
+            0.27781607384114676,
+            0.17136183178195635
+          ],
+          "test_mae": 1.7598609660764388
+        },
+        "constrained_mae": {
+          "w": [
+            0.9999999999999993,
+            0.0,
+            0.0,
+            7.14706072102444e-16
+          ],
+          "test_mae": 0.9624409634715991
+        },
+        "constrained_mse": {
+          "w": [
+            0.637656517780962,
+            0.0,
+            0.36234348221903795,
+            2.0816681711721676e-17
+          ],
+          "test_mae": 1.1158006833860175
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "chronos",
+        "test_mae": 0.962440963471597
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 0.962440963471597
+      }
+    },
+    "DEXJPUS_14": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 2.0585639763398134
+        },
+        "inverse_mae": {
+          "w": [
+            0.29221948346213755,
+            0.30006908767689383,
+            0.3336814964148649,
+            0.07402993244610366
+          ],
+          "test_mae": 1.525371337574877
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            0.0,
+            0.9999999999998224,
+            1.7753796613177788e-13
+          ],
+          "test_mae": 0.9391751508495592
+        },
+        "constrained_mse": {
+          "w": [
+            0.0,
+            0.23909961575984545,
+            0.7609003842401545,
+            0.0
+          ],
+          "test_mae": 1.1619170740566178
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 0.9391751508489655
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 0.9391751508489655
+      }
+    },
+    "DEXJPUS_28": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 2.6223114452299363
+        },
+        "inverse_mae": {
+          "w": [
+            0.2431707261347647,
+            0.2670867329969705,
+            0.36747924632317114,
+            0.12226329454509363
+          ],
+          "test_mae": 2.501007095618067
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            0.0,
+            1.0,
+            0.0
+          ],
+          "test_mae": 2.3202441940310328
+        },
+        "constrained_mse": {
+          "w": [
+            0.12111050197987697,
+            1.124100812432969e-15,
+            0.8788894980201218,
+            0.0
+          ],
+          "test_mae": 2.284742353079749
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 2.3202441940310328
+      },
+      "winner": {
+        "method": "constrained_mse",
+        "test_mae": 2.284742353079749
+      }
+    },
+    "DEXUSEU_7": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.01777263656328388
+        },
+        "inverse_mae": {
+          "w": [
+            0.4380311521257709,
+            0.1895078632684431,
+            0.2934679866590765,
+            0.07899299794670979
+          ],
+          "test_mae": 0.012544562664192396
+        },
+        "constrained_mae": {
+          "w": [
+            0.9999999999999984,
+            1.0061396160665477e-15,
+            5.846018114041837e-16,
+            0.0
+          ],
+          "test_mae": 0.008009630047676911
+        },
+        "constrained_mse": {
+          "w": [
+            0.88076958835974,
+            5.551115123125784e-17,
+            0.11923041164026013,
+            5.551115123125784e-17
+          ],
+          "test_mae": 0.00812923667806015
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "chronos",
+        "test_mae": 0.008009630047676897
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 0.008009630047676897
+      }
+    },
+    "DEXUSEU_14": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.01766253143684469
+        },
+        "inverse_mae": {
+          "w": [
+            0.3649772970412571,
+            0.20972059927142733,
+            0.2903737730393877,
+            0.13492833064792778
+          ],
+          "test_mae": 0.015437376589926739
+        },
+        "constrained_mae": {
+          "w": [
+            0.9999999999999998,
+            0.0,
+            0.0,
+            2.1510571102112403e-16
+          ],
+          "test_mae": 0.01478179445033124
+        },
+        "constrained_mse": {
+          "w": [
+            0.5541512994206012,
+            1.3877787807814457e-16,
+            0.4458487005793988,
+            1.0408340855860843e-17
+          ],
+          "test_mae": 0.012606685154728608
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "chronos",
+        "test_mae": 0.014781794450331237
+      },
+      "winner": {
+        "method": "constrained_mse",
+        "test_mae": 0.012606685154728608
+      }
+    },
+    "DEXUSEU_28": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.017842508329409604
+        },
+        "inverse_mae": {
+          "w": [
+            0.3562207101529807,
+            0.18924080034829216,
+            0.31700784157235296,
+            0.13753064792637432
+          ],
+          "test_mae": 0.015970560076149547
+        },
+        "constrained_mae": {
+          "w": [
+            0.9999999999999982,
+            9.43689570931382e-16,
+            0.0,
+            8.049116928532376e-16
+          ],
+          "test_mae": 0.014453346940792903
+        },
+        "constrained_mse": {
+          "w": [
+            0.5446169594084305,
+            2.7755575615628907e-17,
+            0.45538304059156953,
+            0.0
+          ],
+          "test_mae": 0.013183660449898013
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "chronos",
+        "test_mae": 0.014453346940792889
+      },
+      "winner": {
+        "method": "constrained_mse",
+        "test_mae": 0.013183660449898013
+      }
+    },
+    "DEXCHUS_7": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.034690690500036904
+        },
+        "inverse_mae": {
+          "w": [
+            0.30725895677630083,
+            0.24691376598214834,
+            0.3943485789337087,
+            0.05147869830784206
+          ],
+          "test_mae": 0.02117886221826054
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            0.0,
+            0.9999999999999998,
+            2.3409280156677643e-16
+          ],
+          "test_mae": 0.015762412884263256
+        },
+        "constrained_mse": {
+          "w": [
+            0.0,
+            0.040015823687684034,
+            0.959984176312316,
+            1.0408340855860841e-17
+          ],
+          "test_mae": 0.016130545137926368
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "arima",
+        "test_mae": 0.015762412884263242
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 0.015762412884263242
+      }
+    },
+    "DEXCHUS_14": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.049119233033837334
+        },
+        "inverse_mae": {
+          "w": [
+            0.2988178654996703,
+            0.30220512040404324,
+            0.27971237870613896,
+            0.1192646353901474
+          ],
+          "test_mae": 0.04197509948228402
+        },
+        "constrained_mae": {
+          "w": [
+            0.0,
+            0.9999999999999992,
+            3.6082248300317563e-16,
+            3.4174052476743075e-16
+          ],
+          "test_mae": 0.03187400458960995
+        },
+        "constrained_mse": {
+          "w": [
+            0.5594517657002177,
+            0.23577483341396505,
+            0.2047734008858172,
+            0.0
+          ],
+          "test_mae": 0.033564545616950006
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "timesfm",
+        "test_mae": 0.03187400458960993
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 0.03187400458960993
+      }
+    },
+    "DEXCHUS_28": {
+      "n_cal_folds": 10,
+      "n_test_folds": 10,
+      "models": [
+        "chronos",
+        "timesfm",
+        "arima",
+        "prophet"
+      ],
+      "weights": {
+        "equal": {
+          "w": [
+            0.25,
+            0.25,
+            0.25,
+            0.25
+          ],
+          "test_mae": 0.07622515708177849
+        },
+        "inverse_mae": {
+          "w": [
+            0.21374276213191848,
+            0.32878921058258087,
+            0.27206545754178274,
+            0.18540256974371785
+          ],
+          "test_mae": 0.07368140063745915
+        },
+        "constrained_mae": {
+          "w": [
+            3.565258741241218e-17,
+            0.9999999999999993,
+            0.0,
+            6.714758455242072e-16
+          ],
+          "test_mae": 0.05984540049808135
+        },
+        "constrained_mse": {
+          "w": [
+            0.0,
+            0.7615511144034006,
+            0.23844888559659938,
+            5.308685925196128e-17
+          ],
+          "test_mae": 0.06440512615984152
+        }
+      },
+      "best_individual_on_cal": {
+        "model": "timesfm",
+        "test_mae": 0.059845400498081305
+      },
+      "winner": {
+        "method": "best_individual",
+        "test_mae": 0.059845400498081305
+      }
+    }
+  },
+  "elapsed_s": 0.09606218338012695
+}
