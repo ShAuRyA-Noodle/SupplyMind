@@ -1,0 +1,7 @@
+{
+  "BC": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\bc_best_real_v2.pt",
+  "IQL": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\iql_best_real_v2.pt",
+  "CQL": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\cql_best_real_v2.pt",
+  "TD3+BC": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\td3bc_best_real_v2.pt",
+  "DT": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\dt_best_real_v2.pt"
+}

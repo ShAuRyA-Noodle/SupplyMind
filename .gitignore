@@ -58,3 +58,7 @@ external_data/
 catboost_info/
 v3_arcadia/tools/
 v3_arcadia/gguf_out/
+
+# Auto-generated embedding caches + SB3 best/ dirs
+v3_arcadia/checkpoints/granite/corpus_emb_*.npy
+v3_arcadia/checkpoints/gethsemane/best_*/

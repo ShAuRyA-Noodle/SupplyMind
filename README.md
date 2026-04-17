@@ -15,21 +15,113 @@ tags:
   - ai-agents
 ---
 
-# SupplyMind
+# SupplyMind v3.0-arcadia
 
-**An OpenEnv-compliant environment for AI-driven supply chain risk management.**
+**OpenEnv-compliant supply-chain risk management. 13 SOTA foundation models. 154 passing tests. 261,175 real data points. Full local inference. Zero synthetic substitution.**
 
-[![OpenEnv](https://img.shields.io/badge/OpenEnv-compatible-blue)](https://github.com/meta-llama/open-env)
+[![OpenEnv](https://img.shields.io/badge/OpenEnv-compliant-blue)](https://github.com/meta-llama/open-env)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-154%20passing-brightgreen)](tests/)
 [![Real Data](https://img.shields.io/badge/real%20data-261K%20points-orange)](rl/data/)
+[![Release](https://img.shields.io/badge/release-v3.0--arcadia-purple)](https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/tag/v3.0-arcadia)
+
+> *"Even in Arcadia, supply chains break. SupplyMind sees it coming."*
+
+**Meta PyTorch OpenEnv Hackathon submission.** Each phase commit is named after a Sleep Token track from the "Even In Arcadia" (2025) and "Take Me Back to Eden" (2023) albums.
 
 ---
 
-## Headline Results
+## TL;DR — v3.0-arcadia headline (read this in 30 seconds)
 
-We trained agents in **two paradigms** — simulated env baseline + real-world Kaggle data — and report both honestly.
+| Layer | Tech | Headline metric |
+|---|---|---|
+| **LLM risk panel** | DeepSeek-R1-Q4 + Qwen-2.5-14B + Mistral-Nemo + Qwen-Coder critic | 100% parse rate on 26 real crisis scenarios, α≈0.75 on 2-judge consensus, 69.2% majority-vote vs ground truth |
+| **RAG** | BGE-M3 + mxbai + Snowflake + BGE-reranker + HyDE | mxbai bi-encoder **P@1=0.962, MRR=0.978** on 6,483-chunk corpus |
+| **Forecasting** | Chronos-Bolt + TimesFM-2 + ARIMA + Prophet + Bates-Granger stacking | 20-fold rolling-origin backtest, PICP@80 near-nominal (0.77–0.89) on 8 FRED targets |
+| **RL** | MaskablePPO on 408-dim obs, MultiDiscrete[7,40] action space | PPO_v3 beats random + greedy on all 3 tasks; 8,100-episode bootstrap CI95 non-overlapping; zero constraint violations |
+| **GNN** | Custom 3-layer GCN in pure PyTorch | +30pp F1 vs direct-neighbors baseline on 40-node supply-chain graph |
+| **Conformal** | Split-conformal with per-horizon q̂ | Empirical coverage within ±2pp of nominal |
+| **Production** | FastAPI + MCP JSON-RPC + WebSocket + Docker | 12 HTTP endpoints + 5 v3 endpoints (`/assess`, `/forecast`, `/rag`, `/rl/act`, `/health`) |
+
+Full phase log: [`v3_arcadia/95_arcadia/README.md`](v3_arcadia/95_arcadia/README.md) · Unified card: [`MODEL_CARD.md`](MODEL_CARD.md) · Hackathon demo plan: [`FINAL_DEMO.md`](FINAL_DEMO.md) · Audit matrix: [`AUDIT_PLAN.md`](AUDIT_PLAN.md).
+
+---
+
+## The stack in one picture
+
+```
+                              ┌──────────────────────────────────────┐
+                              │  Meta OpenEnv / MCP client (judges)  │
+                              └───────────────┬──────────────────────┘
+                                              │
+                                  ┌───────────▼───────────┐
+                                  │   server/app.py       │
+                                  │  /reset /step /state  │
+                                  │  /tasks /grader /mcp  │  ← OpenEnv spec
+                                  │  /predict /ws         │
+                                  └───────────┬───────────┘
+                                              │
+                     ┌────────────────────────┼────────────────────────┐
+                     │                        │                        │
+            ┌────────▼────────┐     ┌─────────▼──────────┐    ┌────────▼────────┐
+            │ v3 Damocles API │     │  SupplyMind engine │    │ Streamlit dash   │
+            │ /assess /forecast│    │  server/engine/*   │    │ Infinite Baths   │
+            │ /rag /rl/act    │     │  graders/* tasks/* │    │ all JSONs aggreg │
+            └────────┬────────┘     └─────────┬──────────┘    └──────────────────┘
+                     │                        │
+     ┌───────────────┼────────────────────────┼───────────────┐
+     │               │                        │               │
+┌────▼────┐  ┌──────▼──────┐  ┌───────────────▼──────┐  ┌────▼────┐
+│ 3-judge │  │ mxbai RAG   │  │ MaskablePPO + GCN     │  │ Chronos │
+│ panel   │  │ (R5)        │  │ (R6 RL + Provider)    │  │ (R3)    │
+│ (R4)    │  │             │  │                       │  │         │
+└─────────┘  └─────────────┘  └───────────────────────┘  └─────────┘
+  4 LLMs      3 embedders       1 PPO + 1 GCN             4 forecasters
+  (Ollama)    + reranker        + 80+ v1/v2 agents        + stacking
+```
+
+All 13 foundation models run **locally** via Ollama (LLMs, Q4_K_M) or Python (embedders, forecasters, TabPFN, GNN). **Zero API dependency at inference.**
+
+---
+
+## Quick start (3 commands)
+
+```bash
+# 1. Clone + install
+git clone https://github.com/ShAuRyA-Noodle/Sleep-Token.git supplymind && cd supplymind
+pip install -r requirements.txt
+
+# 2. Run 154 tests (1m 47s on CPU)
+pytest tests/ -q
+
+# 3. Start OpenEnv server
+uvicorn server.app:app --host 0.0.0.0 --port 8000
+# Then: curl -X POST http://localhost:8000/reset?task_id=easy_typhoon_response
+```
+
+Full stack with GPU + Ollama: see [`MODEL_CARD.md` §6](MODEL_CARD.md#6-reproducibility).
+
+---
+
+## Phase history (Sleep Token album order)
+
+| Phase | Track | Commit | What shipped |
+|---|---|---|---|
+| R1 | Emergence | `acc19d8` | All 13 SOTA foundation models verified locally |
+| R2 | Caramel | `b35f15e` | 4-model tabular stack + SHAP + fairness + calibration |
+| R3 | Past Self | `c2d0798` | Chronos + TimesFM + ARIMA + Prophet, 20-fold backtest, PICP@80 |
+| R4 | Dangerous | `4490beb` → `8f14607` V2 BEAST | 26-scenario 3-judge panel, 100% parse, ECE + critic |
+| R5 | Granite | `ca7a57d` | RAG SOTA, 6,483 chunks × 8 pipelines, **mxbai P@1=0.962** |
+| R6 | Gethsemane + Provider + Aqua Regia + Damocles + Infinite Baths + Arcadia | `ea282c4` | RL + GNN + conformal + FastAPI + Streamlit + architecture README |
+| R6 | Euclidian | `badf3cc` | **8,100-episode** RL benchmark, bootstrap CI95 non-overlapping |
+| R7 | Arcadia (closer) | `v3.0-arcadia` tag | Final release |
+
+---
+
+## Pre-v3 history (v1 simulated, v2 real DataCo)
+
+We trained agents in two earlier paradigms — simulated env baseline and real-world Kaggle data — and report both honestly. v3 subsumes v2 for production; v2 is retained as evidence of real-data transfer learning.
 
 ### A. Simulated-Env Benchmark (n=300 episodes per agent, p<0.001)
 

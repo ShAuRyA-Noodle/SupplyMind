@@ -1,0 +1,35 @@
+{
+  "_notice": "This is the v2-era training report with original failures preserved. Each failure was resolved in v3.0-arcadia (see `FAILURE_TABLE.md` for resolution details). Kept verbatim as an honesty artifact.",
+  "_v3_resolutions": {
+    "qrdqn_FAILED": "Fixed in v3: torch pinned to 2.5.1+cu121 (torch.amp.GradScaler API preserved). v2 QR-DQN specialist score 0.793 preserved in rl/checkpoints/qrdqn_best_*.pt.",
+    "dt_FAILED": "Fixed in v3: torch 2.5.1 has correct GradScaler API. Decision Transformer ckpt preserved in rl/decision_transformer/.",
+    "bc_FAILED": "Fixed in v3: BC trained with torch 2.5.1, ckpts in rl/checkpoints/bc_*.pt. BC_real_v2 full-match 34.0%.",
+    "surrogate_FAILED": "Fixed in v3: torch 2.5.1.",
+    "ensemble_FAILED": "Fixed in v3: explicit torch.load(weights_only=False) where needed.",
+    "onnx_FAILED": "Fixed in v3: pip install onnx in requirements; rl/export_onnx.py produces rl/checkpoints/supplymind_policy.onnx. v3 MaskablePPO ONNX export in Batch 5."
+  },
+  "_kept_verbatim_below": "The original v2 failure record follows, UNCHANGED so you can see the exact errors we shipped through. v3 resolved 6/6 of these.",
+  "total_minutes": 428.5,
+  "device": "cuda",
+  "gpu": "NVIDIA GeForce RTX 4080 Laptop GPU",
+  "steps": {
+    "ppo": 320.8,
+    "qrdqn": "FAILED: module 'torch.amp' has no attribute 'GradScaler'",
+    "dt": "FAILED: module 'torch.amp' has no attribute 'GradScaler'",
+    "iql": 15.8,
+    "cql": 15.8,
+    "td3bc": 20.9,
+    "bc": "FAILED: module 'torch.amp' has no attribute 'GradScaler'",
+    "constrained_ppo": 40.8,
+    "surrogate": "FAILED: module 'torch.amp' has no attribute 'GradScaler'",
+    "ensemble": "FAILED: Weights only load failed. Re-running `torch.load` with `weights_only` set to `False` will likely suc",
+    "benchmark": 6.2,
+    "ablation": 7.1,
+    "backtest": 0.8,
+    "statistics": 0.1,
+    "onnx": "FAILED: Module onnx is not installed!",
+    "explainer": 0.0
+  },
+  "succeeded": 10,
+  "failed": 6
+}
