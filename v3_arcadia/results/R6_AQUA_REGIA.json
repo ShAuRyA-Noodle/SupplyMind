@@ -1,0 +1,320 @@
+{
+  "targets": [
+    "DCOILWTICO",
+    "DEXJPUS",
+    "DEXUSEU",
+    "DEXCHUS",
+    "DEXKOUS"
+  ],
+  "horizon": 14,
+  "alphas": [
+    0.8,
+    0.9,
+    0.95
+  ],
+  "n_cal": 30,
+  "n_test": 30,
+  "results": {
+    "DCOILWTICO": {
+      "arima": {
+        "forecaster": "arima",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.8095238095238094,
+          "bare_width_mean": 10.867942261555571,
+          "conformal_coverage_mean": 0.6785714285714285,
+          "conformal_width_mean": 8.029568159989491,
+          "conformal_q_hat": 4.014784079994747
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.9214285714285715,
+          "bare_width_mean": 13.948852880392929,
+          "conformal_coverage_mean": 0.7738095238095238,
+          "conformal_width_mean": 10.167074585069713,
+          "conformal_q_hat": 5.0835372925348565
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.9452380952380951,
+          "bare_width_mean": 16.621083373775793,
+          "conformal_coverage_mean": 0.838095238095238,
+          "conformal_width_mean": 12.16250013730463,
+          "conformal_q_hat": 6.0812500686523165
+        }
+      },
+      "chronos": {
+        "forecaster": "chronos",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.7809523809523807,
+          "bare_width_mean": 11.050525585810343,
+          "conformal_coverage_mean": 0.6452380952380952,
+          "conformal_width_mean": 8.036834106445315,
+          "conformal_q_hat": 4.018417053222656
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.7809523809523807,
+          "bare_width_mean": 11.050525585810343,
+          "conformal_coverage_mean": 0.769047619047619,
+          "conformal_width_mean": 10.63275268554687,
+          "conformal_q_hat": 5.316376342773438
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.7809523809523807,
+          "bare_width_mean": 11.050525585810343,
+          "conformal_coverage_mean": 0.8547619047619047,
+          "conformal_width_mean": 13.761851806640617,
+          "conformal_q_hat": 6.8809259033203105
+        }
+      }
+    },
+    "DEXJPUS": {
+      "arima": {
+        "forecaster": "arima",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.6357142857142856,
+          "bare_width_mean": 4.436568793595841,
+          "conformal_coverage_mean": 0.4928571428571428,
+          "conformal_width_mean": 2.791173769264077,
+          "conformal_q_hat": 1.3955868846320385
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.7738095238095236,
+          "bare_width_mean": 5.694274399535953,
+          "conformal_coverage_mean": 0.5809523809523809,
+          "conformal_width_mean": 3.8189608293080823,
+          "conformal_q_hat": 1.9094804146540412
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.8738095238095237,
+          "bare_width_mean": 6.7851464460479765,
+          "conformal_coverage_mean": 0.6571428571428571,
+          "conformal_width_mean": 4.601997355155362,
+          "conformal_q_hat": 2.300998677577681
+        }
+      },
+      "chronos": {
+        "forecaster": "chronos",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.7309523809523808,
+          "bare_width_mean": 5.977349718411763,
+          "conformal_coverage_mean": 0.49761904761904757,
+          "conformal_width_mean": 2.8918725585937466,
+          "conformal_q_hat": 1.4459362792968733
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.7309523809523808,
+          "bare_width_mean": 5.977349718411763,
+          "conformal_coverage_mean": 0.6023809523809524,
+          "conformal_width_mean": 4.0517645263671795,
+          "conformal_q_hat": 2.0258822631835898
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.7309523809523808,
+          "bare_width_mean": 5.977349718411763,
+          "conformal_coverage_mean": 0.6809523809523809,
+          "conformal_width_mean": 5.0513745117187625,
+          "conformal_q_hat": 2.5256872558593813
+        }
+      }
+    },
+    "DEXUSEU": {
+      "arima": {
+        "forecaster": "arima",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.8595238095238095,
+          "bare_width_mean": 0.037255051394705835,
+          "conformal_coverage_mean": 0.8166666666666665,
+          "conformal_width_mean": 0.031645107249388627,
+          "conformal_q_hat": 0.015822553624694313
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.9142857142857144,
+          "bare_width_mean": 0.047816340798432555,
+          "conformal_coverage_mean": 0.8809523809523809,
+          "conformal_width_mean": 0.041073044538626924,
+          "conformal_q_hat": 0.020536522269313462
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.9380952380952381,
+          "bare_width_mean": 0.05697668430905675,
+          "conformal_coverage_mean": 0.9119047619047618,
+          "conformal_width_mean": 0.05176715217769701,
+          "conformal_q_hat": 0.025883576088848503
+        }
+      },
+      "chronos": {
+        "forecaster": "chronos",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.8,
+          "bare_width_mean": 0.03301220412055651,
+          "conformal_coverage_mean": 0.8000000000000002,
+          "conformal_width_mean": 0.03300358161926287,
+          "conformal_q_hat": 0.016501790809631434
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.8,
+          "bare_width_mean": 0.03301220412055651,
+          "conformal_coverage_mean": 0.8904761904761905,
+          "conformal_width_mean": 0.04548504829406719,
+          "conformal_q_hat": 0.022742524147033594
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.8,
+          "bare_width_mean": 0.03301220412055651,
+          "conformal_coverage_mean": 0.9547619047619046,
+          "conformal_width_mean": 0.06135401725769052,
+          "conformal_q_hat": 0.03067700862884526
+        }
+      }
+    },
+    "DEXCHUS": {
+      "arima": {
+        "forecaster": "arima",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.8309523809523809,
+          "bare_width_mean": 0.12023258914287749,
+          "conformal_coverage_mean": 0.7833333333333333,
+          "conformal_width_mean": 0.0905579673492376,
+          "conformal_q_hat": 0.0452789836746188
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.8761904761904763,
+          "bare_width_mean": 0.1543168575080998,
+          "conformal_coverage_mean": 0.8833333333333333,
+          "conformal_width_mean": 0.14964422846490066,
+          "conformal_q_hat": 0.07482211423245033
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.9142857142857144,
+          "bare_width_mean": 0.18387987719237844,
+          "conformal_coverage_mean": 0.9285714285714286,
+          "conformal_width_mean": 0.22228302327474836,
+          "conformal_q_hat": 0.11114151163737418
+        }
+      },
+      "chronos": {
+        "forecaster": "chronos",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.8428571428571429,
+          "bare_width_mean": 0.11959348532060782,
+          "conformal_coverage_mean": 0.8,
+          "conformal_width_mean": 0.09779591979980395,
+          "conformal_q_hat": 0.04889795989990198
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.8428571428571429,
+          "bare_width_mean": 0.11959348532060782,
+          "conformal_coverage_mean": 0.861904761904762,
+          "conformal_width_mean": 0.1402545883178714,
+          "conformal_q_hat": 0.0701272941589357
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.8428571428571429,
+          "bare_width_mean": 0.11959348532060782,
+          "conformal_coverage_mean": 0.9095238095238095,
+          "conformal_width_mean": 0.2085365203857421,
+          "conformal_q_hat": 0.10426826019287105
+        }
+      }
+    },
+    "DEXKOUS": {
+      "arima": {
+        "forecaster": "arima",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.7071428571428572,
+          "bare_width_mean": 41.40702231782995,
+          "conformal_coverage_mean": 0.738095238095238,
+          "conformal_width_mean": 40.174430225697506,
+          "conformal_q_hat": 20.087215112848753
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.8023809523809522,
+          "bare_width_mean": 53.145337785764546,
+          "conformal_coverage_mean": 0.8166666666666665,
+          "conformal_width_mean": 51.703697664495394,
+          "conformal_q_hat": 25.851848832247697
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.8952380952380953,
+          "bare_width_mean": 63.326575872509096,
+          "conformal_coverage_mean": 0.861904761904762,
+          "conformal_width_mean": 63.003314010262784,
+          "conformal_q_hat": 31.501657005131392
+        }
+      },
+      "chronos": {
+        "forecaster": "chronos",
+        "n_cal": 30,
+        "n_test": 30,
+        "alpha=0.2": {
+          "nominal_coverage": 0.8,
+          "bare_coverage_mean": 0.7476190476190475,
+          "bare_width_mean": 47.698866081237796,
+          "conformal_coverage_mean": 0.7452380952380951,
+          "conformal_width_mean": 43.94189453125,
+          "conformal_q_hat": 21.970947265625
+        },
+        "alpha=0.1": {
+          "nominal_coverage": 0.9,
+          "bare_coverage_mean": 0.7476190476190475,
+          "bare_width_mean": 47.698866081237796,
+          "conformal_coverage_mean": 0.8357142857142856,
+          "conformal_width_mean": 56.23533203124998,
+          "conformal_q_hat": 28.11766601562499
+        },
+        "alpha=0.05": {
+          "nominal_coverage": 0.95,
+          "bare_coverage_mean": 0.7476190476190475,
+          "bare_width_mean": 47.698866081237796,
+          "conformal_coverage_mean": 0.8666666666666666,
+          "conformal_width_mean": 66.16411132812482,
+          "conformal_q_hat": 33.08205566406241
+        }
+      }
+    }
+  },
+  "elapsed_min": 1.6297003030776978
+}

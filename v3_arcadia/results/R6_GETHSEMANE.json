@@ -1,0 +1,122 @@
+{
+  "tasks": {
+    "easy_typhoon_response": {
+      "ppo_v3": {
+        "policy": "ppo_v3",
+        "n_episodes": 50,
+        "reward_mean": 1.2005000000000001,
+        "reward_std": 0.19939637032804786,
+        "reward_min": 0.643,
+        "reward_max": 1.3435000000000004,
+        "length_mean": 20.0,
+        "violations_mean": 0.0,
+        "violations_max": 0,
+        "train_time_s": 389.36543345451355,
+        "total_timesteps": 100000
+      },
+      "random": {
+        "policy": "random",
+        "n_episodes": 50,
+        "reward_mean": 0.7797316807490356,
+        "reward_std": 0.12419262667905032,
+        "reward_min": 0.5059697476286091,
+        "reward_max": 1.009169047501108,
+        "length_mean": 20.0,
+        "violations_mean": 0.0,
+        "violations_max": 0
+      },
+      "greedy": {
+        "policy": "greedy",
+        "n_episodes": 50,
+        "reward_mean": 0.9803400000000001,
+        "reward_std": 0.0062695215128429176,
+        "reward_min": 0.964,
+        "reward_max": 0.9894999999999999,
+        "length_mean": 20.0,
+        "violations_mean": 0.0,
+        "violations_max": 0
+      }
+    },
+    "medium_multi_front": {
+      "ppo_v3": {
+        "policy": "ppo_v3",
+        "n_episodes": 50,
+        "reward_mean": 2.774816094381805,
+        "reward_std": 0.2510891195507745,
+        "reward_min": 2.2131947145395343,
+        "reward_max": 3.1306422226861352,
+        "length_mean": 44.76,
+        "violations_mean": 0.0,
+        "violations_max": 0,
+        "train_time_s": 1028.4124627113342,
+        "total_timesteps": 100000
+      },
+      "random": {
+        "policy": "random",
+        "n_episodes": 50,
+        "reward_mean": -1.1101909893619986,
+        "reward_std": 0.8109045133638636,
+        "reward_min": -2.3839605638376136,
+        "reward_max": 0.6624458826285525,
+        "length_mean": 44.84,
+        "violations_mean": 0.0,
+        "violations_max": 0
+      },
+      "greedy": {
+        "policy": "greedy",
+        "n_episodes": 50,
+        "reward_mean": -1.7960883333333333,
+        "reward_std": 0.08206659628009437,
+        "reward_min": -1.9960833333333332,
+        "reward_max": -1.6348333333333334,
+        "length_mean": 44.76,
+        "violations_mean": 0.0,
+        "violations_max": 0
+      }
+    },
+    "hard_cascading_crisis": {
+      "ppo_v3": {
+        "policy": "ppo_v3",
+        "n_episodes": 50,
+        "reward_mean": 2.67403629887518,
+        "reward_std": 0.7949077297864112,
+        "reward_min": 0.44374348685637904,
+        "reward_max": 3.4482740553083278,
+        "length_mean": 56.06,
+        "violations_mean": 0.0,
+        "violations_max": 0,
+        "train_time_s": 1359.914410352707,
+        "total_timesteps": 100000
+      },
+      "random": {
+        "policy": "random",
+        "n_episodes": 50,
+        "reward_mean": -1.222005001736981,
+        "reward_std": 0.853497432761393,
+        "reward_min": -3.8651570083150526,
+        "reward_max": 0.6500552441714463,
+        "length_mean": 56.06,
+        "violations_mean": 0.0,
+        "violations_max": 0
+      },
+      "greedy": {
+        "policy": "greedy",
+        "n_episodes": 50,
+        "reward_mean": -1.4125516666666666,
+        "reward_std": 0.4515386177313937,
+        "reward_min": -2.3674999999999997,
+        "reward_max": -0.4405833333333334,
+        "length_mean": 56.06,
+        "violations_mean": 0.0,
+        "violations_max": 0
+      }
+    }
+  },
+  "baselines": {},
+  "config": {
+    "timesteps_per_task": 100000,
+    "eval_episodes": 50,
+    "seed": 42
+  },
+  "elapsed_min": 48.6515386501948
+}
