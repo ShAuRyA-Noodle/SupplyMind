@@ -58,12 +58,13 @@ torch.manual_seed(SEED); np.random.seed(SEED)
 
 NODE_TYPES = ["supplier", "warehouse", "port", "factory", "customer"]
 
-# Training hyperparameters
-N_TRAIN = 2000
-N_TEST = 400
+# Training hyperparameters — reduced from v1 since task is harder + we need to
+# hit 3 graphs in under 30 min total.
+N_TRAIN = 500
+N_TEST = 200
 HIDDEN = 64
-N_EPOCHS = 80
-LR = 2e-3
+N_EPOCHS = 30
+LR = 3e-3
 
 LEAD_TIME_NOISE_SIGMA = 0.2  # relative perturbation
 MAX_HOPS_FOR_TARGET = 4

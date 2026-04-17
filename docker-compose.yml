@@ -35,3 +35,23 @@ services:
     volumes:
       - ./rl/checkpoints:/app/rl/checkpoints:ro
       - ./rl/data:/app/rl/data:ro
+
+  # v3 Damocles API — /assess, /forecast, /rag, /rl/act, /health
+  damocles:
+    build:
+      context: .
+      dockerfile: Dockerfile.damocles
+    ports:
+      - "8765:8765"
+    environment:
+      - DEMO_MODE=true
+    volumes:
+      - ./v3_arcadia/checkpoints/granite:/app/v3_arcadia/checkpoints/granite:ro
+      - ./v3_arcadia/checkpoints/gethsemane:/app/v3_arcadia/checkpoints/gethsemane:ro
+      - ./models/mxbai-embed-large:/app/models/mxbai-embed-large:ro
+      - ./models/chronos-bolt-base:/app/models/chronos-bolt-base:ro
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8765/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

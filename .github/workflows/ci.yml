@@ -60,3 +60,43 @@ jobs:
           assert r.status_code == 200, f'Bad status: {r.status_code}'
           print('API smoke test passed!')
           PY
+
+      - name: OpenEnv compliance test (formal spec check)
+        run: pytest tests/test_openenv_compliance.py -v --tb=short
+
+      - name: v3 Aqua Regia conformal smoke (no GPU)
+        run: |
+          pip install statsmodels scipy
+          python - <<'PY'
+          import numpy as np
+          import sys, pathlib
+          sys.path.insert(0, str(pathlib.Path('.').resolve()))
+          from v3_arcadia.utils.conformal_smoke_check import per_horizon_conformal_band
+          # smoke: 30 calibration samples, horizon 14, alpha 0.1
+          cal = np.random.RandomState(0).randn(30, 14)
+          q = per_horizon_conformal_band(cal, 0.1)
+          assert q.shape == (14,)
+          assert all(q >= 0)
+          print(f'Aqua Regia smoke OK: q_per_horizon={q[0]:.3f}..{q[-1]:.3f}')
+          PY
+        continue-on-error: true
+
+      - name: v3 GNN smoke (pure-torch, CPU)
+        run: |
+          python - <<'PY'
+          import sys, pathlib
+          sys.path.insert(0, str(pathlib.Path('.').resolve()))
+          # Import the GCN layer module directly (no sb3 needed)
+          import importlib.util, pathlib
+          spec = importlib.util.spec_from_file_location(
+              "r6_gnn", pathlib.Path("v3_arcadia/70_provider/r6_gnn.py"))
+          m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+          import torch
+          layer = m.GCNLayer(8, 16)
+          x = torch.randn(12, 8)
+          ei = torch.tensor([[0,1,2,3,4,5,6,7,8,9,10,11], [1,2,3,4,5,6,7,8,9,10,11,0]])
+          out = layer(x, ei)
+          assert out.shape == (12, 16), f'Bad shape {out.shape}'
+          print('v3 GNN smoke passed!')
+          PY
+        continue-on-error: true
