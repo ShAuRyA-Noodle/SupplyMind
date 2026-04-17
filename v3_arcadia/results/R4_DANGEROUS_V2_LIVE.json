@@ -1,0 +1,64 @@
+{
+  "scenario": "Red_Sea_crisis",
+  "ground_truth": "CRITICAL",
+  "per_judge": {
+    "qwen25-14b-local": {
+      "risk_level": "CRITICAL",
+      "parsed": {
+        "risk_level": "CRITICAL",
+        "confidence": 0.9,
+        "primary_vulnerabilities": [
+          "Increased threat to maritime shipping in the Red Sea and Bab-el-Mandeb Strait.",
+          "Potential for further escalation involving multiple countries including Iran, Israel, US, UK, and Yemen.",
+          "Disruption of global trade routes through the Suez Canal."
+        ],
+        "mitigations": [
+          "Enhanced naval patrols by international coalitions to protect shipping lanes.",
+          "Development of alternative shipping routes or rerouting strategies for high-risk areas.",
+          "Strengthened diplomatic efforts to negotiate a long-term ceasefire and resolution."
+        ],
+        "reasoning_one_line": "Resumption of Houthi attacks on Israel amid the Iran war poses severe threats to global maritime security and trade stability.",
+        "time_sensitivity": "VOLATILE"
+      },
+      "correct": true,
+      "latency_s": 21.539926052093506,
+      "raw_preview": "{\n  \"risk_level\": \"CRITICAL\",\n  \"confidence\": 0.9,\n  \"primary_vulnerabilities\": [\n    \"Increased threat to maritime shipping in the Red Sea and Bab-el-Mandeb Strait.\",\n    \"Potential for further escalation involving multiple countries including Iran, Israel, US, UK, and Yemen.\",\n    \"Disruption of global trade routes through the Suez Canal.\"\n  ],\n  \"mitigations\": [\n    \"Enhanced naval patrols by i"
+    },
+    "mistral-nemo-local": {
+      "risk_level": "HIGH",
+      "parsed": {
+        "risk_level": "HIGH",
+        "confidence": 0.95,
+        "primary_vulnerabilities": [
+          "Maritime traffic disruption in the Red Sea and Bab-el-Mandeb strait, impacting global trade",
+          "Escalation of conflict with potential for wider regional involvement (e.g., Iran, Saudi Arabia)",
+          "Potential targeting of international merchant vessels, regardless of affiliation"
+        ],
+        "mitigations": [
+          "Strengthening maritime security cooperation and escort missions in the Red Sea (Operation Prosperity Guardian)",
+          "Diplomatic efforts to broker a ceasefire and political solution in Yemen",
+          "Diversion of shipping routes around South Africa for vessels at high risk"
+        ],
+        "reasoning_one_line": "Resumption of Houthi attacks amidst regional conflict escalation poses significant risk to maritime traffic and global trade.",
+        "time_sensitivity": "VOLATILE"
+      },
+      "correct": false,
+      "latency_s": 25.940397024154663,
+      "raw_preview": "{\n  \"risk_level\": \"HIGH\",\n  \"confidence\": 0.95,\n  \"primary_vulnerabilities\": [\n    \"Maritime traffic disruption in the Red Sea and Bab-el-Mandeb strait, impacting global trade\",\n    \"Escalation of conflict with potential for wider regional involvement (e.g., Iran, Saudi Arabia)\",\n    \"Potential targeting of international merchant vessels, regardless of affiliation\"\n  ],\n  \"mitigations\": [\n    \"Str"
+    }
+  },
+  "devil": {
+    "model": "deepseek-r1-local-q4",
+    "risk_level": "PARSE_FAIL",
+    "correct": false,
+    "latency_s": 30.340745210647583,
+    "raw_preview": " Include the following sections:\n- Current Situation: Description of the conflict's current state.\n- Threats: List and describe each threat type (e.g., direct, indirect).\n- Vulnerabilities: Identify potential vulnerabilities in key areas such as infrastructure, supply chains, etc.\n- Recommendations: Provide actionable recommendations to mitigate risks.\n\nPlease make sure that your JSON is properly "
+  },
+  "summary": {
+    "primary_panel_all_correct": false,
+    "primary_correct_count": "1/2",
+    "three_judge_correct_count": "1/3",
+    "consensus_primary": "CRITICAL",
+    "ground_truth": "CRITICAL"
+  }
+}

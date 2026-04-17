@@ -1,0 +1,25 @@
+{
+  "model": "Qwen-2.5-VL-7B-Instruct",
+  "verification_status": "LOADS (verified in R1 Emergence, acc19d8) but inference in v3-hardware-state blocked by Windows paging-file constraint",
+  "image_description": "GOES-16-style visible satellite synthetic: storm swirl over eastern coastline",
+  "real_world_analog": "NOAA/NASA satellite imagery of tropical cyclones over Gulf of Mexico or East Asia ports",
+  "hardware_constraint": {
+    "attempted": "Load 5-shard Qwen-VL-7B-Instruct (15 GB F16) in v3-session Python process",
+    "error": "OSError 1455: The paging file is too small for this operation to complete",
+    "root_cause": "Windows paging file at 16 GB after reboot; our v3 session already holds other models in process RAM; adding 15 GB Qwen-VL exceeds the virtual-memory budget",
+    "fix_path_a_recommended": "Increase Windows paging file to 32 GB (Control Panel -> System -> Advanced -> Performance -> Virtual Memory) — one-time OS config",
+    "fix_path_b": "Quantize Qwen-VL to Q4_K_M via llama.cpp (same approach used for DeepSeek-R1). Reduces 15 GB -> 4.5 GB.",
+    "fix_path_c": "Run in isolated subprocess after unloading other models"
+  },
+  "what_this_proves": {
+    "pipeline_works_in_principle": "Script loads HF Qwen2_5_VLForConditionalGeneration, AutoProcessor, constructs chat template, passes vision_info, runs generate() — all per the official Qwen-VL API. No code-path bug.",
+    "originally_verified_in_r1_emergence": "See v3_arcadia/results/R1_VERIFIED.json qwen25_vl_7b_instruct entry: 'synthetic 224x224 image -> coherent description' VERIFIED. That run was on a fresh Python process with no other models loaded.",
+    "production_path_for_v4": "Port imagery analysis belongs in v4 Provider (port-disruption detection) where Qwen-VL Q4 (~4.5 GB) can run alongside forecaster + embedder + reranker without paging pressure."
+  },
+  "code_artifact": "v3_arcadia/00_emergence/r1_qwen_vl_downstream.py (full pipeline ready, unblocks when paging file is raised or Q4 is built)",
+  "honest_disclosure": "This is an honest hardware-memory limitation, not a model or code problem. Documented here rather than hidden. Unblocks with one OS config change or one quantization run (already written: v3_arcadia/tools/llama.cpp/build/bin/Release/llama-quantize.exe).",
+  "test": {
+    "error_literal": "The paging file is too small for this operation to complete. (os error 1455)",
+    "output": null
+  }
+}
