@@ -143,13 +143,30 @@ See `v3_arcadia/plots/dangerous/r4v2_ablation.png` for the visual comparison.
 
 **Root cause**: When bi-encoder retrieval is near-ceiling on precise, lexically-matched queries, the reranker's chunk-level scoring demotes co-gold chunks. Gold was doc-level; 53 queries were paraphrase-light.
 
-**World-class fix**: Added **20 hard paraphrased queries** (synonyms, temporal framing, indirect references). Rerun 8 pipelines → reranker-enabled pipelines win on hard set. "Right tool for right regime." Published as `R5_GRANITE_HARD.json`.
+**World-class fix**: Added **20 hard paraphrased queries** (synonyms, temporal framing, indirect references). Rerun 8 pipelines:
 
-### F3 — R3 weighted ensemble < best single → constrained-stacking beats best
+| Pipeline | Easy P@1 | Hard P@1 | Reranker lift |
+|---|---|---|---|
+| BGE-M3 bi-encoder | 0.925 | 0.700 | — |
+| **BGE-M3 + reranker** | 0.925 | **0.750** | **+5pp on hard** (0pp on easy) |
+| mxbai bi-encoder | 0.962 | 0.750 | — |
+| mxbai + reranker | 0.925 | 0.750 | 0pp on hard, -3.7pp on easy |
+| Snowflake + reranker | 0.925 | 0.750 | 0pp on hard, -1.9pp on easy |
+
+Snowflake+reranker wins MRR=0.857 on hard. "Right tool for right regime." Published as `R5_GRANITE_HARD.json`.
+
+### F3 — R3 weighted ensemble < best single → constrained-stacking wins 9/21 cells
 
 **Root cause**: Inverse-MAE weights ignored correlation structure.
 
-**World-class fix**: Bates-Granger constrained least-squares optimizer (`scipy.optimize.minimize` with weights ≥ 0, sum = 1) on validation residuals. Industry-standard forecasting combination. Published as `R3_STACKING_V2.json`.
+**World-class fix**: Bates-Granger constrained least-squares optimizer (`scipy.optimize.minimize` with weights ≥ 0, sum = 1) on validation residuals. Industry-standard forecasting combination.
+
+**Real results** (winners across 21 target×horizon cells):
+- **Constrained (MAE or MSE) stacking: 9/21 wins** (43%, up from 0/21 for inverse-MAE)
+- Best individual: 10/21 (honest — stacking isn't universally superior)
+- Equal-weight: 2/21
+
+Published as `R3_STACKING_V2.json`.
 
 ### F4 — R2 stack < TabPFN alone → proper stacking beats
 
@@ -159,15 +176,36 @@ See `v3_arcadia/plots/dangerous/r4v2_ablation.png` for the visual comparison.
 
 ### F5 — R6 Aqua Regia conformal under-covers oil → per-horizon q̂ hits nominal
 
-**Root cause**: Pooled-residual conformal uses a single q̂ across all horizon steps.
+**Root cause**: Pooled-residual conformal uses a single q̂ across all horizon steps. Residual magnitude grows with step → pooled q̂ under-covers on heavy-tailed series.
 
-**World-class fix**: Per-horizon-step conformal — separate q̂₁...q̂₁₄ from validation residuals at each step. Expected: empirical coverage within ±2pp of nominal across all targets. Published as `R6_AQUA_REGIA_V2.json`.
+**World-class fix**: Per-horizon-step conformal — separate q̂₁...q̂₁₄ from validation residuals at each step.
+
+**Real results** (deviation from nominal coverage at 95%):
+
+| Target | Forecaster | Pooled dev | **Per-horizon dev** | Winner |
+|---|---|---|---|---|
+| **DCOILWTICO (oil)** | ARIMA | 0.112 | **0.024** | per-horizon +88%|
+| DCOILWTICO | Chronos | 0.095 | **0.024** | per-horizon |
+| DEXUSEU | ARIMA | 0.038 | **0.010** | per-horizon |
+| DEXCHUS | ARIMA | 0.021 | **0.002** | per-horizon |
+
+Per-horizon wins on heavy-tailed series (oil) and most FX. Pooled is competitive on the smoothest series (DEXCHUS chronos). Honest mixed result: per-horizon is the **textbook-correct** method, but the lift is context-dependent. Published as `R6_AQUA_REGIA_V2.json`.
 
 ### F6 — R6 Provider easy-graph F1=1.000 → arrival-time regression (non-trivial)
 
 **Root cause**: BFS-reachable prediction on a 12-node graph is memorizable by a linear layer.
 
-**World-class fix**: Task switched to **arrival-time regression** — predict expected time (continuous) for disruption to reach each node given noisy per-edge lead-times. Published as `R6_PROVIDER_V2.json`.
+**World-class fix**: Task switched to **arrival-time regression** — predict expected time (continuous) for disruption to reach each node given noisy per-edge lead-times. Ground truth = Dijkstra shortest-path through perturbed graph. Published as `R6_PROVIDER_V2.json`.
+
+**Real results** (GNN MAE vs MLP baseline vs 1-hop-mean baseline across 3 graphs):
+
+| Graph | Nodes | GNN MAE | MLP MAE | 1-hop mean | GNN vs MLP | GNN vs 1-hop |
+|---|---|---|---|---|---|---|
+| easy | 12 | 9.21 | 17.71 | 29.55 | **+48.0%** | **+68.8%** |
+| medium | 25 | 14.05 | 27.56 | 23.25 | **+49.0%** | **+39.6%** |
+| hard | 40 | 10.35 | 28.48 | 16.03 | **+63.7%** | **+35.5%** |
+
+GNN dominates both baselines on every graph. Lift largest on hard graph where multi-hop propagation matters most. The v1 F1=1.000 was trivial; the v2 arrival-time task requires real graph learning.
 
 ### F7 — v2 training_report.json 6/16 failures → annotated with v3 resolutions
 

@@ -10,20 +10,21 @@ This document is the **single source of truth** for everything a judge will see,
 
 | Layer | Status | Grade | Evidence |
 |---|---|---|---|
-| OpenEnv compliance | Full spec + MCP + WebSocket | **S** | `openenv.yaml`, `server/app.py`, `tests/test_openenv_compliance.py` |
-| Real-data ML pipeline | 261,175 verified points, 8 sources, Wilcoxon p<0.001 | **S** | `REPORT_REAL_DATA.md`, `rl/real_data_pipeline.py` |
+| OpenEnv compliance | 19 formal tests pass in 2s | **S** | `tests/test_openenv_compliance.py` (173 total tests) |
+| Real-data ML pipeline | 261,175 verified points, 8 sources, Wilcoxon p<0.001 | **S** | `docs/legacy/REPORT_REAL_DATA.md`, `rl/real_data_pipeline.py` |
 | Foundation model stack | 13 SOTA verified + integrated | **S** | `v3_arcadia/results/R1_VERIFIED.json` |
 | Tabular ML | 4-model stack + SHAP + fairness + calibration | **A+** | `v3_arcadia/results/R2_*.json` |
-| Time-series | 4 forecasters + 20-fold backtest + conformal | **A+** | `R3_PAST_SELF.json`, `R6_AQUA_REGIA_V2.json` |
-| LLM risk panel | 3-judge + critic + ECE + 2-judge ablation | **S** | `R4_DANGEROUS_V2.json`, `R4_DANGEROUS_V2_ABLATION.json` |
-| RAG | 6,483 chunks × 8 pipelines + hard-query redemption | **S** | `R5_GRANITE.json`, `R5_GRANITE_HARD.json` |
-| RL stack | MaskablePPO + 8,100-ep benchmark + zero violations | **S** | `R6_GETHSEMANE.json`, `R6_EUCLIDIAN.json` |
-| GNN | Custom 3-layer GCN + 3-hop harder task | **A+** | `R6_PROVIDER.json`, `R6_PROVIDER_HARD.json` |
-| Production API | FastAPI + MCP + WebSocket + Docker | **A+** | `server/app.py`, `v3_arcadia/90_damocles/app.py`, `Dockerfile*` |
-| Tests | 154 passing + OpenEnv compliance test | **S** | `pytest tests/ -q` → 154 passed |
-| Docs | 150+ MD files, unified model card, PyTorch story | **S** | `README.md`, `MODEL_CARD.md`, `PYTORCH_STORY.md` |
-| CI/CD | GitHub Actions tests + RL smoke + v3 benchmarks | **A** | `.github/workflows/ci.yml` |
-| Deploy | HF Space live + v3 artifacts pushed | target **A+** | https://huggingface.co/spaces/Shaurya-Noodle/Supplymind |
+| Time-series | 4 forecasters + 20-fold backtest + **Bates-Granger stacking wins 9/21** + per-horizon conformal | **S** | `R3_PAST_SELF.json`, `R3_STACKING_V2.json`, `R6_AQUA_REGIA_V2.json` |
+| LLM risk panel | 3-judge + critic + ECE + **2-judge α=0.75** + rubric human-baseline | **S** | `R4_DANGEROUS_V2.json`, `R4_DANGEROUS_V2_ABLATION.json`, `R4_DANGEROUS_V2_HUMAN_BASELINE.json` |
+| RAG | 6,483 chunks × 8 pipelines + **hard-query redemption (+5pp lift)** | **S** | `R5_GRANITE.json`, `R5_GRANITE_HARD.json` |
+| RL stack | MaskablePPO + 8,100-ep benchmark + zero violations + **ONNX export 0.97MB** | **S** | `R6_GETHSEMANE.json`, `R6_EUCLIDIAN.json`, `R6_GETHSEMANE_ONNX_EXPORT.json` |
+| GNN | Custom 3-layer GCN + **arrival-time regression (+48-64% vs MLP)** | **S** | `R6_PROVIDER.json`, `R6_PROVIDER_V2.json` |
+| Production API | FastAPI + MCP + WebSocket + 3 Dockerfiles + compose | **A+** | `server/app.py`, `v3_arcadia/90_damocles/app.py`, `Dockerfile.damocles` |
+| Tests | **173 passing** in ~2 min | **S** | `pytest tests/ -q` |
+| Docs | 150+ MD files, unified card, PyTorch story, BENCHMARKS_VS_PUBLIC | **S** | `README.md`, `MODEL_CARD.md`, `PYTORCH_STORY.md`, `BENCHMARKS_VS_PUBLIC.md`, `FINAL_DEMO.md`, `AUDIT_PLAN.md` |
+| CI/CD | GitHub Actions + OpenEnv compliance + v3 smoke | **A+** | `.github/workflows/ci.yml` |
+| Deploy | HF Space push pending (Batch 10) | target **A+** | https://huggingface.co/spaces/Shaurya-Noodle/Supplymind |
+| Demo assets | 3-min video script + 5-slide pitch + Colab + DEMO_VIDEO_SCRIPT | **A** | `demo/PITCH_DECK.md`, `demo/DEMO_VIDEO_SCRIPT.md`, `notebooks/04_v3_quickstart_colab.ipynb` |
 
 ---
 
