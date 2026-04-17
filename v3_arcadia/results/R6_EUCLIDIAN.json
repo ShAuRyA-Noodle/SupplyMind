@@ -1,0 +1,142 @@
+{
+  "tasks": {
+    "easy_typhoon_response": {
+      "random": {
+        "n_episodes": 900,
+        "reward_mean": 0.7482441732856582,
+        "reward_std": 0.14700208435948228,
+        "reward_ci95": [
+          0.7384200686360962,
+          0.7568298885829328
+        ],
+        "reward_min": 0.19481885444212654,
+        "reward_max": 1.1453749440229317,
+        "length_mean": 20.0,
+        "violations_mean": 0.0,
+        "elapsed_s": 116.64613890647888
+      },
+      "greedy": {
+        "n_episodes": 900,
+        "reward_mean": 0.9804036111111111,
+        "reward_std": 0.006791013323494272,
+        "reward_ci95": [
+          0.9799530347222223,
+          0.9808638958333332
+        ],
+        "reward_min": 0.964,
+        "reward_max": 0.9895,
+        "length_mean": 20.0,
+        "violations_mean": 0.0,
+        "elapsed_s": 120.416987657547
+      },
+      "ppo_v3": {
+        "n_episodes": 900,
+        "reward_mean": 1.2001452777777781,
+        "reward_std": 0.2120400301369494,
+        "reward_ci95": [
+          1.1861176875000004,
+          1.2147862430555558
+        ],
+        "reward_min": 0.643,
+        "reward_max": 1.3542500000000002,
+        "length_mean": 20.0,
+        "violations_mean": 0.0,
+        "elapsed_s": 182.3305103778839
+      }
+    },
+    "medium_multi_front": {
+      "random": {
+        "n_episodes": 900,
+        "reward_mean": -0.9723145075959313,
+        "reward_std": 0.8287684037114463,
+        "reward_ci95": [
+          -1.0248835906393836,
+          -0.9210582901498594
+        ],
+        "reward_min": -2.657711941005567,
+        "reward_max": 1.6755137059745218,
+        "length_mean": 44.77444444444444,
+        "violations_mean": 0.0,
+        "elapsed_s": 2178.533848762512
+      },
+      "greedy": {
+        "n_episodes": 900,
+        "reward_mean": -1.8072616666666665,
+        "reward_std": 0.08249250725234254,
+        "reward_ci95": [
+          -1.8127021736111106,
+          -1.8020112499999998
+        ],
+        "reward_min": -1.9960833333333339,
+        "reward_max": -1.634833333333333,
+        "length_mean": 44.69555555555556,
+        "violations_mean": 0.0,
+        "elapsed_s": 2213.2160155773163
+      },
+      "ppo_v3": {
+        "n_episodes": 900,
+        "reward_mean": 2.7757252478093193,
+        "reward_std": 0.27429331979815375,
+        "reward_ci95": [
+          2.7584659106200156,
+          2.794676638098121
+        ],
+        "reward_min": 1.5239205323279976,
+        "reward_max": 3.2292693104197685,
+        "length_mean": 44.69555555555556,
+        "violations_mean": 0.0,
+        "elapsed_s": 1667.2952637672424
+      }
+    },
+    "hard_cascading_crisis": {
+      "random": {
+        "n_episodes": 900,
+        "reward_mean": -1.308909302609431,
+        "reward_std": 0.8307064683155687,
+        "reward_ci95": [
+          -1.364859585393643,
+          -1.2582614063780788
+        ],
+        "reward_min": -3.9287876024666533,
+        "reward_max": 0.9899682913604323,
+        "length_mean": 56.00222222222222,
+        "violations_mean": 0.0,
+        "elapsed_s": 8252.21863079071
+      },
+      "greedy": {
+        "n_episodes": 900,
+        "reward_mean": -1.4140512037037034,
+        "reward_std": 0.4906146778674514,
+        "reward_ci95": [
+          -1.4477069467592592,
+          -1.384800613425926
+        ],
+        "reward_min": -2.6625000000000005,
+        "reward_max": -0.36558333333333326,
+        "length_mean": 56.00222222222222,
+        "violations_mean": 0.0,
+        "elapsed_s": 7457.718946695328
+      },
+      "ppo_v3": {
+        "n_episodes": 900,
+        "reward_mean": 2.6523747656017957,
+        "reward_std": 0.8501030693092879,
+        "reward_ci95": [
+          2.5961520538760343,
+          2.7080119055357748
+        ],
+        "reward_min": -0.3516463266850995,
+        "reward_max": 3.497878863210078,
+        "length_mean": 56.00222222222222,
+        "violations_mean": 0.0,
+        "elapsed_s": 4636.845929861069
+      }
+    }
+  },
+  "config": {
+    "episodes_per_cell": 900,
+    "seed": 42
+  },
+  "total_episodes": 8100,
+  "elapsed_min": 447.1261458516121
+}
