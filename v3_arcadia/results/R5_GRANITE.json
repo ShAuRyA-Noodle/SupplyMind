@@ -1,0 +1,6199 @@
+{
+  "n_chunks": 6483,
+  "n_queries": 53,
+  "corpus_breakdown": {
+    "wiki_crisis": 564,
+    "sec_10k": 5790,
+    "policy": 129,
+    "world_bank": 0
+  },
+  "pipelines": {
+    "P1_bge_m3_bi": {
+      "p1": 0.9245283018867925,
+      "p3": 0.9119496855345911,
+      "p5": 0.8754716981132076,
+      "r5": 0.9905660377358491,
+      "r10": 0.9905660377358491,
+      "mrr": 0.9622641509433962,
+      "ndcg10": 0.9575134585603043,
+      "latency_s": 0.04845308357814573,
+      "total_s": 2.5680134296417236
+    },
+    "P2_mxbai_bi": {
+      "p1": 0.9622641509433962,
+      "p3": 0.9245283018867925,
+      "p5": 0.8566037735849058,
+      "r5": 0.9811320754716981,
+      "r10": 0.9811320754716981,
+      "mrr": 0.9779874213836477,
+      "ndcg10": 0.9609759488660063,
+      "latency_s": 0.03530673710805065,
+      "total_s": 1.8738455772399902
+    },
+    "P3_snowflake_bi": {
+      "p1": 0.9433962264150944,
+      "p3": 0.8993710691823898,
+      "p5": 0.8830188679245281,
+      "r5": 0.9716981132075472,
+      "r10": 0.9905660377358491,
+      "mrr": 0.9716981132075472,
+      "ndcg10": 0.9579766613122774,
+      "latency_s": 0.0310352568356496,
+      "total_s": 1.6448686122894287
+    },
+    "P4_bge_m3_rerank": {
+      "p1": 0.9245283018867925,
+      "p3": 0.8679245283018868,
+      "p5": 0.811320754716981,
+      "r5": 0.9905660377358491,
+      "r10": 0.9905660377358491,
+      "mrr": 0.9591194968553458,
+      "ndcg10": 0.9384747467002381,
+      "latency_s": 1.3268510710518315,
+      "total_s": 70.32310676574707
+    },
+    "P5_mxbai_rerank": {
+      "p1": 0.9245283018867925,
+      "p3": 0.8616352201257861,
+      "p5": 0.8188679245283017,
+      "r5": 0.9905660377358491,
+      "r10": 0.9905660377358491,
+      "mrr": 0.9591194968553458,
+      "ndcg10": 0.9385247651362846,
+      "latency_s": 1.1392207460583381,
+      "total_s": 60.37869954109192
+    },
+    "P6_snowflake_rerank": {
+      "p1": 0.9245283018867925,
+      "p3": 0.8553459119496855,
+      "p5": 0.7999999999999998,
+      "r5": 0.9905660377358491,
+      "r10": 0.9905660377358491,
+      "mrr": 0.9591194968553458,
+      "ndcg10": 0.9349625304402387,
+      "latency_s": 1.8626266335541348,
+      "total_s": 98.71921157836914
+    },
+    "P7_rrf_ensemble_rerank": {
+      "p1": 0.9245283018867925,
+      "p3": 0.8679245283018867,
+      "p5": 0.8075471698113207,
+      "r5": 0.9905660377358491,
+      "r10": 0.9905660377358491,
+      "mrr": 0.9591194968553458,
+      "ndcg10": 0.9358304090742331,
+      "latency_s": 1.434608540445004,
+      "total_s": 76.0342526435852
+    },
+    "P8_hyde_rrf_rerank": {
+      "p1": 0.9245283018867925,
+      "p3": 0.8616352201257861,
+      "p5": 0.8188679245283018,
+      "r5": 0.9905660377358491,
+      "r10": 0.9905660377358491,
+      "mrr": 0.9591194968553458,
+      "ndcg10": 0.9381023619162208,
+      "latency_s": 1.1886508014966857,
+      "total_s": 62.999061584472656
+    }
+  },
+  "per_pipeline_detail": {
+    "P1_bge_m3_bi": {
+      "pipeline": "P1_bge_m3_bi",
+      "per_query": [
+        {
+          "q": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.6040449142456055
+        },
+        {
+          "q": "How many people died in the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.06020474433898926
+        },
+        {
+          "q": "What nuclear facility was damaged by the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.06476020812988281
+        },
+        {
+          "q": "What caused the 2020-2023 global chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.0599210262298584
+        },
+        {
+          "q": "Which industries were hit hardest by the chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.061450958251953125
+        },
+        {
+          "q": "What ship blocked the Suez Canal in March 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.738689504510803,
+          "latency_s": 0.03346610069274902
+        },
+        {
+          "q": "How long was the Suez Canal blocked by Ever Given?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9135277613190135,
+          "latency_s": 0.04021286964416504
+        },
+        {
+          "q": "What was the economic impact of the 2021 Suez Canal obstruction?",
+          "gold": [
+            "2021_Suez_Canal_obstruction"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9060254355346823,
+          "latency_s": 0.04416227340698242
+        },
+        {
+          "q": "What is the strategic importance of the Bab-el-Mandeb strait?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.04179644584655762
+        },
+        {
+          "q": "How much maritime trade passes through Bab-el-Mandeb?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9888026041880242,
+          "latency_s": 0.039965152740478516
+        },
+        {
+          "q": "What does the Baltic Dry Index measure?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.13663697242736816
+        },
+        {
+          "q": "Who publishes the Baltic Dry Index?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.04612374305725098
+        },
+        {
+          "q": "What is the bullwhip effect in supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03946661949157715
+        },
+        {
+          "q": "What causes demand amplification in multi-tier supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8850504602968671,
+          "latency_s": 0.04556918144226074
+        },
+        {
+          "q": "What is the CHIPS and Science Act?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03365302085876465
+        },
+        {
+          "q": "How much does the CHIPS Act allocate for semiconductor manufacturing?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 0.03516864776611328
+        },
+        {
+          "q": "What is TEU in container shipping?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8948303255886799,
+          "latency_s": 0.0328526496887207
+        },
+        {
+          "q": "What is the largest container ship?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9447403758138471,
+          "latency_s": 0.03183269500732422
+        },
+        {
+          "q": "What does an ERP system do?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03370547294616699
+        },
+        {
+          "q": "Which vendors dominate the ERP software market?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.039411067962646484
+        },
+        {
+          "q": "Who owns the Ever Given ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8510380730119952,
+          "latency_s": 0.03899788856506348
+        },
+        {
+          "q": "What is the length of the Ever Given container ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9042472380494709,
+          "latency_s": 0.02809739112854004
+        },
+        {
+          "q": "Who founded Foxconn?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.027956724166870117
+        },
+        {
+          "q": "What products does Foxconn manufacture?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.026495695114135742
+        },
+        {
+          "q": "What is safety stock in inventory management?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9842184869190973,
+          "latency_s": 0.028023481369018555
+        },
+        {
+          "q": "What is the difference between perpetual and periodic inventory?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9815441540827996,
+          "latency_s": 0.037810325622558594
+        },
+        {
+          "q": "What is just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8285418996677884,
+          "latency_s": 0.02864837646484375
+        },
+        {
+          "q": "Who developed just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9766325382721556,
+          "latency_s": 0.027722597122192383
+        },
+        {
+          "q": "What are the main functions of logistics?",
+          "gold": [
+            "Logistics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.028378009796142578
+        },
+        {
+          "q": "What is the difference between logistics and supply chain management?",
+          "gold": [
+            "Logistics",
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.028174638748168945
+        },
+        {
+          "q": "What is the ranking of the Port of Los Angeles by container volume?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03158283233642578
+        },
+        {
+          "q": "What caused congestion at the Port of Los Angeles in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.02982640266418457
+        },
+        {
+          "q": "What makes the Port of Singapore a transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 0.0318293571472168
+        },
+        {
+          "q": "How many containers does the Port of Singapore handle per year?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9325172924861036,
+          "latency_s": 0.03150367736816406
+        },
+        {
+          "q": "What is the 2023-2024 Red Sea crisis?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 0.03781390190124512
+        },
+        {
+          "q": "Which group has attacked ships in the Red Sea?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9504206262110481,
+          "latency_s": 0.0338284969329834
+        },
+        {
+          "q": "What is Samsung Electronics' role in semiconductors?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03476548194885254
+        },
+        {
+          "q": "Where are Samsung's main semiconductor fabs located?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9963488021549354,
+          "latency_s": 0.03941845893859863
+        },
+        {
+          "q": "How does semiconductor manufacturing work at the foundry level?",
+          "gold": [
+            "Semiconductor_industry",
+            "TSMC"
+          ],
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 0.5,
+          "ndcg10": 0.6821597128635729,
+          "latency_s": 0.032767534255981445
+        },
+        {
+          "q": "What are the leading semiconductor companies by revenue?",
+          "gold": [
+            "Semiconductor_industry"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9565912771023182,
+          "latency_s": 0.029352426528930664
+        },
+        {
+          "q": "What percentage of oil shipments pass through the Strait of Hormuz?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.029010534286499023
+        },
+        {
+          "q": "Why is the Strait of Hormuz a geopolitical chokepoint?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9933222998814617,
+          "latency_s": 0.029836416244506836
+        },
+        {
+          "q": "What is the strategic significance of the Strait of Malacca?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.02891993522644043
+        },
+        {
+          "q": "What volume of trade passes through the Malacca Strait?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 0.029024600982666016
+        },
+        {
+          "q": "When was the Suez Canal built?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.031049489974975586
+        },
+        {
+          "q": "How many ships transit the Suez Canal annually?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 0.025027990341186523
+        },
+        {
+          "q": "What is the SolarWinds supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.0465087890625
+        },
+        {
+          "q": "What are common mitigations for software supply chain attacks?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9764093402750902,
+          "latency_s": 0.040431976318359375
+        },
+        {
+          "q": "What are the key processes in supply chain management?",
+          "gold": [
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03556704521179199
+        },
+        {
+          "q": "What percentage of the world's advanced chips does TSMC produce?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 0.031013011932373047
+        },
+        {
+          "q": "Where are TSMC's main fabrication plants?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9782917460822231,
+          "latency_s": 0.027637481689453125
+        },
+        {
+          "q": "What is the difference between a warehouse and a distribution center?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.776200723929786,
+          "latency_s": 0.029896974563598633
+        },
+        {
+          "q": "What does ASRS stand for in warehousing?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7686741786309024,
+          "latency_s": 0.02669072151184082
+        }
+      ],
+      "aggregate": {
+        "p1": 0.9245283018867925,
+        "p3": 0.9119496855345911,
+        "p5": 0.8754716981132076,
+        "r5": 0.9905660377358491,
+        "r10": 0.9905660377358491,
+        "mrr": 0.9622641509433962,
+        "ndcg10": 0.9575134585603043,
+        "latency_s": 0.04845308357814573,
+        "total_s": 2.5680134296417236
+      }
+    },
+    "P2_mxbai_bi": {
+      "pipeline": "P2_mxbai_bi",
+      "per_query": [
+        {
+          "q": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03399038314819336
+        },
+        {
+          "q": "How many people died in the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.030739307403564453
+        },
+        {
+          "q": "What nuclear facility was damaged by the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.030203580856323242
+        },
+        {
+          "q": "What caused the 2020-2023 global chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.034886837005615234
+        },
+        {
+          "q": "Which industries were hit hardest by the chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9764093402750902,
+          "latency_s": 0.035802364349365234
+        },
+        {
+          "q": "What ship blocked the Suez Canal in March 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.880355725950781,
+          "latency_s": 0.030797719955444336
+        },
+        {
+          "q": "How long was the Suez Canal blocked by Ever Given?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 1.0,
+          "ndcg10": 0.7903864795495061,
+          "latency_s": 0.028298139572143555
+        },
+        {
+          "q": "What was the economic impact of the 2021 Suez Canal obstruction?",
+          "gold": [
+            "2021_Suez_Canal_obstruction"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8215664107074527,
+          "latency_s": 0.029721736907958984
+        },
+        {
+          "q": "What is the strategic importance of the Bab-el-Mandeb strait?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9878316351280039,
+          "latency_s": 0.022417545318603516
+        },
+        {
+          "q": "How much maritime trade passes through Bab-el-Mandeb?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9505310077117098,
+          "latency_s": 0.028276681900024414
+        },
+        {
+          "q": "What does the Baltic Dry Index measure?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.026292085647583008
+        },
+        {
+          "q": "Who publishes the Baltic Dry Index?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.02974557876586914
+        },
+        {
+          "q": "What is the bullwhip effect in supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03444957733154297
+        },
+        {
+          "q": "What causes demand amplification in multi-tier supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9895948844467957,
+          "latency_s": 0.03099346160888672
+        },
+        {
+          "q": "What is the CHIPS and Science Act?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.04363822937011719
+        },
+        {
+          "q": "How much does the CHIPS Act allocate for semiconductor manufacturing?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9799214801447083,
+          "latency_s": 0.042426109313964844
+        },
+        {
+          "q": "What is TEU in container shipping?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03717803955078125
+        },
+        {
+          "q": "What is the largest container ship?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.04027223587036133
+        },
+        {
+          "q": "What does an ERP system do?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.04148292541503906
+        },
+        {
+          "q": "Which vendors dominate the ERP software market?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9895948844467957,
+          "latency_s": 0.03979825973510742
+        },
+        {
+          "q": "Who owns the Ever Given ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9619991470595832,
+          "latency_s": 0.03985714912414551
+        },
+        {
+          "q": "What is the length of the Ever Given container ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8772153153380493,
+          "latency_s": 0.03889036178588867
+        },
+        {
+          "q": "Who founded Foxconn?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03764605522155762
+        },
+        {
+          "q": "What products does Foxconn manufacture?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03971147537231445
+        },
+        {
+          "q": "What is safety stock in inventory management?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9714977244644463,
+          "latency_s": 0.034322261810302734
+        },
+        {
+          "q": "What is the difference between perpetual and periodic inventory?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9613085758737654,
+          "latency_s": 0.04177379608154297
+        },
+        {
+          "q": "What is just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9747429528567879,
+          "latency_s": 0.04061007499694824
+        },
+        {
+          "q": "Who developed just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9714977244644463,
+          "latency_s": 0.03461933135986328
+        },
+        {
+          "q": "What are the main functions of logistics?",
+          "gold": [
+            "Logistics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9918291064614978,
+          "latency_s": 0.04214620590209961
+        },
+        {
+          "q": "What is the difference between logistics and supply chain management?",
+          "gold": [
+            "Logistics",
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.04079151153564453
+        },
+        {
+          "q": "What is the ranking of the Port of Los Angeles by container volume?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.04342460632324219
+        },
+        {
+          "q": "What caused congestion at the Port of Los Angeles in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03981947898864746
+        },
+        {
+          "q": "What makes the Port of Singapore a transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 0.03452348709106445
+        },
+        {
+          "q": "How many containers does the Port of Singapore handle per year?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9705437052559006,
+          "latency_s": 0.03541207313537598
+        },
+        {
+          "q": "What is the 2023-2024 Red Sea crisis?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.039179086685180664
+        },
+        {
+          "q": "Which group has attacked ships in the Red Sea?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9667147927059906,
+          "latency_s": 0.042961835861206055
+        },
+        {
+          "q": "What is Samsung Electronics' role in semiconductors?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.039721012115478516
+        },
+        {
+          "q": "Where are Samsung's main semiconductor fabs located?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 0.035643577575683594
+        },
+        {
+          "q": "How does semiconductor manufacturing work at the foundry level?",
+          "gold": [
+            "Semiconductor_industry",
+            "TSMC"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg10": 0.558226059985166,
+          "latency_s": 0.040132761001586914
+        },
+        {
+          "q": "What are the leading semiconductor companies by revenue?",
+          "gold": [
+            "Semiconductor_industry"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8988898126139723,
+          "latency_s": 0.03789520263671875
+        },
+        {
+          "q": "What percentage of oil shipments pass through the Strait of Hormuz?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9895948844467957,
+          "latency_s": 0.03159451484680176
+        },
+        {
+          "q": "Why is the Strait of Hormuz a geopolitical chokepoint?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 0.03196430206298828
+        },
+        {
+          "q": "What is the strategic significance of the Strait of Malacca?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.031885385513305664
+        },
+        {
+          "q": "What volume of trade passes through the Malacca Strait?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 0.03261208534240723
+        },
+        {
+          "q": "When was the Suez Canal built?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.032811641693115234
+        },
+        {
+          "q": "How many ships transit the Suez Canal annually?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 0.03176259994506836
+        },
+        {
+          "q": "What is the SolarWinds supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9963488021549354,
+          "latency_s": 0.031891822814941406
+        },
+        {
+          "q": "What are common mitigations for software supply chain attacks?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9374836267524946,
+          "latency_s": 0.02443695068359375
+        },
+        {
+          "q": "What are the key processes in supply chain management?",
+          "gold": [
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.02964019775390625
+        },
+        {
+          "q": "What percentage of the world's advanced chips does TSMC produce?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9895948844467957,
+          "latency_s": 0.03383660316467285
+        },
+        {
+          "q": "Where are TSMC's main fabrication plants?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9279641043683683,
+          "latency_s": 0.03643631935119629
+        },
+        {
+          "q": "What is the difference between a warehouse and a distribution center?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7123317756416024,
+          "latency_s": 0.03543710708618164
+        },
+        {
+          "q": "What does ASRS stand for in warehousing?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9731203984025375,
+          "latency_s": 0.036455392837524414
+        }
+      ],
+      "aggregate": {
+        "p1": 0.9622641509433962,
+        "p3": 0.9245283018867925,
+        "p5": 0.8566037735849058,
+        "r5": 0.9811320754716981,
+        "r10": 0.9811320754716981,
+        "mrr": 0.9779874213836477,
+        "ndcg10": 0.9609759488660063,
+        "latency_s": 0.03530673710805065,
+        "total_s": 1.8738455772399902
+      }
+    },
+    "P3_snowflake_bi": {
+      "pipeline": "P3_snowflake_bi",
+      "per_query": [
+        {
+          "q": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03865504264831543
+        },
+        {
+          "q": "How many people died in the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03473258018493652
+        },
+        {
+          "q": "What nuclear facility was damaged by the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.031980276107788086
+        },
+        {
+          "q": "What caused the 2020-2023 global chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 0.03124380111694336
+        },
+        {
+          "q": "Which industries were hit hardest by the chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9888026041880242,
+          "latency_s": 0.03415346145629883
+        },
+        {
+          "q": "What ship blocked the Suez Canal in March 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.773161590685251,
+          "latency_s": 0.036698102951049805
+        },
+        {
+          "q": "How long was the Suez Canal blocked by Ever Given?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 0.5,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.6710350631449844,
+          "latency_s": 0.033799171447753906
+        },
+        {
+          "q": "What was the economic impact of the 2021 Suez Canal obstruction?",
+          "gold": [
+            "2021_Suez_Canal_obstruction"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8519590445170673,
+          "latency_s": 0.026197195053100586
+        },
+        {
+          "q": "What is the strategic importance of the Bab-el-Mandeb strait?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9799214801447083,
+          "latency_s": 0.0244138240814209
+        },
+        {
+          "q": "How much maritime trade passes through Bab-el-Mandeb?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9888009031441519,
+          "latency_s": 0.034143686294555664
+        },
+        {
+          "q": "What does the Baltic Dry Index measure?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.0364990234375
+        },
+        {
+          "q": "Who publishes the Baltic Dry Index?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.026070117950439453
+        },
+        {
+          "q": "What is the bullwhip effect in supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.036455631256103516
+        },
+        {
+          "q": "What causes demand amplification in multi-tier supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03168654441833496
+        },
+        {
+          "q": "What is the CHIPS and Science Act?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 0.032798051834106445
+        },
+        {
+          "q": "How much does the CHIPS Act allocate for semiconductor manufacturing?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9384745935215792,
+          "latency_s": 0.028182029724121094
+        },
+        {
+          "q": "What is TEU in container shipping?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03694033622741699
+        },
+        {
+          "q": "What is the largest container ship?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.037493228912353516
+        },
+        {
+          "q": "What does an ERP system do?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.027571439743041992
+        },
+        {
+          "q": "Which vendors dominate the ERP software market?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 0.0271453857421875
+        },
+        {
+          "q": "Who owns the Ever Given ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8653082042236201,
+          "latency_s": 0.04224061965942383
+        },
+        {
+          "q": "What is the length of the Ever Given container ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9609247825245575,
+          "latency_s": 0.029447317123413086
+        },
+        {
+          "q": "Who founded Foxconn?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 0.03236961364746094
+        },
+        {
+          "q": "What products does Foxconn manufacture?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.020563602447509766
+        },
+        {
+          "q": "What is safety stock in inventory management?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 0.02689194679260254
+        },
+        {
+          "q": "What is the difference between perpetual and periodic inventory?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9851514063429596,
+          "latency_s": 0.03390645980834961
+        },
+        {
+          "q": "What is just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.815079870530422,
+          "latency_s": 0.02526235580444336
+        },
+        {
+          "q": "Who developed just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9933222998814617,
+          "latency_s": 0.019510269165039062
+        },
+        {
+          "q": "What are the main functions of logistics?",
+          "gold": [
+            "Logistics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 0.017243385314941406
+        },
+        {
+          "q": "What is the difference between logistics and supply chain management?",
+          "gold": [
+            "Logistics",
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.02141404151916504
+        },
+        {
+          "q": "What is the ranking of the Port of Los Angeles by container volume?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9671081267272548,
+          "latency_s": 0.019087553024291992
+        },
+        {
+          "q": "What caused congestion at the Port of Los Angeles in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.024052858352661133
+        },
+        {
+          "q": "What makes the Port of Singapore a transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.029094696044921875
+        },
+        {
+          "q": "How many containers does the Port of Singapore handle per year?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9492756620369743,
+          "latency_s": 0.03538393974304199
+        },
+        {
+          "q": "What is the 2023-2024 Red Sea crisis?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.8328978515038054,
+          "latency_s": 0.01881575584411621
+        },
+        {
+          "q": "Which group has attacked ships in the Red Sea?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9196461703481416,
+          "latency_s": 0.0318760871887207
+        },
+        {
+          "q": "What is Samsung Electronics' role in semiconductors?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.0292513370513916
+        },
+        {
+          "q": "Where are Samsung's main semiconductor fabs located?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.02901768684387207
+        },
+        {
+          "q": "How does semiconductor manufacturing work at the foundry level?",
+          "gold": [
+            "Semiconductor_industry",
+            "TSMC"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 0.5,
+          "ndcg10": 0.6005491084563833,
+          "latency_s": 0.029822111129760742
+        },
+        {
+          "q": "What are the leading semiconductor companies by revenue?",
+          "gold": [
+            "Semiconductor_industry"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.026344776153564453
+        },
+        {
+          "q": "What percentage of oil shipments pass through the Strait of Hormuz?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.023540019989013672
+        },
+        {
+          "q": "Why is the Strait of Hormuz a geopolitical chokepoint?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03500938415527344
+        },
+        {
+          "q": "What is the strategic significance of the Strait of Malacca?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.0319056510925293
+        },
+        {
+          "q": "What volume of trade passes through the Malacca Strait?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9963488021549354,
+          "latency_s": 0.03713202476501465
+        },
+        {
+          "q": "When was the Suez Canal built?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03459000587463379
+        },
+        {
+          "q": "How many ships transit the Suez Canal annually?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.035917043685913086
+        },
+        {
+          "q": "What is the SolarWinds supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.03791952133178711
+        },
+        {
+          "q": "What are common mitigations for software supply chain attacks?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.971476156593264,
+          "latency_s": 0.0390164852142334
+        },
+        {
+          "q": "What are the key processes in supply chain management?",
+          "gold": [
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.0361628532409668
+        },
+        {
+          "q": "What percentage of the world's advanced chips does TSMC produce?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9492756620369743,
+          "latency_s": 0.03450918197631836
+        },
+        {
+          "q": "Where are TSMC's main fabrication plants?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8842221264874298,
+          "latency_s": 0.03612375259399414
+        },
+        {
+          "q": "What is the difference between a warehouse and a distribution center?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9538469539548478,
+          "latency_s": 0.03919577598571777
+        },
+        {
+          "q": "What does ASRS stand for in warehousing?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9888009031441519,
+          "latency_s": 0.03539156913757324
+        }
+      ],
+      "aggregate": {
+        "p1": 0.9433962264150944,
+        "p3": 0.8993710691823898,
+        "p5": 0.8830188679245281,
+        "r5": 0.9716981132075472,
+        "r10": 0.9905660377358491,
+        "mrr": 0.9716981132075472,
+        "ndcg10": 0.9579766613122774,
+        "latency_s": 0.0310352568356496,
+        "total_s": 1.6448686122894287
+      }
+    },
+    "P4_bge_m3_rerank": {
+      "pipeline": "P4_bge_m3_rerank",
+      "per_query": [
+        {
+          "q": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 5.574345588684082
+        },
+        {
+          "q": "How many people died in the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0340378284454346
+        },
+        {
+          "q": "What nuclear facility was damaged by the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0368778705596924
+        },
+        {
+          "q": "What caused the 2020-2023 global chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9667147927059906,
+          "latency_s": 1.41029691696167
+        },
+        {
+          "q": "Which industries were hit hardest by the chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 0.9736366271972656
+        },
+        {
+          "q": "What ship blocked the Suez Canal in March 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8775271469089743,
+          "latency_s": 0.9383997917175293
+        },
+        {
+          "q": "How long was the Suez Canal blocked by Ever Given?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9531641314941091,
+          "latency_s": 0.9568395614624023
+        },
+        {
+          "q": "What was the economic impact of the 2021 Suez Canal obstruction?",
+          "gold": [
+            "2021_Suez_Canal_obstruction"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7045057227504283,
+          "latency_s": 0.9618709087371826
+        },
+        {
+          "q": "What is the strategic importance of the Bab-el-Mandeb strait?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.0053887367248535
+        },
+        {
+          "q": "How much maritime trade passes through Bab-el-Mandeb?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9311777582765323,
+          "latency_s": 0.9910998344421387
+        },
+        {
+          "q": "What does the Baltic Dry Index measure?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.5985567569732666
+        },
+        {
+          "q": "Who publishes the Baltic Dry Index?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 3.48456072807312
+        },
+        {
+          "q": "What is the bullwhip effect in supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0200378894805908
+        },
+        {
+          "q": "What causes demand amplification in multi-tier supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9714977244644463,
+          "latency_s": 0.9558901786804199
+        },
+        {
+          "q": "What is the CHIPS and Science Act?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.0333824157714844
+        },
+        {
+          "q": "How much does the CHIPS Act allocate for semiconductor manufacturing?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.0321245193481445
+        },
+        {
+          "q": "What is TEU in container shipping?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9726647310833559,
+          "latency_s": 1.4511635303497314
+        },
+        {
+          "q": "What is the largest container ship?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8932498536862835,
+          "latency_s": 1.0643768310546875
+        },
+        {
+          "q": "What does an ERP system do?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0037941932678223
+        },
+        {
+          "q": "Which vendors dominate the ERP software market?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8918195074012366,
+          "latency_s": 1.1417531967163086
+        },
+        {
+          "q": "Who owns the Ever Given ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8843252268199594,
+          "latency_s": 1.5226895809173584
+        },
+        {
+          "q": "What is the length of the Ever Given container ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9060254355346823,
+          "latency_s": 1.392169713973999
+        },
+        {
+          "q": "Who founded Foxconn?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9933222998814617,
+          "latency_s": 1.043391227722168
+        },
+        {
+          "q": "What products does Foxconn manufacture?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.09773850440979
+        },
+        {
+          "q": "What is safety stock in inventory management?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8219303906225648,
+          "latency_s": 1.0542364120483398
+        },
+        {
+          "q": "What is the difference between perpetual and periodic inventory?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9643632283499571,
+          "latency_s": 1.0808191299438477
+        },
+        {
+          "q": "What is just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.975788054854922,
+          "latency_s": 1.4577124118804932
+        },
+        {
+          "q": "Who developed just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9268520089309742,
+          "latency_s": 1.4060122966766357
+        },
+        {
+          "q": "What are the main functions of logistics?",
+          "gold": [
+            "Logistics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0630159378051758
+        },
+        {
+          "q": "What is the difference between logistics and supply chain management?",
+          "gold": [
+            "Logistics",
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.072244644165039
+        },
+        {
+          "q": "What is the ranking of the Port of Los Angeles by container volume?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9911205770005563,
+          "latency_s": 1.5535588264465332
+        },
+        {
+          "q": "What caused congestion at the Port of Los Angeles in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9818483242455303,
+          "latency_s": 1.4934215545654297
+        },
+        {
+          "q": "What makes the Port of Singapore a transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.14924955368042
+        },
+        {
+          "q": "How many containers does the Port of Singapore handle per year?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9374130297304558,
+          "latency_s": 1.2370803356170654
+        },
+        {
+          "q": "What is the 2023-2024 Red Sea crisis?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 3.4701988697052
+        },
+        {
+          "q": "Which group has attacked ships in the Red Sea?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.1095266342163086
+        },
+        {
+          "q": "What is Samsung Electronics' role in semiconductors?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.1203196048736572
+        },
+        {
+          "q": "Where are Samsung's main semiconductor fabs located?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8971499994450843,
+          "latency_s": 1.1025841236114502
+        },
+        {
+          "q": "How does semiconductor manufacturing work at the foundry level?",
+          "gold": [
+            "Semiconductor_industry",
+            "TSMC"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg10": 0.48381288316677695,
+          "latency_s": 1.0887830257415771
+        },
+        {
+          "q": "What are the leading semiconductor companies by revenue?",
+          "gold": [
+            "Semiconductor_industry"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9134015924715543,
+          "latency_s": 1.0851354598999023
+        },
+        {
+          "q": "What percentage of oil shipments pass through the Strait of Hormuz?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.1235170364379883
+        },
+        {
+          "q": "Why is the Strait of Hormuz a geopolitical chokepoint?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.870392650794485,
+          "latency_s": 1.134181022644043
+        },
+        {
+          "q": "What is the strategic significance of the Strait of Malacca?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.160573959350586
+        },
+        {
+          "q": "What volume of trade passes through the Malacca Strait?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9378773695257355,
+          "latency_s": 1.1379978656768799
+        },
+        {
+          "q": "When was the Suez Canal built?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9504206262110481,
+          "latency_s": 1.0491726398468018
+        },
+        {
+          "q": "How many ships transit the Suez Canal annually?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9447403758138471,
+          "latency_s": 1.1259262561798096
+        },
+        {
+          "q": "What is the SolarWinds supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0733520984649658
+        },
+        {
+          "q": "What are common mitigations for software supply chain attacks?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.090090036392212
+        },
+        {
+          "q": "What are the key processes in supply chain management?",
+          "gold": [
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.086334466934204
+        },
+        {
+          "q": "What percentage of the world's advanced chips does TSMC produce?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9093183643170806,
+          "latency_s": 1.1513686180114746
+        },
+        {
+          "q": "Where are TSMC's main fabrication plants?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9782917460822231,
+          "latency_s": 1.1770970821380615
+        },
+        {
+          "q": "What is the difference between a warehouse and a distribution center?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.675093172436539,
+          "latency_s": 1.2666645050048828
+        },
+        {
+          "q": "What does ASRS stand for in warehousing?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7698461250098078,
+          "latency_s": 1.4785094261169434
+        }
+      ],
+      "aggregate": {
+        "p1": 0.9245283018867925,
+        "p3": 0.8679245283018868,
+        "p5": 0.811320754716981,
+        "r5": 0.9905660377358491,
+        "r10": 0.9905660377358491,
+        "mrr": 0.9591194968553458,
+        "ndcg10": 0.9384747467002381,
+        "latency_s": 1.3268510710518315,
+        "total_s": 70.32310676574707
+      }
+    },
+    "P5_mxbai_rerank": {
+      "pipeline": "P5_mxbai_rerank",
+      "per_query": [
+        {
+          "q": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2316913604736328
+        },
+        {
+          "q": "How many people died in the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2005364894866943
+        },
+        {
+          "q": "What nuclear facility was damaged by the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.199470043182373
+        },
+        {
+          "q": "What caused the 2020-2023 global chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9667147927059906,
+          "latency_s": 1.0500125885009766
+        },
+        {
+          "q": "Which industries were hit hardest by the chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0984537601470947
+        },
+        {
+          "q": "What ship blocked the Suez Canal in March 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8785693769960272,
+          "latency_s": 1.083252191543579
+        },
+        {
+          "q": "How long was the Suez Canal blocked by Ever Given?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9330795243082165,
+          "latency_s": 1.1356401443481445
+        },
+        {
+          "q": "What was the economic impact of the 2021 Suez Canal obstruction?",
+          "gold": [
+            "2021_Suez_Canal_obstruction"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7045057227504283,
+          "latency_s": 1.1385016441345215
+        },
+        {
+          "q": "What is the strategic importance of the Bab-el-Mandeb strait?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.0971970558166504
+        },
+        {
+          "q": "How much maritime trade passes through Bab-el-Mandeb?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.933819260234181,
+          "latency_s": 1.1726038455963135
+        },
+        {
+          "q": "What does the Baltic Dry Index measure?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1080248355865479
+        },
+        {
+          "q": "Who publishes the Baltic Dry Index?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.255444049835205
+        },
+        {
+          "q": "What is the bullwhip effect in supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1200878620147705
+        },
+        {
+          "q": "What causes demand amplification in multi-tier supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0429043769836426
+        },
+        {
+          "q": "What is the CHIPS and Science Act?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.1172358989715576
+        },
+        {
+          "q": "How much does the CHIPS Act allocate for semiconductor manufacturing?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.1425762176513672
+        },
+        {
+          "q": "What is TEU in container shipping?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.1796038150787354
+        },
+        {
+          "q": "What is the largest container ship?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8932498536862835,
+          "latency_s": 1.1405892372131348
+        },
+        {
+          "q": "What does an ERP system do?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.089200496673584
+        },
+        {
+          "q": "Which vendors dominate the ERP software market?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8896955117809704,
+          "latency_s": 1.029043436050415
+        },
+        {
+          "q": "Who owns the Ever Given ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8932547230000344,
+          "latency_s": 1.143744945526123
+        },
+        {
+          "q": "What is the length of the Ever Given container ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9060254355346823,
+          "latency_s": 1.1998693943023682
+        },
+        {
+          "q": "Who founded Foxconn?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1121177673339844
+        },
+        {
+          "q": "What products does Foxconn manufacture?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.230659008026123
+        },
+        {
+          "q": "What is safety stock in inventory management?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.7923583684378549,
+          "latency_s": 1.1165916919708252
+        },
+        {
+          "q": "What is the difference between perpetual and periodic inventory?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9766325382721556,
+          "latency_s": 1.127183437347412
+        },
+        {
+          "q": "What is just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9579534943578898,
+          "latency_s": 1.127232313156128
+        },
+        {
+          "q": "Who developed just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9384745935215792,
+          "latency_s": 1.1286697387695312
+        },
+        {
+          "q": "What are the main functions of logistics?",
+          "gold": [
+            "Logistics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.099419355392456
+        },
+        {
+          "q": "What is the difference between logistics and supply chain management?",
+          "gold": [
+            "Logistics",
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1167974472045898
+        },
+        {
+          "q": "What is the ranking of the Port of Los Angeles by container volume?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9911205770005563,
+          "latency_s": 1.2232487201690674
+        },
+        {
+          "q": "What caused congestion at the Port of Los Angeles in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9782917460822231,
+          "latency_s": 1.1368234157562256
+        },
+        {
+          "q": "What makes the Port of Singapore a transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1168279647827148
+        },
+        {
+          "q": "How many containers does the Port of Singapore handle per year?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9374130297304558,
+          "latency_s": 1.1377360820770264
+        },
+        {
+          "q": "What is the 2023-2024 Red Sea crisis?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 1.0794155597686768
+        },
+        {
+          "q": "Which group has attacked ships in the Red Sea?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.1611733436584473
+        },
+        {
+          "q": "What is Samsung Electronics' role in semiconductors?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.1597414016723633
+        },
+        {
+          "q": "Where are Samsung's main semiconductor fabs located?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9011178066338841,
+          "latency_s": 1.101447582244873
+        },
+        {
+          "q": "How does semiconductor manufacturing work at the foundry level?",
+          "gold": [
+            "Semiconductor_industry",
+            "TSMC"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg10": 0.48381288316677695,
+          "latency_s": 1.0672523975372314
+        },
+        {
+          "q": "What are the leading semiconductor companies by revenue?",
+          "gold": [
+            "Semiconductor_industry"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8726787744521319,
+          "latency_s": 1.1424438953399658
+        },
+        {
+          "q": "What percentage of oil shipments pass through the Strait of Hormuz?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.2155001163482666
+        },
+        {
+          "q": "Why is the Strait of Hormuz a geopolitical chokepoint?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.870392650794485,
+          "latency_s": 1.2378969192504883
+        },
+        {
+          "q": "What is the strategic significance of the Strait of Malacca?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.1327824592590332
+        },
+        {
+          "q": "What volume of trade passes through the Malacca Strait?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9378773695257355,
+          "latency_s": 1.202582597732544
+        },
+        {
+          "q": "When was the Suez Canal built?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9504206262110481,
+          "latency_s": 1.144312858581543
+        },
+        {
+          "q": "How many ships transit the Suez Canal annually?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9447403758138471,
+          "latency_s": 1.1912076473236084
+        },
+        {
+          "q": "What is the SolarWinds supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.1062321662902832
+        },
+        {
+          "q": "What are common mitigations for software supply chain attacks?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9950883841893561,
+          "latency_s": 1.0410802364349365
+        },
+        {
+          "q": "What are the key processes in supply chain management?",
+          "gold": [
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.066835880279541
+        },
+        {
+          "q": "What percentage of the world's advanced chips does TSMC produce?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9093183643170806,
+          "latency_s": 1.1941847801208496
+        },
+        {
+          "q": "Where are TSMC's main fabrication plants?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9670943502702474,
+          "latency_s": 1.2279486656188965
+        },
+        {
+          "q": "What is the difference between a warehouse and a distribution center?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.6860491790714993,
+          "latency_s": 1.151177167892456
+        },
+        {
+          "q": "What does ASRS stand for in warehousing?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.8165229378311881,
+          "latency_s": 1.1064932346343994
+        }
+      ],
+      "aggregate": {
+        "p1": 0.9245283018867925,
+        "p3": 0.8616352201257861,
+        "p5": 0.8188679245283017,
+        "r5": 0.9905660377358491,
+        "r10": 0.9905660377358491,
+        "mrr": 0.9591194968553458,
+        "ndcg10": 0.9385247651362846,
+        "latency_s": 1.1392207460583381,
+        "total_s": 60.37869954109192
+      }
+    },
+    "P6_snowflake_rerank": {
+      "pipeline": "P6_snowflake_rerank",
+      "per_query": [
+        {
+          "q": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2224621772766113
+        },
+        {
+          "q": "How many people died in the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1726162433624268
+        },
+        {
+          "q": "What nuclear facility was damaged by the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2110540866851807
+        },
+        {
+          "q": "What caused the 2020-2023 global chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.4244136810302734
+        },
+        {
+          "q": "Which industries were hit hardest by the chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0874550342559814
+        },
+        {
+          "q": "What ship blocked the Suez Canal in March 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8775271469089743,
+          "latency_s": 1.1190879344940186
+        },
+        {
+          "q": "How long was the Suez Canal blocked by Ever Given?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9498751896215565,
+          "latency_s": 1.1453444957733154
+        },
+        {
+          "q": "What was the economic impact of the 2021 Suez Canal obstruction?",
+          "gold": [
+            "2021_Suez_Canal_obstruction"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7045057227504283,
+          "latency_s": 1.0636754035949707
+        },
+        {
+          "q": "What is the strategic importance of the Bab-el-Mandeb strait?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.1751058101654053
+        },
+        {
+          "q": "How much maritime trade passes through Bab-el-Mandeb?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9550236580992476,
+          "latency_s": 1.202829360961914
+        },
+        {
+          "q": "What does the Baltic Dry Index measure?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 7.148050546646118
+        },
+        {
+          "q": "Who publishes the Baltic Dry Index?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 6.239027976989746
+        },
+        {
+          "q": "What is the bullwhip effect in supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1171696186065674
+        },
+        {
+          "q": "What causes demand amplification in multi-tier supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9682087825918937,
+          "latency_s": 1.0662670135498047
+        },
+        {
+          "q": "What is the CHIPS and Science Act?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 2.003479480743408
+        },
+        {
+          "q": "How much does the CHIPS Act allocate for semiconductor manufacturing?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.1303865909576416
+        },
+        {
+          "q": "What is TEU in container shipping?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 4.46466588973999
+        },
+        {
+          "q": "What is the largest container ship?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9011178066338841,
+          "latency_s": 1.5310895442962646
+        },
+        {
+          "q": "What does an ERP system do?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 2.4770281314849854
+        },
+        {
+          "q": "Which vendors dominate the ERP software market?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8896955117809704,
+          "latency_s": 1.0958306789398193
+        },
+        {
+          "q": "Who owns the Ever Given ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8843252268199594,
+          "latency_s": 4.731953382492065
+        },
+        {
+          "q": "What is the length of the Ever Given container ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9060254355346823,
+          "latency_s": 2.4816629886627197
+        },
+        {
+          "q": "Who founded Foxconn?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 1.5280170440673828
+        },
+        {
+          "q": "What products does Foxconn manufacture?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 3.0471248626708984
+        },
+        {
+          "q": "What is safety stock in inventory management?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.7984186378284633,
+          "latency_s": 1.1784305572509766
+        },
+        {
+          "q": "What is the difference between perpetual and periodic inventory?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8789901909062586,
+          "latency_s": 4.507731199264526
+        },
+        {
+          "q": "What is just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.944819226755994,
+          "latency_s": 2.706261157989502
+        },
+        {
+          "q": "Who developed just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9371072971649781,
+          "latency_s": 2.8042705059051514
+        },
+        {
+          "q": "What are the main functions of logistics?",
+          "gold": [
+            "Logistics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1735777854919434
+        },
+        {
+          "q": "What is the difference between logistics and supply chain management?",
+          "gold": [
+            "Logistics",
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1385736465454102
+        },
+        {
+          "q": "What is the ranking of the Port of Los Angeles by container volume?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9911205770005563,
+          "latency_s": 1.1990694999694824
+        },
+        {
+          "q": "What caused congestion at the Port of Los Angeles in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9752652438087495,
+          "latency_s": 1.6593296527862549
+        },
+        {
+          "q": "What makes the Port of Singapore a transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1820249557495117
+        },
+        {
+          "q": "How many containers does the Port of Singapore handle per year?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9374130297304558,
+          "latency_s": 1.1773130893707275
+        },
+        {
+          "q": "What is the 2023-2024 Red Sea crisis?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 3.3722167015075684
+        },
+        {
+          "q": "Which group has attacked ships in the Red Sea?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.1875979900360107
+        },
+        {
+          "q": "What is Samsung Electronics' role in semiconductors?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.1311655044555664
+        },
+        {
+          "q": "Where are Samsung's main semiconductor fabs located?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8497378014613878,
+          "latency_s": 1.1532227993011475
+        },
+        {
+          "q": "How does semiconductor manufacturing work at the foundry level?",
+          "gold": [
+            "Semiconductor_industry",
+            "TSMC"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg10": 0.48381288316677695,
+          "latency_s": 1.1409482955932617
+        },
+        {
+          "q": "What are the leading semiconductor companies by revenue?",
+          "gold": [
+            "Semiconductor_industry"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8773497378596238,
+          "latency_s": 1.55228853225708
+        },
+        {
+          "q": "What percentage of oil shipments pass through the Strait of Hormuz?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.597299337387085
+        },
+        {
+          "q": "Why is the Strait of Hormuz a geopolitical chokepoint?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.870392650794485,
+          "latency_s": 1.1832406520843506
+        },
+        {
+          "q": "What is the strategic significance of the Strait of Malacca?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.1643388271331787
+        },
+        {
+          "q": "What volume of trade passes through the Malacca Strait?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9378773695257355,
+          "latency_s": 1.1143674850463867
+        },
+        {
+          "q": "When was the Suez Canal built?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9504206262110481,
+          "latency_s": 1.1476852893829346
+        },
+        {
+          "q": "How many ships transit the Suez Canal annually?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9447403758138471,
+          "latency_s": 1.1445331573486328
+        },
+        {
+          "q": "What is the SolarWinds supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 1.5165534019470215
+        },
+        {
+          "q": "What are common mitigations for software supply chain attacks?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9896062251871525,
+          "latency_s": 1.13981032371521
+        },
+        {
+          "q": "What are the key processes in supply chain management?",
+          "gold": [
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1498961448669434
+        },
+        {
+          "q": "What percentage of the world's advanced chips does TSMC produce?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9132861715058802,
+          "latency_s": 1.1338744163513184
+        },
+        {
+          "q": "Where are TSMC's main fabrication plants?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9670943502702474,
+          "latency_s": 1.198075532913208
+        },
+        {
+          "q": "What is the difference between a warehouse and a distribution center?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7498886013666511,
+          "latency_s": 1.1636888980865479
+        },
+        {
+          "q": "What does ASRS stand for in warehousing?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.6934264036172708,
+          "latency_s": 3.9160282611846924
+        }
+      ],
+      "aggregate": {
+        "p1": 0.9245283018867925,
+        "p3": 0.8553459119496855,
+        "p5": 0.7999999999999998,
+        "r5": 0.9905660377358491,
+        "r10": 0.9905660377358491,
+        "mrr": 0.9591194968553458,
+        "ndcg10": 0.9349625304402387,
+        "latency_s": 1.8626266335541348,
+        "total_s": 98.71921157836914
+      }
+    },
+    "P7_rrf_ensemble_rerank": {
+      "pipeline": "P7_rrf_ensemble_rerank",
+      "per_query": [
+        {
+          "q": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.3203678131103516
+        },
+        {
+          "q": "How many people died in the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2834827899932861
+        },
+        {
+          "q": "What nuclear facility was damaged by the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.270418643951416
+        },
+        {
+          "q": "What caused the 2020-2023 global chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9667147927059906,
+          "latency_s": 1.0827159881591797
+        },
+        {
+          "q": "Which industries were hit hardest by the chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1041815280914307
+        },
+        {
+          "q": "What ship blocked the Suez Canal in March 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8775271469089743,
+          "latency_s": 1.0808782577514648
+        },
+        {
+          "q": "How long was the Suez Canal blocked by Ever Given?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9498751896215565,
+          "latency_s": 1.2538537979125977
+        },
+        {
+          "q": "What was the economic impact of the 2021 Suez Canal obstruction?",
+          "gold": [
+            "2021_Suez_Canal_obstruction"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7045057227504283,
+          "latency_s": 1.129406213760376
+        },
+        {
+          "q": "What is the strategic importance of the Bab-el-Mandeb strait?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.223205804824829
+        },
+        {
+          "q": "How much maritime trade passes through Bab-el-Mandeb?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.933819260234181,
+          "latency_s": 1.2065460681915283
+        },
+        {
+          "q": "What does the Baltic Dry Index measure?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 3.358933687210083
+        },
+        {
+          "q": "Who publishes the Baltic Dry Index?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 3.5845930576324463
+        },
+        {
+          "q": "What is the bullwhip effect in supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.215827465057373
+        },
+        {
+          "q": "What causes demand amplification in multi-tier supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9793656319464776,
+          "latency_s": 1.1188225746154785
+        },
+        {
+          "q": "What is the CHIPS and Science Act?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.5330641269683838
+        },
+        {
+          "q": "How much does the CHIPS Act allocate for semiconductor manufacturing?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.2204923629760742
+        },
+        {
+          "q": "What is TEU in container shipping?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9726647310833559,
+          "latency_s": 1.6960132122039795
+        },
+        {
+          "q": "What is the largest container ship?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8932498536862835,
+          "latency_s": 1.2241473197937012
+        },
+        {
+          "q": "What does an ERP system do?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.0698907375335693
+        },
+        {
+          "q": "Which vendors dominate the ERP software market?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8896955117809704,
+          "latency_s": 1.2831108570098877
+        },
+        {
+          "q": "Who owns the Ever Given ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8843252268199594,
+          "latency_s": 2.012232542037964
+        },
+        {
+          "q": "What is the length of the Ever Given container ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9060254355346823,
+          "latency_s": 1.5175962448120117
+        },
+        {
+          "q": "Who founded Foxconn?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 1.1588833332061768
+        },
+        {
+          "q": "What products does Foxconn manufacture?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 2.0332717895507812
+        },
+        {
+          "q": "What is safety stock in inventory management?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.7945039219825193,
+          "latency_s": 1.1962628364562988
+        },
+        {
+          "q": "What is the difference between perpetual and periodic inventory?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9565912771023182,
+          "latency_s": 2.5664608478546143
+        },
+        {
+          "q": "What is just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9634874376052049,
+          "latency_s": 1.7290797233581543
+        },
+        {
+          "q": "Who developed just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9371072971649781,
+          "latency_s": 2.028723955154419
+        },
+        {
+          "q": "What are the main functions of logistics?",
+          "gold": [
+            "Logistics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.298760175704956
+        },
+        {
+          "q": "What is the difference between logistics and supply chain management?",
+          "gold": [
+            "Logistics",
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1835942268371582
+        },
+        {
+          "q": "What is the ranking of the Port of Los Angeles by container volume?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9911205770005563,
+          "latency_s": 1.270153284072876
+        },
+        {
+          "q": "What caused congestion at the Port of Los Angeles in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9642409754030941,
+          "latency_s": 1.0966873168945312
+        },
+        {
+          "q": "What makes the Port of Singapore a transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2324659824371338
+        },
+        {
+          "q": "How many containers does the Port of Singapore handle per year?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9374130297304558,
+          "latency_s": 1.208991527557373
+        },
+        {
+          "q": "What is the 2023-2024 Red Sea crisis?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 2.518171548843384
+        },
+        {
+          "q": "Which group has attacked ships in the Red Sea?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.250565767288208
+        },
+        {
+          "q": "What is Samsung Electronics' role in semiconductors?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.213487148284912
+        },
+        {
+          "q": "Where are Samsung's main semiconductor fabs located?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9001715370445234,
+          "latency_s": 1.1649680137634277
+        },
+        {
+          "q": "How does semiconductor manufacturing work at the foundry level?",
+          "gold": [
+            "Semiconductor_industry",
+            "TSMC"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg10": 0.48381288316677695,
+          "latency_s": 1.137556791305542
+        },
+        {
+          "q": "What are the leading semiconductor companies by revenue?",
+          "gold": [
+            "Semiconductor_industry"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9066276098484507,
+          "latency_s": 1.1817655563354492
+        },
+        {
+          "q": "What percentage of oil shipments pass through the Strait of Hormuz?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.2783095836639404
+        },
+        {
+          "q": "Why is the Strait of Hormuz a geopolitical chokepoint?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.870392650794485,
+          "latency_s": 1.261702299118042
+        },
+        {
+          "q": "What is the strategic significance of the Strait of Malacca?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.2096796035766602
+        },
+        {
+          "q": "What volume of trade passes through the Malacca Strait?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9378773695257355,
+          "latency_s": 1.322840929031372
+        },
+        {
+          "q": "When was the Suez Canal built?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9504206262110481,
+          "latency_s": 1.1706516742706299
+        },
+        {
+          "q": "How many ships transit the Suez Canal annually?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9447403758138471,
+          "latency_s": 1.1605987548828125
+        },
+        {
+          "q": "What is the SolarWinds supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.556633710861206
+        },
+        {
+          "q": "What are common mitigations for software supply chain attacks?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9950883841893561,
+          "latency_s": 1.1702461242675781
+        },
+        {
+          "q": "What are the key processes in supply chain management?",
+          "gold": [
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.194014549255371
+        },
+        {
+          "q": "What percentage of the world's advanced chips does TSMC produce?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9093183643170806,
+          "latency_s": 1.2227239608764648
+        },
+        {
+          "q": "Where are TSMC's main fabrication plants?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9670943502702474,
+          "latency_s": 1.2334749698638916
+        },
+        {
+          "q": "What is the difference between a warehouse and a distribution center?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.6860491790714993,
+          "latency_s": 1.2591311931610107
+        },
+        {
+          "q": "What does ASRS stand for in warehousing?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.6906961806928682,
+          "latency_s": 1.734614372253418
+        }
+      ],
+      "aggregate": {
+        "p1": 0.9245283018867925,
+        "p3": 0.8679245283018867,
+        "p5": 0.8075471698113207,
+        "r5": 0.9905660377358491,
+        "r10": 0.9905660377358491,
+        "mrr": 0.9591194968553458,
+        "ndcg10": 0.9358304090742331,
+        "latency_s": 1.434608540445004,
+        "total_s": 76.0342526435852
+      }
+    },
+    "P8_hyde_rrf_rerank": {
+      "pipeline": "P8_hyde_rrf_rerank",
+      "per_query": [
+        {
+          "q": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2528455257415771
+        },
+        {
+          "q": "How many people died in the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2116341590881348
+        },
+        {
+          "q": "What nuclear facility was damaged by the 2011 Tohoku tsunami?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.381859302520752
+        },
+        {
+          "q": "What caused the 2020-2023 global chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9667147927059906,
+          "latency_s": 1.3036327362060547
+        },
+        {
+          "q": "Which industries were hit hardest by the chip shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1947190761566162
+        },
+        {
+          "q": "What ship blocked the Suez Canal in March 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8775271469089743,
+          "latency_s": 1.2239530086517334
+        },
+        {
+          "q": "How long was the Suez Canal blocked by Ever Given?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9531641314941091,
+          "latency_s": 1.2032644748687744
+        },
+        {
+          "q": "What was the economic impact of the 2021 Suez Canal obstruction?",
+          "gold": [
+            "2021_Suez_Canal_obstruction"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7045057227504283,
+          "latency_s": 1.2745087146759033
+        },
+        {
+          "q": "What is the strategic importance of the Bab-el-Mandeb strait?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9716140459636848,
+          "latency_s": 1.144824743270874
+        },
+        {
+          "q": "How much maritime trade passes through Bab-el-Mandeb?",
+          "gold": [
+            "Bab-el-Mandeb"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.933819260234181,
+          "latency_s": 1.2952625751495361
+        },
+        {
+          "q": "What does the Baltic Dry Index measure?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2430429458618164
+        },
+        {
+          "q": "Who publishes the Baltic Dry Index?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.6018893718719482
+        },
+        {
+          "q": "What is the bullwhip effect in supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1986057758331299
+        },
+        {
+          "q": "What causes demand amplification in multi-tier supply chains?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9793656319464776,
+          "latency_s": 1.1352808475494385
+        },
+        {
+          "q": "What is the CHIPS and Science Act?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.24904203414917
+        },
+        {
+          "q": "How much does the CHIPS Act allocate for semiconductor manufacturing?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.2050206661224365
+        },
+        {
+          "q": "What is TEU in container shipping?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9726647310833559,
+          "latency_s": 1.2344095706939697
+        },
+        {
+          "q": "What is the largest container ship?",
+          "gold": [
+            "Container_ship"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8932498536862835,
+          "latency_s": 1.221764326095581
+        },
+        {
+          "q": "What does an ERP system do?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1244292259216309
+        },
+        {
+          "q": "Which vendors dominate the ERP software market?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8896955117809704,
+          "latency_s": 1.157841444015503
+        },
+        {
+          "q": "Who owns the Ever Given ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.8843252268199594,
+          "latency_s": 1.0649306774139404
+        },
+        {
+          "q": "What is the length of the Ever Given container ship?",
+          "gold": [
+            "Ever_Given"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9060254355346823,
+          "latency_s": 1.1131069660186768
+        },
+        {
+          "q": "Who founded Foxconn?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1354155540466309
+        },
+        {
+          "q": "What products does Foxconn manufacture?",
+          "gold": [
+            "Foxconn"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1375327110290527
+        },
+        {
+          "q": "What is safety stock in inventory management?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.7984186378284633,
+          "latency_s": 1.087503433227539
+        },
+        {
+          "q": "What is the difference between perpetual and periodic inventory?",
+          "gold": [
+            "Inventory"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9860433320650158,
+          "latency_s": 1.1838164329528809
+        },
+        {
+          "q": "What is just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.975788054854922,
+          "latency_s": 1.0933973789215088
+        },
+        {
+          "q": "Who developed just-in-time manufacturing?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9397911964740514,
+          "latency_s": 1.131110668182373
+        },
+        {
+          "q": "What are the main functions of logistics?",
+          "gold": [
+            "Logistics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.2097275257110596
+        },
+        {
+          "q": "What is the difference between logistics and supply chain management?",
+          "gold": [
+            "Logistics",
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1541733741760254
+        },
+        {
+          "q": "What is the ranking of the Port of Los Angeles by container volume?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9911205770005563,
+          "latency_s": 1.1891560554504395
+        },
+        {
+          "q": "What caused congestion at the Port of Los Angeles in 2021?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9502262648327979,
+          "latency_s": 1.150048017501831
+        },
+        {
+          "q": "What makes the Port of Singapore a transshipment hub?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.126070261001587
+        },
+        {
+          "q": "How many containers does the Port of Singapore handle per year?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9374130297304558,
+          "latency_s": 1.1520793437957764
+        },
+        {
+          "q": "What is the 2023-2024 Red Sea crisis?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9937947856332161,
+          "latency_s": 1.1443266868591309
+        },
+        {
+          "q": "Which group has attacked ships in the Red Sea?",
+          "gold": [
+            "Red_Sea_crisis"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.2057571411132812
+        },
+        {
+          "q": "What is Samsung Electronics' role in semiconductors?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9770153702993118,
+          "latency_s": 1.0935866832733154
+        },
+        {
+          "q": "Where are Samsung's main semiconductor fabs located?",
+          "gold": [
+            "Samsung_Electronics"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9044067485064367,
+          "latency_s": 1.1994328498840332
+        },
+        {
+          "q": "How does semiconductor manufacturing work at the foundry level?",
+          "gold": [
+            "Semiconductor_industry",
+            "TSMC"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.2,
+          "r5": 0.5,
+          "r10": 0.5,
+          "mrr": 0.3333333333333333,
+          "ndcg10": 0.48381288316677695,
+          "latency_s": 1.162618637084961
+        },
+        {
+          "q": "What are the leading semiconductor companies by revenue?",
+          "gold": [
+            "Semiconductor_industry"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9066276098484507,
+          "latency_s": 1.1583278179168701
+        },
+        {
+          "q": "What percentage of oil shipments pass through the Strait of Hormuz?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.97484593625304,
+          "latency_s": 1.2386560440063477
+        },
+        {
+          "q": "Why is the Strait of Hormuz a geopolitical chokepoint?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.870392650794485,
+          "latency_s": 1.2855093479156494
+        },
+        {
+          "q": "What is the strategic significance of the Strait of Malacca?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.1624553203582764
+        },
+        {
+          "q": "What volume of trade passes through the Malacca Strait?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9378773695257355,
+          "latency_s": 1.139005422592163
+        },
+        {
+          "q": "When was the Suez Canal built?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9504206262110481,
+          "latency_s": 1.143012285232544
+        },
+        {
+          "q": "How many ships transit the Suez Canal annually?",
+          "gold": [
+            "Suez_Canal"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9447403758138471,
+          "latency_s": 1.1480586528778076
+        },
+        {
+          "q": "What is the SolarWinds supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9971876401972101,
+          "latency_s": 1.148346185684204
+        },
+        {
+          "q": "What are common mitigations for software supply chain attacks?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9930783166417602,
+          "latency_s": 1.0839033126831055
+        },
+        {
+          "q": "What are the key processes in supply chain management?",
+          "gold": [
+            "Supply_chain_management"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 1.0,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 1.0,
+          "latency_s": 1.1509523391723633
+        },
+        {
+          "q": "What percentage of the world's advanced chips does TSMC produce?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 0.6666666666666666,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9093183643170806,
+          "latency_s": 1.156186580657959
+        },
+        {
+          "q": "Where are TSMC's main fabrication plants?",
+          "gold": [
+            "TSMC"
+          ],
+          "p1": 1.0,
+          "p3": 1.0,
+          "p5": 0.8,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 1.0,
+          "ndcg10": 0.9782917460822231,
+          "latency_s": 1.1934635639190674
+        },
+        {
+          "q": "What is the difference between a warehouse and a distribution center?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.4,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.6860491790714993,
+          "latency_s": 1.2119927406311035
+        },
+        {
+          "q": "What does ASRS stand for in warehousing?",
+          "gold": [
+            "Warehouse"
+          ],
+          "p1": 0.0,
+          "p3": 0.3333333333333333,
+          "p5": 0.6,
+          "r5": 1.0,
+          "r10": 1.0,
+          "mrr": 0.5,
+          "ndcg10": 0.7538564085554508,
+          "latency_s": 1.1870019435882568
+        }
+      ],
+      "aggregate": {
+        "p1": 0.9245283018867925,
+        "p3": 0.8616352201257861,
+        "p5": 0.8188679245283018,
+        "r5": 0.9905660377358491,
+        "r10": 0.9905660377358491,
+        "mrr": 0.9591194968553458,
+        "ndcg10": 0.9381023619162208,
+        "latency_s": 1.1886508014966857,
+        "total_s": 62.999061584472656
+      }
+    }
+  },
+  "elapsed_min": 8.073883402347565
+}
