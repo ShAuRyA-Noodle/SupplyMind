@@ -8,6 +8,9 @@ Everything a judge would want, in one place. Updated 2026-04-18.
 1. **Landing page**: [`demo/LANDING_PAGE.md`](LANDING_PAGE.md) or HF Space README
 2. **Pitch deck**: open [`demo/SupplyMind_pitch.html`](SupplyMind_pitch.html) in a browser (5 slides, landscape A4)
 3. **3 curl demos** in the landing page (risk, forecast, RAG)
+4. **Read-only demo transcript**: [`demo/DEMO_TRANSCRIPT.md`](DEMO_TRANSCRIPT.md) — all 8 scenes with exact commands (no video needed)
+5. **Real-cited external credibility**: [`../EXTERNAL_CREDIBILITY.md`](../EXTERNAL_CREDIBILITY.md) — 10+ published quotes validating design choices
+6. **Deploy playbook**: [`../DEPLOY_HF_SPACE.md`](../DEPLOY_HF_SPACE.md) — phoenix rebuild walkthrough
 
 ### 10-minute path
 4. **Demo video** (when recorded): follow [`demo/DEMO_VIDEO_SCRIPT.md`](DEMO_VIDEO_SCRIPT.md) — 3-min OBS screencap
@@ -56,6 +59,7 @@ Run `bash scripts/release_assets.sh` (requires `gh` CLI) to auto-upload:
   - `granite/r5_latency_vs_mrr.png` — Pareto
   - `granite/r5_per_query_heatmap.png` — per-query P@1
   - `past_self/r3_summary.png` — 8 FRED targets × 3 horizons
+  - `gethsemane/r6_masking_ablation.png` — masked vs unmasked PPO isolated lift (+26.8%)
 
 - **JSONs** (`v3_arcadia/results/*.json`):
   - `R1_VERIFIED.json` — 13-model verification
