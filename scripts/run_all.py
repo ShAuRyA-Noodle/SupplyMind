@@ -43,6 +43,10 @@ CHECKS = [
         ["graphs", "medium", "improvement_vs_mlp_pct"], 40.0, True),
     ("R6 GNN arrival-time lift % (hard graph)", "R6_PROVIDER_V2.json",
         ["graphs", "hard", "improvement_vs_mlp_pct"], 50.0, True),
+    ("R6 MaskablePPO reward", "R6_ALGO_COMPARISON.json",
+        ["per_algorithm", "MaskablePPO", "reward_mean"], 1.15, True),
+    ("R6 MaskablePPO invalid picks/ep", "R6_ALGO_COMPARISON.json",
+        ["per_algorithm", "MaskablePPO", "invalid_action_picks_mean_per_ep"], 0.01, False),
 ]
 
 

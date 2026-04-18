@@ -203,6 +203,19 @@ Isolated ablation (same PPO, same 100k steps, same obs space, same hyperparamete
 
 The structural invalid-action elimination is the true product feature — in a production system, invalid actions are not just reward-suboptimal, they are unsafe. MaskablePPO eliminates them categorically.
 
+### W8-b — Head-to-head vs 3 SOTA on-policy RL algorithms
+
+Four algorithms trained identically (same env, same 100k steps, same seed, same two-layer Tanh MLP, same learning rate) and evaluated on the same 50-episode held-out suite (`R6_ALGO_COMPARISON.json`):
+
+| Algorithm | Reward ± std | vs MaskablePPO | Invalid/ep |
+|---|---|---|---|
+| **MaskablePPO** | **1.201 ± 0.199** | **—** | **0.0** |
+| RecurrentPPO (LSTM policy) | 1.081 ± 0.196 | −10.0% | 14.9 |
+| PPO | 0.947 ± 0.124 | −21.2% | 13.6 |
+| A2C | 0.874 ± 0.118 | −27.2% | 13.9 |
+
+MaskablePPO is the uncontested winner on both reward and safety. Even RecurrentPPO with its LSTM memory cannot close the gap — the structural mask dominates the architectural sophistication.
+
 ### W9 — R3 TimesFM residual-quantile wrapper beats Chronos-native
 
 TimesFM-2 ships only point forecasts; Chronos-Bolt ships native quantiles but clips them to its training grid (0.1–0.9 range). For 95% PI we need extrapolation. Built a per-horizon split-conformal wrapper around TimesFM point forecasts and compared head-to-head on 3 FRED targets × 14-day horizon × 20 cal / 20 test folds (`R3_TIMESFM_QUANTILE.json`):

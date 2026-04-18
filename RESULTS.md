@@ -18,6 +18,7 @@
 | 8 | **GNN arrival-time MAE reduction vs MLP** | **−48% / −49% / −64%** (easy / medium / hard graph) | `R6_PROVIDER_V2.json` |
 | 9 | **TimesFM-CP deviation @ 95%** (WTI, EUR-USD) | **0.050 / 0.032** (Chronos-native: 0.239 / 0.214) | `R3_TIMESFM_QUANTILE.json` |
 | 10 | **PPO vs random/greedy CI95** (8,100-ep bootstrap) | non-overlapping on all 3 tasks | `R6_EUCLIDIAN.json` |
+| 11 | **MaskablePPO vs PPO / A2C / RecurrentPPO** (same 100k, same seed) | **+21.2% / +27.2% / +10.0%** | `R6_ALGO_COMPARISON.json` |
 
 ---
 

@@ -1,0 +1,72 @@
+{
+  "task": "easy_typhoon_response",
+  "training_timesteps": 100000,
+  "eval_episodes": 50,
+  "per_algorithm": {
+    "MaskablePPO": {
+      "algorithm": "MaskablePPO",
+      "n_episodes": 50,
+      "reward_mean": 1.2005000000000001,
+      "reward_std": 0.19939637032804786,
+      "reward_min": 0.643,
+      "reward_max": 1.3435000000000004,
+      "length_mean": 20.0,
+      "violations_mean": 0.0,
+      "invalid_action_picks_mean_per_ep": 0.0
+    },
+    "PPO": {
+      "algorithm": "PPO",
+      "n_episodes": 50,
+      "reward_mean": 0.9470000000000001,
+      "reward_std": 0.1244727781484771,
+      "reward_min": 0.5895,
+      "reward_max": 1.0760000000000003,
+      "length_mean": 20.0,
+      "violations_mean": 0.0,
+      "invalid_action_picks_mean_per_ep": 13.64
+    },
+    "A2C": {
+      "algorithm": "A2C",
+      "n_episodes": 50,
+      "reward_mean": 0.8738700000000001,
+      "reward_std": 0.11796597221232909,
+      "reward_min": 0.5359999999999999,
+      "reward_max": 0.9690000000000002,
+      "length_mean": 20.0,
+      "violations_mean": 0.0,
+      "invalid_action_picks_mean_per_ep": 13.88
+    },
+    "RecurrentPPO": {
+      "algorithm": "RecurrentPPO",
+      "n_episodes": 50,
+      "reward_mean": 1.0806900000000002,
+      "reward_std": 0.19626869694375626,
+      "reward_min": 0.7499999999999999,
+      "reward_max": 1.3470000000000004,
+      "length_mean": 20.0,
+      "violations_mean": 0.0,
+      "invalid_action_picks_mean_per_ep": 14.86
+    }
+  },
+  "train_times_min": {
+    "MaskablePPO": 10.99298940896988,
+    "PPO": 8.347426931063334,
+    "A2C": 9.913969707489013,
+    "RecurrentPPO": 16.337928581237794
+  },
+  "maskable_vs_others": {
+    "PPO": {
+      "reward_delta": -0.25350000000000006,
+      "maskable_lift_pct": 26.768743400211196
+    },
+    "A2C": {
+      "reward_delta": -0.32663,
+      "maskable_lift_pct": 37.377413116367414
+    },
+    "RecurrentPPO": {
+      "reward_delta": -0.11980999999999997,
+      "maskable_lift_pct": 11.08643551804865
+    }
+  },
+  "elapsed_min": 45.86821995576223
+}

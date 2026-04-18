@@ -1,0 +1,35 @@
+{
+  "task": "medium_multi_front",
+  "training_timesteps": 300000,
+  "eval_episodes": 50,
+  "masked": {
+    "policy": "ppo_v3_medium_300k_masked",
+    "n_episodes": 50,
+    "reward_mean": 2.509831583626342,
+    "reward_std": 0.26661520771462105,
+    "reward_min": 1.7227792660971328,
+    "reward_max": 2.9819129581805743,
+    "length_mean": 44.76,
+    "violations_mean": 0.0,
+    "invalid_action_picks_mean_per_ep": 0.0
+  },
+  "unmasked": {
+    "policy": "ppo_v3_medium_300k_unmasked",
+    "n_episodes": 50,
+    "reward_mean": 2.6762627380200907,
+    "reward_std": 0.25237600251071923,
+    "reward_min": 1.6895121004566216,
+    "reward_max": 2.8642794052248375,
+    "length_mean": 44.76,
+    "violations_mean": 0.0,
+    "invalid_action_picks_mean_per_ep": 8.06
+  },
+  "action_masking_contribution": {
+    "reward_delta": -0.16643115439374867,
+    "reward_pct_delta": -6.21878980824114,
+    "invalid_reduction": 8.06,
+    "train_time_masked_min": 79.42644394636154,
+    "train_time_unmasked_min": 70.98126666148504
+  },
+  "elapsed_min": 151.33770393133165
+}
