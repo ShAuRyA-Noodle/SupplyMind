@@ -28,6 +28,8 @@ tags:
 
 > *"Even in Arcadia, supply chains break. SupplyMind sees it coming."*
 
+![SupplyMind v3.0-arcadia hero result card](v3_arcadia/plots/hero_result_card.png)
+
 ## If you have 30 seconds — ten headline numbers
 
 | # | Metric | Value |
