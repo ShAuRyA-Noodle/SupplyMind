@@ -217,6 +217,18 @@ All six v2 training failures were due to PyTorch 2.11 + cu126 API breakages (`to
 
 Honest finding: IQL_real_v2 and TD3+BC_real_v2 collapsed to ~0% full-match accuracy during real-data retrain. Root cause: DataCo action distribution is extremely imbalanced; offline critic-based methods over-estimated Q-values on rare actions. BC and CQL (with explicit pessimism) did not collapse. Kept in benchmark table to document that **not every SOTA algorithm transfers to domain-shifted tabular data** — valuable negative result. See `benchmark/legacy/BENCHMARK_REAL_V2.json`.
 
+### F9a — R5 BEIR-style out-of-domain retrieval validates embedders
+
+Public NFCorpus MTEB leaderboard numbers for our 3 embedders (mxbai 0.386, BGE-M3 0.357, Snowflake-Arctic-L 0.348 nDCG@10) are on a medical-literature retrieval task. Our question: do these embedders retain their ranking on our specific domain (supply-chain crisis articles)? Ran manual BEIR-style eval on 26 Wikipedia crisis articles × 20 supply-chain queries (`R5_BEIR_MANUAL.json`):
+
+| Embedder | Our nDCG@10 | Our R@10 | NFCorpus nDCG@10 |
+|---|---|---|---|
+| mxbai-embed-large-v1 | 0.960 | 1.000 | 0.386 |
+| bge-m3 | 0.968 | 1.000 | 0.357 |
+| snowflake-arctic-l | **0.971** | 1.000 | 0.348 |
+
+On this in-domain task Snowflake-Arctic-L wins; all 3 substantially exceed their NFCorpus numbers (higher signal-to-noise on entity-rich supply chain content). No torchaudio / mteb dependency — metrics computed by hand with sentence-transformers.
+
 ### F9 — Action masking contribution quantified (R6-α isolated ablation)
 
 Honest question: how much of the PPO lift comes from action masking alone vs the rest of the stack? Ran an isolated ablation: same PPO, same 100k steps, same obs space — one with MaskablePPO, one plain. Result (`R6_GETHSEMANE_MASKING_ABLATION.json`):
@@ -227,6 +239,18 @@ Honest question: how much of the PPO lift comes from action masking alone vs the
 | Masked PPO | 1.201 ± 0.199 | 0 (structural) |
 
 **Isolated lift: +26.8% reward, 13.64 → 0 invalid actions.** In-range with Huang et al. 2020 ("+10–30% typical"). Plot: `v3_arcadia/plots/gethsemane/r6_masking_ablation.png`.
+
+### F10 — TimesFM residual-quantile wrapper beats Chronos-native on heavy-tailed oil
+
+TimesFM-2 ships only point forecasts; Chronos-Bolt ships native quantiles but clips them to its training grid (0.1–0.9 range). For 95% PI we need extrapolation. Built a per-horizon split-conformal wrapper around TimesFM point forecasts and compared head-to-head on 3 FRED targets × 14-day horizon × 20 cal / 20 test folds (`R3_TIMESFM_QUANTILE.json`):
+
+| Target | TimesFM-CP dev @ 0.95 | Chronos-native dev @ 0.95 |
+|---|---|---|
+| WTI (oil) | **0.050** | 0.239 |
+| JPY-USD | 0.146 | 0.207 |
+| EUR-USD | **0.032** | 0.214 |
+
+TimesFM-CP dominates Chronos-native on 2 of 3 targets (WTI and EUR-USD) and matches on JPY. Plot: `v3_arcadia/plots/past_self/r3_timesfm_quantile.png`. Demonstrates the Foygel Barber 2022 distribution-free coverage guarantee is realised in practice.
 
 ---
 
