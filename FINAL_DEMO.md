@@ -111,6 +111,21 @@ Every artifact must be navigable from the HF Space landing page.
 
 **World-class improvement**: Annotate each failure with **resolution commit**. Most were torch 2.11 + cu126 → fixed in v3 with torch 2.5.1 + cu121. Keep as **honesty artifact** showing we don't hide our scars.
 
+### F9. R6 PPO lift ambiguous → action-masking contribution quantified
+**Original**: PPO beats random/greedy but unclear how much of the lift is from masking vs training.
+
+**World-class improvement**: Ran isolated ablation (same PPO, same steps, same obs) — one MaskablePPO, one plain. **+26.8% reward, 13.64 → 0 invalid actions.** Directly in Huang et al. 2020 published range. `R6_GETHSEMANE_MASKING_ABLATION.json` + `plots/gethsemane/r6_masking_ablation.png`.
+
+### F10. External credibility → real cited published sources
+**Original**: No third-party endorsements available pre-submission.
+
+**World-class improvement**: `EXTERNAL_CREDIBILITY.md` aggregates 10+ real cited quotes from McKinsey, BCI, Gartner, CSCMP, SemiAnalysis, Lloyd's, MT-Bench, Huang 2020, Foygel Barber 2022 — each validating a specific design choice. No invented endorsements.
+
+### F11. Video substitute for read-only judges
+**Original**: Demo video is time-expensive for judges to consume.
+
+**World-class improvement**: `demo/DEMO_TRANSCRIPT.md` — every beat of the 3-min video transcribed with exact commands and captions. Judges can defend the submission in under 7 minutes without playing any media.
+
 ---
 
 ## 4. Repo hygiene + unification (this commit)
