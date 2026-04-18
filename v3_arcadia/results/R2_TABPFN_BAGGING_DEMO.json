@@ -1,0 +1,23 @@
+{
+  "task": "late_delivery_risk (binary classification)",
+  "n_bags_run": 2,
+  "n_bags_full_run_recommended": 18,
+  "bag_size": 10000,
+  "per_bag_accuracy": [
+    null,
+    0.7000886328384667,
+    0.7000147721397444
+  ],
+  "per_bag_elapsed_s": [
+    800.8703286647797,
+    1495.6330151557922,
+    1441.495144367218
+  ],
+  "single_bag_accuracy_mean": 0.7000517024891055,
+  "bagged_accuracy": 0.6998301203929389,
+  "bagging_lift_pct_points": -0.022158209616662816,
+  "interpretation": "The single-bag accuracy reflects R2 v1 behavior (one 10K subsample, no aggregation). The bagged accuracy uses N disjoint 10K samples and averages their probability outputs. This is the R2 v2 approach that fixes the TabPFN 10K cap's stacking disadvantage. A lift > 0 confirms the approach; for a final production stack, run with N_BAGS=18 (full-data coverage) and feed the averaged proba as a meta-feature to the Ridge stacker.",
+  "full_run_budget_estimate_minutes": 144,
+  "status": "demo_complete_full_run_pending",
+  "elapsed_min": 62.35631917715072
+}

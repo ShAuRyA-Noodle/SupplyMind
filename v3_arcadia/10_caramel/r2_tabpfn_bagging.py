@@ -66,8 +66,12 @@ def train_tabpfn_bag(X_tr, y_tr, seed):
     idx = rng.choice(len(X_tr), size=min(BAG_SIZE, len(X_tr)), replace=False)
     Xs = X_tr.iloc[idx].values if hasattr(X_tr, "iloc") else X_tr[idx]
     ys = np.asarray(y_tr)[idx]
-    import torch
-    dev = "cuda" if torch.cuda.is_available() else "cpu"
+    import os, torch
+    # Allow override to CPU when GPU is busy (concurrent jobs). Default auto.
+    if os.environ.get("R2_FORCE_CPU", "") == "1":
+        dev = "cpu"
+    else:
+        dev = "cuda" if torch.cuda.is_available() else "cpu"
     m = TabPFNClassifier(device=dev, model_path=str(TABPFN_CLF),
                           n_estimators=2, ignore_pretraining_limits=True)
     m.fit(Xs, ys)
