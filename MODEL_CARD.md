@@ -240,6 +240,16 @@ Honest question: how much of the PPO lift comes from action masking alone vs the
 
 **Isolated lift: +26.8% reward, 13.64 → 0 invalid actions.** In-range with Huang et al. 2020 ("+10–30% typical"). Plot: `v3_arcadia/plots/gethsemane/r6_masking_ablation.png`.
 
+**Extended to medium + hard tasks** (`R6_GETHSEMANE_MASKING_ABLATION_ALLTASKS.json`):
+
+| Task | Masked reward | Unmasked reward | Δ% | Invalid/ep |
+|---|---|---|---|---|
+| easy_typhoon_response | 1.200 | 0.947 | +26.8% | 13.64 → 0 |
+| medium_multi_front | 2.775 | 2.757 | +0.7% | 18.80 → 0 |
+| hard_cascading_crisis | 2.674 | 2.322 | +15.1% | 0.00 → 0 |
+
+Heterogeneous per-task picture — published warts and all. Masking **always** zeroes invalid picks structurally; reward lift is task-dependent (large on easy + hard, small on medium where unmasked rollouts already get similar terminal rewards despite invalid picks).
+
 ### F10 — TimesFM residual-quantile wrapper beats Chronos-native on heavy-tailed oil
 
 TimesFM-2 ships only point forecasts; Chronos-Bolt ships native quantiles but clips them to its training grid (0.1–0.9 range). For 95% PI we need extrapolation. Built a per-horizon split-conformal wrapper around TimesFM point forecasts and compared head-to-head on 3 FRED targets × 14-day horizon × 20 cal / 20 test folds (`R3_TIMESFM_QUANTILE.json`):
