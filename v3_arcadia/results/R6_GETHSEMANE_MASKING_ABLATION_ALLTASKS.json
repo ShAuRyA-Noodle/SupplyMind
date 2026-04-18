@@ -1,0 +1,56 @@
+{
+  "note": "R6-\u03b2 extension: masking ablation on medium + hard tasks. Easy task result is in R6_GETHSEMANE_MASKING_ABLATION.json.",
+  "training_timesteps": 100000,
+  "eval_episodes": 50,
+  "per_task": {
+    "medium_multi_front": {
+      "unmasked": {
+        "policy": "ppo_v3_unmasked",
+        "n_episodes": 50,
+        "reward_mean": 2.7565819687975632,
+        "reward_std": 0.20403751317525584,
+        "invalid_action_picks_mean_per_ep": 18.78,
+        "violations_mean": 0.0
+      },
+      "masked": {
+        "policy": "ppo_v3_masked",
+        "n_episodes": 50,
+        "reward_mean": 2.774816094381805,
+        "reward_std": 0.2510891195507745,
+        "invalid_action_picks_mean_per_ep": 0.0,
+        "violations_mean": 0.0
+      },
+      "masking_contribution": {
+        "reward_delta": 0.018234125584241756,
+        "reward_pct_delta": 0.6614759071429168,
+        "invalid_reduction": 18.78,
+        "train_time_unmasked_min": 31.571802679697672
+      }
+    },
+    "hard_cascading_crisis": {
+      "unmasked": {
+        "policy": "ppo_v3_unmasked",
+        "n_episodes": 50,
+        "reward_mean": 2.322449254266254,
+        "reward_std": 0.7976866159267366,
+        "invalid_action_picks_mean_per_ep": 0.02,
+        "violations_mean": 0.0
+      },
+      "masked": {
+        "policy": "ppo_v3_masked",
+        "n_episodes": 50,
+        "reward_mean": 2.67403629887518,
+        "reward_std": 0.7949077297864112,
+        "invalid_action_picks_mean_per_ep": 0.0,
+        "violations_mean": 0.0
+      },
+      "masking_contribution": {
+        "reward_delta": 0.35158704460892576,
+        "reward_pct_delta": 15.138631940528875,
+        "invalid_reduction": 0.02,
+        "train_time_unmasked_min": 41.46108073393504
+      }
+    }
+  },
+  "elapsed_min": 75.33311843474706
+}
