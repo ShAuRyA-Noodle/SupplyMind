@@ -7,7 +7,7 @@
       "mean_ndcg@10": 0.9597824382702198,
       "mean_recall@10": 1.0,
       "mean_precision@10": 0.12000000000000002,
-      "corpus_encoding_s": 12.604283332824707,
+      "corpus_encoding_s": 12.996914148330688,
       "n_queries": 20,
       "per_query": {
         "q1": {
@@ -337,12 +337,672 @@
       }
     },
     "bge-m3": {
-      "status": "FAILED",
-      "error": "The paging file is too small for this operation to complete. (os error 1455)"
+      "embedder": "bge-m3",
+      "mean_ndcg@10": 0.967519867361079,
+      "mean_recall@10": 1.0,
+      "mean_precision@10": 0.12000000000000002,
+      "corpus_encoding_s": 43.88751459121704,
+      "n_queries": 20,
+      "per_query": {
+        "q1": {
+          "query": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "top5": [
+            "2011_T\u014dhoku_earthquake_and_tsunami",
+            "Foxconn",
+            "Bab-el-Mandeb",
+            "Ever_Given",
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q2": {
+          "query": "How long was the Suez Canal blocked in 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "top5": [
+            "2021_Suez_Canal_obstruction",
+            "Suez_Canal",
+            "Ever_Given",
+            "Bab-el-Mandeb",
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "ndcg@10": 0.9197207891481876,
+          "recall@10": 1.0,
+          "precision@10": 0.2
+        },
+        "q3": {
+          "query": "What caused the global semiconductor shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "top5": [
+            "2020\u20132023_global_chip_shortage",
+            "Semiconductor_industry",
+            "TSMC",
+            "Samsung_Electronics",
+            "Foxconn"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q4": {
+          "query": "Why is the Strait of Hormuz strategically important?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "top5": [
+            "Strait_of_Hormuz",
+            "Bab-el-Mandeb",
+            "Strait_of_Malacca",
+            "Suez_Canal",
+            "Red_Sea_crisis"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q5": {
+          "query": "How do Houthis threaten Red Sea shipping?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "top5": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb",
+            "Suez_Canal",
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.2
+        },
+        "q6": {
+          "query": "Which foundry dominates advanced chip production?",
+          "gold": [
+            "TSMC",
+            "Semiconductor_industry"
+          ],
+          "top5": [
+            "Semiconductor_industry",
+            "TSMC",
+            "Foxconn",
+            "2020\u20132023_global_chip_shortage",
+            "Samsung_Electronics"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.2
+        },
+        "q7": {
+          "query": "What is the bullwhip effect?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "top5": [
+            "Bullwhip_effect",
+            "2020\u20132023_global_chip_shortage",
+            "Baltic_Dry_Index",
+            "Bab-el-Mandeb",
+            "Just-in-time_manufacturing"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q8": {
+          "query": "Which port congested during 2021 supply chain crisis?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "top5": [
+            "2020\u20132023_global_chip_shortage",
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given",
+            "Port_of_Los_Angeles",
+            "Bab-el-Mandeb"
+          ],
+          "ndcg@10": 0.43067655807339306,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q9": {
+          "query": "What is the just-in-time manufacturing philosophy?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "top5": [
+            "Just-in-time_manufacturing",
+            "Inventory",
+            "Supply_chain_management",
+            "Foxconn",
+            "Logistics"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q10": {
+          "query": "What does the CHIPS Act allocate?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "top5": [
+            "CHIPS_and_Science_Act",
+            "2020\u20132023_global_chip_shortage",
+            "TSMC",
+            "Foxconn",
+            "Supply_chain_attack"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q11": {
+          "query": "Who is Foxconn's primary customer?",
+          "gold": [
+            "Foxconn"
+          ],
+          "top5": [
+            "Foxconn",
+            "TSMC",
+            "Semiconductor_industry",
+            "Ever_Given",
+            "2021_Suez_Canal_obstruction"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q12": {
+          "query": "Why did the Ever Given run aground?",
+          "gold": [
+            "Ever_Given",
+            "2021_Suez_Canal_obstruction"
+          ],
+          "top5": [
+            "Ever_Given",
+            "2021_Suez_Canal_obstruction",
+            "2011_T\u014dhoku_earthquake_and_tsunami",
+            "Bab-el-Mandeb",
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.2
+        },
+        "q13": {
+          "query": "What is safety stock?",
+          "gold": [
+            "Inventory"
+          ],
+          "top5": [
+            "Inventory",
+            "Supply_chain_attack",
+            "TSMC",
+            "Warehouse",
+            "Port_of_Singapore"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q14": {
+          "query": "What is a supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "top5": [
+            "Supply_chain_attack",
+            "Supply_chain_management",
+            "Bullwhip_effect",
+            "2020\u20132023_global_chip_shortage",
+            "Logistics"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q15": {
+          "query": "How busy is the Port of Singapore?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "top5": [
+            "Port_of_Singapore",
+            "Port_of_Los_Angeles",
+            "Strait_of_Malacca",
+            "2021_Suez_Canal_obstruction",
+            "Container_ship"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q16": {
+          "query": "Which strait is a narrow Indonesia-Malaysia chokepoint?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "top5": [
+            "Strait_of_Malacca",
+            "Bab-el-Mandeb",
+            "Strait_of_Hormuz",
+            "Port_of_Singapore",
+            "Suez_Canal"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q17": {
+          "query": "Which industry does the Baltic Dry Index track?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "top5": [
+            "Baltic_Dry_Index",
+            "Inventory",
+            "2020\u20132023_global_chip_shortage",
+            "Semiconductor_industry",
+            "Logistics"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q18": {
+          "query": "What function does a warehouse serve?",
+          "gold": [
+            "Warehouse"
+          ],
+          "top5": [
+            "Warehouse",
+            "Inventory",
+            "Logistics",
+            "Container_ship",
+            "Port_of_Singapore"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q19": {
+          "query": "What is a container ship's TEU?",
+          "gold": [
+            "Container_ship"
+          ],
+          "top5": [
+            "Container_ship",
+            "Ever_Given",
+            "2021_Suez_Canal_obstruction",
+            "Baltic_Dry_Index",
+            "Port_of_Singapore"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q20": {
+          "query": "What software replaces accounting + inventory + HR systems?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "top5": [
+            "Enterprise_resource_planning",
+            "Inventory",
+            "Supply_chain_attack",
+            "Just-in-time_manufacturing",
+            "Foxconn"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        }
+      }
     },
     "snowflake-arctic-l": {
-      "status": "FAILED",
-      "error": "The paging file is too small for this operation to complete. (os error 1455)"
+      "embedder": "snowflake-arctic-l",
+      "mean_ndcg@10": 0.9709860394574094,
+      "mean_recall@10": 1.0,
+      "mean_precision@10": 0.12000000000000002,
+      "corpus_encoding_s": 40.3898344039917,
+      "n_queries": 20,
+      "per_query": {
+        "q1": {
+          "query": "What was the magnitude of the 2011 Tohoku earthquake?",
+          "gold": [
+            "2011_T\u014dhoku_earthquake_and_tsunami"
+          ],
+          "top5": [
+            "2011_T\u014dhoku_earthquake_and_tsunami",
+            "Ever_Given",
+            "2021_Suez_Canal_obstruction",
+            "Samsung_Electronics",
+            "Suez_Canal"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q2": {
+          "query": "How long was the Suez Canal blocked in 2021?",
+          "gold": [
+            "2021_Suez_Canal_obstruction",
+            "Ever_Given"
+          ],
+          "top5": [
+            "2021_Suez_Canal_obstruction",
+            "Suez_Canal",
+            "Ever_Given",
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "ndcg@10": 0.9197207891481876,
+          "recall@10": 1.0,
+          "precision@10": 0.2
+        },
+        "q3": {
+          "query": "What caused the global semiconductor shortage?",
+          "gold": [
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "top5": [
+            "2020\u20132023_global_chip_shortage",
+            "Semiconductor_industry",
+            "TSMC",
+            "Supply_chain_attack",
+            "Foxconn"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q4": {
+          "query": "Why is the Strait of Hormuz strategically important?",
+          "gold": [
+            "Strait_of_Hormuz"
+          ],
+          "top5": [
+            "Strait_of_Hormuz",
+            "Strait_of_Malacca",
+            "Bab-el-Mandeb",
+            "Suez_Canal",
+            "Red_Sea_crisis"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q5": {
+          "query": "How do Houthis threaten Red Sea shipping?",
+          "gold": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb"
+          ],
+          "top5": [
+            "Red_Sea_crisis",
+            "Bab-el-Mandeb",
+            "Strait_of_Hormuz",
+            "Suez_Canal",
+            "2021_Suez_Canal_obstruction"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.2
+        },
+        "q6": {
+          "query": "Which foundry dominates advanced chip production?",
+          "gold": [
+            "TSMC",
+            "Semiconductor_industry"
+          ],
+          "top5": [
+            "Semiconductor_industry",
+            "TSMC",
+            "2020\u20132023_global_chip_shortage",
+            "Foxconn",
+            "CHIPS_and_Science_Act"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.2
+        },
+        "q7": {
+          "query": "What is the bullwhip effect?",
+          "gold": [
+            "Bullwhip_effect"
+          ],
+          "top5": [
+            "Bullwhip_effect",
+            "Just-in-time_manufacturing",
+            "Baltic_Dry_Index",
+            "Inventory",
+            "Bab-el-Mandeb"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q8": {
+          "query": "Which port congested during 2021 supply chain crisis?",
+          "gold": [
+            "Port_of_Los_Angeles"
+          ],
+          "top5": [
+            "2020\u20132023_global_chip_shortage",
+            "2021_Suez_Canal_obstruction",
+            "Port_of_Los_Angeles",
+            "Ever_Given",
+            "Supply_chain_attack"
+          ],
+          "ndcg@10": 0.5,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q9": {
+          "query": "What is the just-in-time manufacturing philosophy?",
+          "gold": [
+            "Just-in-time_manufacturing"
+          ],
+          "top5": [
+            "Just-in-time_manufacturing",
+            "Supply_chain_management",
+            "Inventory",
+            "Logistics",
+            "Semiconductor_industry"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q10": {
+          "query": "What does the CHIPS Act allocate?",
+          "gold": [
+            "CHIPS_and_Science_Act"
+          ],
+          "top5": [
+            "CHIPS_and_Science_Act",
+            "2020\u20132023_global_chip_shortage",
+            "Semiconductor_industry",
+            "TSMC",
+            "Supply_chain_attack"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q11": {
+          "query": "Who is Foxconn's primary customer?",
+          "gold": [
+            "Foxconn"
+          ],
+          "top5": [
+            "Foxconn",
+            "TSMC",
+            "Semiconductor_industry",
+            "2020\u20132023_global_chip_shortage",
+            "Supply_chain_management"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q12": {
+          "query": "Why did the Ever Given run aground?",
+          "gold": [
+            "Ever_Given",
+            "2021_Suez_Canal_obstruction"
+          ],
+          "top5": [
+            "Ever_Given",
+            "2021_Suez_Canal_obstruction",
+            "Bab-el-Mandeb",
+            "Strait_of_Hormuz",
+            "Container_ship"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.2
+        },
+        "q13": {
+          "query": "What is safety stock?",
+          "gold": [
+            "Inventory"
+          ],
+          "top5": [
+            "Inventory",
+            "Supply_chain_attack",
+            "Bullwhip_effect",
+            "Logistics",
+            "Baltic_Dry_Index"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q14": {
+          "query": "What is a supply chain attack?",
+          "gold": [
+            "Supply_chain_attack"
+          ],
+          "top5": [
+            "Supply_chain_attack",
+            "Supply_chain_management",
+            "Bullwhip_effect",
+            "Logistics",
+            "2020\u20132023_global_chip_shortage"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q15": {
+          "query": "How busy is the Port of Singapore?",
+          "gold": [
+            "Port_of_Singapore"
+          ],
+          "top5": [
+            "Port_of_Singapore",
+            "Strait_of_Malacca",
+            "Port_of_Los_Angeles",
+            "Container_ship",
+            "2021_Suez_Canal_obstruction"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q16": {
+          "query": "Which strait is a narrow Indonesia-Malaysia chokepoint?",
+          "gold": [
+            "Strait_of_Malacca"
+          ],
+          "top5": [
+            "Strait_of_Malacca",
+            "Strait_of_Hormuz",
+            "Bab-el-Mandeb",
+            "Port_of_Singapore",
+            "Suez_Canal"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q17": {
+          "query": "Which industry does the Baltic Dry Index track?",
+          "gold": [
+            "Baltic_Dry_Index"
+          ],
+          "top5": [
+            "Baltic_Dry_Index",
+            "Inventory",
+            "Logistics",
+            "Semiconductor_industry",
+            "Enterprise_resource_planning"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q18": {
+          "query": "What function does a warehouse serve?",
+          "gold": [
+            "Warehouse"
+          ],
+          "top5": [
+            "Warehouse",
+            "Inventory",
+            "Logistics",
+            "Supply_chain_management",
+            "Enterprise_resource_planning"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q19": {
+          "query": "What is a container ship's TEU?",
+          "gold": [
+            "Container_ship"
+          ],
+          "top5": [
+            "Container_ship",
+            "Ever_Given",
+            "Inventory",
+            "2021_Suez_Canal_obstruction",
+            "Baltic_Dry_Index"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        },
+        "q20": {
+          "query": "What software replaces accounting + inventory + HR systems?",
+          "gold": [
+            "Enterprise_resource_planning"
+          ],
+          "top5": [
+            "Enterprise_resource_planning",
+            "Inventory",
+            "Supply_chain_management",
+            "Logistics",
+            "Supply_chain_attack"
+          ],
+          "ndcg@10": 1.0,
+          "recall@10": 1.0,
+          "precision@10": 0.1
+        }
+      }
     }
   },
   "public_ref_nfcorpus": {
@@ -359,5 +1019,5 @@
       "source": "Snowflake Arctic paper"
     }
   },
-  "elapsed_min": 0.3412270188331604
+  "elapsed_min": 1.861957597732544
 }
