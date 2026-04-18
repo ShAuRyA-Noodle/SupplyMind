@@ -14,10 +14,10 @@ This document is the **single source of truth** for everything a judge will see,
 | Real-data ML pipeline | 261,175 verified points, 8 sources, Wilcoxon p<0.001 | **S** | `docs/legacy/REPORT_REAL_DATA.md`, `rl/real_data_pipeline.py` |
 | Foundation model stack | 13 SOTA verified + integrated | **S** | `v3_arcadia/results/R1_VERIFIED.json` |
 | Tabular ML | 4-model stack + SHAP + fairness + calibration | **A+** | `v3_arcadia/results/R2_*.json` |
-| Time-series | 4 forecasters + 20-fold backtest + **Bates-Granger stacking wins 9/21** + per-horizon conformal | **S** | `R3_PAST_SELF.json`, `R3_STACKING_V2.json`, `R6_AQUA_REGIA_V2.json` |
+| Time-series | 4 forecasters + 20-fold backtest + **Bates-Granger stacking wins 9/21** + per-horizon conformal + **TimesFM-CP beats Chronos-native on WTI/EUR** | **S** | `R3_PAST_SELF.json`, `R3_STACKING_V2.json`, `R3_TIMESFM_QUANTILE.json`, `R6_AQUA_REGIA_V2.json` |
 | LLM risk panel | 3-judge + critic + ECE + **2-judge α=0.75** + rubric human-baseline | **S** | `R4_DANGEROUS_V2.json`, `R4_DANGEROUS_V2_ABLATION.json`, `R4_DANGEROUS_V2_HUMAN_BASELINE.json` |
-| RAG | 6,483 chunks × 8 pipelines + **hard-query redemption (+5pp lift)** | **S** | `R5_GRANITE.json`, `R5_GRANITE_HARD.json` |
-| RL stack | MaskablePPO + 8,100-ep benchmark + zero violations + **ONNX export 0.97MB** | **S** | `R6_GETHSEMANE.json`, `R6_EUCLIDIAN.json`, `R6_GETHSEMANE_ONNX_EXPORT.json` |
+| RAG | 6,483 chunks × 8 pipelines + **hard-query redemption (+5pp lift)** + **BEIR out-of-domain nDCG@10 up to 0.971** | **S** | `R5_GRANITE.json`, `R5_GRANITE_HARD.json`, `R5_BEIR_MANUAL.json` |
+| RL stack | MaskablePPO + 8,100-ep benchmark + zero violations + **ONNX export 0.97MB** + **masking ablation +26.8%** | **S** | `R6_GETHSEMANE.json`, `R6_EUCLIDIAN.json`, `R6_GETHSEMANE_MASKING_ABLATION.json` |
 | GNN | Custom 3-layer GCN + **arrival-time regression (+48-64% vs MLP)** | **S** | `R6_PROVIDER.json`, `R6_PROVIDER_V2.json` |
 | Production API | FastAPI + MCP + WebSocket + 3 Dockerfiles + compose | **A+** | `server/app.py`, `v3_arcadia/90_damocles/app.py`, `Dockerfile.damocles` |
 | Tests | **173 passing** in ~2 min | **S** | `pytest tests/ -q` |
