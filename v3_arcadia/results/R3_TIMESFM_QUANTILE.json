@@ -1,0 +1,130 @@
+{
+  "method": "per-horizon split-conformal wrapper on TimesFM point forecasts",
+  "comparison": "Chronos-Bolt native quantiles",
+  "targets": {
+    "DCOILWTICO": {
+      "target": "DCOILWTICO",
+      "n_cal": 20,
+      "n_test": 20,
+      "timesfm_conf=0.8": {
+        "nominal_coverage": 0.8,
+        "empirical_coverage": 0.7464285714285714,
+        "mean_width": 11.44973765781948,
+        "dev_from_nominal": 0.0535714285714286
+      },
+      "timesfm_conf=0.9": {
+        "nominal_coverage": 0.9,
+        "empirical_coverage": 0.8321428571428573,
+        "mean_width": 14.322232644217351,
+        "dev_from_nominal": 0.06785714285714273
+      },
+      "timesfm_conf=0.95": {
+        "nominal_coverage": 0.95,
+        "empirical_coverage": 0.9,
+        "mean_width": 17.292571051461362,
+        "dev_from_nominal": 0.04999999999999993
+      },
+      "chronos_native_conf=0.8": {
+        "nominal_coverage": 0.8,
+        "empirical_coverage": 0.7107142857142856,
+        "mean_width": 10.861018967628478,
+        "dev_from_nominal": 0.08928571428571441
+      },
+      "chronos_native_conf=0.9": {
+        "nominal_coverage": 0.9,
+        "empirical_coverage": 0.7107142857142856,
+        "mean_width": 10.861018967628478,
+        "dev_from_nominal": 0.1892857142857144
+      },
+      "chronos_native_conf=0.95": {
+        "nominal_coverage": 0.95,
+        "empirical_coverage": 0.7107142857142856,
+        "mean_width": 10.861018967628478,
+        "dev_from_nominal": 0.23928571428571432
+      }
+    },
+    "DEXJPUS": {
+      "target": "DEXJPUS",
+      "n_cal": 20,
+      "n_test": 20,
+      "timesfm_conf=0.8": {
+        "nominal_coverage": 0.8,
+        "empirical_coverage": 0.7464285714285714,
+        "mean_width": 5.831283089773991,
+        "dev_from_nominal": 0.0535714285714286
+      },
+      "timesfm_conf=0.9": {
+        "nominal_coverage": 0.9,
+        "empirical_coverage": 0.7928571428571428,
+        "mean_width": 6.870930001395079,
+        "dev_from_nominal": 0.1071428571428572
+      },
+      "timesfm_conf=0.95": {
+        "nominal_coverage": 0.95,
+        "empirical_coverage": 0.8035714285714285,
+        "mean_width": 7.547866254534036,
+        "dev_from_nominal": 0.14642857142857146
+      },
+      "chronos_native_conf=0.8": {
+        "nominal_coverage": 0.8,
+        "empirical_coverage": 0.742857142857143,
+        "mean_width": 5.904579341411591,
+        "dev_from_nominal": 0.05714285714285705
+      },
+      "chronos_native_conf=0.9": {
+        "nominal_coverage": 0.9,
+        "empirical_coverage": 0.742857142857143,
+        "mean_width": 5.904579341411591,
+        "dev_from_nominal": 0.15714285714285703
+      },
+      "chronos_native_conf=0.95": {
+        "nominal_coverage": 0.95,
+        "empirical_coverage": 0.742857142857143,
+        "mean_width": 5.904579341411591,
+        "dev_from_nominal": 0.20714285714285696
+      }
+    },
+    "DEXUSEU": {
+      "target": "DEXUSEU",
+      "n_cal": 20,
+      "n_test": 20,
+      "timesfm_conf=0.8": {
+        "nominal_coverage": 0.8,
+        "empirical_coverage": 0.9071428571428573,
+        "mean_width": 0.06282055849347795,
+        "dev_from_nominal": 0.1071428571428572
+      },
+      "timesfm_conf=0.9": {
+        "nominal_coverage": 0.9,
+        "empirical_coverage": 0.9678571428571429,
+        "mean_width": 0.08470568656921382,
+        "dev_from_nominal": 0.06785714285714284
+      },
+      "timesfm_conf=0.95": {
+        "nominal_coverage": 0.95,
+        "empirical_coverage": 0.9821428571428571,
+        "mean_width": 0.09796196365356444,
+        "dev_from_nominal": 0.03214285714285714
+      },
+      "chronos_native_conf=0.8": {
+        "nominal_coverage": 0.8,
+        "empirical_coverage": 0.7357142857142858,
+        "mean_width": 0.03356509944424033,
+        "dev_from_nominal": 0.06428571428571428
+      },
+      "chronos_native_conf=0.9": {
+        "nominal_coverage": 0.9,
+        "empirical_coverage": 0.7357142857142858,
+        "mean_width": 0.03356509944424033,
+        "dev_from_nominal": 0.16428571428571426
+      },
+      "chronos_native_conf=0.95": {
+        "nominal_coverage": 0.95,
+        "empirical_coverage": 0.7357142857142858,
+        "mean_width": 0.03356509944424033,
+        "dev_from_nominal": 0.2142857142857142
+      }
+    }
+  },
+  "elapsed_min": 0.5109713474909464
+}
