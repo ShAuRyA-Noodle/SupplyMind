@@ -28,7 +28,6 @@ on:
       - 'scripts/**'
       - 'demo/**'
       - 'challenges/**'
-      - 'docs/**'
   workflow_dispatch:
 
 jobs:

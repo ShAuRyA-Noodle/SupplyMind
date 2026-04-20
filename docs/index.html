@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SupplyMind v3.0-arcadia</title>
+<meta name="description" content="OpenEnv-compliant supply-chain risk management. 261,175 real data points. 173 tests. Zero synthetic substitution.">
+<style>
+:root { color-scheme: dark; }
+body { margin: 0; background: #0d1117; color: #f0f6fc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.55; }
+.container { max-width: 920px; margin: 0 auto; padding: 2.4rem 1.4rem 4rem; }
+header h1 { font-size: 2.2rem; margin: 0 0 0.4rem; }
+header p.sub { color: #8b949e; margin: 0 0 1.6rem; }
+header a { color: #58a6ff; text-decoration: none; margin-right: 0.8rem; }
+header a:hover { text-decoration: underline; }
+img.hero { width: 100%; height: auto; border-radius: 10px; margin: 1.2rem 0 2rem; border: 1px solid #30363d; }
+section { margin: 2.2rem 0; }
+section h2 { font-size: 1.35rem; margin: 0 0 0.9rem; border-bottom: 1px solid #30363d; padding-bottom: 0.4rem; }
+table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+th, td { text-align: left; padding: 0.45rem 0.6rem; border-bottom: 1px solid #21262d; }
+th { color: #8b949e; font-weight: 600; }
+td b, td strong { color: #3fb950; }
+pre { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 0.9rem 1rem; overflow-x: auto; font-size: 0.88rem; }
+ul { padding-left: 1.3rem; }
+ul li { margin: 0.3rem 0; }
+footer { margin-top: 3rem; color: #8b949e; font-size: 0.85rem; border-top: 1px solid #30363d; padding-top: 1rem; }
+code { background: #161b22; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.88em; }
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>SupplyMind v3.0-arcadia</h1>
+<p class="sub">OpenEnv-compliant supply-chain risk management · 261,175 real data points · 173 tests · zero synthetic</p>
+<p>
+<a href="https://github.com/ShAuRyA-Noodle/Sleep-Token">GitHub</a>
+<a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind">HF Space</a>
+<a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/tag/v3.0-arcadia">Release</a>
+</p>
+</header>
+
+<img class="hero" src="https://raw.githubusercontent.com/ShAuRyA-Noodle/Sleep-Token/main/v3_arcadia/plots/hero_result_card.png" alt="SupplyMind v3.0-arcadia hero result card — 10 headline numbers">
+
+<section>
+<h2>30-second summary</h2>
+<p>SupplyMind is a Meta PyTorch OpenEnv-compliant AI stack that sees supply chain disruptions forming, quantifies risk with rigorous statistics, and recommends pre-emptive actions — all from 261,175 real data points across 8 public authoritative sources. Every headline number is reproducible by a single shell command.</p>
+</section>
+
+<section>
+<h2>Eleven headline numbers</h2>
+<table>
+<thead><tr><th>#</th><th>Metric</th><th>Value</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>RAG nDCG@10 (Snowflake, out-of-domain)</td><td><b>0.971</b></td></tr>
+<tr><td>2</td><td>RAG P@1 (mxbai bi-encoder, 6,483 chunks)</td><td><b>0.962</b></td></tr>
+<tr><td>3</td><td>RAG MRR (precise queries)</td><td><b>0.978</b></td></tr>
+<tr><td>4</td><td>LLM 2-judge Krippendorff &alpha; (ordinal)</td><td><b>0.750</b></td></tr>
+<tr><td>5</td><td>Cohen &kappa; (Qwen &times; Mistral weighted)</td><td><b>0.747</b></td></tr>
+<tr><td>6</td><td>Per-horizon conformal dev on WTI @ 95%</td><td><b>0.024</b></td></tr>
+<tr><td>7</td><td>MaskablePPO masking lift (easy / hard)</td><td><b>+26.8% / +15.1%</b></td></tr>
+<tr><td>8</td><td>GNN arrival-time MAE reduction vs MLP</td><td><b>-48 / -49 / -64%</b></td></tr>
+<tr><td>9</td><td>TimesFM-CP dev @ 95% (WTI / EUR-USD)</td><td><b>0.050 / 0.032</b></td></tr>
+<tr><td>10</td><td>Tests passing</td><td><b>173</b> (2m 14s)</td></tr>
+<tr><td>11</td><td>MaskablePPO vs PPO / A2C / RecurrentPPO</td><td><b>+21.2 / +27.2 / +10.0%</b></td></tr>
+</tbody>
+</table>
+</section>
+
+<section>
+<h2>Verify any number in 60 seconds</h2>
+<pre><code>git clone https://github.com/ShAuRyA-Noodle/Sleep-Token.git &amp;&amp; cd Sleep-Token
+pip install -r requirements.txt
+python scripts/run_all.py    # 14 claims, all PASS
+pytest tests/ -q             # 173 tests, all PASS</code></pre>
+</section>
+
+<section>
+<h2>Deep dives</h2>
+<ul>
+<li><a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/MODEL_CARD.md">MODEL_CARD</a> &mdash; every benchmark, every design win</li>
+<li><a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/RESULTS.md">RESULTS</a> &mdash; one-page hero with verification commands</li>
+<li><a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/comparison.md">comparison</a> &mdash; positioning vs every hackathon category</li>
+<li><a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/BENCHMARKS_VS_PUBLIC.md">BENCHMARKS_VS_PUBLIC</a> &mdash; vs MTEB, M5, MuJoCo, LLM-as-judge</li>
+<li><a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/PYTORCH_STORY.md">PYTORCH_STORY</a> &mdash; 11 non-trivial engineering items</li>
+<li><a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/EXTERNAL_CREDIBILITY.md">EXTERNAL_CREDIBILITY</a> &mdash; 10+ cited published sources</li>
+<li><a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/challenges/R4_RUBRIC_CHALLENGE.md">R4 reproducibility challenge</a></li>
+</ul>
+</section>
+
+<section>
+<h2>Architecture</h2>
+<pre><code>Real data -&gt; R1 Emergence       (13 foundation models, local-only inference)
+          -&gt; R2 Caramel          (TabPFN + XGB + LGB + CAT + Ridge meta-learner)
+          -&gt; R3 Past Self        (Chronos + TimesFM + ARIMA + Prophet + Bates-Granger stack)
+          -&gt; R4 Dangerous        (DeepSeek + Qwen-14B + Mistral-Nemo 3-judge, alpha=0.75)
+          -&gt; R5 Granite          (mxbai/BGE-M3/Snowflake/reranker/HyDE, P@1=0.962)
+          -&gt; R6-alpha Gethsemane (MaskablePPO + ONNX, +26.8%)
+          -&gt; R6-beta Euclidian   (8,100-ep bootstrap CI95 non-overlapping)
+          -&gt; R6-gamma Provider   (custom 3-layer GCN, -48/-49/-64% MAE vs MLP)
+          -&gt; R6-delta Aqua Regia (per-horizon split-conformal, dev=0.024 on WTI)
+          -&gt; R7 Arcadia          (OpenEnv server + MCP + Docker + HF Space + CI)</code></pre>
+</section>
+
+<footer>
+Built for the Meta PyTorch OpenEnv Hackathon. Each phase commit is named after a Sleep Token track from "Even In Arcadia" (2025) and "Take Me Back to Eden" (2023). MIT licensed.
+</footer>
+</div>
+</body>
+</html>

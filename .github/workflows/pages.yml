@@ -5,10 +5,7 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
-      - 'README.md'
-      - 'RESULTS.md'
-      - 'MODEL_CARD.md'
-      - 'comparison.md'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -16,23 +13,21 @@ permissions:
   pages: write
   id-token: write
 
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  build:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      - uses: actions/jekyll-build-pages@v1
-        with:
-          source: ./docs
-          destination: ./_site
       - uses: actions/upload-pages-artifact@v3
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
+        with:
+          path: './docs'
       - id: deployment
         uses: actions/deploy-pages@v4
