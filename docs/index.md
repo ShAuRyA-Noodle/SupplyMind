@@ -8,11 +8,11 @@ description: OpenEnv-compliant supply-chain risk management · 261,175 real data
 
 **Mirror of the canonical submission.** Authoritative repo: [ShAuRyA-Noodle/Sleep-Token](https://github.com/ShAuRyA-Noodle/Sleep-Token) · HF Space: [Supplymind](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind)
 
-![Hero card](../v3_arcadia/plots/hero_result_card.png)
+![Hero card](https://raw.githubusercontent.com/ShAuRyA-Noodle/Sleep-Token/main/v3_arcadia/plots/hero_result_card.png)
 
 ## 30-second summary
 
-SupplyMind is a Meta PyTorch OpenEnv-compliant AI stack that **sees supply chain disruptions forming, quantifies the risk with rigorous statistics, and recommends pre-emptive actions** — all from 261,175 real data points across 8 public authoritative sources, with every headline number reproducible by a single shell command.
+SupplyMind is a Meta PyTorch OpenEnv-compliant AI stack that sees supply chain disruptions forming, quantifies the risk with rigorous statistics, and recommends pre-emptive actions — all from 261,175 real data points across 8 public authoritative sources, with every headline number reproducible by a single shell command.
 
 ## Ten headline numbers
 
@@ -34,40 +34,40 @@ SupplyMind is a Meta PyTorch OpenEnv-compliant AI stack that **sees supply chain
 ```bash
 git clone https://github.com/ShAuRyA-Noodle/Sleep-Token.git && cd Sleep-Token
 pip install -r requirements.txt
-python scripts/run_all.py    # 12 claims → all PASS
-pytest tests/ -q              # 173 tests → all PASS
+python scripts/run_all.py    # 14 claims, all PASS
+pytest tests/ -q             # 173 tests, all PASS
 ```
 
 ## Deep dives
 
-- [MODEL_CARD](../MODEL_CARD) — every benchmark, every design win
-- [RESULTS](../RESULTS) — one-page hero with verification commands
-- [comparison](../comparison) — category-by-category hackathon positioning
-- [BENCHMARKS_VS_PUBLIC](../BENCHMARKS_VS_PUBLIC) — vs MTEB, M5, MuJoCo, LLM-as-judge
-- [PYTORCH_STORY](../PYTORCH_STORY) — 11 non-trivial engineering items
-- [EXTERNAL_CREDIBILITY](../EXTERNAL_CREDIBILITY) — 10+ cited published sources
-- [DEPLOY_HF_SPACE](../DEPLOY_HF_SPACE) — phoenix rebuild guide
-- [challenges/R4_RUBRIC_CHALLENGE](../challenges/R4_RUBRIC_CHALLENGE) — reproducibility invitation
+- [MODEL_CARD](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/MODEL_CARD.md) — every benchmark, every design win
+- [RESULTS](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/RESULTS.md) — one-page hero with verification commands
+- [comparison](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/comparison.md) — category-by-category hackathon positioning
+- [BENCHMARKS_VS_PUBLIC](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/BENCHMARKS_VS_PUBLIC.md) — vs MTEB, M5, MuJoCo, LLM-as-judge
+- [PYTORCH_STORY](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/PYTORCH_STORY.md) — 11 non-trivial engineering items
+- [EXTERNAL_CREDIBILITY](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/EXTERNAL_CREDIBILITY.md) — 10+ cited published sources
+- [DEPLOY_HF_SPACE](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/DEPLOY_HF_SPACE.md) — phoenix rebuild guide
+- [R4 reproducibility challenge](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/challenges/R4_RUBRIC_CHALLENGE.md)
 
 ## Architecture
 
 ```
-Real data ──▶ R1 Emergence  (13 foundation models, local-only inference)
-           ──▶ R2 Caramel    (TabPFN + XGB + LGB + CAT + Ridge meta-learner)
-           ──▶ R3 Past Self  (Chronos + TimesFM + ARIMA + Prophet + Bates-Granger stack)
-           ──▶ R4 Dangerous  (DeepSeek + Qwen-14B + Mistral-Nemo 3-judge, α=0.75)
-           ──▶ R5 Granite    (mxbai/BGE-M3/Snowflake/reranker/HyDE, 8 pipelines, P@1=0.962)
-           ──▶ R6-α Gethsem. (MaskablePPO + ONNX, +26.8%)
-           ──▶ R6-β Euclidian(8,100-ep bootstrap CI95 non-overlapping)
-           ──▶ R6-γ Provider (custom 3-layer GCN, -48/-49/-64% MAE vs MLP)
-           ──▶ R6-δ Aqua Reg.(per-horizon split-conformal, dev=0.024 on WTI)
-           ──▶ R7 Arcadia    (OpenEnv server + MCP + Docker + HF Space + CI)
+Real data -> R1 Emergence   (13 foundation models, local-only inference)
+          -> R2 Caramel      (TabPFN + XGB + LGB + CAT + Ridge meta-learner)
+          -> R3 Past Self    (Chronos + TimesFM + ARIMA + Prophet + Bates-Granger stack)
+          -> R4 Dangerous    (DeepSeek + Qwen-14B + Mistral-Nemo 3-judge, alpha=0.75)
+          -> R5 Granite      (mxbai/BGE-M3/Snowflake/reranker/HyDE, 8 pipelines, P@1=0.962)
+          -> R6-alpha Gethsem. (MaskablePPO + ONNX, +26.8%)
+          -> R6-beta Euclidian (8,100-ep bootstrap CI95 non-overlapping)
+          -> R6-gamma Provider (custom 3-layer GCN, -48/-49/-64% MAE vs MLP)
+          -> R6-delta Aqua Reg. (per-horizon split-conformal, dev=0.024 on WTI)
+          -> R7 Arcadia      (OpenEnv server + MCP + Docker + HF Space + CI)
 ```
 
 ## License
 
-MIT (code) · CC BY-SA 4.0 (Wikipedia-sourced text) · Dataset-specific licenses for each of the 8 public sources (documented in [DATA_SOURCES](../DATA_SOURCES)).
+MIT (code) · CC BY-SA 4.0 (Wikipedia-sourced text) · Dataset-specific licenses for each of the 8 public sources (documented in [DATA_SOURCES](https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/DATA_SOURCES.md)).
 
 ---
 
-*Built for the Meta PyTorch OpenEnv Hackathon · Each phase commit named after a Sleep Token track from "Even In Arcadia" (2025) and "Take Me Back to Eden" (2023).*
+*Built for the Meta PyTorch OpenEnv Hackathon. Each phase commit named after a Sleep Token track from "Even In Arcadia" (2025) and "Take Me Back to Eden" (2023).*
