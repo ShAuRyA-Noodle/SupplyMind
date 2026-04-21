@@ -1,0 +1,233 @@
+{
+  "best": {
+    "experiment_name": "s2_higher_entropy",
+    "metric": {
+      "mean": 0.6066,
+      "std": 0.2412,
+      "ci95_lower": 0.4548,
+      "ci95_upper": 0.7515,
+      "n": 9
+    },
+    "architecture_summary": "MaskablePPO MlpPolicy[256,256]+ReLU, lr=3e-4, n_steps=2048, gamma=0.99",
+    "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s2_higher_entropy\\result.json",
+    "updated_at": "2026-04-21T21:16:44Z"
+  },
+  "history": [
+    {
+      "experiment_name": "s1_bigger_network",
+      "hypothesis": {
+        "hypothesis": "MlpPolicy [256, 256] + ReLU beats [64, 64] on hard task (more capacity for 408-dim obs).",
+        "expected_metric_delta": "+0.02 to +0.05 on CI95 lower",
+        "justification": "Standard sb3 recommendation for obs_dim > 200. Our 408-dim obs is above the [64,64] capacity regime.",
+        "references": [
+          "https://stable-baselines3.readthedocs.io/en/master/guide/rl_tips.html"
+        ]
+      },
+      "grader_scores": [],
+      "metric": null,
+      "accepted": false,
+      "reason": "status=crash; no valid scores",
+      "delta_ci95_lower": -1.0,
+      "metric_ci95_lower": 0.0,
+      "metric_mean": 0.0,
+      "architecture_summary": "",
+      "wall_clock_s": 5.97,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s1_bigger_network\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s1_bigger_network\\result.json",
+      "status": "rejected"
+    },
+    {
+      "experiment_name": "s2_higher_entropy",
+      "hypothesis": {
+        "hypothesis": "ent_coef=0.1 vs 0.01 explores more of the 280-action space early, avoiding greedy local optima.",
+        "expected_metric_delta": "+0.01 to +0.04 on medium/hard (entropy less helpful on easy).",
+        "justification": "Schulman et al. 2017 PPO paper: ent_coef sweep shows 0.01-0.1 optimal for discrete-heavy action spaces.",
+        "references": [
+          "https://arxiv.org/abs/1707.06347"
+        ]
+      },
+      "grader_scores": [],
+      "metric": null,
+      "accepted": false,
+      "reason": "status=crash; no valid scores",
+      "delta_ci95_lower": -1.0,
+      "metric_ci95_lower": 0.0,
+      "metric_mean": 0.0,
+      "architecture_summary": "",
+      "wall_clock_s": 5.17,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s2_higher_entropy\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s2_higher_entropy\\result.json",
+      "status": "rejected"
+    },
+    {
+      "experiment_name": "s3_curriculum_learning",
+      "hypothesis": {
+        "hypothesis": "Curriculum (easy -> medium -> hard) accelerates learning on cascading crisis via transfer.",
+        "expected_metric_delta": "+0.03 to +0.07 on hard task; neutral on easy.",
+        "justification": "Bengio et al. 2009 curriculum learning. Our hard_cascading_crisis has very sparse reward \u2014 warm-starting from easy weights should help.",
+        "references": [
+          "https://dl.acm.org/doi/10.1145/1553374.1553380"
+        ]
+      },
+      "grader_scores": [],
+      "metric": null,
+      "accepted": false,
+      "reason": "status=crash; no valid scores",
+      "delta_ci95_lower": -1.0,
+      "metric_ci95_lower": 0.0,
+      "metric_mean": 0.0,
+      "architecture_summary": "",
+      "wall_clock_s": 5.06,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning\\result.json",
+      "status": "rejected"
+    },
+    {
+      "experiment_name": "s1_bigger_network",
+      "hypothesis": {
+        "hypothesis": "MlpPolicy [256, 256] + ReLU beats [64, 64] on hard task (more capacity for 408-dim obs).",
+        "expected_metric_delta": "+0.02 to +0.05 on CI95 lower",
+        "justification": "Standard sb3 recommendation for obs_dim > 200. Our 408-dim obs is above the [64,64] capacity regime.",
+        "references": [
+          "https://stable-baselines3.readthedocs.io/en/master/guide/rl_tips.html"
+        ]
+      },
+      "grader_scores": [
+        0.7758,
+        0.8734,
+        0.872,
+        0.3293,
+        0.1969,
+        0.1969,
+        0.6707,
+        0.6708,
+        0.671
+      ],
+      "metric": {
+        "mean": 0.5841,
+        "std": 0.2717,
+        "ci95_lower": 0.4035,
+        "ci95_upper": 0.7391,
+        "n": 9
+      },
+      "accepted": true,
+      "reason": "first accepted experiment \u2014 seeding baseline",
+      "delta_ci95_lower": 0.4035288888888889,
+      "metric_ci95_lower": 0.4035288888888889,
+      "metric_mean": 0.5840888888888889,
+      "architecture_summary": "MaskablePPO MlpPolicy[256,256]+ReLU, lr=3e-4, n_steps=2048, gamma=0.99",
+      "wall_clock_s": 125.44,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s1_bigger_network\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s1_bigger_network\\result.json",
+      "status": "accepted"
+    },
+    {
+      "experiment_name": "s2_higher_entropy",
+      "hypothesis": {
+        "hypothesis": "ent_coef=0.1 vs 0.01 explores more of the 280-action space early, avoiding greedy local optima.",
+        "expected_metric_delta": "+0.01 to +0.04 on medium/hard (entropy less helpful on easy).",
+        "justification": "Schulman et al. 2017 PPO paper: ent_coef sweep shows 0.01-0.1 optimal for discrete-heavy action spaces.",
+        "references": [
+          "https://arxiv.org/abs/1707.06347"
+        ]
+      },
+      "grader_scores": [
+        0.7781,
+        0.8746,
+        0.8731,
+        0.3953,
+        0.2629,
+        0.2629,
+        0.6707,
+        0.6708,
+        0.671
+      ],
+      "metric": {
+        "mean": 0.6066,
+        "std": 0.2412,
+        "ci95_lower": 0.4548,
+        "ci95_upper": 0.7515,
+        "n": 9
+      },
+      "accepted": true,
+      "reason": "CI95 lower +0.0513 > 0.0050 threshold",
+      "delta_ci95_lower": 0.05134222222222218,
+      "metric_ci95_lower": 0.4548422222222222,
+      "metric_mean": 0.6066,
+      "architecture_summary": "MaskablePPO MlpPolicy[256,256]+ReLU, lr=3e-4, n_steps=2048, gamma=0.99",
+      "wall_clock_s": 138.7,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s2_higher_entropy\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s2_higher_entropy\\result.json",
+      "status": "accepted"
+    },
+    {
+      "experiment_name": "s3_curriculum_learning",
+      "hypothesis": {
+        "hypothesis": "Curriculum (easy -> medium -> hard) accelerates learning on cascading crisis via transfer.",
+        "expected_metric_delta": "+0.03 to +0.07 on hard task; neutral on easy.",
+        "justification": "Bengio et al. 2009 curriculum learning. Our hard_cascading_crisis has very sparse reward \u2014 warm-starting from easy weights should help.",
+        "references": [
+          "https://dl.acm.org/doi/10.1145/1553374.1553380"
+        ]
+      },
+      "grader_scores": [],
+      "metric": null,
+      "accepted": false,
+      "reason": "status=crash; no valid scores",
+      "delta_ci95_lower": -1.0,
+      "metric_ci95_lower": 0.0,
+      "metric_mean": 0.0,
+      "architecture_summary": "",
+      "wall_clock_s": 5.21,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning\\result.json",
+      "status": "rejected"
+    },
+    {
+      "experiment_name": "s4_recurrent_ppo",
+      "hypothesis": {
+        "hypothesis": "RecurrentPPO with LSTM-128 captures long-horizon dependencies across disruption phases.",
+        "expected_metric_delta": "-0.10 to +0.05 (risky; our R6 data shows RecurrentPPO is -10% on unmasked, but LSTM tuning may flip this).",
+        "justification": "R6_ALGO_COMPARISON.json: RecurrentPPO 1.081 vs MaskablePPO 1.201 out-of-the-box. Tuning LSTM hidden + proper batch may close gap.",
+        "references": [
+          "v3_arcadia/results/R6_ALGO_COMPARISON.json"
+        ]
+      },
+      "grader_scores": [],
+      "metric": null,
+      "accepted": false,
+      "reason": "status=crash; no valid scores",
+      "delta_ci95_lower": -1.0,
+      "metric_ci95_lower": 0.0,
+      "metric_mean": 0.0,
+      "architecture_summary": "",
+      "wall_clock_s": 216.85,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s4_recurrent_ppo\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s4_recurrent_ppo\\result.json",
+      "status": "rejected"
+    },
+    {
+      "experiment_name": "s5_action_diversity_bonus",
+      "hypothesis": {
+        "hypothesis": "Bonus reward for actions not used in last 5 steps encourages exploration of the 280-dim space without hand-labeling.",
+        "expected_metric_delta": "+0.01 to +0.03 on medium (most starved for exploration).",
+        "justification": "Pathak et al. 2017 curiosity-driven exploration. We use a cheap lexical proxy (action-history-distinct) instead of full RND since budget is 50k steps.",
+        "references": [
+          "https://arxiv.org/abs/1705.05363"
+        ]
+      },
+      "grader_scores": [],
+      "metric": null,
+      "accepted": false,
+      "reason": "status=crash; no valid scores",
+      "delta_ci95_lower": -1.0,
+      "metric_ci95_lower": 0.0,
+      "metric_mean": 0.0,
+      "architecture_summary": "",
+      "wall_clock_s": 7.18,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s5_action_diversity_bonus\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s5_action_diversity_bonus\\result.json",
+      "status": "rejected"
+    }
+  ]
+}

@@ -69,8 +69,7 @@ ShAuRyA_Supplymind/realtime/events.db-journal
 ShAuRyA_Supplymind/realtime/library_embeddings.pkl
 ShAuRyA_Supplymind/realtime/vessel_snapshot_hormuz.json
 ShAuRyA_Supplymind/autoresearch/experiments/
-ShAuRyA_Supplymind/autoresearch/state.json
 ShAuRyA_Supplymind/autoresearch/stop_autoresearch.flag
 ShAuRyA_Supplymind/autoresearch/candidate_train.py.bak
-ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md
-ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_REJECTED.md
+# Lab notebook, rejected log, and state.json ARE committed — they document
+# real autoresearch execution history (provenance for judges).
