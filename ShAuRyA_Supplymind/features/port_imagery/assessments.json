@@ -1,0 +1,151 @@
+{
+  "port_anchors": {
+    "KAOHSIUNG": {
+      "name": "Kaohsiung (Taiwan)",
+      "baseline_queue": 18,
+      "lat": 22.62,
+      "lon": 120.27
+    },
+    "SHANGHAI": {
+      "name": "Shanghai (China)",
+      "baseline_queue": 45,
+      "lat": 31.23,
+      "lon": 121.47
+    },
+    "LONG_BEACH": {
+      "name": "Long Beach (USA)",
+      "baseline_queue": 25,
+      "lat": 33.77,
+      "lon": -118.2
+    },
+    "ROTTERDAM": {
+      "name": "Rotterdam (NL)",
+      "baseline_queue": 30,
+      "lat": 51.92,
+      "lon": 4.48
+    },
+    "JEBEL_ALI": {
+      "name": "Jebel Ali (UAE)",
+      "baseline_queue": 20,
+      "lat": 25.01,
+      "lon": 55.06
+    },
+    "HAIFA": {
+      "name": "Haifa (Israel)",
+      "baseline_queue": 10,
+      "lat": 32.82,
+      "lon": 35.0
+    },
+    "HODEIDAH": {
+      "name": "Hodeidah (Yemen)",
+      "baseline_queue": 8,
+      "lat": 14.82,
+      "lon": 42.95
+    }
+  },
+  "assessments": {
+    "KAOHSIUNG": {
+      "port_id": "KAOHSIUNG",
+      "port_name": "Kaohsiung (Taiwan)",
+      "mode": "heuristic",
+      "ship_queue_count": 1,
+      "container_stack_density": "low",
+      "smoke_or_fire": true,
+      "flood_indicators": false,
+      "unusual_activity": "smoke detected",
+      "risk_score": 0.501,
+      "confidence": 0.35,
+      "latency_s": 0.0,
+      "meta": {}
+    },
+    "SHANGHAI": {
+      "port_id": "SHANGHAI",
+      "port_name": "Shanghai (China)",
+      "mode": "heuristic",
+      "ship_queue_count": 2,
+      "container_stack_density": "low",
+      "smoke_or_fire": true,
+      "flood_indicators": false,
+      "unusual_activity": "smoke detected",
+      "risk_score": 0.502,
+      "confidence": 0.35,
+      "latency_s": 0.0,
+      "meta": {}
+    },
+    "LONG_BEACH": {
+      "port_id": "LONG_BEACH",
+      "port_name": "Long Beach (USA)",
+      "mode": "heuristic",
+      "ship_queue_count": 1,
+      "container_stack_density": "low",
+      "smoke_or_fire": true,
+      "flood_indicators": false,
+      "unusual_activity": "smoke detected",
+      "risk_score": 0.501,
+      "confidence": 0.35,
+      "latency_s": 0.0,
+      "meta": {}
+    },
+    "ROTTERDAM": {
+      "port_id": "ROTTERDAM",
+      "port_name": "Rotterdam (NL)",
+      "mode": "heuristic",
+      "ship_queue_count": 2,
+      "container_stack_density": "low",
+      "smoke_or_fire": true,
+      "flood_indicators": false,
+      "unusual_activity": "smoke detected",
+      "risk_score": 0.502,
+      "confidence": 0.35,
+      "latency_s": 0.0,
+      "meta": {}
+    },
+    "JEBEL_ALI": {
+      "port_id": "JEBEL_ALI",
+      "port_name": "Jebel Ali (UAE)",
+      "mode": "heuristic",
+      "ship_queue_count": 2,
+      "container_stack_density": "low",
+      "smoke_or_fire": true,
+      "flood_indicators": false,
+      "unusual_activity": "smoke detected",
+      "risk_score": 0.502,
+      "confidence": 0.35,
+      "latency_s": 0.0,
+      "meta": {}
+    },
+    "HAIFA": {
+      "port_id": "HAIFA",
+      "port_name": "Haifa (Israel)",
+      "mode": "heuristic",
+      "ship_queue_count": 1,
+      "container_stack_density": "low",
+      "smoke_or_fire": true,
+      "flood_indicators": false,
+      "unusual_activity": "smoke detected",
+      "risk_score": 0.501,
+      "confidence": 0.35,
+      "latency_s": 0.0,
+      "meta": {}
+    },
+    "HODEIDAH": {
+      "port_id": "HODEIDAH",
+      "port_name": "Hodeidah (Yemen)",
+      "mode": "heuristic",
+      "ship_queue_count": 1,
+      "container_stack_density": "low",
+      "smoke_or_fire": true,
+      "flood_indicators": false,
+      "unusual_activity": "smoke detected",
+      "risk_score": 0.501,
+      "confidence": 0.35,
+      "latency_s": 0.0,
+      "meta": {}
+    }
+  },
+  "summary": {
+    "highest_risk_port": "SHANGHAI",
+    "any_smoke": true,
+    "mean_confidence": 0.35
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "graph": "easy_graph",
+  "target_node": "FAC_PHOENIX",
+  "top_10_edges": [
+    {
+      "source": "PORT_LONG_BEACH",
+      "target": "WH_US_WEST",
+      "grad_magnitude": 0.8625,
+      "raw_weight": 1.0
+    },
+    {
+      "source": "WH_US_WEST",
+      "target": "FAC_PHOENIX",
+      "grad_magnitude": 0.848571,
+      "raw_weight": 0.9143
+    },
+    {
+      "source": "SUP_TSMC",
+      "target": "WH_TAIWAN",
+      "grad_magnitude": 0.675357,
+      "raw_weight": 0.7714
+    },
+    {
+      "source": "WH_TAIWAN",
+      "target": "PORT_LONG_BEACH",
+      "grad_magnitude": 0.514286,
+      "raw_weight": 0.8571
+    },
+    {
+      "source": "SUP_SAMSUNG",
+      "target": "WH_TAIWAN",
+      "grad_magnitude": 0.320201,
+      "raw_weight": 0.3143
+    },
+    {
+      "source": "SUP_ASE",
+      "target": "SUP_TSMC",
+      "grad_magnitude": 0.318191,
+      "raw_weight": 0.3143
+    },
+    {
+      "source": "SUP_SILTRONIC",
+      "target": "SUP_TSMC",
+      "grad_magnitude": 0.314603,
+      "raw_weight": 0.3143
+    },
+    {
+      "source": "FAC_PHOENIX",
+      "target": "CUST_APPLE",
+      "grad_magnitude": 0.188571,
+      "raw_weight": 0.3143
+    },
+    {
+      "source": "FAC_PHOENIX",
+      "target": "CUST_DELL",
+      "grad_magnitude": 0.188571,
+      "raw_weight": 0.3143
+    },
+    {
+      "source": "FAC_PHOENIX",
+      "target": "CUST_HP",
+      "grad_magnitude": 0.188571,
+      "raw_weight": 0.3143
+    }
+  ],
+  "total_edges": 12
+}

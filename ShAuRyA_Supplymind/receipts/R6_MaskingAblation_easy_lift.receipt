@@ -1,0 +1,14 @@
+{
+  "number_id": "R6_MaskingAblation_easy_lift",
+  "description": "MaskablePPO easy-task reward lift vs plain PPO (+%)",
+  "value": "26.768743400211196",
+  "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R6_GETHSEMANE_MASKING_ABLATION.json'))['action_masking_contribution']['reward_pct_delta'])\"",
+  "expected_output": "26.768743400211196",
+  "data_files_hashes": {
+    "v3_arcadia/results/R6_GETHSEMANE_MASKING_ABLATION.json": "9cdd504dee0bad2a"
+  },
+  "git_sha": "02251e94dc01",
+  "generated_at": "2026-04-20T20:57:26Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

@@ -1,0 +1,14 @@
+{
+  "number_id": "R6_GCN_easy_MAE_vs_MLP",
+  "description": "GNN easy-graph MAE reduction vs MLP baseline (%)",
+  "value": "48.0247837147887",
+  "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R6_PROVIDER_V2.json'))['graphs']['easy']['improvement_vs_mlp_pct'])\"",
+  "expected_output": "48.0247837147887",
+  "data_files_hashes": {
+    "v3_arcadia/results/R6_PROVIDER_V2.json": "97618378c6d24460"
+  },
+  "git_sha": "02251e94dc01",
+  "generated_at": "2026-04-20T20:57:26Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

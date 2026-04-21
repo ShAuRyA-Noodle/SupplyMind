@@ -1,0 +1,20 @@
+{
+  "easy_graph": {
+    "target_node": "FAC_PHOENIX",
+    "total_edges": 12,
+    "top_1_source_target": "PORT_LONG_BEACH -> WH_US_WEST",
+    "top_1_grad": 0.8625
+  },
+  "medium_graph": {
+    "target_node": "FAC_SUZHOU",
+    "total_edges": 29,
+    "top_1_source_target": "WH_THAILAND -> FAC_SUZHOU",
+    "top_1_grad": 0.9
+  },
+  "hard_graph": {
+    "target_node": "FAC_TOYOTA_AICHI",
+    "total_edges": 47,
+    "top_1_source_target": "WH_JAPAN -> PORT_YOKOHAMA",
+    "top_1_grad": 0.6
+  }
+}

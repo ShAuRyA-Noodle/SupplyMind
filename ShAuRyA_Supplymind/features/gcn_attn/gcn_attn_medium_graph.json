@@ -1,0 +1,67 @@
+{
+  "graph": "medium_graph",
+  "target_node": "FAC_SUZHOU",
+  "top_10_edges": [
+    {
+      "source": "WH_THAILAND",
+      "target": "FAC_SUZHOU",
+      "grad_magnitude": 0.9,
+      "raw_weight": 1.0
+    },
+    {
+      "source": "WH_CHINA",
+      "target": "FAC_SUZHOU",
+      "grad_magnitude": 0.814286,
+      "raw_weight": 0.8571
+    },
+    {
+      "source": "FAC_SUZHOU",
+      "target": "CUST_APPLE",
+      "grad_magnitude": 0.553247,
+      "raw_weight": 0.9221
+    },
+    {
+      "source": "FAC_AUSTIN",
+      "target": "CUST_APPLE",
+      "grad_magnitude": 0.522078,
+      "raw_weight": 0.8701
+    },
+    {
+      "source": "WH_TAIWAN",
+      "target": "PORT_KAOHSIUNG",
+      "grad_magnitude": 0.514286,
+      "raw_weight": 0.8571
+    },
+    {
+      "source": "WH_THAILAND",
+      "target": "PORT_KAOHSIUNG",
+      "grad_magnitude": 0.450649,
+      "raw_weight": 0.7511
+    },
+    {
+      "source": "WH_US_WEST",
+      "target": "FAC_AUSTIN",
+      "grad_magnitude": 0.444156,
+      "raw_weight": 0.7403
+    },
+    {
+      "source": "SUP_FOXCONN_TH",
+      "target": "WH_THAILAND",
+      "grad_magnitude": 0.383836,
+      "raw_weight": 0.3117
+    },
+    {
+      "source": "SUP_DELTA_TH",
+      "target": "WH_THAILAND",
+      "grad_magnitude": 0.379698,
+      "raw_weight": 0.3117
+    },
+    {
+      "source": "SUP_SHENZHEN",
+      "target": "WH_CHINA",
+      "grad_magnitude": 0.377262,
+      "raw_weight": 0.3117
+    }
+  ],
+  "total_edges": 29
+}

@@ -1,0 +1,148 @@
+{
+  "alpha_levels_tested": [
+    0.05,
+    0.05,
+    0.1
+  ],
+  "decisions": {
+    "conservative_threshold_0.5": {
+      "action": 0,
+      "reward_p50": 1.2101,
+      "reward_ci95_lower": 0.0294,
+      "reward_ci95_upper": 2.3908,
+      "width_95": 2.3614,
+      "abstain": true,
+      "n_samples_used": 30,
+      "per_action_intervals": {
+        "0": {
+          "mean": 1.2101,
+          "q_hat": 1.1807,
+          "lo": 0.0294,
+          "hi": 2.3908,
+          "n": 30
+        },
+        "1": {
+          "mean": 1.0728,
+          "q_hat": 0.4056,
+          "lo": 0.6672,
+          "hi": 1.4783,
+          "n": 30
+        },
+        "2": {
+          "mean": 0.8895,
+          "q_hat": 0.4744,
+          "lo": 0.4151,
+          "hi": 1.3639,
+          "n": 30
+        },
+        "3": {
+          "mean": 0.9284,
+          "q_hat": 0.1498,
+          "lo": 0.7786,
+          "hi": 1.0781,
+          "n": 30
+        },
+        "4": {
+          "mean": 0.6955,
+          "q_hat": 1.1701,
+          "lo": -0.4746,
+          "hi": 1.8655,
+          "n": 30
+        }
+      }
+    },
+    "balanced_threshold_1.0": {
+      "action": 0,
+      "reward_p50": 1.2101,
+      "reward_ci95_lower": 0.0294,
+      "reward_ci95_upper": 2.3908,
+      "width_95": 2.3614,
+      "abstain": true,
+      "n_samples_used": 30,
+      "per_action_intervals": {
+        "0": {
+          "mean": 1.2101,
+          "q_hat": 1.1807,
+          "lo": 0.0294,
+          "hi": 2.3908,
+          "n": 30
+        },
+        "1": {
+          "mean": 1.0728,
+          "q_hat": 0.4056,
+          "lo": 0.6672,
+          "hi": 1.4783,
+          "n": 30
+        },
+        "2": {
+          "mean": 0.8895,
+          "q_hat": 0.4744,
+          "lo": 0.4151,
+          "hi": 1.3639,
+          "n": 30
+        },
+        "3": {
+          "mean": 0.9284,
+          "q_hat": 0.1498,
+          "lo": 0.7786,
+          "hi": 1.0781,
+          "n": 30
+        },
+        "4": {
+          "mean": 0.6955,
+          "q_hat": 1.1701,
+          "lo": -0.4746,
+          "hi": 1.8655,
+          "n": 30
+        }
+      }
+    },
+    "aggressive_threshold_2.0_alpha_0.1": {
+      "action": 0,
+      "reward_p50": 1.2101,
+      "reward_ci95_lower": 0.4867,
+      "reward_ci95_upper": 1.9335,
+      "width_95": 1.4469,
+      "abstain": false,
+      "n_samples_used": 30,
+      "per_action_intervals": {
+        "0": {
+          "mean": 1.2101,
+          "q_hat": 0.7234,
+          "lo": 0.4867,
+          "hi": 1.9335,
+          "n": 30
+        },
+        "1": {
+          "mean": 1.0728,
+          "q_hat": 0.2762,
+          "lo": 0.7965,
+          "hi": 1.349,
+          "n": 30
+        },
+        "2": {
+          "mean": 0.8895,
+          "q_hat": 0.3283,
+          "lo": 0.5612,
+          "hi": 1.2178,
+          "n": 30
+        },
+        "3": {
+          "mean": 0.9284,
+          "q_hat": 0.1165,
+          "lo": 0.8118,
+          "hi": 1.0449,
+          "n": 30
+        },
+        "4": {
+          "mean": 0.6955,
+          "q_hat": 0.8032,
+          "lo": -0.1078,
+          "hi": 1.4987,
+          "n": 30
+        }
+      }
+    }
+  },
+  "note": "Conservative mode abstains when the best action's 95% CI width > 0.5. Balanced mode runs with wider tolerance. Aggressive mode uses alpha=0.1 (90% intervals) and a loose threshold. Same underlying rollouts \u2014 different safety posture."
+}

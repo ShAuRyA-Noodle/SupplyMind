@@ -1,0 +1,407 @@
+{
+  "emission_factors_kg_co2_per_tonne_km": {
+    "air": 0.82,
+    "express_sea": 0.02,
+    "sea": 0.013,
+    "rail": 0.028,
+    "road": 0.096
+  },
+  "shipment_profiles": {
+    "shanghai_la_base": {
+      "tonnes": 1200,
+      "km_sea": 10600,
+      "km_road": 0,
+      "km_air": 0
+    },
+    "shanghai_la_expedite_air": {
+      "tonnes": 120,
+      "km_sea": 0,
+      "km_road": 50,
+      "km_air": 10600
+    },
+    "shanghai_ny_rail": {
+      "tonnes": 800,
+      "km_sea": 2500,
+      "km_road": 100,
+      "km_air": 0,
+      "km_rail": 11000
+    },
+    "reroute_cape": {
+      "tonnes": 1200,
+      "km_sea": 14500,
+      "km_road": 0,
+      "km_air": 0
+    }
+  },
+  "all_plans": [
+    {
+      "name": "ship_sea",
+      "description": "Base shipment via SEA only",
+      "cost_usd": 80000,
+      "resilience_bps": 30,
+      "carbon_kg_co2": 165.0,
+      "components": {
+        "mode": "sea",
+        "tonnes": 1200
+      }
+    },
+    {
+      "name": "ship_express_sea",
+      "description": "Base shipment via EXPRESS_SEA only",
+      "cost_usd": 220000,
+      "resilience_bps": 45,
+      "carbon_kg_co2": 254.0,
+      "components": {
+        "mode": "express_sea",
+        "tonnes": 1200
+      }
+    },
+    {
+      "name": "ship_rail",
+      "description": "Base shipment via RAIL only",
+      "cost_usd": 150000,
+      "resilience_bps": 50,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "rail",
+        "tonnes": 1200
+      }
+    },
+    {
+      "name": "ship_air",
+      "description": "Base shipment via AIR only",
+      "cost_usd": 850000,
+      "resilience_bps": 85,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "air",
+        "tonnes": 1200
+      }
+    },
+    {
+      "name": "reroute_sea_panama",
+      "description": "Reroute via panama using sea",
+      "cost_usd": 110000,
+      "resilience_bps": 60,
+      "carbon_kg_co2": 165.0,
+      "components": {
+        "mode": "sea",
+        "via": "panama"
+      }
+    },
+    {
+      "name": "reroute_sea_cape_good_hope",
+      "description": "Reroute via cape good hope using sea",
+      "cost_usd": 140000,
+      "resilience_bps": 60,
+      "carbon_kg_co2": 226.0,
+      "components": {
+        "mode": "sea",
+        "via": "cape_good_hope"
+      }
+    },
+    {
+      "name": "reroute_rail_panama",
+      "description": "Reroute via panama using rail",
+      "cost_usd": 180000,
+      "resilience_bps": 70,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "rail",
+        "via": "panama"
+      }
+    },
+    {
+      "name": "reroute_rail_cape_good_hope",
+      "description": "Reroute via cape good hope using rail",
+      "cost_usd": 210000,
+      "resilience_bps": 70,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "rail",
+        "via": "cape_good_hope"
+      }
+    },
+    {
+      "name": "backup_25pct",
+      "description": "Activate backup supplier at 25% of base capacity",
+      "cost_usd": 260000,
+      "resilience_bps": 65.0,
+      "carbon_kg_co2": 941.0,
+      "components": {
+        "backup_depth_pct": 25
+      }
+    },
+    {
+      "name": "backup_50pct",
+      "description": "Activate backup supplier at 50% of base capacity",
+      "cost_usd": 460000,
+      "resilience_bps": 75.0,
+      "carbon_kg_co2": 983.0,
+      "components": {
+        "backup_depth_pct": 50
+      }
+    },
+    {
+      "name": "backup_75pct",
+      "description": "Activate backup supplier at 75% of base capacity",
+      "cost_usd": 660000,
+      "resilience_bps": 85.0,
+      "carbon_kg_co2": 1024.0,
+      "components": {
+        "backup_depth_pct": 75
+      }
+    },
+    {
+      "name": "backup_100pct",
+      "description": "Activate backup supplier at 100% of base capacity",
+      "cost_usd": 860000,
+      "resilience_bps": 95.0,
+      "carbon_kg_co2": 1065.0,
+      "components": {
+        "backup_depth_pct": 100
+      }
+    },
+    {
+      "name": "safety_stock_7d",
+      "description": "7-day warehouse safety stock buffer",
+      "cost_usd": 154000,
+      "resilience_bps": 35.5,
+      "carbon_kg_co2": 560,
+      "components": {
+        "days": 7
+      }
+    },
+    {
+      "name": "safety_stock_14d",
+      "description": "14-day warehouse safety stock buffer",
+      "cost_usd": 308000,
+      "resilience_bps": 46.0,
+      "carbon_kg_co2": 1120,
+      "components": {
+        "days": 14
+      }
+    },
+    {
+      "name": "safety_stock_21d",
+      "description": "21-day warehouse safety stock buffer",
+      "cost_usd": 462000,
+      "resilience_bps": 56.5,
+      "carbon_kg_co2": 1680,
+      "components": {
+        "days": 21
+      }
+    },
+    {
+      "name": "safety_stock_30d",
+      "description": "30-day warehouse safety stock buffer",
+      "cost_usd": 660000,
+      "resilience_bps": 70.0,
+      "carbon_kg_co2": 2400,
+      "components": {
+        "days": 30
+      }
+    },
+    {
+      "name": "combo_hedge_sea_backup25",
+      "description": "Hedge oil + sea shipping + 25% backup",
+      "cost_usd": 250000,
+      "resilience_bps": 72,
+      "carbon_kg_co2": 665.0,
+      "components": {
+        "hedge": true,
+        "backup": 25
+      }
+    },
+    {
+      "name": "combo_cape_rail_backup75",
+      "description": "Cape reroute + rail last-mile + 75% backup",
+      "cost_usd": 410000,
+      "resilience_bps": 88,
+      "carbon_kg_co2": 1673.0,
+      "components": {
+        "reroute": "cape",
+        "rail": true,
+        "backup": 75
+      }
+    },
+    {
+      "name": "combo_air_premium_full",
+      "description": "Air shipping + 100% backup + 14d stock (fastest + greenest-cost)",
+      "cost_usd": 1550000,
+      "resilience_bps": 95,
+      "carbon_kg_co2": 3063.0,
+      "components": {
+        "air": true,
+        "backup": 100,
+        "stock_days": 14
+      }
+    },
+    {
+      "name": "do_nothing",
+      "description": "No mitigation; monitor only",
+      "cost_usd": 0,
+      "resilience_bps": 0,
+      "carbon_kg_co2": 165.0,
+      "components": {}
+    }
+  ],
+  "pareto_frontier": [
+    {
+      "name": "ship_sea",
+      "description": "Base shipment via SEA only",
+      "cost_usd": 80000,
+      "resilience_bps": 30,
+      "carbon_kg_co2": 165.0,
+      "components": {
+        "mode": "sea",
+        "tonnes": 1200
+      }
+    },
+    {
+      "name": "ship_rail",
+      "description": "Base shipment via RAIL only",
+      "cost_usd": 150000,
+      "resilience_bps": 50,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "rail",
+        "tonnes": 1200
+      }
+    },
+    {
+      "name": "ship_air",
+      "description": "Base shipment via AIR only",
+      "cost_usd": 850000,
+      "resilience_bps": 85,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "air",
+        "tonnes": 1200
+      }
+    },
+    {
+      "name": "reroute_sea_panama",
+      "description": "Reroute via panama using sea",
+      "cost_usd": 110000,
+      "resilience_bps": 60,
+      "carbon_kg_co2": 165.0,
+      "components": {
+        "mode": "sea",
+        "via": "panama"
+      }
+    },
+    {
+      "name": "reroute_rail_panama",
+      "description": "Reroute via panama using rail",
+      "cost_usd": 180000,
+      "resilience_bps": 70,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "rail",
+        "via": "panama"
+      }
+    },
+    {
+      "name": "backup_50pct",
+      "description": "Activate backup supplier at 50% of base capacity",
+      "cost_usd": 460000,
+      "resilience_bps": 75.0,
+      "carbon_kg_co2": 983.0,
+      "components": {
+        "backup_depth_pct": 50
+      }
+    },
+    {
+      "name": "backup_75pct",
+      "description": "Activate backup supplier at 75% of base capacity",
+      "cost_usd": 660000,
+      "resilience_bps": 85.0,
+      "carbon_kg_co2": 1024.0,
+      "components": {
+        "backup_depth_pct": 75
+      }
+    },
+    {
+      "name": "backup_100pct",
+      "description": "Activate backup supplier at 100% of base capacity",
+      "cost_usd": 860000,
+      "resilience_bps": 95.0,
+      "carbon_kg_co2": 1065.0,
+      "components": {
+        "backup_depth_pct": 100
+      }
+    },
+    {
+      "name": "combo_hedge_sea_backup25",
+      "description": "Hedge oil + sea shipping + 25% backup",
+      "cost_usd": 250000,
+      "resilience_bps": 72,
+      "carbon_kg_co2": 665.0,
+      "components": {
+        "hedge": true,
+        "backup": 25
+      }
+    },
+    {
+      "name": "combo_cape_rail_backup75",
+      "description": "Cape reroute + rail last-mile + 75% backup",
+      "cost_usd": 410000,
+      "resilience_bps": 88,
+      "carbon_kg_co2": 1673.0,
+      "components": {
+        "reroute": "cape",
+        "rail": true,
+        "backup": 75
+      }
+    },
+    {
+      "name": "do_nothing",
+      "description": "No mitigation; monitor only",
+      "cost_usd": 0,
+      "resilience_bps": 0,
+      "carbon_kg_co2": 165.0,
+      "components": {}
+    }
+  ],
+  "best_under_weights": {
+    "conservative_cost_0.5_res_0.2_carbon_0.3": {
+      "name": "reroute_rail_panama",
+      "description": "Reroute via panama using rail",
+      "cost_usd": 180000,
+      "resilience_bps": 70,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "rail",
+        "via": "panama"
+      }
+    },
+    "balanced_0.33_0.34_0.33": {
+      "name": "reroute_rail_panama",
+      "description": "Reroute via panama using rail",
+      "cost_usd": 180000,
+      "resilience_bps": 70,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "rail",
+        "via": "panama"
+      }
+    },
+    "green_cost_0.2_res_0.3_carbon_0.5": {
+      "name": "reroute_rail_panama",
+      "description": "Reroute via panama using rail",
+      "cost_usd": 180000,
+      "resilience_bps": 70,
+      "carbon_kg_co2": 0.0,
+      "components": {
+        "mode": "rail",
+        "via": "panama"
+      }
+    }
+  },
+  "meta": {
+    "n_plans": 20,
+    "n_pareto": 11,
+    "pareto_ratio": 0.55
+  }
+}

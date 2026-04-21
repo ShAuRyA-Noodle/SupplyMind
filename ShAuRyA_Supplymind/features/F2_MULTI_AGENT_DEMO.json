@@ -1,0 +1,117 @@
+{
+  "constants": {
+    "cap_total_wafers_week": 1000,
+    "wafer_revenue_usd": 16500,
+    "shortfall_loss_usd_per_wafer": 55000,
+    "crisis_duration_weeks": 6
+  },
+  "narrative": "2021-chip-shortage dynamic: TSMC backup capacity (1000 wafers/week) contested by Apple (aggressive) + Samsung (conservative) + Toyota (reactive). Apple bids hard early, captures >50% of step-1 capacity. Toyota waits, pays higher step-2 prices. Samsung splits budget.",
+  "step_log": [
+    {
+      "event": "step_1_open",
+      "capacity_remaining": 1000,
+      "price_signal": 1.0
+    },
+    {
+      "event": "step_1_bid",
+      "agent": "Apple",
+      "bid_usd": 15399999.999999998
+    },
+    {
+      "event": "step_1_bid",
+      "agent": "Samsung",
+      "bid_usd": 3500000.0
+    },
+    {
+      "event": "step_1_bid",
+      "agent": "Toyota",
+      "bid_usd": 0.0
+    },
+    {
+      "event": "step_1_allocated",
+      "agent": "Apple",
+      "allocated_wafers": 407.4074074074074
+    },
+    {
+      "event": "step_1_allocated",
+      "agent": "Samsung",
+      "allocated_wafers": 92.59259259259258
+    },
+    {
+      "event": "step_1_allocated",
+      "agent": "Toyota",
+      "allocated_wafers": 0.0
+    },
+    {
+      "event": "step_2_open",
+      "capacity_remaining": 500.0,
+      "price_signal": 2.291
+    },
+    {
+      "event": "step_2_bid",
+      "agent": "Apple",
+      "bid_usd": 3300000.0
+    },
+    {
+      "event": "step_2_bid",
+      "agent": "Samsung",
+      "bid_usd": 2800000.0
+    },
+    {
+      "event": "step_2_bid",
+      "agent": "Toyota",
+      "bid_usd": 1833333.3333333333
+    }
+  ],
+  "outcomes": [
+    {
+      "name": "Apple",
+      "strategy": "aggressive",
+      "budget_usd": 22000000,
+      "bid_usd": 18700000.0,
+      "allocated_wafers": 615.4,
+      "revenue_earned_usd": 60923669.0,
+      "shortfall_loss_usd": 39486850.0,
+      "net_pnl_usd": 2736819.0
+    },
+    {
+      "name": "Samsung",
+      "strategy": "conservative",
+      "budget_usd": 14000000,
+      "bid_usd": 6300000.0,
+      "allocated_wafers": 269.1,
+      "revenue_earned_usd": 26637255.0,
+      "shortfall_loss_usd": 31868192.0,
+      "net_pnl_usd": -11530937.0
+    },
+    {
+      "name": "Toyota",
+      "strategy": "reactive",
+      "budget_usd": 7000000,
+      "bid_usd": 1833333.0,
+      "allocated_wafers": 115.5,
+      "revenue_earned_usd": 11439076.0,
+      "shortfall_loss_usd": 16978291.0,
+      "net_pnl_usd": -7372549.0
+    }
+  ],
+  "ranking": [
+    {
+      "rank": 1,
+      "agent": "Apple",
+      "net_pnl_usd": 2736819.0
+    },
+    {
+      "rank": 2,
+      "agent": "Toyota",
+      "net_pnl_usd": -7372549.0
+    },
+    {
+      "rank": 3,
+      "agent": "Samsung",
+      "net_pnl_usd": -11530937.0
+    }
+  ],
+  "winner": "Apple",
+  "loser": "Samsung"
+}

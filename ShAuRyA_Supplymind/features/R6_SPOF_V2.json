@@ -1,0 +1,314 @@
+{
+  "by_graph": {
+    "easy_graph": {
+      "graph": "easy_graph",
+      "nodes_total": 12,
+      "edges_total": 12,
+      "ground_truth_spofs": [
+        "FAC_PHOENIX",
+        "PORT_LONG_BEACH",
+        "SUP_TSMC",
+        "WH_TAIWAN",
+        "WH_US_WEST"
+      ],
+      "n_ground_truth": 5,
+      "v1_legacy": {
+        "predicted": [
+          "FAC_PHOENIX",
+          "PORT_LONG_BEACH",
+          "SUP_TSMC",
+          "WH_TAIWAN",
+          "WH_US_WEST"
+        ],
+        "n_predicted": 5,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "v2_articulation": {
+        "predicted": [
+          "FAC_PHOENIX",
+          "PORT_LONG_BEACH",
+          "SUP_TSMC",
+          "WH_TAIWAN",
+          "WH_US_WEST"
+        ],
+        "n_predicted": 5,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "top5_v2_details": [
+        {
+          "node_id": "FAC_PHOENIX",
+          "name": "Assembly Plant Phoenix (TSMC Arizona)",
+          "node_type": "factory",
+          "country": "United States",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 3,
+          "increases_components_by": 3,
+          "mitigation": "CRITICAL: redundant production at alt-factory"
+        },
+        {
+          "node_id": "SUP_TSMC",
+          "name": "TSMC Fab 14 (Tainan)",
+          "node_type": "supplier",
+          "country": "Taiwan",
+          "revenue_at_risk": 18000000000.0,
+          "downstream_count": 8,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: validate existing backup"
+        },
+        {
+          "node_id": "WH_TAIWAN",
+          "name": "Taiwan Regional Warehouse",
+          "node_type": "warehouse",
+          "country": "Taiwan",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 7,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        },
+        {
+          "node_id": "PORT_LONG_BEACH",
+          "name": "Port of Long Beach",
+          "node_type": "port",
+          "country": "United States",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 5,
+          "increases_components_by": 1,
+          "mitigation": "HIGH: pre-negotiate rerouting + alt-port agreements"
+        },
+        {
+          "node_id": "WH_US_WEST",
+          "name": "US West Coast Distribution Center",
+          "node_type": "warehouse",
+          "country": "United States",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 4,
+          "increases_components_by": 1,
+          "mitigation": "HIGH: increase safety stock + alt-storage"
+        }
+      ]
+    },
+    "medium_graph": {
+      "graph": "medium_graph",
+      "nodes_total": 25,
+      "edges_total": 29,
+      "ground_truth_spofs": [
+        "FAC_AUSTIN",
+        "FAC_GUADALAJARA",
+        "FAC_SUZHOU",
+        "PORT_KAOHSIUNG",
+        "WH_CHINA",
+        "WH_TAIWAN",
+        "WH_THAILAND",
+        "WH_US_WEST"
+      ],
+      "n_ground_truth": 8,
+      "v1_legacy": {
+        "predicted": [
+          "FAC_AUSTIN",
+          "FAC_GUADALAJARA",
+          "FAC_SUZHOU",
+          "PORT_KAOHSIUNG",
+          "WH_CHINA",
+          "WH_TAIWAN",
+          "WH_THAILAND",
+          "WH_US_WEST"
+        ],
+        "n_predicted": 8,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "v2_articulation": {
+        "predicted": [
+          "FAC_AUSTIN",
+          "FAC_GUADALAJARA",
+          "FAC_SUZHOU",
+          "PORT_KAOHSIUNG",
+          "WH_CHINA",
+          "WH_TAIWAN",
+          "WH_THAILAND",
+          "WH_US_WEST"
+        ],
+        "n_predicted": 8,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "top5_v2_details": [
+        {
+          "node_id": "FAC_SUZHOU",
+          "name": "Assembly Plant Suzhou",
+          "node_type": "factory",
+          "country": "China",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 3,
+          "increases_components_by": 3,
+          "mitigation": "CRITICAL: redundant production at alt-factory"
+        },
+        {
+          "node_id": "WH_TAIWAN",
+          "name": "Taiwan Regional Warehouse",
+          "node_type": "warehouse",
+          "country": "Taiwan",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 10,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        },
+        {
+          "node_id": "WH_US_WEST",
+          "name": "US West Coast Warehouse",
+          "node_type": "warehouse",
+          "country": "United States",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 6,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        },
+        {
+          "node_id": "WH_THAILAND",
+          "name": "Thailand Regional Warehouse",
+          "node_type": "warehouse",
+          "country": "Thailand",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 14,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        },
+        {
+          "node_id": "WH_CHINA",
+          "name": "Shenzhen Warehouse",
+          "node_type": "warehouse",
+          "country": "China",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 4,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        }
+      ]
+    },
+    "hard_graph": {
+      "graph": "hard_graph",
+      "nodes_total": 40,
+      "edges_total": 47,
+      "ground_truth_spofs": [
+        "FAC_BMW_MUNICH",
+        "FAC_HYUNDAI_ULSAN",
+        "FAC_TESLA_AUSTIN",
+        "FAC_TOYOTA_AICHI",
+        "FAC_VW_WOLFSBURG",
+        "PORT_YOKOHAMA",
+        "WH_GERMANY",
+        "WH_INDIA",
+        "WH_JAPAN",
+        "WH_KOREA",
+        "WH_TAIWAN"
+      ],
+      "n_ground_truth": 11,
+      "v1_legacy": {
+        "predicted": [
+          "FAC_BMW_MUNICH",
+          "FAC_HYUNDAI_ULSAN",
+          "FAC_TESLA_AUSTIN",
+          "FAC_TOYOTA_AICHI",
+          "FAC_VW_WOLFSBURG",
+          "PORT_BUSAN",
+          "PORT_LONG_BEACH",
+          "PORT_MUMBAI",
+          "PORT_YOKOHAMA",
+          "WH_GERMANY",
+          "WH_INDIA",
+          "WH_JAPAN",
+          "WH_KOREA",
+          "WH_TAIWAN",
+          "WH_US"
+        ],
+        "n_predicted": 15,
+        "precision": 0.733,
+        "recall": 1.0,
+        "f1": 0.846
+      },
+      "v2_articulation": {
+        "predicted": [
+          "FAC_BMW_MUNICH",
+          "FAC_HYUNDAI_ULSAN",
+          "FAC_TESLA_AUSTIN",
+          "FAC_TOYOTA_AICHI",
+          "FAC_VW_WOLFSBURG",
+          "PORT_YOKOHAMA",
+          "WH_GERMANY",
+          "WH_INDIA",
+          "WH_JAPAN",
+          "WH_KOREA",
+          "WH_TAIWAN"
+        ],
+        "n_predicted": 11,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      },
+      "top5_v2_details": [
+        {
+          "node_id": "WH_JAPAN",
+          "name": "Japan Central Warehouse",
+          "node_type": "warehouse",
+          "country": "Japan",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 10,
+          "increases_components_by": 4,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        },
+        {
+          "node_id": "WH_GERMANY",
+          "name": "Germany Central Warehouse",
+          "node_type": "warehouse",
+          "country": "Germany",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 13,
+          "increases_components_by": 4,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        },
+        {
+          "node_id": "WH_TAIWAN",
+          "name": "Taiwan Automotive Warehouse",
+          "node_type": "warehouse",
+          "country": "Taiwan",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 10,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        },
+        {
+          "node_id": "WH_KOREA",
+          "name": "South Korea Warehouse",
+          "node_type": "warehouse",
+          "country": "South Korea",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 11,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: increase safety stock + alt-storage"
+        },
+        {
+          "node_id": "FAC_TOYOTA_AICHI",
+          "name": "Toyota Aichi Assembly",
+          "node_type": "factory",
+          "country": "Japan",
+          "revenue_at_risk": 0.0,
+          "downstream_count": 2,
+          "increases_components_by": 2,
+          "mitigation": "CRITICAL: redundant production at alt-factory"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "v1_mean_f1": 0.949,
+    "v2_mean_f1": 1.0,
+    "lift_f1_absolute": 0.051
+  },
+  "note": "v1 legacy rl/analysis/spof.py used a strict path-intersection heuristic. v2 uses the standard graph-theoretic articulation-point definition. This is a bug fix, not a novel method \u2014 but it closes the honest F1=0.000 finding documented in docs/legacy/REPORT_SIMULATED_DATA.md step 13."
+}

@@ -1,0 +1,14 @@
+{
+  "number_id": "V4_STACKING_V2_lift_vs_WV",
+  "description": "v4 Stacking v2 AUC lift vs ensemble weighted voting",
+  "value": "0.001",
+  "command": "python -c \"import json; print(json.load(open(r'ShAuRyA_Supplymind/features/R15_STACKING_V2.json'))['lift_stacking_vs_wv_auc'])\"",
+  "expected_output": "0.001",
+  "data_files_hashes": {
+    "ShAuRyA_Supplymind/features/R15_STACKING_V2.json": "0f29718fdade3a56"
+  },
+  "git_sha": "02251e94dc01",
+  "generated_at": "2026-04-20T20:57:26Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

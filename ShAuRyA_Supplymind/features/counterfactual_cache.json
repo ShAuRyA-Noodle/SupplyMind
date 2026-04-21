@@ -1,0 +1,105 @@
+{
+  "71ff8b9abe9ef312": {
+    "action_taken": {
+      "action_type": "hedge_commodity",
+      "commodity": "oil",
+      "hedge_amount_usd": 4200000
+    },
+    "no_action_delta_usd": 36900000.0,
+    "opposite_action_delta_usd": 22140000.0,
+    "rationale": "Template counterfactual (no LLM): action 'hedge_commodity' saves an estimated 40% of the P50 base exposure of $36,900,000 under severity 0.82 \u00d7 30-day duration. Doing nothing would cost $36,900,000. An opposite-family action (less mitigating) would cost $22,140,000.",
+    "historical_analog": "US seizure of Iranian-flagged cargo ship in Gulf of Oman + Hormuz closure threat (2026-04-18)",
+    "historical_outcome_usd": 13152000.0,
+    "source": "template",
+    "latency_s": 0.0,
+    "meta": {}
+  },
+  "e06420e1ff811f09": {
+    "action_taken": {
+      "action_type": "reroute_shipment",
+      "via": [
+        "cape_of_good_hope"
+      ]
+    },
+    "no_action_delta_usd": 76500000.0,
+    "opposite_action_delta_usd": 30600000.0,
+    "rationale": "Template counterfactual (no LLM): action 'reroute_shipment' saves an estimated 60% of the P50 base exposure of $76,500,000 under severity 0.85 \u00d7 60-day duration. Doing nothing would cost $76,500,000. An opposite-family action (less mitigating) would cost $30,600,000.",
+    "historical_analog": "US-UK Operation Poseidon Archer \u2014 strikes on Houthi Yemen targets (2024-01-11)",
+    "historical_outcome_usd": 4320000.0,
+    "source": "template",
+    "latency_s": 0.0,
+    "meta": {}
+  },
+  "e2ed7260c1812696": {
+    "action_taken": {
+      "action_type": "activate_backup_supplier",
+      "backup_supplier_id": "SUP_SAMSUNG"
+    },
+    "no_action_delta_usd": 6825000.0,
+    "opposite_action_delta_usd": 4436250.0,
+    "rationale": "Template counterfactual (no LLM): action 'activate_backup_supplier' saves an estimated 35% of the P50 base exposure of $6,825,000 under severity 0.65 \u00d7 7-day duration. Doing nothing would cost $6,825,000. An opposite-family action (less mitigating) would cost $4,436,250.",
+    "historical_analog": "US seizure of Iranian-flagged cargo ship in Gulf of Oman + Hormuz closure threat (2026-04-18)",
+    "historical_outcome_usd": 13152000.0,
+    "source": "template",
+    "latency_s": 0.0,
+    "meta": {}
+  },
+  "533997c97811b22c": {
+    "action_taken": {
+      "action_type": "reroute_shipment",
+      "via": [
+        "ASHDOD"
+      ]
+    },
+    "no_action_delta_usd": 12600000.0,
+    "opposite_action_delta_usd": 5040000.0,
+    "rationale": "Template counterfactual (no LLM): action 'reroute_shipment' saves an estimated 60% of the P50 base exposure of $12,600,000 under severity 0.60 \u00d7 14-day duration. Doing nothing would cost $12,600,000. An opposite-family action (less mitigating) would cost $5,040,000.",
+    "historical_analog": "Hezbollah / Iran-backed rocket attacks on Haifa port (2024-10-07)",
+    "historical_outcome_usd": 50048000.0,
+    "source": "template",
+    "latency_s": 0.0,
+    "meta": {}
+  },
+  "95051010791b853b": {
+    "action_taken": {
+      "action_type": "increase_safety_stock",
+      "additional_stock_days": 14
+    },
+    "no_action_delta_usd": 60750000.0,
+    "opposite_action_delta_usd": 45562500.0,
+    "rationale": "Template counterfactual (no LLM): action 'increase_safety_stock' saves an estimated 25% of the P50 base exposure of $60,750,000 under severity 0.45 \u00d7 90-day duration. Doing nothing would cost $60,750,000. An opposite-family action (less mitigating) would cost $45,562,500.",
+    "historical_analog": "Houthi Red Sea commercial vessel campaign (2023-11-19)",
+    "historical_outcome_usd": 1885866667.0,
+    "source": "template",
+    "latency_s": 0.0,
+    "meta": {}
+  },
+  "2c31786c1d7cdc64": {
+    "action_taken": {
+      "action_type": "do_nothing"
+    },
+    "no_action_delta_usd": 4500000.0,
+    "opposite_action_delta_usd": 4500000.0,
+    "rationale": "Template counterfactual (no LLM): action 'do_nothing' saves an estimated 0% of the P50 base exposure of $4,500,000 under severity 0.10 \u00d7 30-day duration. Doing nothing would cost $4,500,000. An opposite-family action (less mitigating) would cost $4,500,000.",
+    "historical_analog": "Hezbollah / Iran-backed rocket attacks on Haifa port (2024-10-07)",
+    "historical_outcome_usd": 50048000.0,
+    "source": "template",
+    "latency_s": 0.0,
+    "meta": {}
+  },
+  "6a151d2e9e5fd6b4": {
+    "action_taken": {
+      "action_type": "hedge_commodity",
+      "commodity": "oil",
+      "hedge_amount_usd": 1000000
+    },
+    "no_action_delta_usd": 15000000.0,
+    "opposite_action_delta_usd": 9000000.0,
+    "rationale": "Template counterfactual (no LLM): action 'hedge_commodity' saves an estimated 40% of the P50 base exposure of $15,000,000 under severity 0.50 \u00d7 20-day duration. Doing nothing would cost $15,000,000. An opposite-family action (less mitigating) would cost $9,000,000.",
+    "historical_analog": "Iran 'True Promise' operation \u2014 first direct drone+missile attack on Israel (2024-04-13)",
+    "historical_outcome_usd": 2458667.0,
+    "source": "template",
+    "latency_s": 0.0,
+    "meta": {}
+  }
+}

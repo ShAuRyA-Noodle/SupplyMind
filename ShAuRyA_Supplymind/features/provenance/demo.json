@@ -1,0 +1,89 @@
+{
+  "query": "Why is TSMC a supply-chain single point of failure for advanced semiconductors?",
+  "n_chunks": 5,
+  "chunks": [
+    {
+      "id": "c1",
+      "doc_url": "https://www.semianalysis.com/tsmc-market-share",
+      "doc_name": "SemiAnalysis \u2014 TSMC market share 2024",
+      "score": 0.91,
+      "text_preview": "TSMC produces 54% of global foundry revenue and 92% of <7nm advanced logic."
+    },
+    {
+      "id": "c2",
+      "doc_url": "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0000320193&type=10-K",
+      "doc_name": "Apple Inc. 10-K Fiscal 2024",
+      "score": 0.88,
+      "text_preview": "Section 1A Risk Factors: Concentration in a single Taiwanese manufacturing partner exposes Company to geopolitical risk."
+    },
+    {
+      "id": "c3",
+      "doc_url": "https://en.wikipedia.org/wiki/2022_Chinese_military_exercises_around_Taiwan",
+      "doc_name": "Wikipedia \u2014 2022 Taiwan Strait exercises",
+      "score": 0.85,
+      "text_preview": "Taiwan Strait tensions reached highest level since 1996 during PLA exercises August 2022."
+    },
+    {
+      "id": "c4",
+      "doc_url": "https://www.bis.org/publ/qtrpdf/r_qt2312.htm",
+      "doc_name": "BIS Quarterly Review \u2014 Dec 2023",
+      "score": 0.82,
+      "text_preview": "Global supply chain disruption costs exceeded $184 billion in 2023 per BCI analysis."
+    },
+    {
+      "id": "c5",
+      "doc_url": "https://www.alixpartners.com/semi-report",
+      "doc_name": "AlixPartners Semi Shortage 2021",
+      "score": 0.79,
+      "text_preview": "Lead times for advanced nodes reached 52+ weeks at peak 2021 chip shortage."
+    }
+  ],
+  "documents": {
+    "https://www.semianalysis.com/tsmc-market-share": {
+      "name": "SemiAnalysis \u2014 TSMC market share 2024",
+      "tier": 4,
+      "tier_label": "tier_4_industry",
+      "trust_score": 0.25,
+      "chunk_ids": [
+        "c1"
+      ]
+    },
+    "https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0000320193&type=10-K": {
+      "name": "Apple Inc. 10-K Fiscal 2024",
+      "tier": 1,
+      "tier_label": "tier_1_regulatory",
+      "trust_score": 1.0,
+      "chunk_ids": [
+        "c2"
+      ]
+    },
+    "https://en.wikipedia.org/wiki/2022_Chinese_military_exercises_around_Taiwan": {
+      "name": "Wikipedia \u2014 2022 Taiwan Strait exercises",
+      "tier": 3,
+      "tier_label": "tier_3_reference",
+      "trust_score": 0.333,
+      "chunk_ids": [
+        "c3"
+      ]
+    },
+    "https://www.bis.org/publ/qtrpdf/r_qt2312.htm": {
+      "name": "BIS Quarterly Review \u2014 Dec 2023",
+      "tier": 2,
+      "tier_label": "tier_2_academic",
+      "trust_score": 0.5,
+      "chunk_ids": [
+        "c4"
+      ]
+    },
+    "https://www.alixpartners.com/semi-report": {
+      "name": "AlixPartners Semi Shortage 2021",
+      "tier": 4,
+      "tier_label": "tier_4_industry",
+      "trust_score": 0.25,
+      "chunk_ids": [
+        "c5"
+      ]
+    }
+  },
+  "provenance_score": 0.47
+}

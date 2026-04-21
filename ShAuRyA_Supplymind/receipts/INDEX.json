@@ -1,0 +1,85 @@
+{
+  "generated_at": "2026-04-20T20:57:26Z",
+  "git_sha": "02251e94dc01",
+  "n_receipts": 13,
+  "receipts": [
+    {
+      "id": "R5_GRANITE_mxbai_P1",
+      "desc": "RAG P@1 on 6,483-chunk real corpus, mxbai bi-encoder",
+      "value": "0.9622641509433962",
+      "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R5_GRANITE.json'))['pipelines']['P2_mxbai_bi']['p1'])\""
+    },
+    {
+      "id": "R5_GRANITE_mxbai_MRR",
+      "desc": "RAG MRR on precise queries",
+      "value": "0.9779874213836477",
+      "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R5_GRANITE.json'))['pipelines']['P2_mxbai_bi']['mrr'])\""
+    },
+    {
+      "id": "R5_BEIR_snowflake_nDCG10",
+      "desc": "BEIR out-of-domain nDCG@10 (Snowflake) on 26 Wiki crisis articles",
+      "value": "0.9709860394574094",
+      "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R5_BEIR_MANUAL.json'))['our_results']['snowflake-arctic-l']['mean_ndcg@10'])\""
+    },
+    {
+      "id": "R4_2JUDGE_Krippendorff_alpha",
+      "desc": "2-judge panel Krippendorff ordinal alpha on 26 crisis scenarios",
+      "value": "0.7499056959637873",
+      "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json'))['agreement_primary_panel']['krippendorff_alpha_ordinal'])\""
+    },
+    {
+      "id": "R4_Cohen_kappa_QwenMistral",
+      "desc": "Cohen weighted kappa Qwen-14B x Mistral-Nemo",
+      "value": "0.7473841554559043",
+      "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json'))['agreement_primary_panel']['cohen_weighted_kappa_qwen_vs_mistral'])\""
+    },
+    {
+      "id": "R6_MaskingAblation_easy_lift",
+      "desc": "MaskablePPO easy-task reward lift vs plain PPO (+%)",
+      "value": "26.768743400211196",
+      "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R6_GETHSEMANE_MASKING_ABLATION.json'))['action_masking_contribution']['reward_pct_delta'])\""
+    },
+    {
+      "id": "R6_GCN_easy_MAE_vs_MLP",
+      "desc": "GNN easy-graph MAE reduction vs MLP baseline (%)",
+      "value": "48.0247837147887",
+      "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R6_PROVIDER_V2.json'))['graphs']['easy']['improvement_vs_mlp_pct'])\""
+    },
+    {
+      "id": "R6_AquaRegia_WTI_dev95",
+      "desc": "Per-horizon conformal deviation at 95% nominal, WTI ARIMA",
+      "value": "0.023809523809523836",
+      "command": "python -c \"import json; d=json.load(open('v3_arcadia/results/R6_AQUA_REGIA_V2.json'));c=d['results']['DCOILWTICO']['arima']['conf=0.95'];print(abs(c['perhorizon_coverage_mean']-c['nominal_coverage']))"
+    },
+    {
+      "id": "R3_TimesFM_CP_WTI_dev95",
+      "desc": "TimesFM-CP WTI deviation from 95% nominal",
+      "value": "0.04999999999999993",
+      "command": "python -c \"import json; d=json.load(open('v3_arcadia/results/R3_TIMESFM_QUANTILE.json'));print(d['targets']['DCOILWTICO']['timesfm_conf=0.95']['dev_from_nominal'])\""
+    },
+    {
+      "id": "V4_SPOF_V2_F1",
+      "desc": "v4 SPOF articulation-point F1 (mean across 3 graphs)",
+      "value": "1.0",
+      "command": "python -c \"import json; print(json.load(open(r'ShAuRyA_Supplymind/features/R6_SPOF_V2.json'))['summary']['v2_mean_f1'])\""
+    },
+    {
+      "id": "V4_STACKING_V2_lift_vs_WV",
+      "desc": "v4 Stacking v2 AUC lift vs ensemble weighted voting",
+      "value": "0.001",
+      "command": "python -c \"import json; print(json.load(open(r'ShAuRyA_Supplymind/features/R15_STACKING_V2.json'))['lift_stacking_vs_wv_auc'])\""
+    },
+    {
+      "id": "V4_Live_Brent_202604",
+      "desc": "FRED Brent crude spot price as ingested on 2026-04-21 ($/bbl)",
+      "value": "123.28",
+      "command": "python -c \"import sqlite3, json; c=sqlite3.connect('ShAuRyA_Supplymind/realtime/events.db');r=c.execute('SELECT meta_json FROM events WHERE source=? ORDER BY ts_unix DESC LIMIT 1', ('fred_brent',)).fe"
+    },
+    {
+      "id": "V4_Tests_Total",
+      "desc": "Total test count across v3 + v4",
+      "value": "tests/test_engine.py::TestSupplyChainGraph::test_load_easy_g",
+      "command": "python -m pytest tests/ ShAuRyA_Supplymind/tests/ --collect-only -q"
+    }
+  ]
+}

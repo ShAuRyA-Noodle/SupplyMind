@@ -1,0 +1,14 @@
+{
+  "number_id": "V4_Live_Brent_202604",
+  "description": "FRED Brent crude spot price as ingested on 2026-04-21 ($/bbl)",
+  "value": "123.28",
+  "command": "python -c \"import sqlite3, json; c=sqlite3.connect('ShAuRyA_Supplymind/realtime/events.db');r=c.execute('SELECT meta_json FROM events WHERE source=? ORDER BY ts_unix DESC LIMIT 1', ('fred_brent',)).fetchone();print(json.loads(r[0])['latest_price']) if r else print('no-data')\"",
+  "expected_output": "123.28",
+  "data_files_hashes": {
+    "ShAuRyA_Supplymind/realtime/events.db": "a7cb3c867be64648"
+  },
+  "git_sha": "02251e94dc01",
+  "generated_at": "2026-04-20T20:57:26Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

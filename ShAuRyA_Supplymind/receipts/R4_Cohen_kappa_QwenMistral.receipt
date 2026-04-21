@@ -1,0 +1,14 @@
+{
+  "number_id": "R4_Cohen_kappa_QwenMistral",
+  "description": "Cohen weighted kappa Qwen-14B x Mistral-Nemo",
+  "value": "0.7473841554559043",
+  "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json'))['agreement_primary_panel']['cohen_weighted_kappa_qwen_vs_mistral'])\"",
+  "expected_output": "0.7473841554559043",
+  "data_files_hashes": {
+    "v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json": "f8adadde04dd931f"
+  },
+  "git_sha": "02251e94dc01",
+  "generated_at": "2026-04-20T20:57:26Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

@@ -1,0 +1,67 @@
+{
+  "graph": "hard_graph",
+  "target_node": "FAC_TOYOTA_AICHI",
+  "top_10_edges": [
+    {
+      "source": "WH_JAPAN",
+      "target": "PORT_YOKOHAMA",
+      "grad_magnitude": 0.6,
+      "raw_weight": 1.0
+    },
+    {
+      "source": "WH_JAPAN",
+      "target": "FAC_TOYOTA_AICHI",
+      "grad_magnitude": 0.588312,
+      "raw_weight": 0.4805
+    },
+    {
+      "source": "PORT_YOKOHAMA",
+      "target": "PORT_LONG_BEACH",
+      "grad_magnitude": 0.581818,
+      "raw_weight": 0.9697
+    },
+    {
+      "source": "WH_GERMANY",
+      "target": "PORT_LONG_BEACH",
+      "grad_magnitude": 0.577922,
+      "raw_weight": 0.9632
+    },
+    {
+      "source": "PORT_LONG_BEACH",
+      "target": "WH_US",
+      "grad_magnitude": 0.416883,
+      "raw_weight": 0.6948
+    },
+    {
+      "source": "WH_KOREA",
+      "target": "PORT_BUSAN",
+      "grad_magnitude": 0.376623,
+      "raw_weight": 0.6277
+    },
+    {
+      "source": "PORT_BUSAN",
+      "target": "PORT_LONG_BEACH",
+      "grad_magnitude": 0.357143,
+      "raw_weight": 0.5952
+    },
+    {
+      "source": "WH_US",
+      "target": "FAC_TESLA_AUSTIN",
+      "grad_magnitude": 0.341558,
+      "raw_weight": 0.5693
+    },
+    {
+      "source": "WH_GERMANY",
+      "target": "FAC_VW_WOLFSBURG",
+      "grad_magnitude": 0.292208,
+      "raw_weight": 0.487
+    },
+    {
+      "source": "SUP_DENSO",
+      "target": "WH_JAPAN",
+      "grad_magnitude": 0.275487,
+      "raw_weight": 0.1688
+    }
+  ],
+  "total_edges": 47
+}

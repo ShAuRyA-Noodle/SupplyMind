@@ -62,3 +62,15 @@ v3_arcadia/gguf_out/
 # Auto-generated embedding caches + SB3 best/ dirs
 v3_arcadia/checkpoints/granite/corpus_emb_*.npy
 v3_arcadia/checkpoints/gethsemane/best_*/
+
+# v4 arcadia-live auto-generated state
+ShAuRyA_Supplymind/realtime/events.db
+ShAuRyA_Supplymind/realtime/events.db-journal
+ShAuRyA_Supplymind/realtime/library_embeddings.pkl
+ShAuRyA_Supplymind/realtime/vessel_snapshot_hormuz.json
+ShAuRyA_Supplymind/autoresearch/experiments/
+ShAuRyA_Supplymind/autoresearch/state.json
+ShAuRyA_Supplymind/autoresearch/stop_autoresearch.flag
+ShAuRyA_Supplymind/autoresearch/candidate_train.py.bak
+ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md
+ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_REJECTED.md

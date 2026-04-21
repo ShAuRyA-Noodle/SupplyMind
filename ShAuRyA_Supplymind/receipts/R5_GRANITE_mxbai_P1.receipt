@@ -1,0 +1,14 @@
+{
+  "number_id": "R5_GRANITE_mxbai_P1",
+  "description": "RAG P@1 on 6,483-chunk real corpus, mxbai bi-encoder",
+  "value": "0.9622641509433962",
+  "command": "python -c \"import json; print(json.load(open(r'v3_arcadia/results/R5_GRANITE.json'))['pipelines']['P2_mxbai_bi']['p1'])\"",
+  "expected_output": "0.9622641509433962",
+  "data_files_hashes": {
+    "v3_arcadia/results/R5_GRANITE.json": "1c3f16b3712ffdaa"
+  },
+  "git_sha": "02251e94dc01",
+  "generated_at": "2026-04-20T20:57:26Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

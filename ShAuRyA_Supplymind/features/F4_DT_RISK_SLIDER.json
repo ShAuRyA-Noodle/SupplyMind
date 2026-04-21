@@ -1,0 +1,135 @@
+{
+  "slider_positions": {
+    "conservative": {
+      "target_return": 0.3,
+      "preferred_action_types": [
+        "issue_supplier_alert",
+        "do_nothing",
+        "increase_safety_stock"
+      ]
+    },
+    "balanced": {
+      "target_return": 0.55,
+      "preferred_action_types": [
+        "activate_backup_supplier",
+        "reroute_shipment",
+        "increase_safety_stock"
+      ]
+    },
+    "aggressive": {
+      "target_return": 0.8,
+      "preferred_action_types": [
+        "activate_backup_supplier",
+        "hedge_commodity",
+        "expedite_order",
+        "reroute_shipment"
+      ]
+    }
+  },
+  "per_rollout": [
+    {
+      "slider_position": "conservative",
+      "task_id": "easy_typhoon_response",
+      "seed": 42,
+      "episode_return": 0.6196,
+      "action_type_distribution": {
+        "do_nothing": 0.55,
+        "activate_backup_supplier": 0.0,
+        "reroute_shipment": 0.0,
+        "increase_safety_stock": 0.15,
+        "expedite_order": 0.0,
+        "hedge_commodity": 0.0,
+        "issue_supplier_alert": 0.3
+      },
+      "n_steps": 20
+    },
+    {
+      "slider_position": "balanced",
+      "task_id": "easy_typhoon_response",
+      "seed": 42,
+      "episode_return": 0.765,
+      "action_type_distribution": {
+        "do_nothing": 0.0,
+        "activate_backup_supplier": 0.15,
+        "reroute_shipment": 0.3,
+        "increase_safety_stock": 0.55,
+        "expedite_order": 0.0,
+        "hedge_commodity": 0.0,
+        "issue_supplier_alert": 0.0
+      },
+      "n_steps": 20
+    },
+    {
+      "slider_position": "aggressive",
+      "task_id": "easy_typhoon_response",
+      "seed": 42,
+      "episode_return": 0.765,
+      "action_type_distribution": {
+        "do_nothing": 0.0,
+        "activate_backup_supplier": 0.1,
+        "reroute_shipment": 0.1,
+        "increase_safety_stock": 0.0,
+        "expedite_order": 0.3,
+        "hedge_commodity": 0.5,
+        "issue_supplier_alert": 0.0
+      },
+      "n_steps": 20
+    }
+  ],
+  "summary_by_position": {
+    "conservative": {
+      "n_rollouts": 1,
+      "mean_return": 0.6196,
+      "std_return": 0,
+      "min_return": 0.6196,
+      "max_return": 0.6196,
+      "action_type_mix": {
+        "do_nothing": 0.55,
+        "activate_backup_supplier": 0.0,
+        "reroute_shipment": 0.0,
+        "increase_safety_stock": 0.15,
+        "expedite_order": 0.0,
+        "hedge_commodity": 0.0,
+        "issue_supplier_alert": 0.3
+      },
+      "most_used_action": "do_nothing"
+    },
+    "balanced": {
+      "n_rollouts": 1,
+      "mean_return": 0.765,
+      "std_return": 0,
+      "min_return": 0.765,
+      "max_return": 0.765,
+      "action_type_mix": {
+        "do_nothing": 0.0,
+        "activate_backup_supplier": 0.15,
+        "reroute_shipment": 0.3,
+        "increase_safety_stock": 0.55,
+        "expedite_order": 0.0,
+        "hedge_commodity": 0.0,
+        "issue_supplier_alert": 0.0
+      },
+      "most_used_action": "increase_safety_stock"
+    },
+    "aggressive": {
+      "n_rollouts": 1,
+      "mean_return": 0.765,
+      "std_return": 0,
+      "min_return": 0.765,
+      "max_return": 0.765,
+      "action_type_mix": {
+        "do_nothing": 0.0,
+        "activate_backup_supplier": 0.1,
+        "reroute_shipment": 0.1,
+        "increase_safety_stock": 0.0,
+        "expedite_order": 0.3,
+        "hedge_commodity": 0.5,
+        "issue_supplier_alert": 0.0
+      },
+      "most_used_action": "hedge_commodity"
+    }
+  },
+  "wall_clock_s": 0.9,
+  "dt_checkpoint_present": true,
+  "note": "Surrogate DT slider: same conditioning pattern as v2 DT (return-to-go -> action distribution). If rl/checkpoints/dt_best.pt is present, run `python -m rl.decision_transformer.train --eval-only` for the actual transformer-based rollouts."
+}

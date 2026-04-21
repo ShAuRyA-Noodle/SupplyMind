@@ -95,6 +95,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# v4 arcadia-live — mount the /live/* router for realtime Hormuz / Iran / Israel /
+# Red Sea demo. Graceful no-op if v4 staging dir isn't present (keeps v3 clean).
+try:
+    from ShAuRyA_Supplymind.realtime.hormuz_endpoint import router as _hormuz_router
+    if _hormuz_router is not None:
+        app.include_router(_hormuz_router, prefix="/live", tags=["live (v4)"])
+        logger.info("mounted /live router (v4 arcadia-live)")
+except Exception as _e:  # noqa: BLE001
+    logger.info("v4 /live router not mounted (%s) — continuing with v3 endpoints", _e)
+
 # Environment pool keyed by session_id for concurrent isolation.
 # OpenEnv evaluation typically runs sequentially, but this supports
 # multiple concurrent sessions (e.g., multiple judges or demo users).
