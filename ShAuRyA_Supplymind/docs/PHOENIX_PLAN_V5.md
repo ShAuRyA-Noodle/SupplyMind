@@ -207,10 +207,268 @@ Current state if we stop here: top-10 essentially locked, top-3 at ~30–40%. Th
 
 ---
 
-## 9. One-sentence strategic summary
+## 9. One-sentence strategic summary (pre-ROLL / pre-superpowers)
 
 > **Fix autoresearch today, ship the OpenEnv Arena tomorrow, deploy + polish Apr 24, land in Bangalore Apr 25 with every demo path tested both online and offline, then use mentor hours on-campus to ship one feature Meta engineers hand-pick and submit the env upstream — and we win.**
 
 ---
 
-*Track: "Rain" opens v4. "The Summoning" opens finals. "Arcadia II" closes the cycle.*
+## 10. ROLL framework deep integration (Alibaba, Apache 2.0)
+
+Upstream: `github.com/alibaba/ROLL` (v0.2.1, Mar 2026). Vendored copy at `ROLL-main/ROLL-main/` is current — no upstream drift. 259 Python files, 56.3k LOC core, 17.7k LOC tests. **This is not a toy; it's what Alibaba ships to thousand-GPU clusters.**
+
+### 10.1 What ROLL actually gives us
+
+| Capability | Feasible on 12GB/solo/3 days? | Judge impact |
+|---|---|---|
+| **DPO pipeline** (preference pairs → fine-tuned judge) | ✅ 2–4h on RTX 4080, Qwen-3B + LoRA r=8 | ⭐⭐⭐⭐⭐ |
+| **RLVR** (reinforcement learning with verifiable reasoning) | ⚠️ Possible with LoRA, risky in time | ⭐⭐⭐⭐ |
+| **Agentic RL with GiGPO** (step-wise multi-turn) | ⚠️ 1–2 day build; scaffolded + partial results is honest | ⭐⭐⭐⭐⭐ |
+| **LLMJudgeRewardWorker** (3 modes: API / local / cluster) | ✅ 2–3h wrapper | ⭐⭐⭐⭐ |
+| **MCP tool integration** (already in ROLL's agentic pipeline) | ✅ maps directly to our existing tools | ⭐⭐⭐⭐ |
+| **Action parser** (`Qwen3CoderActionParser`) | ✅ <1h | ⭐⭐⭐ |
+| **Custom ROLL environment** (register `supplymind_crisis_env`) | ✅ 4–6h, huge for upstream PR | ⭐⭐⭐⭐⭐ |
+| **On-policy distill** (Qwen-14B → Qwen-3B) | ❌ too heavy in 3 days | ⭐⭐ |
+| **Megatron 5D parallelism** | ❌ needs multi-GPU cluster | N/A |
+| **FSDP2 / DeepSpeed ZeRO-3** | ⚠️ works with CPU offload, slow | ⭐⭐ |
+
+### 10.2 The five ROLL integrations I recommend (ranked)
+
+1. **ROLL-DPO-judge-v1** — Fine-tune Qwen-2.5-3B-Q4 with DPO on our 26 crisis scenarios as preference pairs (GT-correct response = chosen; worst-judge output = rejected). LoRA r=8, ~3h training. Publishable receipt: `V4_DPO_JUDGE_accuracy_delta.reproduce.sh`. This proves we actually did LLM post-training, not just prompt engineering.
+2. **ROLL agentic RL loop for supplymind-analyst** — Register SupplyMind as a ROLL environment (`env_manager.tags: [supplymind]`). Multi-turn: observe crisis → call tool (forecast / RAG / RL-policy) → observe outcome → act → report. Train with **GiGPO** (step-wise, dense feedback). Even partial convergence is a killer demo.
+3. **LLMJudgeRewardWorker integration** — Our existing 3-judge panel becomes the reward signal for ROLL training. Novel composition of our R4 Dangerous panel feeding a ROLL RLVR loop.
+4. **MCP tool-use bridge** — ROLL already supports MCP-registered tools in agentic pipelines. Our forecast/RAG/RL endpoints already exist. Wire them as MCP tools, train the analyst to call them. Dual signal: MCP (Anthropic standard) + OpenEnv (Meta standard) in one agent.
+5. **Upstream PR to alibaba/ROLL** — Submit `examples/supplymind/` as a reference agentic environment. Same open-source signal as the OpenEnv PR, doubled. Even an unmerged PR shows intent.
+
+### 10.3 Install strategy — isolated `ShAuRyA_Phoenix/` folder + WSL2 day-budget
+
+**User directive (Apr 22)**: if ROLL install fights us, invest a full day on **WSL2 with CUDA passthrough** to push it through rather than falling back. All ROLL work lives in a **new `ShAuRyA_Phoenix/` folder at the repo root** so the existing `ShAuRyA_Supplymind/` v4 stays frozen and safe.
+
+**Directory layout**:
+```
+Sleep-Token/
+├── v3_arcadia/              # frozen at 02251e9
+├── ShAuRyA_Supplymind/      # frozen v4 (249 tests, 13 receipts)  <- DO NOT TOUCH
+├── ShAuRyA_Phoenix/         # NEW — all ROLL + superpowers work lives here
+│   ├── README.md
+│   ├── .venv-roll/          # isolated Python env
+│   ├── roll_integration/
+│   │   ├── dpo_judge/       # ROLL-DPO-judge-v1
+│   │   ├── env/             # SupplyMind registered as ROLL env (upstream PR)
+│   │   ├── reward_bridge/   # LLMJudgeRewardWorker -> our 3 judges
+│   │   └── configs/         # Hydra/YAML configs
+│   ├── supplymind_skills/   # publishable skill pack
+│   │   ├── benchmark-runner/
+│   │   ├── autoresearch-experiment/
+│   │   └── live-demo-orchestrator/
+│   ├── experiments/         # training runs + checkpoints
+│   ├── receipts/            # grade-A receipts (command+stdout+exit+expected/actual)
+│   └── docs/                # PREPRINT_V5.md, PHOENIX_STORY.md
+```
+
+**Two-phase install**:
+
+*Phase A (Windows-native, 0.5 day)*: Try the path of least resistance first.
+```bash
+cd ShAuRyA_Phoenix
+python -m venv .venv-roll
+.venv-roll\Scripts\activate
+pip install -e ../ROLL-main/ROLL-main/[hf]   # HF strategy only, no megatron/vllm/sglang
+pip install peft trl==0.9.6 accelerate bitsandbytes
+python -c "from roll.pipeline.dpo import DPOPipeline; print('ok')"
+```
+
+If this works → we're done, 3.5h reclaimed for other features.
+
+*Phase B (WSL2 + CUDA, full day)*: only if Phase A fails.
+```bash
+wsl --install -d Ubuntu-22.04         # if not installed
+# inside WSL2:
+sudo apt install nvidia-cuda-toolkit
+python -m venv .venv-roll-wsl
+pip install -e /mnt/c/Users/Dell/Desktop/Sleep-Token/ROLL-main/ROLL-main/[hf,deepspeed]
+pip install vllm==0.6.3 flash-attn --no-build-isolation
+```
+WSL2 gets us proper Linux wheels for vLLM + flash-attn + DeepSpeed. CUDA passes through to the RTX 4080. `.venv-roll-wsl/` stays separate from Windows venv.
+
+**Worst case**: if even WSL2 fights us, fall back to standalone `trl.DPOTrainer` for ROLL-DPO-judge-v1 (same DPO result, loses env-PR and agentic-RL). Phase A + Phase B budget: **~8h max** before calling it.
+
+---
+
+## 11. Superpowers framework deep integration (obra, MIT, v5.0.7)
+
+Vendored copy at `superpowers-main/superpowers-main/` is current (v5.0.7, Mar 31 2026). 15 skills, SessionStart hook, platform-aware (Claude Code / Cursor / Copilot CLI / Gemini / OpenCode).
+
+### 11.1 What superpowers actually gives us (methodology, not code)
+
+| Skill / pattern | Value | Cost |
+|---|---|---|
+| `subagent-driven-development` | Per-task fresh subagent → 2-stage review (spec → quality) | Already used during v3/v4 builds |
+| `writing-plans` | Bite-sized tasks (2–5 min each), zero-context-assumed | This Phoenix Plan already mirrors the pattern |
+| `verification-before-completion` | "Claim = evidence"; fresh command output required | Maps to our 13 receipts |
+| `test-driven-development` | Iron law: no production code before failing test | Matches our existing testing culture |
+| `using-git-worktrees` | Parallel branches without context switching | Useful on-campus if teammate joins |
+| `dispatching-parallel-agents` | Concurrent subagents for independent subsystems | Speed at finals |
+| Platform-aware SessionStart hook | One hook, all IDEs | Minor (we're on Claude Code) |
+| **The meta-move: publish a skill pack** | Judges install your skill, see methodology | 2–3h authoring |
+
+### 11.2 The three superpowers integrations I recommend
+
+1. **`supplymind-skills` skill pack — public marketplace submission** — Ship 3 skills:
+    - `benchmark-runner` (TDD for benchmarks: baseline → change → verify)
+    - `autoresearch-experiment` (maps to our autoresearch/ module — plan → run → receipt)
+    - `live-demo-orchestrator` (pre-demo checklist, fallback, post-demo receipt)
+    
+    Publish to `obra/superpowers-marketplace` + Claude Code plugins marketplace. Add to `JUDGES.md`: *"Judges: install `supplymind-skills` in your Claude Code to reproduce our methodology."* **This is a second open-source artifact, on top of the upstream OpenEnv/ROLL PRs.**
+
+2. **Adopt `writing-plans` + `subagent-driven-development` for the 48-hour finals** — Every hour of on-campus work starts with a bite-sized plan in `docs/superpowers/plans/2026-04-25-<phase>.md`, executed by subagents, receipt-verified. Git log becomes a TDD-discipline artifact judges can read. I already structured the Phoenix Plan this way; we formalize it at finals.
+
+3. **`verification-before-completion` receipt upgrade** — Our 13 receipts currently emit a value (e.g., `0.9622`). Upgrade to superpowers-grade receipts: include `command`, `full stdout`, `exit code`, `expected`, `actual`, `match: true/false`. Auto-generate on commit via a tiny pre-commit hook. One morning's work, massive judge-facing credibility bump.
+
+### 11.3 What we do NOT take from superpowers
+
+- The `.cursor-plugin/` / `.codex/` / `gemini-extension.json` plumbing — we're solo, Claude Code only.
+- The deprecated `commands/` slash commands — superseded by Skill tool.
+- The brainstorm WebSocket server — we don't need live-collab visualization.
+
+---
+
+## 12. Revised top-20 unique features (expanded from 10)
+
+Marked ⚑ = ROLL-enabled, ⚒ = superpowers-enabled, 🌐 = live geopolitics, 🔬 = research-rigor, 📦 = open-source contribution.
+
+| # | Feature | Tags | Phase | Cost | Impact |
+|---|---|---|---|---|---|
+| 1 | OpenEnv Arena — drop-in PyTorch policy | — | P1.A | 6h | ⭐⭐⭐⭐⭐ |
+| 2 | Live Counterfactual Digital Twin | 🌐 | P1.B | 4h | ⭐⭐⭐⭐⭐ |
+| 3 | Upstream PR to Meta's OpenEnv repo | 📦 | P4.C | 4h @ venue | ⭐⭐⭐⭐⭐ |
+| 4 | Self-improving reward curriculum | 🔬 | P1.C | 3h | ⭐⭐⭐⭐ |
+| 5 | Red-team adversarial agent | 🔬 | P4.B | 4h @ venue | ⭐⭐⭐⭐ |
+| 6 | Mentor Demo Mode — free-text crisis → full pipe | 🌐 | P4.B | 3h @ venue | ⭐⭐⭐⭐ |
+| 7 | Reproducibility Bounty $100 | 📦 | P2.C | 30min | ⭐⭐⭐ |
+| 8 | Zero-to-Deploy Colab (2 min) | 📦 | P2.D | 2h | ⭐⭐⭐ |
+| 9 | Carbon-adjusted Pareto live (FRED Brent) | 🌐 | P1.B | 1h | ⭐⭐ |
+| 10 | arXiv submission of PREPRINT.md | 📦 | P2.E | 1h | ⭐⭐⭐ |
+| **11** | **ROLL-DPO-judge-v1**: Qwen-3B DPO on 26 crisis pairs | ⚑🔬 | P1 (new) | 4h | ⭐⭐⭐⭐⭐ |
+| **12** | **SupplyMind as a ROLL environment** (upstream PR) | ⚑📦 | P4.C | 4h @ venue | ⭐⭐⭐⭐⭐ |
+| **13** | **Agentic RL for supplymind-analyst via GiGPO** | ⚑🔬 | P1/P4 | 8–10h | ⭐⭐⭐⭐ |
+| **14** | **LLMJudgeRewardWorker bridge** (our 3 judges → ROLL reward) | ⚑ | P1 (new) | 3h | ⭐⭐⭐⭐ |
+| **15** | **MCP tool-use analyst** (forecast/RAG/RL as MCP tools + ROLL train) | ⚑ | P1/P4 | 4h | ⭐⭐⭐⭐ |
+| **16** | **`supplymind-skills` skill pack** — publish to marketplace | ⚒📦 | P2 | 3h | ⭐⭐⭐⭐⭐ |
+| **17** | **Superpowers-driven 48h finals execution** — `docs/superpowers/plans/` artifact | ⚒ | P4 | 0 (method) | ⭐⭐⭐ |
+| **18** | **Grade-A receipt upgrade** (command + stdout + exit + expected/actual) | ⚒🔬 | P2 | 3h | ⭐⭐⭐⭐ |
+| **19** | **Dual upstream PRs** — Meta/OpenEnv + Alibaba/ROLL in 48h | ⚑📦 | P4.C | bundled | ⭐⭐⭐⭐⭐ |
+| **20** | **Methodology video** — show brainstorm → plan → subagent → receipt chain | ⚒ | P2.B | +30min | ⭐⭐⭐ |
+
+**Target for ship**: 8–12 of these 20. Ranked by impact-per-hour above.
+
+---
+
+## 13. Revised 3-day plan with ROLL + Superpowers woven in
+
+### Phase 0 — TODAY (Apr 22, 8–10h) — Unbreak + install + framework audit
+
+| # | Task | Frame | Est |
+|---|---|---|---|
+| 0.1 | Root-cause the autoresearch crash (`state.json` shows all 5 seeds = `status=crash, wall_clock_s~5`) | — | 30 min |
+| 0.2 | Patch `candidate_train.py`, run 3 seeds to convergence, 1 accepted | — | 2–3h |
+| 0.3 | Real `lab_notebook.md` with 3 hypotheses + accept/reject | — | 1h |
+| 0.4 | Freeze Hormuz replay cache → `realtime/replay_cache_2026_04_22.json` | — | 2h |
+| **0.5** | **Create `ShAuRyA_Phoenix/` folder** with directory skeleton (see §10.3) + placeholder README | ⚑⚒ | 30 min |
+| **0.6** | **ROLL install Phase A** (Windows-native, HF-only, `.venv-roll/`) + Qwen-0.5B smoke test | ⚑ | up to 4h; if green, stop here |
+| **0.6b** | **ROLL install Phase B** (WSL2 + CUDA + full extras) — only if Phase A fails | ⚑ | up to 4h more |
+| **0.7** | **Superpowers skill pack scaffold** — `ShAuRyA_Phoenix/supplymind_skills/{benchmark-runner,autoresearch-experiment,live-demo-orchestrator}/SKILL.md` stubs | ⚒ | 1h |
+| 0.8 | Rewrite README.md first 30s to lead with OpenEnv | — | 45 min |
+| 0.9 | `pytest tests/ ShAuRyA_Supplymind/tests/ -q` → 249 green (unchanged; `ShAuRyA_Phoenix/` not in suite yet) | — | 30 min |
+
+**Gate**: autoresearch converges AND (Phase A green OR Phase B green OR `trl` fallback decision made) AND replay cache exists. `ShAuRyA_Supplymind/` tests still 249 green (we never touch it). Budget ceiling: if total Phase 0 > 12h, stop + pivot to `trl` fallback regardless.
+
+---
+
+### Phase 1 — Apr 23 (14–16h) — Unique features + ROLL-DPO-judge
+
+| # | Task | Frame | Est |
+|---|---|---|---|
+| 1.1 | **ROLL-DPO-judge-v1** — Qwen-2.5-3B + LoRA r=8, DPO on 26 crisis preference pairs | ⚑🔬 | 4h (includes training wait) |
+| 1.2 | OpenEnv Arena (Gradio + FastAPI at `/arena`, judges drop in `policy.pt`) | — | 6h |
+| 1.3 | Live Counterfactual Digital Twin — 100 MC rollouts conditioned on live Hormuz signal | 🌐 | 4h |
+| 1.4 | **LLMJudgeRewardWorker bridge** — our 3 judges → ROLL reward function | ⚑ | 3h |
+
+**Gate**: pick any 3 of the 4. With ROLL installed, 1.1 is cheap; without ROLL, 1.1 uses `trl.DPOTrainer` and still ships.
+
+---
+
+### Phase 2 — Apr 24 (12–14h) — Deploy + skill pack + polish
+
+| # | Task | Frame | Est |
+|---|---|---|---|
+| 2.1 | HF Space deploy + smoke test all endpoints (incl. `/arena` + `/live/*`) | — | 3h |
+| 2.2 | Record 3-min demo video (Hormuz live → autoresearch lab notebook → Arena → ROLL-DPO delta → receipts) | — | 3h |
+| 2.3 | Pitch deck v2 (8 slides) | — | 2h |
+| **2.4** | **Publish `supplymind-skills` skill pack** to `obra/superpowers-marketplace` fork + Claude Code plugins | ⚒📦 | 3h |
+| **2.5** | **Grade-A receipt upgrade** — auto-include command + stdout + exit + expected/actual; pre-commit hook | ⚒🔬 | 3h |
+| 2.6 | End-to-end dry-run <4 min judge path | — | 2h |
+| 2.7 | Travel prep, API rotation, offline caches verified | — | 2h |
+
+**Gate**: HF Space green, demo video uploaded, skill pack discoverable by judges' `/plugin install`.
+
+---
+
+### Phase 3 — Apr 25 AM — Travel + venue smoke (4h)
+
+No new features; only proving everything still works at venue + talking to Meta engineers.
+
+---
+
+### Phase 4 — Apr 25–26 — On-campus 48h (ROLL + superpowers in full force)
+
+| Block | Hours | Focus |
+|---|---|---|
+| A | 0–6 | Recon + pitch to ≥2 Meta engineers for reactions; run live demo in the room |
+| **B** | **6–20** | **ROLL upstream PR draft**: fork `alibaba/ROLL`, add `examples/supplymind_crisis/` with env+config+README. Dispatch a subagent per sub-task (superpowers pattern). | ⚑📦⚒ |
+| **C** | **20–36** | **OpenEnv upstream PR**: meta-pytorch/openenv, submit SupplyMind as reference env. + Mentor-suggested feature (red-team agent likely) | 📦 |
+| D | 36–48 | Pitch rehearsals (3×), final demo |
+
+**Dual upstream PRs** = dual open-source signal. Hackathon page says "code ships to Meta-backed projects" — we go one better and ship to Alibaba too.
+
+---
+
+## 14. Framework-specific risks + mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| **ROLL install fails on Windows-native (Phase A)** | Medium-High | Loses ~0.5 day of unique-feature build time | Phase B: WSL2 + CUDA passthrough, full 4h budget. If even WSL2 fails → `trl.DPOTrainer` fallback (same DPO science, loses env-PR and agentic). Hard ceiling: 8h total on install before pivot. |
+| **ROLL install succeeds but blows up `ShAuRyA_Supplymind/` venv** | — | Would break 249 tests | Isolated `.venv-roll/` inside `ShAuRyA_Phoenix/` only. User directive: never touch existing v4. |
+| **ROLL-DPO training OOMs on 12GB** | Low (LoRA r=8 on 3B fits) | No DPO demo | Drop to Qwen-1.5B or shrink LoRA r=4; both fit comfortably |
+| **Skill pack marketplace PR doesn't merge pre-finals** | High | Can't say "install our skill pack" | Host as a public GitHub repo + pointer in README; judges can `git clone` even without marketplace merge |
+| **ROLL env PR doesn't merge pre-finals** | High (Alibaba review is slow) | Less upstream impact | PR draft + link from README counts; even an open PR is the artifact |
+| **Subagent-driven dev at finals creates conflicting commits** | Medium | Git hell | Use git worktrees (superpowers skill #7) for isolation |
+| **Ollama can't host the DPO-trained LoRA adapter** | Medium | No live judge serving | Serve via `vllm serve Qwen2.5-3B-Instruct --enable-lora --lora-modules supplymind=./adapters/`. Fallback: `transformers` pipeline with `peft.PeftModel.from_pretrained`. |
+| **ROLL dependency pins conflict with existing `.venv`** | High | Breaks existing tests | Isolated `.venv-roll/`; never touch main venv |
+
+---
+
+## 15. Updated probability assessment with ROLL + Superpowers integration
+
+With full plan + ROLL-DPO-judge + skill pack + dual upstream PRs landing:
+
+| Outcome | Prob (pre-ROLL plan) | Prob (with ROLL + superpowers) |
+|---|---|---|
+| Top 3 ($4K–$10K) | 45–60% | **60–75%** |
+| Top 10 finalist | 85–92% | **92–97%** |
+| Meta / HF interview | 90%+ | **95%+** |
+| Alibaba / other downstream offers | — | **meaningful non-zero** |
+
+The ROLL + superpowers additions primarily unlock the **top-3 tier** (from 45–60% to 60–75%) because they give us two things every single other finalist will lack: (a) actual LLM post-training results on a real domain, (b) two separate upstream open-source contributions + a public skill pack.
+
+---
+
+## 16. Revised one-sentence strategic summary (post-ROLL / post-superpowers)
+
+> **Fix autoresearch today + bring up ROLL in a brand-new isolated `ShAuRyA_Phoenix/` folder (WSL2 if Windows-native fails); ship OpenEnv Arena + ROLL-DPO-judge on Apr 23; publish the `supplymind-skills` skill pack + deploy HF Space + record demo Apr 24; land in Bangalore Apr 25 with both online and offline demo paths tested, then spend the 48h finals shipping dual upstream PRs (Meta/OpenEnv and Alibaba/ROLL) plus one mentor-suggested feature — and we don't just make top 10, we're in the top-3 fight.**
+
+**Non-negotiable**: `ShAuRyA_Supplymind/` (v4 with 249 tests, 13 receipts, frozen) stays untouched throughout. `ShAuRyA_Phoenix/` is the new home for ROLL + superpowers integration. If Phoenix fails for any reason, v4 is still a complete top-10 submission on its own.
+
+---
+
+*Tracks: "Rain" opens v4. "The Summoning" opens finals. "Ascensionism" marks ROLL+superpowers integration. "Arcadia II" closes the cycle.*

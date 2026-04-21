@@ -63,6 +63,10 @@ v3_arcadia/gguf_out/
 v3_arcadia/checkpoints/granite/corpus_emb_*.npy
 v3_arcadia/checkpoints/gethsemane/best_*/
 
+# Third-party source checkouts (not our code)
+ROLL-main/
+superpowers-main/
+
 # v4 arcadia-live auto-generated state
 ShAuRyA_Supplymind/realtime/events.db
 ShAuRyA_Supplymind/realtime/events.db-journal

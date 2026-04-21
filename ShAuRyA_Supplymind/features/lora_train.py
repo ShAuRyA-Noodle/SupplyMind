@@ -128,16 +128,19 @@ def build_dataset() -> list[TrainingExample]:
 
 @dataclass
 class LoRAConfig:
-    base_model: str = "Qwen/Qwen2.5-14B-Instruct"
+    # Default Qwen2.5-1.5B-Instruct for fast end-to-end training (~5-10 min on
+    # RTX 4080). Override via --base-model Qwen/Qwen2.5-14B-Instruct for the
+    # production-size QLoRA run when you have 30+ GB disk + 20-30 min patience.
+    base_model: str = "Qwen/Qwen2.5-1.5B-Instruct"
     rank: int = 16
     alpha: int = 32
     dropout: float = 0.05
     target_modules: tuple[str, ...] = ("q_proj", "v_proj", "k_proj", "o_proj")
     learning_rate: float = 2e-4
-    n_epochs: int = 3
+    n_epochs: int = 5
     batch_size: int = 1
     gradient_accumulation: int = 2
-    max_seq_length: int = 2048
+    max_seq_length: int = 1024
     warmup_ratio: float = 0.05
     weight_decay: float = 0.01
     bf16: bool = True
@@ -251,12 +254,13 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true", help="Validate dataset + imports without GPU training")
-    parser.add_argument("--train", action="store_true", help="Run actual LoRA training (2-3 GPU hours)")
+    parser.add_argument("--train", action="store_true", help="Run actual LoRA training")
+    parser.add_argument("--base-model", type=str, default="Qwen/Qwen2.5-1.5B-Instruct")
     parser.add_argument("--rank", type=int, default=16)
-    parser.add_argument("--epochs", type=int, default=3)
+    parser.add_argument("--epochs", type=int, default=5)
     args = parser.parse_args()
 
-    cfg = LoRAConfig(rank=args.rank, n_epochs=args.epochs)
+    cfg = LoRAConfig(base_model=args.base_model, rank=args.rank, n_epochs=args.epochs)
 
     if args.dry_run or (not args.train):
         result = dry_run(cfg)

@@ -11,13 +11,13 @@
     {
       "batch_size": 32,
       "n_actions": 280,
-      "pytorch_fallback_ms": 0.03,
+      "pytorch_fallback_ms": 0.0267,
       "jit_cuda_ms": null,
       "jit_matches_pytorch": null,
-      "naive_python_ms": 44.4792,
+      "naive_python_ms": 38.6367,
       "naive_matches_pytorch": true,
       "speedup_jit_over_fallback": null,
-      "speedup_fallback_over_naive": 1480.57
+      "speedup_fallback_over_naive": 1448.91
     }
   ],
   "conclusion": "partial results"
