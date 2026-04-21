@@ -5,10 +5,10 @@
   "command": "python -c \"import json; d=json.load(open('ShAuRyA_Supplymind/autoresearch/state.json'));print(d['best']['metric']['ci95_lower']) if d.get('best') else print('none')\"",
   "expected_output": "0.5514",
   "data_files_hashes": {
-    "ShAuRyA_Supplymind/autoresearch/state.json": "0971d180fd999a55"
+    "ShAuRyA_Supplymind/autoresearch/state.json": "e940010fa2a60a0b"
   },
-  "git_sha": "74567ce7e577",
-  "generated_at": "2026-04-21T21:40:08Z",
+  "git_sha": "a0738ad89aa2",
+  "generated_at": "2026-04-21T21:43:38Z",
   "python_version": "3.11.9",
   "platform": "Windows-10"
 }

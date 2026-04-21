@@ -94,3 +94,49 @@
 
 ---
 
+## 2026-04-21 21:40:48 UTC — `s4_recurrent_ppo_rerun` ❌ REJECTED
+
+**Status**: ok
+**Reason**: CI95 lower delta -0.2927 <= 0.0050 threshold
+
+**Hypothesis**: RecurrentPPO with LSTM-128 captures long-horizon dependencies across disruption phases.
+
+**Expected delta**: -0.10 to +0.05 (risky; our R6 data shows RecurrentPPO is -10% on unmasked, but LSTM tuning may flip this).
+
+| metric        | before (best) | after (this) | delta |
+|---------------|---------------|--------------|-------|
+| mean          | — | 0.3010 |       |
+| std           | — | 0.0596 |       |
+| **ci95_lower**| **—** | **0.2587** | **-0.2927** |
+| ci95_upper    | — | 0.3332 |       |
+| n             | — | 9.0000 |       |
+
+**Architecture attempted**: `RecurrentPPO MlpLstmPolicy lstm=128, [64], lr=3e-4`
+
+**Wall clock**: 196.9 s
+
+---
+
+## 2026-04-21 21:43:01 UTC — `s5_action_diversity_bonus_rerun` ❌ REJECTED
+
+**Status**: ok
+**Reason**: CI95 lower delta +0.0018 <= 0.0050 threshold
+
+**Hypothesis**: Bonus reward for actions not used in last 5 steps encourages exploration of the 280-dim space without hand-labeling.
+
+**Expected delta**: +0.01 to +0.03 on medium (most starved for exploration).
+
+| metric        | before (best) | after (this) | delta |
+|---------------|---------------|--------------|-------|
+| mean          | — | 0.6574 |       |
+| std           | — | 0.1749 |       |
+| **ci95_lower**| **—** | **0.5532** | **+0.0018** |
+| ci95_upper    | — | 0.7720 |       |
+| n             | — | 9.0000 |       |
+
+**Architecture attempted**: `MaskablePPO [64,64] + ActionDiversityWrapper(k=5, bonus=0.02)`
+
+**Wall clock**: 132.9 s
+
+---
+

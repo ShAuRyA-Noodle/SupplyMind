@@ -267,6 +267,84 @@
       "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning_rerun\\train.stdout.log",
       "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning_rerun\\result.json",
       "status": "accepted"
+    },
+    {
+      "experiment_name": "s4_recurrent_ppo_rerun",
+      "hypothesis": {
+        "hypothesis": "RecurrentPPO with LSTM-128 captures long-horizon dependencies across disruption phases.",
+        "expected_metric_delta": "-0.10 to +0.05 (risky; our R6 data shows RecurrentPPO is -10% on unmasked, but LSTM tuning may flip this).",
+        "justification": "R6_ALGO_COMPARISON.json: RecurrentPPO 1.081 vs MaskablePPO 1.201 out-of-the-box. Tuning LSTM hidden + proper batch may close gap.",
+        "references": [
+          "v3_arcadia/results/R6_ALGO_COMPARISON.json"
+        ]
+      },
+      "grader_scores": [
+        0.3222,
+        0.3214,
+        0.32,
+        0.3293,
+        0.1969,
+        0.1969,
+        0.3407,
+        0.3408,
+        0.341
+      ],
+      "metric": {
+        "mean": 0.301,
+        "std": 0.0596,
+        "ci95_lower": 0.2587,
+        "ci95_upper": 0.3332,
+        "n": 9
+      },
+      "accepted": false,
+      "reason": "CI95 lower delta -0.2927 <= 0.0050 threshold",
+      "delta_ci95_lower": -0.2926888888888889,
+      "metric_ci95_lower": 0.2587111111111111,
+      "metric_mean": 0.30102222222222225,
+      "architecture_summary": "RecurrentPPO MlpLstmPolicy lstm=128, [64], lr=3e-4",
+      "wall_clock_s": 196.92,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s4_recurrent_ppo_rerun\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s4_recurrent_ppo_rerun\\result.json",
+      "status": "rejected"
+    },
+    {
+      "experiment_name": "s5_action_diversity_bonus_rerun",
+      "hypothesis": {
+        "hypothesis": "Bonus reward for actions not used in last 5 steps encourages exploration of the 280-dim space without hand-labeling.",
+        "expected_metric_delta": "+0.01 to +0.03 on medium (most starved for exploration).",
+        "justification": "Pathak et al. 2017 curiosity-driven exploration. We use a cheap lexical proxy (action-history-distinct) instead of full RND since budget is 50k steps.",
+        "references": [
+          "https://arxiv.org/abs/1705.05363"
+        ]
+      },
+      "grader_scores": [
+        0.7699,
+        0.8662,
+        0.8647,
+        0.5278,
+        0.409,
+        0.4089,
+        0.7085,
+        0.6531,
+        0.7088
+      ],
+      "metric": {
+        "mean": 0.6574,
+        "std": 0.1749,
+        "ci95_lower": 0.5532,
+        "ci95_upper": 0.772,
+        "n": 9
+      },
+      "accepted": false,
+      "reason": "CI95 lower delta +0.0018 <= 0.0050 threshold",
+      "delta_ci95_lower": 0.0018186111111111458,
+      "metric_ci95_lower": 0.5532186111111111,
+      "metric_mean": 0.6574333333333333,
+      "architecture_summary": "MaskablePPO [64,64] + ActionDiversityWrapper(k=5, bonus=0.02)",
+      "wall_clock_s": 132.94,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s5_action_diversity_bonus_rerun\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s5_action_diversity_bonus_rerun\\result.json",
+      "status": "rejected"
     }
   ]
 }
