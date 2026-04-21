@@ -189,7 +189,7 @@ def _llm_counterfactual(state: dict, action: dict, template: Counterfactual) -> 
         r = requests.post(
             f"{OLLAMA_URL}/api/chat",
             json={
-                "model": "qwen2.5:14b-instruct-q4_K_M",
+                "model": "qwen2.5:14b",
                 "messages": [{"role": "user", "content": prompt}],
                 "format": "json",
                 "stream": False,

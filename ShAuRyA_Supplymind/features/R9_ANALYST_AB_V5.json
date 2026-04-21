@@ -1,0 +1,474 @@
+{
+  "status": "ok",
+  "v5": {
+    "model": "supplymind-analyst:v5",
+    "n": 10,
+    "exact_risk_acc": 0.8,
+    "partial_risk_acc": 0.9,
+    "evidence_coverage_mean": 0.917,
+    "parse_rate": 1.0,
+    "total_latency_s": 180.32,
+    "scenarios": [
+      {
+        "id": "hormuz_2026_04",
+        "correct_risk": "CRITICAL",
+        "predicted_risk": "CRITICAL",
+        "exact": 1,
+        "one_off": 0,
+        "evidence_coverage": 1.0,
+        "parsed": true,
+        "latency_s": 27.06,
+        "response": {
+          "decision": "Hedge oil exposure via near-term futures to cap supply-cost spike.",
+          "evidence": [
+            "Iran threatened full Hormuz closure",
+            "Brent $123/bbl DoD +3.5%",
+            "Carriers pausing Persian Gulf bookings"
+          ],
+          "counterfactual": "No action -> if closure materializes, P50 Brent projection $160-180/bbl, 60-day COGS impact $80-120M.",
+          "precedent": "2019 Abqaiq attack cut 5% global crude; Brent +14% peak. Hormuz closure >10x larger scale.",
+          "risk_level": "CRITICAL",
+          "confidence": 0.9
+        }
+      },
+      {
+        "id": "routine_q3_report",
+        "correct_risk": "LOW",
+        "predicted_risk": "LOW",
+        "exact": 1,
+        "one_off": 0,
+        "evidence_coverage": 0.5,
+        "parsed": true,
+        "latency_s": 12.26,
+        "response": {
+          "decision": "Do nothing; monitor.",
+          "evidence": [
+            "Q3 internal supplier report arrived on time",
+            "all suppliers operational",
+            "no active disruption signals"
+          ],
+          "counterfactual": "No action -> zero expected loss; acting would waste budget.",
+          "precedent": "DataCo baseline: 57% orders are late-risk flagged but only ~8% escalate; most normal operations require no intervention.",
+          "risk_level": "LOW",
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "typhoon_72h_warning",
+        "correct_risk": "HIGH",
+        "predicted_risk": "CRITICAL",
+        "exact": 0,
+        "one_off": 1,
+        "evidence_coverage": 1.0,
+        "parsed": true,
+        "latency_s": 25.57,
+        "response": {
+          "decision": "Activate pre-qualified Samsung backup for TSMC capacity now.",
+          "evidence": [
+            "Category 3 typhoon with 72h ETA towards Kaohsiung",
+            "TSMC in projected path",
+            "Samsung already pre-qualified at 70% TSMC N5 equivalency"
+          ],
+          "counterfactual": "No action -> if typhoon lands, 7-14 day TSMC outage, P50 revenue-at-risk $12M, P95 $45M.",
+          "precedent": "2024-07 Typhoon Gaemi: Kaohsiung port 2-day closure + 3-5 day shipping delays; TSMC precautionary shutdown avoided production loss.",
+          "risk_level": "CRITICAL",
+          "confidence": 0.9
+        }
+      },
+      {
+        "id": "minor_fx_move",
+        "correct_risk": "LOW",
+        "predicted_risk": "LOW",
+        "exact": 1,
+        "one_off": 0,
+        "evidence_coverage": 1.0,
+        "parsed": true,
+        "latency_s": 14.51,
+        "response": {
+          "decision": "Do nothing; monitor.",
+          "evidence": [
+            "TRY -2.5% DoD within normal FX volatility band",
+            "no operational disruption signals",
+            "supply chain health 93/100"
+          ],
+          "counterfactual": "No action -> near-zero downside; free-cost information action.",
+          "precedent": "2022 Ukraine war caused 80% palladium spike + 250% nickel spike, but lower-magnitude FX moves (<5% daily) rarely cascade to supply chains.",
+          "risk_level": "LOW",
+          "confidence": 0.8
+        }
+      },
+      {
+        "id": "red_sea_campaign",
+        "correct_risk": "CRITICAL",
+        "predicted_risk": "CRITICAL",
+        "exact": 1,
+        "one_off": 0,
+        "evidence_coverage": 0.6666666666666666,
+        "parsed": true,
+        "latency_s": 17.26,
+        "response": {
+          "decision": "Reroute in-transit vessels via Cape of Good Hope (+10-14d transit).",
+          "evidence": [
+            "Houthi attacks ongoing 60+ days",
+            "100+ vessel attacks reported",
+            "Maersk and MSC rerouting via Cape"
+          ],
+          "counterfactual": "No action -> 40% chance of vessel attack or insurance denial, P50 loss $8M per vessel affected.",
+          "precedent": "2023-11 Galaxy Leader seizure triggered 50% Suez volume drop; Tesla Berlin paused production Jan 2024 over delays.",
+          "risk_level": "CRITICAL",
+          "confidence": 0.92
+        }
+      },
+      {
+        "id": "small_earthquake",
+        "correct_risk": "LOW",
+        "predicted_risk": "LOW",
+        "exact": 1,
+        "one_off": 0,
+        "evidence_coverage": 1.0,
+        "parsed": true,
+        "latency_s": 15.23,
+        "response": {
+          "decision": "Do nothing; monitor.",
+          "evidence": [
+            "M4.8 earthquake below damage-inducing threshold (~M6.0)",
+            "no tsunami advisory",
+            "no damage or supplier-offline reports"
+          ],
+          "counterfactual": "No action -> zero expected loss; acting would waste budget.",
+          "precedent": "2011 Tohoku was M9.0 (~1000x energy of M4.8); only M6.5+ quakes have historically disrupted auto/semi supply chains.",
+          "risk_level": "LOW",
+          "confidence": 0.95
+        }
+      },
+      {
+        "id": "panama_drought",
+        "correct_risk": "MEDIUM",
+        "predicted_risk": "MEDIUM",
+        "exact": 1,
+        "one_off": 0,
+        "evidence_coverage": 1.0,
+        "parsed": true,
+        "latency_s": 19.7,
+        "response": {
+          "decision": "Increase Atlanta warehouse safety stock +14 days to buffer Panama slot reductions.",
+          "evidence": [
+            "Panama transit slots -30%",
+            "Shanghai-East US rates +18% WoW",
+            "Panama Canal Authority restricted daily transits"
+          ],
+          "counterfactual": "No action -> 30% probability of stock-out on Asian imports in 21-28 days, P50 loss $3M.",
+          "precedent": "2023 Panama Canal drought cut transits 25% for 9 months, driving Atlantic freight +40%; firms with 2+ week buffer avoided stock-outs.",
+          "risk_level": "MEDIUM",
+          "confidence": 0.82
+        }
+      },
+      {
+        "id": "chinese_sanctions_rumor",
+        "correct_risk": "MEDIUM",
+        "predicted_risk": "LOW",
+        "exact": 0,
+        "one_off": 1,
+        "evidence_coverage": 1.0,
+        "parsed": true,
+        "latency_s": 15.76,
+        "response": {
+          "decision": "Monitor official channels for confirmation of rare-earth export control rumors.",
+          "evidence": [
+            "unconfirmed social media rumor about potential rare-earth export controls",
+            "no official announcement",
+            "stock prices stable"
+          ],
+          "counterfactual": "No action -> if rumor is false, no downside; if true, early detection allows timely mitigation.",
+          "precedent": "2019 US-China trade war saw unconfirmed reports causing market volatility; official announcements led to concrete actions.",
+          "risk_level": "LOW",
+          "confidence": 0.75
+        }
+      },
+      {
+        "id": "iran_israel_missile",
+        "correct_risk": "HIGH",
+        "predicted_risk": "HIGH",
+        "exact": 1,
+        "one_off": 0,
+        "evidence_coverage": 1.0,
+        "parsed": true,
+        "latency_s": 19.07,
+        "response": {
+          "decision": "Reroute Haifa-bound shipments via Ashdod (+3-5d transit).",
+          "evidence": [
+            "Iran launched 180 ballistic missiles at Israel",
+            "Haifa port intermittent closures",
+            "Lloyd's war-risk premium +50bp"
+          ],
+          "counterfactual": "No action -> 25% probability of carrier cancellation, P50 delivery delay 7-10 days, SLA penalty $0.5M.",
+          "precedent": "2024-10-07 Hezbollah rocket escalation caused multi-week Haifa operational disruption; Ashdod pickup absorbed 80% of diverted volume.",
+          "risk_level": "HIGH",
+          "confidence": 0.88
+        }
+      },
+      {
+        "id": "quiet_day",
+        "correct_risk": "LOW",
+        "predicted_risk": "LOW",
+        "exact": 1,
+        "one_off": 0,
+        "evidence_coverage": 1.0,
+        "parsed": true,
+        "latency_s": 13.9,
+        "response": {
+          "decision": "Do nothing; monitor.",
+          "evidence": [
+            "all suppliers operational",
+            "no disruption signals",
+            "Brent +0.2% DoD within normal range"
+          ],
+          "counterfactual": "Taking a costly mitigation action would waste 3-5% of budget with no expected loss avoided (P50 ~ 0).",
+          "precedent": "DataCo baseline: 57% orders are late-risk flagged but only ~8% escalate; most normal operations require no intervention.",
+          "risk_level": "LOW",
+          "confidence": 0.9
+        }
+      }
+    ]
+  },
+  "base": {
+    "model": "qwen2.5:14b",
+    "n": 10,
+    "exact_risk_acc": 0.0,
+    "partial_risk_acc": 0.05,
+    "evidence_coverage_mean": 0.0,
+    "parse_rate": 1.0,
+    "total_latency_s": 153.31,
+    "scenarios": [
+      {
+        "id": "hormuz_2026_04",
+        "correct_risk": "CRITICAL",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 3.18,
+        "response": {
+          "supply_chain_risk": "High",
+          "action": "Increase inventory levels, diversify suppliers, and seek alternative shipping routes."
+        }
+      },
+      {
+        "id": "routine_q3_report",
+        "correct_risk": "LOW",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 6.88,
+        "response": {
+          "health_score": 95,
+          "maximum_possible_health": 100,
+          "status": "All operational",
+          "report_arrival_status": "On time",
+          "disruption_signals": "No active disruption signals"
+        }
+      },
+      {
+        "id": "typhoon_72h_warning",
+        "correct_risk": "HIGH",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 13.23,
+        "response": {
+          "alertType": "Typhoon Warning",
+          "location": "Kaohsiung, Taiwan",
+          "severity": "Category 3 Typhoon",
+          "ETA": "72 hours",
+          "affectedEntity": "TSMC (Taiwan Semiconductor Manufacturing Company)",
+          "backupStatus": "Samsung backup qualified",
+          "recommendedActions": [
+            "Activate emergency response plan for TSMC.",
+            "Evacuate non-essential personnel from the affected area.",
+            "Secure all equipment and facilities to withstand typhoon conditions.",
+            "Communicate with Samsung to ensure readiness for potential production shift.",
+            "Monitor weather updates closely and adjust plans as necessary."
+          ]
+        }
+      },
+      {
+        "id": "minor_fx_move",
+        "correct_risk": "LOW",
+        "predicted_risk": "Medium",
+        "exact": 0,
+        "one_off": 1,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 17.03,
+        "response": {
+          "score": 6,
+          "risk_level": "Medium",
+          "rationale": [
+            "The Turkish Lira's depreciation by -2.5% overnight suggests a significant economic event or market sentiment shift affecting Turkey. However, since there are no reported supplier or shipping issues, this indicates that the immediate operational and logistical risks for businesses dealing with the Turkish Lira are not heightened due to these factors.",
+            "A health score of 93/100 is quite high, indicating strong overall economic fundamentals and stability in other areas, which helps mitigate some of the negative impacts of currency depreciation. However, a sudden drop in currency value can still pose risks related to financing costs for Turkish companies with foreign debt, import prices, and inflation.",
+            "Given these factors, the risk level is assessed as Medium. The situation requires close monitoring but does not necessarily indicate an immediate crisis."
+          ]
+        }
+      },
+      {
+        "id": "red_sea_campaign",
+        "correct_risk": "CRITICAL",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 26.25,
+        "response": {
+          "spans": [
+            {
+              "text": "Given the current situation with Houthi attacks in the Red Sea, it is crucial to prioritize safety and security for all in-transit vessels.",
+              "entity_type": "instruction"
+            },
+            {
+              "text": "For vessels currently transiting through the Red Sea, the following actions are recommended:",
+              "entity_type": "bullet_point_list"
+            },
+            {
+              "text": "- **Rerouting**: If possible, reroute via the Cape of Good Hope to avoid the high-risk areas in and around the Bab-el-Mandeb Strait.",
+              "entity_type": "bullet_point_item"
+            },
+            {
+              "text": "- **Enhanced Security Measures**: Increase vigilance and security protocols. This includes deploying additional armed guards if necessary and ensuring all crew members are aware of potential threats and emergency procedures.",
+              "entity_type": "bullet_point_item"
+            },
+            {
+              "text": "- **Communication**: Maintain constant communication with maritime authorities, shipping companies, and other vessels in the area to stay updated on any new developments or changes in security conditions.",
+              "entity_type": "bullet_point_item"
+            },
+            {
+              "text": "- **Monitoring**: Continuously monitor for updates regarding Houthi activities and adjust routes or actions as needed based on the latest intelligence.",
+              "entity_type": "bullet_point_item"
+            }
+          ]
+        }
+      },
+      {
+        "id": "small_earthquake",
+        "correct_risk": "LOW",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 13.42,
+        "response": {
+          "en": "Given the information provided, it seems that the recent M4.8 earthquake off the coast of Japan in the Pacific did not cause any immediate threats such as tsunamis or damages to infrastructure and all suppliers are currently operational. The following steps can be considered:\n\n1. Monitor: Keep an eye on official updates from local authorities for any changes.\n2. Communication: Inform relevant stakeholders (employees, customers, partners) about the situation to ensure transparency.\n3. Preparedness: Review emergency preparedness plans and ensure that all necessary measures are in place should a more significant event occur in the future."
+        }
+      },
+      {
+        "id": "panama_drought",
+        "correct_risk": "MEDIUM",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 43.99,
+        "response": {
+          "@context": "https://schema.org",
+          "@type": "RiskAssessment",
+          "riskType": "SupplyChainDisruption",
+          "description": "The Panama Canal water levels are at -25%, leading to a reduction in transit slots by -30%. Additionally, there is an observed increase of +18% WoW (Week Over Week) in Shanghai-East US freight costs.",
+          "impacts": [
+            {
+              "impactType": "IncreasedTransportationCosts",
+              "description": "The rise in shipping costs from Shanghai to the East Coast of the United States can lead to higher expenses for businesses relying on these routes, potentially affecting profit margins and consumer pricing."
+            },
+            {
+              "impactType": "SupplyChainDisruption",
+              "description": "With reduced transit slots through the Panama Canal due to lower water levels, there is an increased risk of delays in shipping times. This can lead to stock shortages or overstocking as companies adjust their inventory management strategies."
+            }
+          ],
+          "riskMitigationActions": [
+            {
+              "actionType": "DiversifyShippingRoutes",
+              "description": "Companies should consider diversifying their shipping routes by exploring alternative waterways and air freight options. This can help mitigate the risk of supply chain disruptions caused by reduced capacity through the Panama Canal."
+            },
+            {
+              "actionType": "NegotiateFreightRates",
+              "description": "Businesses should negotiate with carriers to secure better rates or long-term contracts that lock in current shipping costs, providing some stability against rising freight expenses from Shanghai-East US routes."
+            },
+            {
+              "actionType": "InventoryManagementAdjustments",
+              "description": "Companies need to adjust their inventory management strategies to account for potential delays and increased costs. This may include increasing safety stock levels or implementing more agile supply chain practices."
+            }
+          ]
+        }
+      },
+      {
+        "id": "chinese_sanctions_rumor",
+        "correct_risk": "MEDIUM",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 10.78,
+        "response": {
+          "actions": [
+            [
+              "Monitor",
+              "Continue to observe developments and verify the information through reliable sources before taking any significant actions."
+            ],
+            "Analyze",
+            "Conduct a thorough analysis of the potential impact on your business or investments if such export controls were to be implemented, considering both short-term and long-term effects."
+          ],
+          "no_action": "If there is no official confirmation from authoritative sources and stock prices remain stable, it might not be necessary to take immediate action. However, staying informed and prepared for any changes is advisable."
+        }
+      },
+      {
+        "id": "iran_israel_missile",
+        "correct_risk": "HIGH",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 11.05,
+        "response": {
+          "actions": "[Seek Alternative Routes] Consider rerouting shipments to alternative ports such as Ashdod or Caesarea, which may be less affected by the current conflict. [Increase Insurance Coverage] Given the increased war-risk premiums (+50bp), it is advisable to secure comprehensive insurance coverage for any shipments transiting through the Eastern Mediterranean. [Monitor Situation Closely] Stay updated with real-time news and alerts from reliable sources such as Lloyd's, Reuters, or other maritime security agencies to make informed decisions about future shipments."
+        }
+      },
+      {
+        "id": "quiet_day",
+        "correct_risk": "LOW",
+        "predicted_risk": "",
+        "exact": 0,
+        "one_off": 0,
+        "evidence_coverage": 0.0,
+        "parsed": true,
+        "latency_s": 7.5,
+        "response": {
+          "state": "Day 4 of 30",
+          "suppliers_status": "All suppliers operational",
+          "disruption_signals": "No disruption signals",
+          "brent_price_change": "+0.2% DoD (Day over Day)",
+          "health_score": "96/100",
+          "action_required": "None or Monitor"
+        }
+      }
+    ]
+  },
+  "summary": {
+    "v5_exact_acc": 0.8,
+    "base_exact_acc": 0.0,
+    "exact_acc_lift": 0.8,
+    "v5_partial_acc": 0.9,
+    "base_partial_acc": 0.05,
+    "partial_acc_lift": 0.85,
+    "v5_evidence_mean": 0.917,
+    "base_evidence_mean": 0.0
+  },
+  "note": "v5 target: exact_acc_lift > 0 AND evidence_coverage_mean > base. Historical v3 A/B win rate was only 12% vs base Qwen (per docs/legacy/AUTORESEARCH_SUMMARY.md + EXECUTIVE_SUMMARY.md \u00a7supplymind-analyst)."
+}

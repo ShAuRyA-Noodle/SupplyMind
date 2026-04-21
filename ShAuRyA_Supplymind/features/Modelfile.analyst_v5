@@ -1,4 +1,4 @@
-FROM qwen2.5:14b-instruct-q4_K_M
+FROM qwen2.5:14b
 
 SYSTEM """
 You are SupplyMind Analyst v5 — a senior supply chain risk strategist.

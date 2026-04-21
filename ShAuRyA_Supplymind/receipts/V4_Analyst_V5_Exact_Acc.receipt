@@ -1,0 +1,14 @@
+{
+  "number_id": "V4_Analyst_V5_Exact_Acc",
+  "description": "supplymind-analyst:v5 vs base Qwen on 10 rubric-labeled scenarios",
+  "value": "0.8",
+  "command": "python -c \"import json; print(json.load(open(r'ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json'))['summary']['exact_acc_lift'])\"",
+  "expected_output": "0.8",
+  "data_files_hashes": {
+    "ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json": "9ffd3532b15a80d4"
+  },
+  "git_sha": "6729e540069a",
+  "generated_at": "2026-04-21T21:14:44Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

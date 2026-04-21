@@ -27,8 +27,10 @@ import time
 from pathlib import Path
 from typing import Any
 
+import gymnasium as gym
 import numpy as np
 import torch
+from gymnasium import spaces
 
 _PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(_PROJECT_ROOT) not in sys.path:
@@ -43,6 +45,32 @@ EVAL_SEEDS = (42, 99, 7)
 EVAL_TASKS = ("easy_typhoon_response", "medium_multi_front", "hard_cascading_crisis")
 
 
+class FlatDiscreteEnv(gym.Wrapper):
+    """Flatten MultiDiscrete([7,40]) to Discrete(280) so MaskablePPO's 280-dim
+    action mask aligns. Matches the v3 Gethsemane pattern."""
+
+    def __init__(self, base_env):
+        super().__init__(base_env)
+        n_type, n_target = base_env.action_space.nvec
+        self._n_target = int(n_target)
+        self.action_space = spaces.Discrete(int(n_type) * int(n_target))
+
+    def step(self, action):
+        flat = int(np.asarray(action).item())
+        a_type, a_target = divmod(flat, self._n_target)
+        return self.env.step(np.array([a_type, a_target]))
+
+
+def _safe_predict(model: Any, obs: np.ndarray, action_masks) -> int:
+    """Call model.predict; swallow the action_masks kwarg if unsupported."""
+    try:
+        out = model.predict(obs, deterministic=True, action_masks=action_masks)
+    except TypeError:
+        out = model.predict(obs, deterministic=True)
+    action = out[0] if isinstance(out, tuple) else out
+    return int(np.asarray(action).item())
+
+
 def _evaluate_policy(model: Any, device: str = "cuda") -> list[float]:
     """Run 3 tasks x 3 seeds = 9 episodes, return grader scores.
 
@@ -51,29 +79,23 @@ def _evaluate_policy(model: Any, device: str = "cuda") -> list[float]:
     scores: list[float] = []
     for task_id in EVAL_TASKS:
         for seed in EVAL_SEEDS:
-            eval_env = SupplyMindGymnasiumEnv(task_id=task_id)
+            base_env = SupplyMindGymnasiumEnv(task_id=task_id)
+            eval_env = FlatDiscreteEnv(base_env)
             eval_core = SupplyMindEnvironment()
             obs, info = eval_env.reset(seed=seed)
-            _ = eval_core.reset(task_id=task_id, seed=seed)
+            core_obs = eval_core.reset(task_id=task_id, seed=seed)
             done = False
-            while not done:
-                # sb3-compatible predict interface; agent must preserve this
-                if hasattr(model, "predict"):
-                    action_masks = info.get("action_masks")
-                    action, _ = model.predict(
-                        obs, deterministic=True, action_masks=action_masks
-                    )
-                else:
-                    # Raw torch module case (e.g., QR-DQN)
-                    with torch.no_grad():
-                        st = torch.from_numpy(obs).float().unsqueeze(0).to(device)
-                        mk = torch.from_numpy(info["action_masks"]).bool().unsqueeze(0).to(device)
-                        flat = model.act(st, mk).item()
-                        action = np.array([flat // 40, flat % 40], dtype=np.int64)
-                obs, _, terminated, truncated, info = eval_env.step(action)
-                sm_action = eval_env._decode_action(action)
-                eval_core.step(sm_action)
-                done = terminated or truncated or eval_core.done
+            steps = 0
+            while not done and steps < 200:
+                mask = info.get("action_masks")
+                mask_np = np.asarray(mask) if mask is not None else None
+                flat = _safe_predict(model, obs, mask_np)
+                obs, _, terminated, truncated, info = eval_env.step(flat)
+                a_type, a_target = divmod(flat, 40)
+                sm_action = base_env._decode_action(np.array([a_type, a_target], dtype=np.int64))
+                core_obs = eval_core.step(sm_action)
+                done = terminated or truncated or getattr(core_obs, "done", False)
+                steps += 1
             score = eval_core.grade()["score"]
             scores.append(float(score))
             eval_env.close()
@@ -98,7 +120,8 @@ def build_policy_and_env(seed: int) -> tuple[Any, Any]:
             training_mode=True,
             grade_reward=False,
         )
-        return ActionMasker(env, lambda env: env.unwrapped._compute_action_mask())
+        env = FlatDiscreteEnv(env)
+        return ActionMasker(env, lambda e: e.unwrapped._compute_action_mask())
 
     env = DummyVecEnv([_env_fn])
     env.seed(seed)
@@ -112,10 +135,10 @@ def build_policy_and_env(seed: int) -> tuple[Any, Any]:
         gamma=0.99,
         gae_lambda=0.95,
         clip_range=0.2,
-        ent_coef=0.01,
+        ent_coef=0.1,
         vf_coef=0.5,
         max_grad_norm=0.5,
-        policy_kwargs={"net_arch": [64, 64]},
+        policy_kwargs={"net_arch": [256, 256], "activation_fn": torch.nn.ReLU},
         device="cuda" if torch.cuda.is_available() else "cpu",
         seed=seed,
         verbose=0,
@@ -135,7 +158,7 @@ def train_policy(model: Any, env: Any, total_steps: int) -> None:
 
 def architecture_summary() -> str:
     """One-line human-readable summary for the lab notebook."""
-    return "MaskablePPO MlpPolicy[64,64], lr=3e-4, n_steps=2048, gamma=0.99"
+    return "MaskablePPO MlpPolicy[256,256]+ReLU, lr=3e-4, n_steps=2048, gamma=0.99"
 
 # --- SAFE TO MODIFY ABOVE ---
 

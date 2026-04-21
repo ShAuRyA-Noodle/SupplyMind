@@ -5,10 +5,10 @@
   "command": "python -c \"import sqlite3, json; c=sqlite3.connect('ShAuRyA_Supplymind/realtime/events.db');r=c.execute('SELECT meta_json FROM events WHERE source=? ORDER BY ts_unix DESC LIMIT 1', ('fred_brent',)).fetchone();print(json.loads(r[0])['latest_price']) if r else print('no-data')\"",
   "expected_output": "123.28",
   "data_files_hashes": {
-    "ShAuRyA_Supplymind/realtime/events.db": "a7cb3c867be64648"
+    "ShAuRyA_Supplymind/realtime/events.db": "cb259fe90ab5d876"
   },
-  "git_sha": "02251e94dc01",
-  "generated_at": "2026-04-20T20:57:26Z",
+  "git_sha": "6729e540069a",
+  "generated_at": "2026-04-21T21:14:44Z",
   "python_version": "3.11.9",
   "platform": "Windows-10"
 }

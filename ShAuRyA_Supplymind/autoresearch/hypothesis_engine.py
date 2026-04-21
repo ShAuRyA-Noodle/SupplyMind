@@ -143,7 +143,7 @@ in the system prompt. Remember: full file content in proposed_code, not a diff.
 """
 
 
-def _call_ollama(prompt: str, model: str = "qwen2.5:14b-instruct-q4_K_M") -> str:
+def _call_ollama(prompt: str, model: str = "qwen2.5:14b") -> str:
     """Local Qwen-14B via Ollama. Requires ollama serve running."""
     url = "http://127.0.0.1:11434/api/chat"
     payload = {
@@ -263,7 +263,7 @@ def propose_hypothesis(
     for attempt in range(retries):
         try:
             if agent == "ollama":
-                raw = _call_ollama(prompt, model or "qwen2.5:14b-instruct-q4_K_M")
+                raw = _call_ollama(prompt, model or "qwen2.5:14b")
             elif agent == "claude":
                 raw = _call_claude(prompt, model or "claude-opus-4-7")
             else:

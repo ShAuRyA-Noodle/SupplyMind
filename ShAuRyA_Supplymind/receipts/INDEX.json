@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-04-20T20:57:26Z",
-  "git_sha": "02251e94dc01",
-  "n_receipts": 13,
+  "generated_at": "2026-04-21T21:14:44Z",
+  "git_sha": "6729e540069a",
+  "n_receipts": 15,
   "receipts": [
     {
       "id": "R5_GRANITE_mxbai_P1",
@@ -66,7 +66,7 @@
     {
       "id": "V4_STACKING_V2_lift_vs_WV",
       "desc": "v4 Stacking v2 AUC lift vs ensemble weighted voting",
-      "value": "0.001",
+      "value": "0.0045",
       "command": "python -c \"import json; print(json.load(open(r'ShAuRyA_Supplymind/features/R15_STACKING_V2.json'))['lift_stacking_vs_wv_auc'])\""
     },
     {
@@ -80,6 +80,18 @@
       "desc": "Total test count across v3 + v4",
       "value": "tests/test_engine.py::TestSupplyChainGraph::test_load_easy_g",
       "command": "python -m pytest tests/ ShAuRyA_Supplymind/tests/ --collect-only -q"
+    },
+    {
+      "id": "V4_Analyst_V5_Exact_Acc",
+      "desc": "supplymind-analyst:v5 vs base Qwen on 10 rubric-labeled scenarios",
+      "value": "0.8",
+      "command": "python -c \"import json; print(json.load(open(r'ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json'))['summary']['exact_acc_lift'])\""
+    },
+    {
+      "id": "V4_Autoresearch_Best_CI95",
+      "desc": "Best CI95-lower accepted by autoresearch orchestrator (bootstrap 1000)",
+      "value": "0.4035",
+      "command": "python -c \"import json; d=json.load(open('ShAuRyA_Supplymind/autoresearch/state.json'));print(d['best']['metric']['ci95_lower']) if d.get('best') else print('none')\""
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "number_id": "V4_Autoresearch_Best_CI95",
+  "description": "Best CI95-lower accepted by autoresearch orchestrator (bootstrap 1000)",
+  "value": "0.4035",
+  "command": "python -c \"import json; d=json.load(open('ShAuRyA_Supplymind/autoresearch/state.json'));print(d['best']['metric']['ci95_lower']) if d.get('best') else print('none')\"",
+  "expected_output": "0.4035",
+  "data_files_hashes": {
+    "ShAuRyA_Supplymind/autoresearch/state.json": "8942178533e633cf"
+  },
+  "git_sha": "6729e540069a",
+  "generated_at": "2026-04-21T21:14:44Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

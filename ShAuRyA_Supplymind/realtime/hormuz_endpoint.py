@@ -326,8 +326,8 @@ def run_hormuz_pipeline(req: ScenarioRequest) -> ScenarioResponse:
             signals_brief=_signals_brief(signals),
         )
         for model_name, friendly in [
-            ("qwen2.5:14b-instruct-q4_K_M", "Qwen-2.5-14B"),
-            ("mistral-nemo:latest", "Mistral-Nemo"),
+            ("qwen2.5:14b", "Qwen-2.5-14B"),
+            ("mistral-nemo-local:latest", "Mistral-Nemo"),
             ("deepseek-r1-local-q4:latest", "DeepSeek-R1-Q4"),
         ]:
             try:

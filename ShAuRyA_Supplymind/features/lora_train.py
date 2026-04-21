@@ -164,13 +164,13 @@ def _format_example(ex: TrainingExample) -> str:
 
 
 def train(config: LoRAConfig, examples: list[TrainingExample]) -> dict:
-    """Run the actual fine-tune. REQUIRES transformers + peft + accelerate + torch."""
+    """Run the actual fine-tune. 4-bit QLoRA via bitsandbytes on consumer GPUs."""
     try:
         import torch
         from transformers import (AutoModelForCausalLM, AutoTokenizer,
-                                  TrainingArguments, Trainer,
+                                  BitsAndBytesConfig, TrainingArguments, Trainer,
                                   DataCollatorForLanguageModeling)
-        from peft import LoraConfig, TaskType, get_peft_model
+        from peft import LoraConfig, TaskType, get_peft_model, prepare_model_for_kbit_training
         from datasets import Dataset
     except ImportError as e:
         return {"status": "imports_failed", "error": str(e),
@@ -179,13 +179,22 @@ def train(config: LoRAConfig, examples: list[TrainingExample]) -> dict:
     if not torch.cuda.is_available():
         return {"status": "no_cuda", "error": "CUDA not available; LoRA requires GPU"}
 
-    logger.info("[lora] loading %s ...", config.base_model)
+    logger.info("[lora] loading %s in 4-bit QLoRA mode...", config.base_model)
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16 if config.bf16 else torch.float16,
+        bnb_4bit_use_double_quant=True,
+    )
     tokenizer = AutoTokenizer.from_pretrained(config.base_model, trust_remote_code=True)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
     model = AutoModelForCausalLM.from_pretrained(
         config.base_model,
-        torch_dtype=torch.bfloat16 if config.bf16 else torch.float16,
+        quantization_config=bnb_config,
         device_map="auto", trust_remote_code=True,
     )
+    model = prepare_model_for_kbit_training(model)
     peft_cfg = LoraConfig(
         r=config.rank, lora_alpha=config.alpha, lora_dropout=config.dropout,
         bias="none", task_type=TaskType.CAUSAL_LM,

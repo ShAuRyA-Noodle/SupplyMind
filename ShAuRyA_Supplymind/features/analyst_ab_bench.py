@@ -293,7 +293,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     parser = argparse.ArgumentParser()
     parser.add_argument("--v5", default="supplymind-analyst:v5")
-    parser.add_argument("--base", default="qwen2.5:14b-instruct-q4_K_M")
+    parser.add_argument("--base", default="qwen2.5:14b")
     parser.add_argument("--save", action="store_true")
     args = parser.parse_args()
 

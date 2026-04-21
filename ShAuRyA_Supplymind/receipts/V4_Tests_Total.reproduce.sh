@@ -3,7 +3,7 @@
 # Verify: Total test count across v3 + v4
 # Expected: tests/test_engine.py::TestSupplyChainGraph::test_load_easy_graph_node_count
 tests/test_engine.py::T
-# Git SHA at issuance: 02251e94dc01
+# Git SHA at issuance: 6729e540069a
 set -e
 cd "$(dirname "$0")/../.."
 python -m pytest tests/ ShAuRyA_Supplymind/tests/ --collect-only -q

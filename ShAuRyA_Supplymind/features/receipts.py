@@ -206,6 +206,20 @@ RECEIPT_SPECS: list[dict] = [
                     "--collect-only -q"),
         "data_files": [],
     },
+    {
+        "number_id": "V4_Analyst_V5_Exact_Acc",
+        "description": "supplymind-analyst:v5 vs base Qwen on 10 rubric-labeled scenarios",
+        "command": _jqlike("ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json",
+                           ".summary.exact_acc_lift"),
+        "data_files": ["ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json"],
+    },
+    {
+        "number_id": "V4_Autoresearch_Best_CI95",
+        "description": "Best CI95-lower accepted by autoresearch orchestrator (bootstrap 1000)",
+        "command": ("python -c \"import json; d=json.load(open('ShAuRyA_Supplymind/autoresearch/state.json'));"
+                    "print(d['best']['metric']['ci95_lower']) if d.get('best') else print('none')\""),
+        "data_files": ["ShAuRyA_Supplymind/autoresearch/state.json"],
+    },
 ]
 
 

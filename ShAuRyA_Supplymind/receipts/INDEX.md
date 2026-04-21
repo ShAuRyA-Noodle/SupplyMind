@@ -1,6 +1,6 @@
 # SupplyMind Receipts — Verify Any Headline Number in 30 Seconds
 
-*generated 2026-04-20T20:57:26Z from git SHA `02251e94dc01`*
+*generated 2026-04-21T21:14:44Z from git SHA `6729e540069a`*
 
 | # | Number | Value | Verify |
 |---|--------|-------|--------|
@@ -14,6 +14,8 @@
 | R6_AquaRegia_WTI_dev95 | Per-horizon conformal deviation at 95% nominal, WTI ARIMA | `0.023809523809523836` | `bash receipts/R6_AquaRegia_WTI_dev95.reproduce.sh` |
 | R3_TimesFM_CP_WTI_dev95 | TimesFM-CP WTI deviation from 95% nominal | `0.04999999999999993` | `bash receipts/R3_TimesFM_CP_WTI_dev95.reproduce.sh` |
 | V4_SPOF_V2_F1 | v4 SPOF articulation-point F1 (mean across 3 graphs) | `1.0` | `bash receipts/V4_SPOF_V2_F1.reproduce.sh` |
-| V4_STACKING_V2_lift_vs_WV | v4 Stacking v2 AUC lift vs ensemble weighted voting | `0.001` | `bash receipts/V4_STACKING_V2_lift_vs_WV.reproduce.sh` |
+| V4_STACKING_V2_lift_vs_WV | v4 Stacking v2 AUC lift vs ensemble weighted voting | `0.0045` | `bash receipts/V4_STACKING_V2_lift_vs_WV.reproduce.sh` |
 | V4_Live_Brent_202604 | FRED Brent crude spot price as ingested on 2026-04-21 ($/bbl | `123.28` | `bash receipts/V4_Live_Brent_202604.reproduce.sh` |
 | V4_Tests_Total | Total test count across v3 + v4 | `tests/test_engine.py::TestSupp` | `bash receipts/V4_Tests_Total.reproduce.sh` |
+| V4_Analyst_V5_Exact_Acc | supplymind-analyst:v5 vs base Qwen on 10 rubric-labeled scen | `0.8` | `bash receipts/V4_Analyst_V5_Exact_Acc.reproduce.sh` |
+| V4_Autoresearch_Best_CI95 | Best CI95-lower accepted by autoresearch orchestrator (boots | `0.4035` | `bash receipts/V4_Autoresearch_Best_CI95.reproduce.sh` |
