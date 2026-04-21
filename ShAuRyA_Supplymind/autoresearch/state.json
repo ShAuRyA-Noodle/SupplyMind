@@ -1,16 +1,16 @@
 {
   "best": {
-    "experiment_name": "s2_higher_entropy",
+    "experiment_name": "s3_curriculum_learning_rerun",
     "metric": {
-      "mean": 0.6066,
-      "std": 0.2412,
-      "ci95_lower": 0.4548,
-      "ci95_upper": 0.7515,
+      "mean": 0.646,
+      "std": 0.1634,
+      "ci95_lower": 0.5514,
+      "ci95_upper": 0.7469,
       "n": 9
     },
-    "architecture_summary": "MaskablePPO MlpPolicy[256,256]+ReLU, lr=3e-4, n_steps=2048, gamma=0.99",
-    "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s2_higher_entropy\\result.json",
-    "updated_at": "2026-04-21T21:16:44Z"
+    "architecture_summary": "MaskablePPO [128,128] curriculum easy->med->hard (40/30/30 split)",
+    "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning_rerun\\result.json",
+    "updated_at": "2026-04-21T21:37:31Z"
   },
   "history": [
     {
@@ -228,6 +228,45 @@
       "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s5_action_diversity_bonus\\train.stdout.log",
       "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s5_action_diversity_bonus\\result.json",
       "status": "rejected"
+    },
+    {
+      "experiment_name": "s3_curriculum_learning_rerun",
+      "hypothesis": {
+        "hypothesis": "Curriculum (easy -> medium -> hard) accelerates learning on cascading crisis via transfer.",
+        "expected_metric_delta": "+0.03 to +0.07 on hard task; neutral on easy.",
+        "justification": "Bengio et al. 2009 curriculum learning. Our hard_cascading_crisis has very sparse reward \u2014 warm-starting from easy weights should help.",
+        "references": [
+          "https://dl.acm.org/doi/10.1145/1553374.1553380"
+        ]
+      },
+      "grader_scores": [
+        0.7844,
+        0.8822,
+        0.8807,
+        0.5918,
+        0.4594,
+        0.4594,
+        0.5852,
+        0.5853,
+        0.5855
+      ],
+      "metric": {
+        "mean": 0.646,
+        "std": 0.1634,
+        "ci95_lower": 0.5514,
+        "ci95_upper": 0.7469,
+        "n": 9
+      },
+      "accepted": true,
+      "reason": "CI95 lower +0.0966 > 0.0050 threshold",
+      "delta_ci95_lower": 0.09660361111111104,
+      "metric_ci95_lower": 0.551403611111111,
+      "metric_mean": 0.645988888888889,
+      "architecture_summary": "MaskablePPO [128,128] curriculum easy->med->hard (40/30/30 split)",
+      "wall_clock_s": 219.7,
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning_rerun\\train.stdout.log",
+      "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Supplymind\\autoresearch\\experiments\\s3_curriculum_learning_rerun\\result.json",
+      "status": "accepted"
     }
   ]
 }

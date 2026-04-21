@@ -1,6 +1,6 @@
 # SupplyMind Receipts — Verify Any Headline Number in 30 Seconds
 
-*generated 2026-04-21T21:14:44Z from git SHA `6729e540069a`*
+*generated 2026-04-21T21:40:08Z from git SHA `74567ce7e577`*
 
 | # | Number | Value | Verify |
 |---|--------|-------|--------|
@@ -18,4 +18,4 @@
 | V4_Live_Brent_202604 | FRED Brent crude spot price as ingested on 2026-04-21 ($/bbl | `123.28` | `bash receipts/V4_Live_Brent_202604.reproduce.sh` |
 | V4_Tests_Total | Total test count across v3 + v4 | `tests/test_engine.py::TestSupp` | `bash receipts/V4_Tests_Total.reproduce.sh` |
 | V4_Analyst_V5_Exact_Acc | supplymind-analyst:v5 vs base Qwen on 10 rubric-labeled scen | `0.8` | `bash receipts/V4_Analyst_V5_Exact_Acc.reproduce.sh` |
-| V4_Autoresearch_Best_CI95 | Best CI95-lower accepted by autoresearch orchestrator (boots | `0.4035` | `bash receipts/V4_Autoresearch_Best_CI95.reproduce.sh` |
+| V4_Autoresearch_Best_CI95 | Best CI95-lower accepted by autoresearch orchestrator (boots | `0.5514` | `bash receipts/V4_Autoresearch_Best_CI95.reproduce.sh` |

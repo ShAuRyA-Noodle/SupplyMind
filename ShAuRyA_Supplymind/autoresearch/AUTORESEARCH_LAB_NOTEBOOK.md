@@ -58,3 +58,31 @@
 
 ---
 
+## 2026-04-21 21:37:31 UTC — `s3_curriculum_learning_rerun` ✅ ACCEPTED
+
+**Hypothesis**: Curriculum (easy -> medium -> hard) accelerates learning on cascading crisis via transfer.
+
+**Expected delta**: +0.03 to +0.07 on hard task; neutral on easy.
+
+**Justification**: Bengio et al. 2009 curriculum learning. Our hard_cascading_crisis has very sparse reward — warm-starting from easy weights should help.
+
+| metric        | before (best) | after (this) | delta |
+|---------------|---------------|--------------|-------|
+| mean          | 0.6066 | 0.6460 |       |
+| std           | 0.2412 | 0.1634 |       |
+| **ci95_lower**| **0.4548** | **0.5514** | **+0.0966** |
+| ci95_upper    | 0.7515 | 0.7469 |       |
+| n             | 9.0000 | 9.0000 |       |
+
+**Architecture**: `MaskablePPO [128,128] curriculum easy->med->hard (40/30/30 split)`
+
+**Wall clock**: 219.7 s
+
+**Diff**: diff: +35 / -42 LOC
+
+**References**: https://dl.acm.org/doi/10.1145/1553374.1553380
+
+**SURPRISE (better than expected by 0.047)**: actual=+0.097 vs expected=+0.050
+
+---
+

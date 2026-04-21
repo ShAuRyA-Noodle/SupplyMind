@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-21T21:14:44Z",
-  "git_sha": "6729e540069a",
+  "generated_at": "2026-04-21T21:40:08Z",
+  "git_sha": "74567ce7e577",
   "n_receipts": 15,
   "receipts": [
     {
@@ -90,7 +90,7 @@
     {
       "id": "V4_Autoresearch_Best_CI95",
       "desc": "Best CI95-lower accepted by autoresearch orchestrator (bootstrap 1000)",
-      "value": "0.4035",
+      "value": "0.5514",
       "command": "python -c \"import json; d=json.load(open('ShAuRyA_Supplymind/autoresearch/state.json'));print(d['best']['metric']['ci95_lower']) if d.get('best') else print('none')\""
     }
   ]
