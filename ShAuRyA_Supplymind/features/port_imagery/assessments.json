@@ -111,7 +111,7 @@
       "unusual_activity": "smoke detected",
       "risk_score": 0.502,
       "confidence": 0.35,
-      "latency_s": 0.0,
+      "latency_s": 0.01,
       "meta": {}
     },
     "HAIFA": {

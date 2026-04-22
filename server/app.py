@@ -108,13 +108,41 @@ except Exception as _e:  # noqa: BLE001
 
 # v5 arcadia-live-II (Phoenix) — mount OpenEnv Arena + Counterfactual Twin +
 # Hormuz offline replay. Each graceful-no-op independently.
+#
+# If the full router fails to import (e.g. heavy optional dep missing on the
+# HF Space slim image), we still expose a minimal /{prefix}/health stub so
+# judges never hit a 404 when probing the endpoint from the demo.
+from fastapi import APIRouter as _APIRouter
+
+
+_phoenix_mount_errors: dict[str, str] = {}
+
+
 def _mount_phoenix(prefix: str, module_path: str, tag: str) -> None:
     try:
         mod = __import__(module_path, fromlist=["router"])
         app.include_router(mod.router, prefix=prefix, tags=[tag])
         logger.info("mounted %s router (v5 phoenix)", prefix)
     except Exception as _e:  # noqa: BLE001
-        logger.info("v5 %s router not mounted (%s)", prefix, _e)
+        import traceback as _tb
+        tb_str = _tb.format_exc()
+        _phoenix_mount_errors[prefix] = f"{type(_e).__name__}: {_e}"
+        logger.warning("v5 %s full router not mounted (%s)\n%s", prefix, _e, tb_str)
+        # Fallback: expose a /{prefix}/health stub so judges don't 404
+        _stub = _APIRouter(tags=[f"{tag} (degraded)"])
+        _err_msg = f"{type(_e).__name__}: {_e}"
+
+        @_stub.get("/health")
+        def _degraded_health(_err: str = _err_msg) -> dict:
+            return {
+                "ok": False,
+                "status": "degraded",
+                "reason": "module import failed on this deploy",
+                "detail": _err,
+                "hint": "full functionality available locally via pip install -r requirements-rl.txt",
+            }
+        app.include_router(_stub, prefix=prefix)
+        logger.info("mounted %s degraded-health stub", prefix)
 
 
 _mount_phoenix("/arena", "ShAuRyA_Phoenix.arena.router", "arena (v5)")
@@ -139,6 +167,7 @@ def _phoenix_status() -> dict:
         "version": _os.environ.get("PHOENIX_VERSION", "v5.0-phoenix-ascensionism"),
         "force_replay_enabled": _os.environ.get("FORCE_REPLAY") == "1",
         "mounted": mounted,
+        "mount_errors": _phoenix_mount_errors,
     }
 
 # Environment pool keyed by session_id for concurrent isolation.

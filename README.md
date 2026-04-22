@@ -30,6 +30,36 @@ tags:
 
 ![SupplyMind v3.0-arcadia hero result card](v3_arcadia/plots/hero_result_card.png)
 
+---
+
+## 🏆 Meta PyTorch × Scaler OpenEnv Hackathon — Finals 2026-04-25/26
+
+**Primary theme: #3.1 World Modeling — Professional Tasks.** An LLM agent that interacts with real geopolitical APIs (NewsAPI, GDELT, USGS, FRED, MarineTraffic) to build a persistent world-model of global supply-chain risk, tested against real 2024-2026 crisis scenarios. Supporting theme: **#4 Self-Improvement** (Karpathy-style autoresearch loop with bootstrap-CI95 accept/reject on proposed training variants).
+
+### Minimum-requirement evidence — every gate, one click away
+
+| # | Requirement | Status | Evidence |
+|---|---|---|---|
+| 1 | OpenEnv (latest release) | ✅ | `openenv-core>=0.2.0` · [server/app.py](server/app.py) `/reset` `/step` `/state` · [server/openenv_adapter.py](server/openenv_adapter.py) |
+| 2 | Minimal training script using **Unsloth or HF TRL in Colab** | ✅ | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/06_trl_training_colab.ipynb) [`notebooks/06_trl_training_colab.ipynb`](notebooks/06_trl_training_colab.ipynb) — TRL `DPOTrainer` on 21 real preference pairs, Qwen-2.5-0.5B, runs in ~15 min on free T4, plots loss + implicit reward margins |
+| 3 | OpenEnv env hosted on HF Spaces | ✅ | [huggingface.co/spaces/Shaurya-Noodle/Supplymind](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) — live Docker deploy |
+| 4 | Mini-blog on HF or <2-min video | 📹 | Script ready at [demo/DEMO_VIDEO_SCRIPT.md](demo/DEMO_VIDEO_SCRIPT.md); record & link after onsite |
+| 5 | Observable reward improvement | ✅ | [v3_arcadia/plots/gethsemane/learning_curves.png](v3_arcadia/plots/gethsemane/learning_curves.png) · autoresearch +0.148 CI95 lift in [ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md](ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md) · A/B lift 0 % → 80 % in [ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json](ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json) |
+
+### RL training stack
+
+**DPO warm-start → GRPO RLVR main stage.** DPO locks in judge quality from a 3-judge preference panel; GRPO then directly optimizes the verifiable rubric reward against live env rollouts.
+
+- DPO (Colab): [notebooks/06_trl_training_colab.ipynb](notebooks/06_trl_training_colab.ipynb) — runs in ≤20 min on free T4
+- GRPO (HF compute): [ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_env.py](ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_env.py) — 3-component reward (match + format + length) specifically hardened against reward-hacking (hackathon guide §8)
+- Policy RL (history): MaskablePPO + autoresearch in [ShAuRyA_Supplymind/autoresearch/](ShAuRyA_Supplymind/autoresearch/)
+
+### Killer demo moment
+
+The live Hormuz pipeline ingested 3,911 real 2026 news articles on launch day and matched the **2026-04-18 Gulf-of-Oman cargo-ship seizure** to our pre-loaded crisis library at **0.99 similarity**. That is not a synthetic demo — it is the agent reading today's news and recognizing it as analogous to a historical disruption, in seconds. See [ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json](ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json) and [ShAuRyA_Supplymind/realtime/hormuz_endpoint.py](ShAuRyA_Supplymind/realtime/hormuz_endpoint.py).
+
+---
+
 ## If you have 30 seconds — ten headline numbers
 
 | # | Metric | Value |
