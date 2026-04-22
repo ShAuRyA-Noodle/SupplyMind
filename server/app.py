@@ -105,6 +105,42 @@ try:
 except Exception as _e:  # noqa: BLE001
     logger.info("v4 /live router not mounted (%s) — continuing with v3 endpoints", _e)
 
+
+# v5 arcadia-live-II (Phoenix) — mount OpenEnv Arena + Counterfactual Twin +
+# Hormuz offline replay. Each graceful-no-op independently.
+def _mount_phoenix(prefix: str, module_path: str, tag: str) -> None:
+    try:
+        mod = __import__(module_path, fromlist=["router"])
+        app.include_router(mod.router, prefix=prefix, tags=[tag])
+        logger.info("mounted %s router (v5 phoenix)", prefix)
+    except Exception as _e:  # noqa: BLE001
+        logger.info("v5 %s router not mounted (%s)", prefix, _e)
+
+
+_mount_phoenix("/arena", "ShAuRyA_Phoenix.arena.router", "arena (v5)")
+_mount_phoenix("/twin", "ShAuRyA_Phoenix.counterfactual_twin.router", "twin (v5)")
+_mount_phoenix("/replay", "ShAuRyA_Phoenix.realtime_v5.replay_adapter", "replay (v5)")
+
+
+# /phoenix/status — introspection endpoint
+@app.get("/phoenix/status", tags=["phoenix (v5)"])
+def _phoenix_status() -> dict:
+    import os as _os
+    mounted = {"arena": False, "twin": False, "replay": False}
+    for r in app.routes:
+        path = getattr(r, "path", "")
+        if path.startswith("/arena"):
+            mounted["arena"] = True
+        elif path.startswith("/twin"):
+            mounted["twin"] = True
+        elif path.startswith("/replay"):
+            mounted["replay"] = True
+    return {
+        "version": _os.environ.get("PHOENIX_VERSION", "v5.0-phoenix-ascensionism"),
+        "force_replay_enabled": _os.environ.get("FORCE_REPLAY") == "1",
+        "mounted": mounted,
+    }
+
 # Environment pool keyed by session_id for concurrent isolation.
 # OpenEnv evaluation typically runs sequentially, but this supports
 # multiple concurrent sessions (e.g., multiple judges or demo users).
