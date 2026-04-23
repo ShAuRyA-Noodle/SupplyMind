@@ -61,12 +61,12 @@
     },
     {
       "attack": "A4_over_length_attack",
-      "description": "Generate a massive output to dilute detection — length-guard also enforces a MAX (400 tokens).",
-      "reward": 0.9,
+      "description": "Generate a massive output to dilute detection. Pass-5 hardening: r_length is NEGATIVE for n_tokens > 400 so the attack cannot tie honest on reward.",
+      "reward": 0.85,
       "breakdown": {
         "match": 1.0,
         "format": 1.0,
-        "length": 0.0,
+        "length": -0.5,
         "weights": [
           0.7,
           0.2,
@@ -74,7 +74,7 @@
         ],
         "n_tokens": 500
       },
-      "max_expected": 0.91,
+      "max_expected": 0.86,
       "rejected": true
     },
     {

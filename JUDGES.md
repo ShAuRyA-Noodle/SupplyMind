@@ -5,7 +5,7 @@
 
 ## 30-second pitch
 
-**SupplyMind v4.0-arcadia-live** is an OpenEnv-compliant supply-chain risk management environment. 13 local SOTA foundation models, 261K real data points, 250+ passing tests, and — unique to v4 — a **live geopolitical pipeline** that polls real-time news from NewsAPI / GDELT / USGS / FRED and feeds a 3-judge LLM panel against the real 2026 Iran / Israel / Hormuz crisis.
+**SupplyMind v5.0-phoenix** is an OpenEnv-compliant supply-chain risk management environment. **13 local SOTA foundation models + 18-model OpenRouter frontier panel**, 261K real data points, **272 passing tests (274 collected)**, and a **live geopolitical pipeline** that polls real-time news from NewsAPI / GDELT / USGS / FRED and feeds a 9-judge ordinal-Krippendorff-scored panel (3 local + 6 frontier via Hermes-3-405B / gpt-oss-120b / Gemma-4-31B / Ling-2.6-1T / Nemotron-3-Super / Qwen3-Next-80B) against the real 2026 Iran / Israel / Hormuz crisis.
 
 ### Real execution numbers (2026-04-22 run):
 - **supplymind-analyst:v5** wins **8/10 (80%)** exact-risk on the A/B benchmark vs base Qwen-2.5-14B **0/10 (0%)**. Evidence coverage **91.7% vs 0%**.
@@ -73,7 +73,7 @@ Expected response:
 2. **[60s] Watch the live Hormuz demo** in `ShAuRyA_Supplymind/docs/LIVE_DEMO_HORMUZ.md`.
 3. **[60s] Pick any 3 receipts** from the top-10 list above and run them.
 4. **[30s] Read the preprint abstract** at `ShAuRyA_Supplymind/docs/PREPRINT.md` §Abstract.
-5. **[30s] Run the test suite**: `pytest tests/ ShAuRyA_Supplymind/tests/ -q` (249+ passing).
+5. **[30s] Run the test suite**: `pytest tests/ ShAuRyA_Supplymind/tests/ ShAuRyA_Phoenix/tests/ -q` (272 passing, 2 skipped, 274 collected as of 2026-04-24).
 
 ## What's unique to v4 (vs v3.0-arcadia)
 
@@ -115,7 +115,7 @@ Expected response:
 
 ## Reproducibility guarantees
 
-- 249+ tests pass on commit (last verified 2026-04-21).
+- 272 tests pass + 2 skipped = 274 collected (last verified 2026-04-24).
 - Every headline number has a committed receipt.
 - All data is public + cited: DataCo (Kaggle), NOAA IBTRACS, FRED, SEC EDGAR, Wikipedia, World Bank, BIS, CNBC, Reuters, IDF, CFR, UNCTAD.
 - The 2026-04-18 Hormuz scenario in the crisis library is anchored to a REAL NewsAPI article ingested on 2026-04-21.

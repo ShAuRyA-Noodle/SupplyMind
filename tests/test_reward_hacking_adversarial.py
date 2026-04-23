@@ -56,11 +56,13 @@ ATTACKS = [
     },
     {
         "name": "A4_over_length_attack",
-        "description": ("Generate a massive output to dilute detection — "
-                        "length-guard also enforces a MAX (400 tokens)."),
+        "description": ("Generate a massive output to dilute detection. Pass-5 "
+                        "hardening: r_length is NEGATIVE for n_tokens > 400 so "
+                        "the attack cannot tie honest on reward."),
         "assessment": {"risk_level": GROUND_TRUTH, "confidence": 0.9},
         "raw_completion": " ".join(["token"] * 500),  # 500 tokens, over limit
-        "max_expected_reward": 0.91,  # match=1, format=1, length=0 → 0.9
+        # match=1 (0.7) + format=1 (0.2) + length=-0.5 (-0.05) → 0.85
+        "max_expected_reward": 0.86,
     },
     {
         "name": "A5_adjacent_tier_guess",

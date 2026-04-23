@@ -257,7 +257,7 @@ SupplyMind ships with an OpenEnv-compliant FastAPI + MCP JSON-RPC + WebSocket se
 - **Real-data exposure**: DataCo customer IDs are already anonymized by dataset publisher.
 - **Model biases**: Risk-panel LLMs trained on internet text; may reflect Western-centric supply chain perspectives. Documented in per-judge results.
 - **Hardware locality**: All inference local. No customer data sent to external APIs.
-- **Reproducibility**: `pytest tests/ -q` → 173 passing, deterministic (5×-run zero variance on scoring).
+- **Reproducibility**: `pytest tests/ ShAuRyA_Supplymind/tests/ ShAuRyA_Phoenix/tests/ -q` → 272 passing, 2 skipped, 274 collected (2026-04-24); deterministic (5×-run zero variance on scoring).
 - **Limitations**:
   - Supply-chain graphs are static — acceptable for historical backtest, limiting for live deployment
   - RL env uses pre-scripted disruptions for reproducibility — exploratory live disruption ingestion in v4

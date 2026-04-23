@@ -1,0 +1,183 @@
+{
+  "n_models_tested": 14,
+  "n_ok": 4,
+  "n_fail": 10,
+  "budget": {
+    "per_min_used": 10,
+    "per_min_budget": 18,
+    "per_day_used": 26,
+    "per_day_budget": 950
+  },
+  "source": "https://openrouter.ai/api/v1/chat/completions",
+  "probe_message": "Reply with the single word: OK",
+  "results": [
+    {
+      "slug": "nvidia/nemotron-3-super:free",
+      "short": "nemotron3-super",
+      "params": "120B MoE / 12B active",
+      "context": 262000,
+      "role": "judge",
+      "notes": "1M-capable, multi-agent",
+      "ok": false,
+      "http_status": 400,
+      "latency_s": 0.48,
+      "response_preview": "{\"error\":{\"message\":\"nvidia/nemotron-3-super:free is not a valid model ID\",\"code\":400},\"user_id\":\"user_3CkuY4og0XdSQU1KC"
+    },
+    {
+      "slug": "inclusionai/ling-1t:free",
+      "short": "ling-1t",
+      "params": "1T params",
+      "context": 262000,
+      "role": "judge",
+      "notes": "GOING AWAY 2026-04-30 — use urgently",
+      "ok": false,
+      "http_status": 400,
+      "latency_s": 0.02,
+      "response_preview": "{\"error\":{\"message\":\"inclusionai/ling-1t:free is not a valid model ID\",\"code\":400},\"user_id\":\"user_3CkuY4og0XdSQU1KC8FIZ"
+    },
+    {
+      "slug": "nousresearch/hermes-3-llama-3.1-405b:free",
+      "short": "hermes-3-405b",
+      "params": "405B",
+      "context": 131000,
+      "role": "judge",
+      "notes": "Frontier agentic",
+      "ok": false,
+      "http_status": 0,
+      "latency_s": 22.82,
+      "response_preview": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"nousresearch/hermes-3-llama-"
+    },
+    {
+      "slug": "openai/gpt-oss-120b:free",
+      "short": "gpt-oss-120b",
+      "params": "117B MoE / 5.1B active",
+      "context": 131000,
+      "role": "judge",
+      "notes": "OpenAI open reasoning, native tool use",
+      "ok": true,
+      "http_status": 200,
+      "latency_s": 1.64,
+      "response_preview": "OK"
+    },
+    {
+      "slug": "google/gemma-3-27b-it:free",
+      "short": "gemma-3-27b",
+      "params": "27B dense",
+      "context": 131000,
+      "role": "judge",
+      "notes": "Google SOTA open, vision-capable",
+      "ok": false,
+      "http_status": 0,
+      "latency_s": 22.19,
+      "response_preview": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-3-27b-it:free i"
+    },
+    {
+      "slug": "qwen/qwen3-next-80b-a3b-instruct:free",
+      "short": "qwen3-next-80b",
+      "params": "80B MoE / 3B active",
+      "context": 262000,
+      "role": "judge",
+      "notes": "Stable reasoning",
+      "ok": false,
+      "http_status": 0,
+      "latency_s": 22.87,
+      "response_preview": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-next-80b-a3b-inst"
+    },
+    {
+      "slug": "z-ai/glm-4.5-air:free",
+      "short": "glm-4.5-air",
+      "params": "MoE w/ thinking",
+      "context": 131000,
+      "role": "judge",
+      "notes": "Configurable reasoning depth",
+      "ok": false,
+      "http_status": 200,
+      "latency_s": 7.57,
+      "response_preview": ""
+    },
+    {
+      "slug": "meta-llama/llama-3.3-70b-instruct:free",
+      "short": "llama-3.3-70b",
+      "params": "70B dense",
+      "context": 66000,
+      "role": "judge",
+      "notes": "Meta SOTA baseline",
+      "ok": false,
+      "http_status": 0,
+      "latency_s": 22.78,
+      "response_preview": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"meta-llama/llama-3.3-70b-ins"
+    },
+    {
+      "slug": "nvidia/nemotron-nano-9b-v2:free",
+      "short": "nemotron-nano-9b",
+      "params": "9B",
+      "context": 128000,
+      "role": "judge",
+      "notes": "Cheap reasoning-trace generator",
+      "ok": false,
+      "http_status": 200,
+      "latency_s": 1.5,
+      "response_preview": ""
+    },
+    {
+      "slug": "qwen/qwen3-coder:free",
+      "short": "qwen3-coder-480b",
+      "params": "480B MoE / 35B active",
+      "context": 262000,
+      "role": "red-team",
+      "notes": "Adversarial reward-hack generator",
+      "ok": false,
+      "http_status": 0,
+      "latency_s": 24.79,
+      "response_preview": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"qwen/qwen3-coder:free is tem"
+    },
+    {
+      "slug": "google/gemma-3-12b-it:free",
+      "short": "gemma-3-12b",
+      "params": "12B vision+text",
+      "context": 33000,
+      "role": "vision",
+      "notes": "Port imagery fallback",
+      "ok": true,
+      "http_status": 200,
+      "latency_s": 3.29,
+      "response_preview": "OK"
+    },
+    {
+      "slug": "google/gemma-3-4b-it:free",
+      "short": "gemma-3-4b",
+      "params": "4B vision+text",
+      "context": 33000,
+      "role": "vision",
+      "notes": "Tiny fast vision",
+      "ok": true,
+      "http_status": 200,
+      "latency_s": 1.45,
+      "response_preview": "OK\n"
+    },
+    {
+      "slug": "meta-llama/llama-3.2-3b-instruct:free",
+      "short": "llama-3.2-3b",
+      "params": "3B",
+      "context": 131000,
+      "role": "utility",
+      "notes": "Cheap text",
+      "ok": false,
+      "http_status": 0,
+      "latency_s": 22.81,
+      "response_preview": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"meta-llama/llama-3.2-3b-inst"
+    },
+    {
+      "slug": "openai/gpt-oss-20b:free",
+      "short": "gpt-oss-20b",
+      "params": "21B MoE / 3.6B active",
+      "context": 131000,
+      "role": "utility",
+      "notes": "Light tool-use judge",
+      "ok": true,
+      "http_status": 200,
+      "latency_s": 3.71,
+      "response_preview": "OK"
+    }
+  ]
+}

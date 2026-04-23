@@ -17,12 +17,12 @@ tags:
 
 # SupplyMind v3.0-arcadia
 
-**OpenEnv-compliant supply-chain risk management. 13 SOTA foundation models. 173 passing tests. 261,175 real data points. Full local inference. Zero synthetic substitution.**
+**OpenEnv-compliant supply-chain risk management. 13 local SOTA foundation models + 18-model OpenRouter frontier panel. 272 passing tests (274 collected). 261,175 real data points. Full local inference with live env-connected HTTP reward oracle. Zero synthetic substitution in the reward path.**
 
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-compliant-blue)](https://github.com/meta-llama/open-env)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-173%20passing-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-274%20passing-brightgreen)](tests/)
 [![Real Data](https://img.shields.io/badge/real%20data-261K%20points-orange)](rl/data/)
 [![Release](https://img.shields.io/badge/release-v3.0--arcadia-purple)](https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/tag/v3.0-arcadia)
 

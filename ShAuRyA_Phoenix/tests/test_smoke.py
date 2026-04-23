@@ -85,8 +85,10 @@ def test_receipt_framework_importable():
         expected_regex=r"Python \d+\.\d+",
     )
     r.run()
-    assert r.exit_code in (0, 1), f"unexpected exit_code: {r.exit_code}"
-    # Don't assert match=True here; just make sure framework doesn't crash.
+    # `python --version` must succeed; pass-5 tightened from (0, 1) to == 0
+    # after audit flagged the permissive assertion.
+    assert r.exit_code == 0, f"unexpected exit_code: {r.exit_code}"
+    assert r.match, f"expected python --version to match 'Python \\d+\\.\\d+', got {r.extracted!r}"
 
 
 def test_arena_leaderboard_importable():

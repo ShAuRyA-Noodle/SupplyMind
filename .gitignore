@@ -88,3 +88,9 @@ ShAuRyA_Supplymind/autoresearch/stop_autoresearch.flag
 ShAuRyA_Supplymind/autoresearch/candidate_train.py.bak
 # Lab notebook, rejected log, and state.json ARE committed — they document
 # real autoresearch execution history (provenance for judges).
+
+# OpenRouter usage audit log (per-call timestamps, no keys)
+.openrouter_usage.jsonl
+# Frontier panel run intermediate caches
+.openrouter_cache/
+lora_stdout.log

@@ -725,10 +725,18 @@ async def analyst_grade(req: AnalystGradeRequest) -> AnalystGradeResponse:
     r_format = 1.0 if ("risk_level" in req.assessment and
                        "confidence" in req.assessment) else 0.0
 
-    # r_length: anti-hack against degenerate short-circuits like "CRITICAL"
+    # r_length: anti-hack. Degenerate short circuits (e.g. just "CRITICAL")
+    # → 0.0; token-dilution attacks (>400 tokens) → -0.5 so the attacker
+    # cannot tie with the honest answer on length alone (pass-5 audit
+    # closed the 0.9 vs 0.9 tie: honest ≥0.95, over-length ≤0.65).
     text = req.raw_completion if req.raw_completion else json.dumps(req.assessment)
     n_tokens = len(text.split())
-    r_length = 1.0 if 30 <= n_tokens <= 400 else 0.0
+    if n_tokens < 30:
+        r_length = 0.0
+    elif n_tokens > 400:
+        r_length = -0.5
+    else:
+        r_length = 1.0
 
     total = 0.7 * r_match + 0.2 * r_format + 0.1 * r_length
     return AnalystGradeResponse(
@@ -926,7 +934,12 @@ def _score_one(pred_assessment: dict, gt: str, raw_completion: str | None) -> di
                        "confidence" in pred_assessment) else 0.0
     text = raw_completion if raw_completion else json.dumps(pred_assessment)
     n_tokens = len(text.split())
-    r_length = 1.0 if 30 <= n_tokens <= 400 else 0.0
+    if n_tokens < 30:
+        r_length = 0.0
+    elif n_tokens > 400:
+        r_length = -0.5  # pass-5 anti-tie hardening (A4 token-dilution attack)
+    else:
+        r_length = 1.0
     total = 0.7 * r_match + 0.2 * r_format + 0.1 * r_length
     return {
         "predicted_risk": pred or "MISSING",
