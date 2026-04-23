@@ -94,3 +94,4 @@ ShAuRyA_Supplymind/autoresearch/candidate_train.py.bak
 # Frontier panel run intermediate caches
 .openrouter_cache/
 lora_stdout.log
+.openai_usage.jsonl
