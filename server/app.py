@@ -1005,6 +1005,42 @@ async def analyst_holdout_eval(req: HoldoutEvalRequest) -> HoldoutEvalResponse:
 
 
 # ============================================================
+# /agent/decide — IntegratedAgent single-call 5-stage pipeline
+# ============================================================
+#
+# Closes the "disjointed modules" architectural limitation: one endpoint
+# shows RAG → panel → GNN → RL → forecast wired together. Every stage
+# has inference_type provenance, every output is a function of the input
+# query. No mock, no synthetic substitution.
+
+
+class AgentDecideRequest(BaseModel):
+    query: str = Field(..., description="Natural-language crisis description")
+    task_id: str = Field("easy_typhoon_response", description="OpenEnv task id")
+    seed: int = Field(42, description="Deterministic reset seed")
+
+
+@app.post("/agent/decide", tags=["agent"])
+async def agent_decide(req: AgentDecideRequest) -> dict:
+    """IntegratedAgent.decide() exposed over HTTP.
+
+    Single curl → 5 stages: RAG retrieval, multi-judge panel replay,
+    graph-centrality cascade, RL policy action on real env reset, FRED-
+    anchored conformal forecast. Reads from committed data only; zero
+    external API dependency.
+
+    Example:
+        curl -X POST http://localhost:8000/agent/decide \\
+             -H 'Content-Type: application/json' \\
+             -d '{"query":"Iran closes Strait of Hormuz","task_id":"easy_typhoon_response","seed":42}'
+    """
+    from server.integrated_agent import IntegratedAgent  # lazy to avoid startup cost
+    agent = IntegratedAgent()
+    decision = agent.decide(req.query, task_id=req.task_id, seed=req.seed)
+    return decision.to_dict()
+
+
+# ============================================================
 # /analyst/panel-consensus — frontier 9-judge panel verdict
 # ============================================================
 #
