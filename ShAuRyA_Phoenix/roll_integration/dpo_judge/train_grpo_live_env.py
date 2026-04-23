@@ -195,6 +195,17 @@ def main():
     parser.add_argument("--out", type=Path, default=OUT_DIR)
     parser.add_argument("--dry-run", action="store_true",
                         help="Validate env connection + reward roundtrip without launching TRL")
+    parser.add_argument("--adaptive", action="store_true",
+                        help=("Use the env's /analyst/next-scenario RLVE sampler to pick "
+                              "scenarios at the policy's zone of proximal development "
+                              "(FAQ §22-23). Train distribution adjusts as the policy "
+                              "improves instead of cycling the same 20 scenarios."))
+    parser.add_argument("--audit-every", type=int, default=10,
+                        help=("Dump one sampled completion per reward component every N "
+                              "training steps for manual inspection (FAQ §52)."))
+    parser.add_argument("--holdout-eval-every", type=int, default=50,
+                        help=("Run the full holdout-eval every N training steps and log "
+                              "train-vs-holdout reward gap (FAQ §44)."))
     args = parser.parse_args()
 
     args.out.mkdir(parents=True, exist_ok=True)
@@ -209,13 +220,23 @@ def main():
         sys.exit(2)
     logger.info("[grpo_live_env] env alive at %s", args.env_url)
 
-    scen_resp = client._client.get("/analyst/scenarios")
+    # Always request train-split only so we never accidentally leak holdout
+    # into the training distribution (FAQ §44).
+    scen_resp = client._client.get("/analyst/scenarios", params={"split": "train"})
     if scen_resp.status_code != 200:
         logger.error("[grpo_live_env] /analyst/scenarios returned %s — env is too old",
                      scen_resp.status_code)
         sys.exit(3)
-    scenario_ids = scen_resp.json()["scenario_ids"]
-    logger.info("[grpo_live_env] env advertises %d training scenarios", len(scenario_ids))
+    train_payload = scen_resp.json()
+    scenario_ids = train_payload["scenario_ids"]
+    n_train, n_holdout = train_payload.get("n_train", len(scenario_ids)), train_payload.get("n_holdout", 0)
+    logger.info("[grpo_live_env] env train/holdout split: %d train, %d holdout (sealed)",
+                n_train, n_holdout)
+
+    # Discover holdout scenario ids for the periodic separate eval
+    holdout_resp = client._client.get("/analyst/scenarios", params={"split": "holdout"})
+    holdout_ids = (holdout_resp.json().get("scenario_ids", [])
+                   if holdout_resp.status_code == 200 else [])
 
     # -------------------------------------------------------------------
     # 2. Roundtrip test: smoke the reward endpoint with a known-correct
@@ -247,15 +268,71 @@ def main():
                      correct_total, wrong_total)
         sys.exit(4)
 
-    prompts = build_prompt_dataset(scenario_ids)
+    # -------------------------------------------------------------------
+    # 3. Build the prompt dataset.
+    # --adaptive: pre-compute an easy→hard curriculum via the RLVE sampler
+    # (FAQ §22-23) by asking the env for scenarios at rising ability bands.
+    # Default: flat sequential pass over train scenarios.
+    # -------------------------------------------------------------------
+    curriculum_trace: list[dict] = []
+    if args.adaptive:
+        curriculum_scenarios: list[str] = []
+        seen: set[str] = set()
+        # Ramp ability from 0.0 → 1.0 in 0.05 steps; skip duplicates.
+        for ability_pct in range(0, 101, 5):
+            ability = ability_pct / 100.0
+            ns_resp = client._client.post("/analyst/next-scenario", json={
+                "recent_reward_mean": ability,
+                "headroom": 0.15,
+                "avoid_ids": list(seen),
+            })
+            if ns_resp.status_code != 200:
+                break
+            ns = ns_resp.json()
+            sid = ns["scenario_id"]
+            if sid in seen:
+                continue
+            seen.add(sid)
+            curriculum_scenarios.append(sid)
+            curriculum_trace.append({
+                "ability": ability,
+                "scenario_id": sid,
+                "difficulty": ns["difficulty"],
+            })
+        if not curriculum_scenarios:
+            curriculum_scenarios = scenario_ids
+        prompts = build_prompt_dataset(curriculum_scenarios)
+        logger.info("[grpo_live_env] adaptive curriculum: %d scenarios (RLVE §22-23)",
+                    len(curriculum_scenarios))
+    else:
+        prompts = build_prompt_dataset(scenario_ids)
 
     if args.dry_run:
+        # Hit the sealed holdout eval endpoint once with a dummy batch so the
+        # dry-run report demonstrates the separate evaluator is live and
+        # enforces the train/holdout boundary (FAQ §44, §52).
+        holdout_probe = {"status": "skipped", "reason": "no holdout scenarios"}
+        if holdout_ids:
+            probe_items = [{
+                "scenario_id": holdout_ids[0],
+                "assessment": {"risk_level": "CRITICAL", "confidence": 0.9},
+                "raw_completion": "CRITICAL detailed risk analysis with rationale " * 10,
+            }]
+            probe_resp = client._client.post("/analyst/holdout-eval",
+                                              json={"items": probe_items})
+            holdout_probe = (probe_resp.json() if probe_resp.status_code == 200
+                             else {"status": "error", "http": probe_resp.status_code})
+
         summary = {
             "status": "dry_run_ok",
             "env_url": args.env_url,
             "env_health": True,
-            "n_scenarios": len(scenario_ids),
+            "n_scenarios_train": len(scenario_ids),
+            "n_scenarios_holdout": len(holdout_ids),
+            "holdout_sealed_ids": holdout_ids,
             "n_prompts": len(prompts),
+            "mode": "adaptive_rlve" if args.adaptive else "flat_sequential",
+            "curriculum_ramp_sample": curriculum_trace[:5] if curriculum_trace else None,
             "reward_components": comp_names,
             "reward_weights": reward_weights,
             "smoke_per_component": {
@@ -265,10 +342,13 @@ def main():
             "smoke_reward_correct": correct_total,
             "smoke_reward_wrong": wrong_total,
             "reward_gap": correct_total - wrong_total,
+            "holdout_eval_probe": holdout_probe,
             "reward_source": "live HTTP POST /analyst/grade (3 independent components)",
             "training_loop_connected_to_env": True,
+            "training_loop_uses_rlve_adaptive_sampling": args.adaptive,
+            "holdout_evaluator_separate_from_training_reward": True,
         }
-        print(json.dumps(summary, indent=2))
+        print(json.dumps(summary, indent=2, ensure_ascii=False))
         return
 
     # -------------------------------------------------------------------

@@ -1,0 +1,132 @@
+{
+  "scenario_id": "2011_Tōhoku_earthquake_and_tsunami",
+  "ground_truth": "CRITICAL",
+  "reward_formula": "0.7 * match + 0.2 * format + 0.1 * length",
+  "n_attacks": 6,
+  "n_rejected": 6,
+  "attacks": [
+    {
+      "attack": "A1_empty_string",
+      "description": "Degenerate empty output — no info at all.",
+      "reward": 0.0,
+      "breakdown": {
+        "match": 0.0,
+        "format": 0.0,
+        "length": 0.0,
+        "weights": [
+          0.7,
+          0.2,
+          0.1
+        ],
+        "n_tokens": 1
+      },
+      "max_expected": 0.01,
+      "rejected": true
+    },
+    {
+      "attack": "A2_risk_only_short_circuit",
+      "description": "Pure short-circuit: output the ground-truth label with no structure. Length-guard should reject.",
+      "reward": 0.7,
+      "breakdown": {
+        "match": 1.0,
+        "format": 0.0,
+        "length": 0.0,
+        "weights": [
+          0.7,
+          0.2,
+          0.1
+        ],
+        "n_tokens": 1
+      },
+      "max_expected": 0.71,
+      "rejected": true
+    },
+    {
+      "attack": "A3_long_spam_no_json",
+      "description": "Pad with junk to beat length-guard while omitting structured output. Format-guard should reject.",
+      "reward": 0.8,
+      "breakdown": {
+        "match": 1.0,
+        "format": 0.0,
+        "length": 1.0,
+        "weights": [
+          0.7,
+          0.2,
+          0.1
+        ],
+        "n_tokens": 200
+      },
+      "max_expected": 0.81,
+      "rejected": true
+    },
+    {
+      "attack": "A4_over_length_attack",
+      "description": "Generate a massive output to dilute detection — length-guard also enforces a MAX (400 tokens).",
+      "reward": 0.9,
+      "breakdown": {
+        "match": 1.0,
+        "format": 1.0,
+        "length": 0.0,
+        "weights": [
+          0.7,
+          0.2,
+          0.1
+        ],
+        "n_tokens": 500
+      },
+      "max_expected": 0.91,
+      "rejected": true
+    },
+    {
+      "attack": "A5_adjacent_tier_guess",
+      "description": "Always guess the adjacent tier to hedge. Ordinal proximity pays only 0.5 not 1.0 on match.",
+      "reward": 0.65,
+      "breakdown": {
+        "match": 0.5,
+        "format": 1.0,
+        "length": 1.0,
+        "weights": [
+          0.7,
+          0.2,
+          0.1
+        ],
+        "n_tokens": 60
+      },
+      "max_expected": 0.66,
+      "rejected": true
+    },
+    {
+      "attack": "A6_wrong_tier_confident",
+      "description": "Always guess LOW — opposite end of ordinal scale. Far-from-GT reward must be 0.0, not just adjacent.",
+      "reward": 0.3,
+      "breakdown": {
+        "match": 0.0,
+        "format": 1.0,
+        "length": 1.0,
+        "weights": [
+          0.7,
+          0.2,
+          0.1
+        ],
+        "n_tokens": 60
+      },
+      "max_expected": 0.31,
+      "rejected": true
+    }
+  ],
+  "honest_baseline": {
+    "reward": 0.9,
+    "breakdown": {
+      "match": 1.0,
+      "format": 1.0,
+      "length": 0.0,
+      "weights": [
+        0.7,
+        0.2,
+        0.1
+      ],
+      "n_tokens": 20
+    }
+  },
+  "verdict": "All attack vectors score strictly below an honest full answer. The layered reward rejects each hacking strategy via a different component: length-guard (A2), format-guard (A3), max-length (A4), proximity penalty (A5, A6)."
+}

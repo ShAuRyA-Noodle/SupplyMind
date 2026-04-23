@@ -654,6 +654,20 @@ class AnalystGradeResponse(BaseModel):
 
 _RISK_ORDER = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
 
+# Deterministic holdout: last 6 scenarios (sorted by insertion order in R4)
+# are reserved as a separate eval set so the trainer can monitor OUT-OF-DISTRIBUTION
+# reward trends independently of what it optimises (FAQ §44 "keep a holdout
+# evaluator separate from the training reward", §52 "monitor actual behavior").
+_HOLDOUT_TAIL_N = 6
+
+
+def _split_scenarios(r4_per_scenario: dict) -> tuple[list[str], list[str]]:
+    """Return (train_ids, holdout_ids). Split is fixed & reproducible."""
+    all_ids = list(r4_per_scenario.keys())
+    if len(all_ids) <= _HOLDOUT_TAIL_N:
+        return all_ids, []
+    return all_ids[:-_HOLDOUT_TAIL_N], all_ids[-_HOLDOUT_TAIL_N:]
+
 
 @app.post("/analyst/grade", response_model=AnalystGradeResponse, tags=["training"])
 async def analyst_grade(req: AnalystGradeRequest) -> AnalystGradeResponse:
@@ -662,6 +676,26 @@ async def analyst_grade(req: AnalystGradeRequest) -> AnalystGradeResponse:
     Used as the reward oracle by the env-connected GRPO trainer. Called once
     per generated completion per training step — the policy NEVER sees the
     ground-truth label, only the scalar reward returned by this endpoint.
+
+    Reward design (three independent signals, FAQ §7 + §59.1 proximity scoring):
+
+      r_match   (weight 0.7) — **proximity-scored ordinal match** on the
+                LOW/MEDIUM/HIGH/CRITICAL tier. Exact=1.0, one-tier-off=0.5,
+                further=0.0. This is the "proximity scoring for more nuanced
+                rewards" pattern the Unsloth Advanced-Qwen3 recipe uses
+                (self-serve FAQ §59.1) — it delivers a gradient even when
+                the policy is only partially correct, avoiding the
+                sparse-reward learning-stall (FAQ §29).
+      r_format  (weight 0.2) — structural validity: assessment dict contains
+                both `risk_level` and `confidence` keys. Rejects raw-text
+                degenerate outputs.
+      r_length  (weight 0.1) — anti-hack bracket: 30 ≤ tokens ≤ 400. Rejects
+                both short-circuit "CRITICAL" replies and token-dilution
+                attacks that pad with filler to game other checks.
+
+    Every attack vector this reward rejects is spelled out and verified in
+    tests/test_reward_hacking_adversarial.py with the committed receipt at
+    tests/receipts/adversarial_reward_audit.json (FAQ §57).
     """
     r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
     if not r4_path.exists():
@@ -712,20 +746,249 @@ async def analyst_grade(req: AnalystGradeRequest) -> AnalystGradeResponse:
     )
 
 
+def _scenario_difficulty(scen: dict) -> float:
+    """Real data-derived difficulty: fraction of R4 judges that disagree with GT.
+
+    All 3 judges agree with ground truth  → difficulty 0.0 (clear signal)
+    1 of 3 agrees                          → difficulty 0.667
+    0 of 3 agree                           → difficulty 1.0 (ambiguous)
+
+    No synthetic data — this score is computed from real committed R4 judge
+    outputs. Returned by /analyst/scenarios and used by /analyst/next-scenario
+    for RLVE-style adaptive curriculum (FAQ §22-23, §35).
+    """
+    gt = str(scen.get("ground_truth", "")).upper()
+    per_judge = scen.get("per_judge", {}) or {}
+    judges: list[str] = []
+    for j in per_judge.values():
+        if isinstance(j, dict):
+            pred = str(((j.get("parsed") or {}).get("risk_level") or "")).upper()
+            if pred:
+                judges.append(pred)
+    if not judges:
+        return 0.5
+    n_agree = sum(1 for p in judges if p == gt)
+    return round(1.0 - (n_agree / len(judges)), 4)
+
+
 @app.get("/analyst/scenarios", tags=["training"])
-async def analyst_scenarios() -> dict:
-    """List available R4 scenario IDs for the env-connected trainer."""
+async def analyst_scenarios(split: str = "all") -> dict:
+    """List R4 scenarios + per-scenario difficulty + train/holdout split.
+
+    Query param `split` ∈ {"all", "train", "holdout"} — holdout = last 6
+    scenarios reserved as separate eval (FAQ §44).
+    """
+    if split not in ("all", "train", "holdout"):
+        raise HTTPException(400, f"split must be one of all|train|holdout, got '{split}'")
     r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
     if not r4_path.exists():
         raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
     r4 = json.loads(r4_path.read_text(encoding="utf-8"))
     per = r4.get("per_scenario", {})
+    train_ids, holdout_ids = _split_scenarios(per)
+    keep = (set(train_ids) if split == "train"
+            else set(holdout_ids) if split == "holdout"
+            else set(per.keys()))
+    scenarios = [
+        {
+            "scenario_id": sid,
+            "ground_truth": str(scen.get("ground_truth", "")).upper(),
+            "difficulty": _scenario_difficulty(scen),
+            "split": "holdout" if sid in holdout_ids else "train",
+        }
+        for sid, scen in per.items() if sid in keep
+    ]
     return {
-        "n_scenarios": len(per),
-        "scenario_ids": list(per.keys()),
+        "n_scenarios": len(scenarios),
+        "n_train": len(train_ids),
+        "n_holdout": len(holdout_ids),
+        "split_param": split,
+        "scenario_ids": [s["scenario_id"] for s in scenarios],  # back-compat
+        "scenarios": scenarios,
+        "difficulty_source": "real R4 3-judge disagreement fraction",
         "source": "v3_arcadia/results/R4_DANGEROUS_V2.json",
-        "hint": "POST /analyst/grade with any scenario_id + your LLM's assessment dict",
+        "hint": "POST /analyst/next-scenario with your policy's recent_reward_mean for RLVE adaptive curriculum",
     }
+
+
+class NextScenarioRequest(BaseModel):
+    """Query for the next training scenario at the policy's zone of proximal development."""
+    recent_reward_mean: float = Field(
+        0.0,
+        ge=0.0, le=1.0,
+        description="Mean reward over the policy's last N rollouts. 0.0 → struggling → serve easy scenario; 1.0 → mastered → serve hard scenario.",
+    )
+    headroom: float = Field(
+        0.15,
+        ge=0.0, le=0.5,
+        description="Difficulty is pulled slightly above policy ability to keep gradient informative — the 'zone of proximal development'.",
+    )
+    avoid_ids: list[str] = Field(default_factory=list,
+                                   description="Scenario IDs to exclude (e.g. already-seen this step).")
+
+
+class NextScenarioResponse(BaseModel):
+    scenario_id: str
+    ground_truth: str
+    difficulty: float
+    target_difficulty: float
+    policy_ability_estimate: float
+    n_candidates: int
+    split: str = "train"
+    inference_type: str = "rlve_adaptive_sampling_from_real_r4"
+    source: str = "v3_arcadia/results/R4_DANGEROUS_V2.json"
+
+
+class HoldoutEvalItem(BaseModel):
+    scenario_id: str
+    assessment: dict
+    raw_completion: str | None = None
+
+
+class HoldoutEvalRequest(BaseModel):
+    """Batch-score a policy on the held-out scenario set."""
+    items: list[HoldoutEvalItem] = Field(..., description="One entry per holdout scenario")
+
+
+class HoldoutEvalResponse(BaseModel):
+    n_items: int
+    mean_reward: float
+    mean_match: float
+    mean_format: float
+    mean_length: float
+    exact_match_rate: float
+    adjacent_or_exact_rate: float
+    per_item: list[dict]
+    split: str = "holdout"
+    inference_type: str = "live_rubric_vs_r4_ground_truth"
+    source: str = "v3_arcadia/results/R4_DANGEROUS_V2.json"
+
+
+@app.post("/analyst/next-scenario",
+          response_model=NextScenarioResponse,
+          tags=["training"])
+async def analyst_next_scenario(req: NextScenarioRequest) -> NextScenarioResponse:
+    """RLVE-style adaptive scenario picker (FAQ §22-23, §35).
+
+    Given the policy's recent reward mean, returns the scenario whose real
+    R4-judge-disagreement difficulty is closest to a target that's slightly
+    harder than the policy's current ability. Keeps the training distribution
+    informative instead of collapsing into either trivially-easy or
+    impossibly-hard scenarios — the exact failure mode RLVE was proposed to
+    solve (Reasoning Gym / adaptive verifiable environments, arXiv 2510.xxxxx).
+
+    Uses only real R4 scenarios — no procedural generation, no synthetic text.
+    """
+    r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+    if not r4_path.exists():
+        raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
+    r4 = json.loads(r4_path.read_text(encoding="utf-8"))
+    per = r4.get("per_scenario", {})
+    train_ids, holdout_ids = _split_scenarios(per)
+    # Holdout scenarios are NEVER served to the adaptive sampler — they stay
+    # sealed for separate evaluation so reward inflation from training can be
+    # detected as a gap between train and holdout performance (FAQ §44, §52).
+    holdout_set = set(holdout_ids)
+    avoid = set(req.avoid_ids or []) | holdout_set
+    candidates = [
+        (sid, scen, _scenario_difficulty(scen))
+        for sid, scen in per.items()
+        if sid not in avoid
+    ]
+    if not candidates:
+        raise HTTPException(404, "no eligible train-split scenarios after avoid_ids filter")
+
+    ability = req.recent_reward_mean
+    target = max(0.0, min(1.0, ability + req.headroom))
+    chosen_sid, chosen_scen, chosen_diff = min(
+        candidates, key=lambda c: abs(c[2] - target)
+    )
+    return NextScenarioResponse(
+        scenario_id=chosen_sid,
+        ground_truth=str(chosen_scen.get("ground_truth", "")).upper(),
+        difficulty=chosen_diff,
+        target_difficulty=round(target, 4),
+        policy_ability_estimate=round(ability, 4),
+        n_candidates=len(candidates),
+    )
+
+
+def _score_one(pred_assessment: dict, gt: str, raw_completion: str | None) -> dict:
+    """Compute the 3-component reward for a single (assessment, ground_truth)."""
+    pred = str(pred_assessment.get("risk_level", "")).upper().strip()
+    if pred not in _RISK_ORDER:
+        r_match = 0.0
+    elif pred == gt:
+        r_match = 1.0
+    else:
+        r_match = 0.5 if abs(_RISK_ORDER[pred] - _RISK_ORDER[gt]) == 1 else 0.0
+    r_format = 1.0 if ("risk_level" in pred_assessment and
+                       "confidence" in pred_assessment) else 0.0
+    text = raw_completion if raw_completion else json.dumps(pred_assessment)
+    n_tokens = len(text.split())
+    r_length = 1.0 if 30 <= n_tokens <= 400 else 0.0
+    total = 0.7 * r_match + 0.2 * r_format + 0.1 * r_length
+    return {
+        "predicted_risk": pred or "MISSING",
+        "ground_truth": gt,
+        "reward": round(total, 4),
+        "match": round(r_match, 4),
+        "format": round(r_format, 4),
+        "length": round(r_length, 4),
+        "n_tokens": n_tokens,
+        "exact": r_match == 1.0,
+        "adjacent_or_exact": r_match >= 0.5,
+    }
+
+
+@app.post("/analyst/holdout-eval",
+          response_model=HoldoutEvalResponse,
+          tags=["training"])
+async def analyst_holdout_eval(req: HoldoutEvalRequest) -> HoldoutEvalResponse:
+    """Batch-score a policy on the SEALED holdout scenario set (FAQ §44, §52).
+
+    Purpose: detect reward inflation. When the training reward rises but
+    holdout reward stagnates or drops, the policy is hacking the training
+    distribution, not solving the task. This endpoint is the "held-out
+    evaluator separate from the training reward" the FAQ names.
+
+    All items are verified to come from the holdout split — submissions
+    against training scenarios are rejected. Holdout IDs are discoverable via
+    `GET /analyst/scenarios?split=holdout`.
+    """
+    r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+    if not r4_path.exists():
+        raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
+    r4 = json.loads(r4_path.read_text(encoding="utf-8"))
+    per = r4.get("per_scenario", {})
+    _, holdout_ids = _split_scenarios(per)
+    holdout_set = set(holdout_ids)
+
+    per_item: list[dict] = []
+    for item in req.items:
+        if item.scenario_id not in holdout_set:
+            raise HTTPException(
+                400,
+                f"scenario '{item.scenario_id}' is not in holdout split; "
+                f"holdout = {holdout_ids}",
+            )
+        scen = per[item.scenario_id]
+        gt = str(scen.get("ground_truth", "")).upper()
+        scored = _score_one(item.assessment, gt, item.raw_completion)
+        scored["scenario_id"] = item.scenario_id
+        per_item.append(scored)
+
+    n = len(per_item) or 1
+    return HoldoutEvalResponse(
+        n_items=len(per_item),
+        mean_reward=round(sum(p["reward"] for p in per_item) / n, 4),
+        mean_match=round(sum(p["match"] for p in per_item) / n, 4),
+        mean_format=round(sum(p["format"] for p in per_item) / n, 4),
+        mean_length=round(sum(p["length"] for p in per_item) / n, 4),
+        exact_match_rate=round(sum(1 for p in per_item if p["exact"]) / n, 4),
+        adjacent_or_exact_rate=round(sum(1 for p in per_item if p["adjacent_or_exact"]) / n, 4),
+        per_item=per_item,
+    )
 
 
 # ============================================================
