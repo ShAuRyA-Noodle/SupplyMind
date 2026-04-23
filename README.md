@@ -40,19 +40,31 @@ tags:
 
 | # | Requirement | Status | Evidence |
 |---|---|---|---|
-| 1 | OpenEnv (latest release) | ✅ | `openenv-core>=0.2.0` · [server/app.py](server/app.py) `/reset` `/step` `/state` · [server/openenv_adapter.py](server/openenv_adapter.py) |
+| 1 | OpenEnv (latest release) | ✅ | `openenv-core>=0.2.3` (latest PyPI) · [server/app.py](server/app.py) exposes `/reset` `/step` `/state` `/tasks` `/grader` `/health` `/schema` `/metadata` `/mcp` · OpenEnv `Environment[ActT,ObsT,StateT]` subclass + `TrajectoryRubric` composition at [server/openenv_adapter.py](server/openenv_adapter.py) · [openenv.yaml](openenv.yaml) manifest |
 | 2 | Minimal training script using **Unsloth or HF TRL in Colab** | ✅ | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/06_trl_training_colab.ipynb) [`notebooks/06_trl_training_colab.ipynb`](notebooks/06_trl_training_colab.ipynb) — TRL `DPOTrainer` on 21 real preference pairs, Qwen-2.5-0.5B, runs in ~15 min on free T4, plots loss + implicit reward margins |
 | 3 | OpenEnv env hosted on HF Spaces | ✅ | [huggingface.co/spaces/Shaurya-Noodle/Supplymind](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) — live Docker deploy |
 | 4 | Mini-blog on HF or <2-min video | 📹 | Script ready at [demo/DEMO_VIDEO_SCRIPT.md](demo/DEMO_VIDEO_SCRIPT.md); record & link after onsite |
 | 5 | Observable reward improvement | ✅ | [v3_arcadia/plots/gethsemane/learning_curves.png](v3_arcadia/plots/gethsemane/learning_curves.png) · autoresearch +0.148 CI95 lift in [ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md](ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md) · A/B lift 0 % → 80 % in [ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json](ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json) |
+| 6 | Training loop connects to the live env (not a static dataset) | ✅ | [ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) — every reward comes via HTTP `POST /analyst/grade` on the running server. Dry-run log: correct=0.900, wrong=0.200, gap=0.700 |
+| 7 | Client/server separation | ✅ | [client/supplymind_client.py](client/supplymind_client.py) — zero `from server` imports; verified live against HF Space (`health: True`, metadata matches) |
 
-### RL training stack
+### RL training stack — two-stage, both provably env-connected
 
-**DPO warm-start → GRPO RLVR main stage.** DPO locks in judge quality from a 3-judge preference panel; GRPO then directly optimizes the verifiable rubric reward against live env rollouts.
+**Stage 0 — MaskablePPO policy training (history).** RL policy trained in-env on 3 supply-chain tasks: [v3_arcadia/plots/gethsemane/learning_curves.png](v3_arcadia/plots/gethsemane/learning_curves.png). Bootstrap CI95 non-overlapping vs random/greedy in [v3_arcadia/results/R6_EUCLIDIAN.json](v3_arcadia/results/R6_EUCLIDIAN.json).
 
-- DPO (Colab): [notebooks/06_trl_training_colab.ipynb](notebooks/06_trl_training_colab.ipynb) — runs in ≤20 min on free T4
-- GRPO (HF compute): [ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_env.py](ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_env.py) — 3-component reward (match + format + length) specifically hardened against reward-hacking (hackathon guide §8)
-- Policy RL (history): MaskablePPO + autoresearch in [ShAuRyA_Supplymind/autoresearch/](ShAuRyA_Supplymind/autoresearch/)
+**Stage 1 — DPO warm-start (Colab).** [notebooks/06_trl_training_colab.ipynb](notebooks/06_trl_training_colab.ipynb) — TRL `DPOTrainer` on 21 real preference pairs (3-judge LLM panel). Runs in ≤20 min on free T4. Plots loss + chosen/rejected reward margins.
+
+**Stage 2 — GRPO against the live env (RLVR).** [ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) — TRL `GRPOTrainer` whose reward function is `HTTP POST /analyst/grade` on the SupplyMind server. Reward is computed server-side from R4 ground-truth with a 3-component rubric (0.7 × match + 0.2 × format + 0.1 × length) hardened against reward-hacking per hackathon guide §8. Every training step generates HTTP traffic to the env — you can watch it on the server's access log.
+
+**Env-connected dry-run proof** (reproducible):
+```bash
+uvicorn server.app:app --host 0.0.0.0 --port 8000 &
+python -m ShAuRyA_Phoenix.roll_integration.dpo_judge.train_grpo_live_env \
+    --env-url http://localhost:8000 --dry-run
+# → smoke_reward_correct: 0.9, smoke_reward_wrong: 0.2, reward_gap: 0.7,
+#   reward_source: "live HTTP POST /analyst/grade",
+#   training_loop_connected_to_env: true
+```
 
 ### Killer demo moment
 

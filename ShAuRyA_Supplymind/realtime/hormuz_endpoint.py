@@ -147,6 +147,8 @@ def _call_ollama_judge(model: str, prompt: str) -> dict:
         "confidence": float(parsed.get("confidence", 0.5)),
         "rationale": parsed.get("rationale", "(no rationale)")[:500],
         "latency_s": round(time.time() - start, 2),
+        "inference_type": "live_llm",
+        "judge_source": f"ollama:{model}",
     }
 
 
@@ -174,6 +176,9 @@ def _rubric_judge(scenario_text: str, projection: dict, signals: list[dict]) -> 
                       f"Analog severity P50={sev:.2f} mapped to {level}. "
                       f"{len(signals or [])} recent signals corroborate."),
         "latency_s": round(time.time() - start, 2),
+        "inference_type": "rubric_fallback",
+        "judge_source": "deterministic_severity_rubric",
+        "note": "not a real LLM judge; live panel requires Ollama + qwen2.5:14b/mistral-nemo/deepseek-r1-local-q4 locally",
     }
 
 
