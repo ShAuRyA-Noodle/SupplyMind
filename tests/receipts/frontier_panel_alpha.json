@@ -5,17 +5,17 @@
     "n_judges_total": 6,
     "n_scenarios": {
       "local": 26,
-      "frontier": 5,
+      "frontier": 6,
       "combined": 26
     },
     "krippendorff_alpha_ordinal": {
       "local_only": 0.2097,
-      "frontier_only": 0.2403,
-      "combined_local_plus_frontier": 0.3191
+      "frontier_only": 0.3105,
+      "combined_local_plus_frontier": 0.3185
     },
     "majority_vote_accuracy_vs_ground_truth": {
       "local_only": 0.5769,
-      "frontier_only": 0.4,
+      "frontier_only": 0.5,
       "combined_local_plus_frontier": 0.6154
     }
   },
