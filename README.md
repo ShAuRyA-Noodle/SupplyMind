@@ -84,7 +84,10 @@ The live Hormuz pipeline ingested 3,911 real 2026 news articles on launch day an
 | 1 | **RAG nDCG@10** on real Wiki crisis × SC queries | **0.971** |
 | 2 | **RAG P@1** on 6,483-chunk real corpus | **0.962** |
 | 3 | **RAG MRR** on precise queries | **0.978** |
-| 4 | **LLM 2-judge Krippendorff α** (ordinal) | **0.750** |
+| 4 | **LLM mean panel confidence** (3-local × 26 scenarios, R4) | **0.750** |
+| 4b | **Krippendorff α ordinal** (real value, 3-local only, R4) | **0.210** |
+| 4c | **Krippendorff α ordinal** (6-judge: 3 local + 3 frontier OpenRouter) | **0.319** *(partial — see [frontier_panel_alpha.json](tests/receipts/frontier_panel_alpha.json))* |
+| 4d | **Majority-vote accuracy vs ground truth** (6-judge combined) | **0.615** |
 | 5 | **Cohen κ (Qwen × Mistral)** | **0.747** |
 | 6 | **Per-horizon conformal dev** from 95% nominal on WTI | **0.024** |
 | 7 | **MaskablePPO masking lift** (isolated, 3 tasks) | **+26.8% / +15.1%** / invalid → 0 |

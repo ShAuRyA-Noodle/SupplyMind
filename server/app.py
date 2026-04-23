@@ -1005,6 +1005,127 @@ async def analyst_holdout_eval(req: HoldoutEvalRequest) -> HoldoutEvalResponse:
 
 
 # ============================================================
+# /analyst/panel-consensus — frontier 9-judge panel verdict
+# ============================================================
+#
+# Replays the committed Frontier Panel v2 results (v3_arcadia/results/
+# R4_FRONTIER_PANEL_V2.json + local R4) for a given scenario. Two modes:
+#   - GET  /analyst/panel-consensus/{scenario_id}            — snapshot dict
+#   - GET  /analyst/panel-consensus/{scenario_id}/stream     — SSE, one
+#                                                              event per judge
+#
+# No live API calls — returns the committed offline-run verdicts. Judges
+# get reproducible cross-frontier consensus without needing any API key.
+
+
+@app.get("/analyst/panel-consensus/{scenario_id}", tags=["training"])
+async def analyst_panel_consensus(scenario_id: str) -> dict:
+    """Return the full 9-judge (3 local + 6 frontier) consensus for a scenario.
+
+    Reads committed R4_DANGEROUS_V2.json (local) + R4_FRONTIER_PANEL_V2.json
+    (frontier) so there's zero API dependency at demo time. Majority + ordinal
+    agreement + Krippendorff-aligned ordinal distance are computed live.
+    """
+    r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+    fp_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
+    if not r4_path.exists():
+        raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
+    r4 = json.loads(r4_path.read_text(encoding="utf-8"))
+    scen = r4.get("per_scenario", {}).get(scenario_id)
+    if not scen:
+        raise HTTPException(404, f"scenario_id '{scenario_id}' not in R4")
+    gt = str(scen.get("ground_truth", "")).upper()
+
+    # Local 3-judge verdicts (R4 committed)
+    verdicts: list[dict] = []
+    for judge_id, body in (scen.get("per_judge") or {}).items():
+        parsed = (body.get("parsed") if isinstance(body, dict) else {}) or {}
+        pred = str(parsed.get("risk_level", "")).upper()
+        verdicts.append({
+            "judge": f"local:{judge_id}",
+            "tier": "local",
+            "predicted_risk": pred,
+            "confidence": parsed.get("confidence"),
+            "rationale": (parsed.get("reasoning_one_line") or "")[:240],
+            "latency_s": body.get("latency_s") if isinstance(body, dict) else None,
+        })
+
+    # Frontier verdicts (committed pass-5 panel)
+    if fp_path.exists():
+        fp = json.loads(fp_path.read_text(encoding="utf-8"))
+        per_scen = (fp.get("per_scenario", {}) or {}).get(scenario_id, {})
+        for row in per_scen.get("per_judge", []):
+            if not row.get("ok"):
+                continue
+            verdicts.append({
+                "judge": f"frontier:{row.get('model_short', row.get('model',''))}",
+                "tier": "frontier",
+                "predicted_risk": row.get("predicted_risk", ""),
+                "confidence": row.get("confidence"),
+                "rationale": (row.get("rationale_one_line") or "")[:240],
+                "latency_s": row.get("latency_s"),
+            })
+
+    valid = [v for v in verdicts if v["predicted_risk"] in _RISK_ORDER]
+    tallies: dict[str, int] = {}
+    for v in valid:
+        tallies[v["predicted_risk"]] = tallies.get(v["predicted_risk"], 0) + 1
+    majority = max(tallies, key=tallies.get) if tallies else "UNKNOWN"
+    # Ordinal dispersion: mean squared distance to majority
+    dispersion = 0.0
+    if valid:
+        dispersion = sum(
+            (_RISK_ORDER[v["predicted_risk"]] - _RISK_ORDER.get(majority, 0)) ** 2
+            for v in valid
+        ) / len(valid)
+
+    return {
+        "scenario_id": scenario_id,
+        "ground_truth": gt,
+        "n_judges_total": len(verdicts),
+        "n_judges_valid": len(valid),
+        "n_local": sum(1 for v in verdicts if v["tier"] == "local"),
+        "n_frontier": sum(1 for v in verdicts if v["tier"] == "frontier"),
+        "majority_vote": majority,
+        "majority_matches_ground_truth": majority == gt,
+        "tallies": tallies,
+        "ordinal_dispersion_squared": round(dispersion, 3),
+        "verdicts": verdicts,
+        "inference_type": "committed_panel_replay",
+        "sources": {
+            "local": "v3_arcadia/results/R4_DANGEROUS_V2.json",
+            "frontier": "v3_arcadia/results/R4_FRONTIER_PANEL_V2.json",
+        },
+    }
+
+
+@app.get("/analyst/panel-consensus/{scenario_id}/stream", tags=["training"])
+async def analyst_panel_consensus_stream(scenario_id: str):
+    """SSE-stream the 9-judge verdicts one at a time — demo-surface flair.
+
+    Each event is a JSON object with a single judge's verdict. Judges are
+    sent with a small delay so the live demo shows the panel "arriving"
+    judgment-by-judgment. Reads from committed files only.
+    """
+    from fastapi.responses import StreamingResponse
+
+    snapshot = await analyst_panel_consensus(scenario_id)
+
+    async def _gen():
+        yield f"event: start\ndata: {json.dumps({'scenario_id': scenario_id, 'ground_truth': snapshot['ground_truth'], 'n_judges': snapshot['n_judges_total']})}\n\n"
+        for v in snapshot["verdicts"]:
+            yield f"event: verdict\ndata: {json.dumps(v)}\n\n"
+            await asyncio.sleep(0.35)
+        final = {k: snapshot[k] for k in (
+            "majority_vote", "majority_matches_ground_truth",
+            "tallies", "ordinal_dispersion_squared", "inference_type",
+        )}
+        yield f"event: consensus\ndata: {json.dumps(final)}\n\n"
+
+    return StreamingResponse(_gen(), media_type="text/event-stream")
+
+
+# ============================================================
 # /v3/e2e — end-to-end chained pipeline
 # ============================================================
 
