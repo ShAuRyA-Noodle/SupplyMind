@@ -85,9 +85,10 @@ The live Hormuz pipeline ingested 3,911 real 2026 news articles on launch day an
 | 2 | **RAG P@1** on 6,483-chunk real corpus | **0.962** |
 | 3 | **RAG MRR** on precise queries | **0.978** |
 | 4 | **LLM mean panel confidence** (3-local × 26 scenarios, R4) | **0.750** |
-| 4b | **Krippendorff α ordinal** (real value, 3-local only, R4) | **0.210** |
-| 4c | **Krippendorff α ordinal** (6-judge: 3 local + 3 frontier OpenRouter) | **0.319** *(partial — see [frontier_panel_alpha.json](tests/receipts/frontier_panel_alpha.json))* |
-| 4d | **Majority-vote accuracy vs ground truth** (6-judge combined) | **0.615** |
+| 4b | **Krippendorff α ordinal** (3-local R4 judges only) | **0.210** |
+| 4c | **Krippendorff α ordinal, 12-frontier panel** (Nemotron-3-Super, Ling-2.6-1T, Hermes-3-405B, Llama-3.3-70B, Qwen3-Next-80B, gpt-oss-120b, Gemma-4-31B, Gemma-4-26B-A4B, GLM-4.5-Air, MiniMax-M2.5, Nemotron-3-Nano-30B, Nemotron-Nano-9B) | **0.567** |
+| 4d | **Krippendorff α ordinal, 15-judge combined** (3 local + 12 frontier) | **0.358** |
+| 4e | **Majority-vote accuracy vs R4 ground truth** (3-local / 12-frontier / 15-combined) | **0.577 / 0.231 / 0.308** |
 | 5 | **Cohen κ (Qwen × Mistral)** | **0.747** |
 | 6 | **Per-horizon conformal dev** from 95% nominal on WTI | **0.024** |
 | 7 | **MaskablePPO masking lift** (isolated, 3 tasks) | **+26.8% / +15.1%** / invalid → 0 |
