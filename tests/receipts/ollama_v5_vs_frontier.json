@@ -1,0 +1,936 @@
+{
+  "generated_at_utc": "2026-04-25T14:03:04.554806+00:00",
+  "n_scenarios": 15,
+  "judges": [
+    "supplymind-analyst:v5",
+    "openai/gpt-oss-120b:free",
+    "google/gemma-4-31b-it:free",
+    "z-ai/glm-4.5-air:free",
+    "minimax/minimax-m2.5:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "google/gemma-4-26b-a4b-it:free"
+  ],
+  "ollama_status": "ok",
+  "ollama_model": "supplymind-analyst:v5",
+  "frontier_judges": [
+    "openai/gpt-oss-120b:free",
+    "google/gemma-4-31b-it:free",
+    "z-ai/glm-4.5-air:free",
+    "minimax/minimax-m2.5:free",
+    "nvidia/nemotron-3-super-120b-a12b:free",
+    "google/gemma-4-26b-a4b-it:free"
+  ],
+  "per_judge": {
+    "supplymind-analyst:v5": {
+      "exact_tier_accuracy": 0.4,
+      "soft_accuracy_within_1_tier": 1.0,
+      "n_succeeded": 15,
+      "krippendorff_alpha_against_ground_truth": 0.7975,
+      "mean_latency_s": 3.67,
+      "consensus_with_panel": 0.4
+    },
+    "openai/gpt-oss-120b:free": {
+      "exact_tier_accuracy": 0.4,
+      "soft_accuracy_within_1_tier": 1.0,
+      "n_succeeded": 15,
+      "krippendorff_alpha_against_ground_truth": 0.7464,
+      "mean_latency_s": 4.93,
+      "consensus_with_panel": 0.5333
+    },
+    "google/gemma-4-31b-it:free": {
+      "exact_tier_accuracy": 0.75,
+      "soft_accuracy_within_1_tier": 1.0,
+      "n_succeeded": 4,
+      "krippendorff_alpha_against_ground_truth": 0.9114,
+      "mean_latency_s": 0.89,
+      "consensus_with_panel": 0.75
+    },
+    "z-ai/glm-4.5-air:free": {
+      "exact_tier_accuracy": 0.0,
+      "soft_accuracy_within_1_tier": 0.0,
+      "n_succeeded": 0,
+      "krippendorff_alpha_against_ground_truth": 0.0,
+      "mean_latency_s": 28.81,
+      "consensus_with_panel": 0.0
+    },
+    "minimax/minimax-m2.5:free": {
+      "exact_tier_accuracy": 0.5385,
+      "soft_accuracy_within_1_tier": 1.0,
+      "n_succeeded": 13,
+      "krippendorff_alpha_against_ground_truth": 0.8116,
+      "mean_latency_s": 52.86,
+      "consensus_with_panel": 0.5385
+    },
+    "nvidia/nemotron-3-super-120b-a12b:free": {
+      "exact_tier_accuracy": 0.0,
+      "soft_accuracy_within_1_tier": 1.0,
+      "n_succeeded": 1,
+      "krippendorff_alpha_against_ground_truth": 0.0,
+      "mean_latency_s": 8.45,
+      "consensus_with_panel": 0.0
+    },
+    "google/gemma-4-26b-a4b-it:free": {
+      "exact_tier_accuracy": 0.8,
+      "soft_accuracy_within_1_tier": 1.0,
+      "n_succeeded": 5,
+      "krippendorff_alpha_against_ground_truth": 0.9109,
+      "mean_latency_s": 0.94,
+      "consensus_with_panel": 0.6
+    }
+  },
+  "headline": {
+    "v5_exact_acc": 0.4,
+    "frontier_panel_mean_exact_acc": 0.4148,
+    "v5_beats_frontier": false,
+    "v5_skipped": false,
+    "v5_skip_reason": null
+  },
+  "openrouter_budget_remaining": {
+    "per_min_used": 12,
+    "per_min_budget": 18,
+    "per_day_used": 151,
+    "per_day_budget": 950
+  },
+  "per_event_predictions": [
+    {
+      "id": "iran_true_promise_1_2024_04",
+      "source": "iran_israel_hormuz_2024_2026",
+      "ground_truth_tier": "HIGH",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 15.7,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.78,
+          "latency_s": 4.61,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"z-ai/glm-4.5-air:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to acc"
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.75,
+          "latency_s": 12.08,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 8.44,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "iran_true_promise_2_2024_10",
+      "source": "iran_israel_hormuz_2024_2026",
+      "ground_truth_tier": "CRITICAL",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 3.12,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.78,
+          "latency_s": 5.67,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 44.05,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.85,
+          "latency_s": 50.5,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 2.94,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "houthi_red_sea_campaign_2023_ongoing",
+      "source": "iran_israel_hormuz_2024_2026",
+      "ground_truth_tier": "CRITICAL",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 2.76,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.86,
+          "latency_s": 7.47,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"z-ai/glm-4.5-air:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to acc"
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 121.53,
+          "ok": false,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.9,
+          "latency_s": 6.09,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": "CRITICAL",
+          "confidence": 1.0,
+          "latency_s": 2.97,
+          "ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "us_uk_operation_poseidon_archer_2024_01",
+      "source": "iran_israel_hormuz_2024_2026",
+      "ground_truth_tier": "HIGH",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 3.16,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.78,
+          "latency_s": 4.58,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.9,
+          "latency_s": 3.61,
+          "ok": true,
+          "error": null
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 83.44,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 122.95,
+          "ok": false,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 3.42,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.9,
+          "latency_s": 3.08,
+          "ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "haifa_port_missile_2024_10",
+      "source": "iran_israel_hormuz_2024_2026",
+      "ground_truth_tier": "MEDIUM",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "HIGH",
+          "confidence": 0.9,
+          "latency_s": 2.64,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.78,
+          "latency_s": 5.22,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 26.19,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.8,
+          "latency_s": 56.92,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 12.61,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "houthi_yaffa_tel_aviv_2024_07",
+      "source": "iran_israel_hormuz_2024_2026",
+      "ground_truth_tier": "HIGH",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 3.17,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.78,
+          "latency_s": 7.23,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.85,
+          "latency_s": 3.78,
+          "ok": true,
+          "error": null
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 115.75,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.85,
+          "latency_s": 21.25,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 4.45,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.85,
+          "latency_s": 3.17,
+          "ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "hormuz_trump_cargo_ship_2026_04",
+      "source": "iran_israel_hormuz_2024_2026",
+      "ground_truth_tier": "HIGH",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 2.88,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.92,
+          "latency_s": 4.34,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"z-ai/glm-4.5-air:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to acc"
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 17.58,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 6.06,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "ukraine_neon_palladium_shock_2022_context",
+      "source": "iran_israel_hormuz_2024_2026",
+      "ground_truth_tier": "CRITICAL",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 2.7,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.92,
+          "latency_s": 3.84,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 3.06,
+          "ok": true,
+          "error": null
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 120.91,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "CRITICAL",
+          "confidence": 0.95,
+          "latency_s": 56.28,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 2.27,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "2018-0040-BRA",
+      "source": "crisis_library_v2",
+      "ground_truth_tier": "LOW",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.85,
+          "latency_s": 2.84,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "LOW",
+          "confidence": 0.78,
+          "latency_s": 3.84,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 7.51,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "LOW",
+          "confidence": 0.75,
+          "latency_s": 18.41,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 7.92,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "2002-0351-USA",
+      "source": "crisis_library_v2",
+      "ground_truth_tier": "LOW",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.85,
+          "latency_s": 2.52,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "LOW",
+          "confidence": 0.88,
+          "latency_s": 4.42,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": "LOW",
+          "confidence": 0.95,
+          "latency_s": 2.94,
+          "ok": true,
+          "error": null
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 6.77,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "LOW",
+          "confidence": 0.75,
+          "latency_s": 13.8,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 2.78,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": "LOW",
+          "confidence": 0.95,
+          "latency_s": 2.44,
+          "ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "2022-0770-RWA",
+      "source": "crisis_library_v2",
+      "ground_truth_tier": "LOW",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "LOW",
+          "confidence": 0.95,
+          "latency_s": 2.99,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "LOW",
+          "confidence": 0.92,
+          "latency_s": 4.12,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 8.38,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "LOW",
+          "confidence": 0.95,
+          "latency_s": 9.02,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 5.83,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "2024-9796-USA",
+      "source": "crisis_library_v2",
+      "ground_truth_tier": "HIGH",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "HIGH",
+          "confidence": 0.9,
+          "latency_s": 2.86,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.72,
+          "latency_s": 5.52,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 5.38,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "HIGH",
+          "confidence": 0.75,
+          "latency_s": 94.06,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 2.45,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.85,
+          "latency_s": 2.39,
+          "ok": true,
+          "error": null
+        }
+      }
+    },
+    {
+      "id": "2022-0563-IDN",
+      "source": "crisis_library_v2",
+      "ground_truth_tier": "MEDIUM",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "LOW",
+          "confidence": 0.95,
+          "latency_s": 2.3,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "LOW",
+          "confidence": 0.92,
+          "latency_s": 3.44,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 7.03,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "LOW",
+          "confidence": 0.85,
+          "latency_s": 47.25,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 39.62,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "2000-0620-NGA",
+      "source": "crisis_library_v2",
+      "ground_truth_tier": "LOW",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "LOW",
+          "confidence": 0.95,
+          "latency_s": 2.88,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "LOW",
+          "confidence": 0.78,
+          "latency_s": 6.06,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 6.8,
+          "ok": false,
+          "error": null
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "MEDIUM",
+          "confidence": 0.7,
+          "latency_s": 135.27,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 2.47,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    },
+    {
+      "id": "2022-0586-TUN",
+      "source": "crisis_library_v2",
+      "ground_truth_tier": "MEDIUM",
+      "predictions": {
+        "supplymind-analyst:v5": {
+          "risk_level": "LOW",
+          "confidence": 0.95,
+          "latency_s": 2.47,
+          "ok": true,
+          "error": null
+        },
+        "openai/gpt-oss-120b:free": {
+          "risk_level": "LOW",
+          "confidence": 0.85,
+          "latency_s": 3.61,
+          "ok": true,
+          "error": null
+        },
+        "google/gemma-4-31b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-31b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own key t"
+        },
+        "z-ai/glm-4.5-air:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"z-ai/glm-4.5-air:free is temporarily rate-limited upstream. Please retry shortly, or add your own key to acc"
+        },
+        "minimax/minimax-m2.5:free": {
+          "risk_level": "LOW",
+          "confidence": 0.6,
+          "latency_s": 16.03,
+          "ok": true,
+          "error": null
+        },
+        "nvidia/nemotron-3-super-120b-a12b:free": {
+          "risk_level": null,
+          "confidence": 0.5,
+          "latency_s": 19.42,
+          "ok": false,
+          "error": null
+        },
+        "google/gemma-4-26b-a4b-it:free": {
+          "risk_level": null,
+          "confidence": null,
+          "latency_s": 0.0,
+          "ok": false,
+          "error": "429 rate-limit: {\"error\":{\"message\":\"Provider returned error\",\"code\":429,\"metadata\":{\"raw\":\"google/gemma-4-26b-a4b-it:free is temporarily rate-limited upstream. Please retry shortly, or add your own k"
+        }
+      }
+    }
+  ]
+}
