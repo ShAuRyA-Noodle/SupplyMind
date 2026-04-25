@@ -1,0 +1,187 @@
+{
+  "n_episodes": 200,
+  "final_tier": 2,
+  "n_tier_bumps": 5,
+  "n_tier_drops": 3,
+  "decisions": [
+    {
+      "current_tier": 1,
+      "n_episodes": 10,
+      "rolling_win_rate": 0.0,
+      "decision": {
+        "type": "BUMP",
+        "from": 0,
+        "to": 1,
+        "win_rate": 1.0,
+        "reason": "saturated tier 0 (wr=1.000 \u2265 0.85)",
+        "at_episode": 10
+      }
+    },
+    {
+      "current_tier": 2,
+      "n_episodes": 20,
+      "rolling_win_rate": 0.0,
+      "decision": {
+        "type": "BUMP",
+        "from": 1,
+        "to": 2,
+        "win_rate": 0.9,
+        "reason": "saturated tier 1 (wr=0.900 \u2265 0.85)",
+        "at_episode": 20
+      }
+    },
+    {
+      "current_tier": 1,
+      "n_episodes": 40,
+      "rolling_win_rate": 0.0,
+      "decision": {
+        "type": "DROP",
+        "from": 2,
+        "to": 1,
+        "win_rate": 0.3,
+        "reason": "stalled at tier 2 (wr=0.300 \u2264 0.3)",
+        "at_episode": 40
+      }
+    },
+    {
+      "current_tier": 2,
+      "n_episodes": 50,
+      "rolling_win_rate": 0.0,
+      "decision": {
+        "type": "BUMP",
+        "from": 1,
+        "to": 2,
+        "win_rate": 1.0,
+        "reason": "saturated tier 1 (wr=1.000 \u2265 0.85)",
+        "at_episode": 50
+      }
+    },
+    {
+      "current_tier": 1,
+      "n_episodes": 110,
+      "rolling_win_rate": 0.0,
+      "decision": {
+        "type": "DROP",
+        "from": 2,
+        "to": 1,
+        "win_rate": 0.3,
+        "reason": "stalled at tier 2 (wr=0.300 \u2264 0.3)",
+        "at_episode": 110
+      }
+    },
+    {
+      "current_tier": 2,
+      "n_episodes": 158,
+      "rolling_win_rate": 0.0,
+      "decision": {
+        "type": "BUMP",
+        "from": 1,
+        "to": 2,
+        "win_rate": 0.85,
+        "reason": "saturated tier 1 (wr=0.850 \u2265 0.85)",
+        "at_episode": 158
+      }
+    },
+    {
+      "current_tier": 1,
+      "n_episodes": 183,
+      "rolling_win_rate": 0.0,
+      "decision": {
+        "type": "DROP",
+        "from": 2,
+        "to": 1,
+        "win_rate": 0.3,
+        "reason": "stalled at tier 2 (wr=0.300 \u2264 0.3)",
+        "at_episode": 183
+      }
+    },
+    {
+      "current_tier": 2,
+      "n_episodes": 193,
+      "rolling_win_rate": 0.0,
+      "decision": {
+        "type": "BUMP",
+        "from": 1,
+        "to": 2,
+        "win_rate": 0.9,
+        "reason": "saturated tier 1 (wr=0.900 \u2265 0.85)",
+        "at_episode": 193
+      }
+    }
+  ],
+  "final_state": {
+    "current_tier": 2,
+    "tier_word_pool_size": 478,
+    "n_episodes_total": 200,
+    "rolling_win_rate": 0.1429,
+    "n_tier_bumps": 5,
+    "n_tier_drops": 3,
+    "decisions": [
+      {
+        "type": "BUMP",
+        "from": 0,
+        "to": 1,
+        "win_rate": 1.0,
+        "reason": "saturated tier 0 (wr=1.000 \u2265 0.85)",
+        "at_episode": 10
+      },
+      {
+        "type": "BUMP",
+        "from": 1,
+        "to": 2,
+        "win_rate": 0.9,
+        "reason": "saturated tier 1 (wr=0.900 \u2265 0.85)",
+        "at_episode": 20
+      },
+      {
+        "type": "DROP",
+        "from": 2,
+        "to": 1,
+        "win_rate": 0.3,
+        "reason": "stalled at tier 2 (wr=0.300 \u2264 0.3)",
+        "at_episode": 40
+      },
+      {
+        "type": "BUMP",
+        "from": 1,
+        "to": 2,
+        "win_rate": 1.0,
+        "reason": "saturated tier 1 (wr=1.000 \u2265 0.85)",
+        "at_episode": 50
+      },
+      {
+        "type": "DROP",
+        "from": 2,
+        "to": 1,
+        "win_rate": 0.3,
+        "reason": "stalled at tier 2 (wr=0.300 \u2264 0.3)",
+        "at_episode": 110
+      },
+      {
+        "type": "BUMP",
+        "from": 1,
+        "to": 2,
+        "win_rate": 0.85,
+        "reason": "saturated tier 1 (wr=0.850 \u2265 0.85)",
+        "at_episode": 158
+      },
+      {
+        "type": "DROP",
+        "from": 2,
+        "to": 1,
+        "win_rate": 0.3,
+        "reason": "stalled at tier 2 (wr=0.300 \u2264 0.3)",
+        "at_episode": 183
+      },
+      {
+        "type": "BUMP",
+        "from": 1,
+        "to": 2,
+        "win_rate": 0.9,
+        "reason": "saturated tier 1 (wr=0.900 \u2265 0.85)",
+        "at_episode": 193
+      }
+    ],
+    "rlve_alignment": "Per \u00a722-23: procedural difficulty modulation prevents saturation on static datasets \u00b7 target win-rate band 0.45-0.75 for max learning gradient"
+  }
+}

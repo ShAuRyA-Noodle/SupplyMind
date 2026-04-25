@@ -1,0 +1,65 @@
+{
+  "target": "brain",
+  "n_trials": 5,
+  "results": [
+    {
+      "guess": "about",
+      "note": "first guess",
+      "rule_score": 0.04,
+      "rule_reason": "green=0_yellow=2_partial=0.040",
+      "model_score": 0.65,
+      "composite": 0.033,
+      "disagreement": 0.61,
+      "alarm": false
+    },
+    {
+      "guess": "crane",
+      "note": "good explorer",
+      "rule_score": 0.0,
+      "rule_reason": "non_dictionary",
+      "model_score": 0.85,
+      "composite": 0.0,
+      "disagreement": 0.85,
+      "alarm": false
+    },
+    {
+      "guess": "braid",
+      "note": "5-letter alpha, gets 4 greens",
+      "rule_score": 0.0,
+      "rule_reason": "non_dictionary",
+      "model_score": 0.85,
+      "composite": 0.0,
+      "disagreement": 0.85,
+      "alarm": false
+    },
+    {
+      "guess": "brawn",
+      "note": "4 letters match positions",
+      "rule_score": 0.0,
+      "rule_reason": "non_dictionary",
+      "model_score": 0.75,
+      "composite": 0.0,
+      "disagreement": 0.75,
+      "alarm": false
+    },
+    {
+      "guess": "brain",
+      "note": "exact match",
+      "rule_score": 1.0,
+      "rule_reason": "exact_match",
+      "model_score": 0.85,
+      "composite": 0.925,
+      "disagreement": 0.15,
+      "alarm": false
+    }
+  ],
+  "audit": {
+    "n_calls": 5,
+    "rule_pass_rate": 0.4,
+    "model_pass_rate": 1.0,
+    "n_disagreement_alarms": 0,
+    "rolling_avg_disagreement": 0.642,
+    "alarm_threshold": 0.3,
+    "framework": "RLVR dual-verifier (rule \u00d7 model \u00b7 \u00a731-33 hardened)"
+  }
+}
