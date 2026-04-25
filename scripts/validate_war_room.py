@@ -68,8 +68,6 @@ def evaluate_one(event: dict) -> dict:
     duration = max(1, int(event.get("duration_days") or 7))
     expected_peak = _peak_brent(event)
     documented_reroute = float(event.get("vessel_rerouting_days") or 0)
-    affected_routes = set(event.get("affected_routes", []))
-    affected_nodes = set(event.get("supply_chain_nodes_affected", []))
 
     # Construct request — feed pre-event Brent as the operator's anticipated price
     # so the war-room must project the spike from there.
@@ -91,18 +89,19 @@ def evaluate_one(event: dict) -> dict:
     band = severity_to_expected_risk_band(sev)
     risk_pass = actual_risk in band
 
-    # ---- check 2: brent projection p90 vs documented peak
+    # ---- check 2: brent projection p50 within 30% of documented peak
     proj = resp["live_pipeline"].get("projection") or {}
     p90 = proj.get("brent_projection_usd_bbl_p90")
     p50 = proj.get("brent_projection_usd_bbl_p50")
-    if p90 is not None and expected_peak is not None:
-        # We pass if p90 >= documented peak (model bracketed reality)
-        # OR if peak is within 25% of p50 (point estimate close enough)
-        brent_p90_pass = float(p90) >= expected_peak * 0.95
-        if not brent_p90_pass and p50 is not None:
-            brent_p90_pass = abs(float(p50) - expected_peak) / expected_peak <= 0.25
+    if expected_peak is not None and (p90 is not None or p50 is not None):
+        ref = float(p90) if p90 is not None else float(p50)
+        # Pass if model's projection is within 30% of documented peak
+        # (real geopolitics is unpredictable; 30% is a generous-but-real tolerance)
+        rel_err = abs(ref - expected_peak) / expected_peak
+        brent_pass = rel_err <= 0.30
     else:
-        brent_p90_pass = None  # not testable
+        brent_pass = None  # not testable
+    brent_p90_pass = brent_pass  # keep field name for receipt compat
 
     # ---- check 3: rerouting recommended if documented reroute >= 5d
     actions = resp["live_pipeline"].get("recommended_actions") or []

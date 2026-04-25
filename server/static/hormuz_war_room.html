@@ -160,6 +160,13 @@
                         rounded-lg px-3 py-2 text-sm focus:outline-none
                         focus:ring-1 focus:ring-[var(--cyan)]">
         </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)]">OpenRouter</label>
+          <label class="inline-flex items-center gap-2 cursor-pointer">
+            <input id="enable-openrouter" type="checkbox" class="w-4 h-4 accent-[var(--cyan)]">
+            <span class="text-xs text-[var(--fg-1)]">6-judge panel<br>(+~60s, free)</span>
+          </label>
+        </div>
         <button id="run-btn" class="md:ml-2 mt-1 px-5 py-2 rounded-lg font-semibold
                   text-[var(--bg-0)] transition active:scale-[.98]"
                 style="background: linear-gradient(135deg, var(--cyan), var(--violet));">
@@ -301,6 +308,52 @@
         <span class="chip chip-scen">no AI fluff</span>
       </div>
       <ul id="caveats" class="space-y-2 text-sm text-[var(--fg-1)]"></ul>
+    </div>
+  </section>
+
+  <!-- ============================ OPENROUTER PANEL + BACKTEST ============================ -->
+  <section class="grid-shell">
+
+    <!-- OPENROUTER PANEL -->
+    <div id="openrouter-panel" class="panel p-5 hidden">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-semibold">OpenRouter · 6-frontier-judge cross-check</h2>
+        <span id="openrouter-flag" class="chip chip-live">awaiting</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+        <div>
+          <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">Consensus</div>
+          <div id="or-consensus" class="text-xl font-bold mono">—</div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">Krippendorff α</div>
+          <div id="or-alpha" class="text-xl font-bold mono text-[var(--cyan)]">—</div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">Mean confidence</div>
+          <div id="or-meanconf" class="text-xl font-bold mono">—</div>
+        </div>
+        <div>
+          <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">Panel size</div>
+          <div id="or-panelsize" class="text-xl font-bold mono">—</div>
+        </div>
+      </div>
+      <div id="or-judges" class="space-y-2"></div>
+    </div>
+
+    <!-- BACKTEST -->
+    <div id="backtest-panel" class="panel p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-semibold">Validation · backtest vs 8 documented events</h2>
+        <button id="run-backtest" class="text-xs chip chip-live cursor-pointer
+                hover:border-[var(--cyan)]">▶ run</button>
+      </div>
+      <div id="backtest-summary" class="text-xs text-[var(--fg-1)] mb-3">
+        Click ▶ run to validate against 8 historical Iran/Israel/Hormuz/Red-Sea
+        events with documented Brent prices, vessel rerouting, and severity.
+        Receipt at <span class="mono">tests/receipts/war_room_validation.json</span>.
+      </div>
+      <div id="backtest-rows" class="space-y-1"></div>
     </div>
   </section>
 
@@ -615,6 +668,113 @@
     });
   }
 
+  // ---------- openrouter panel ----------
+  function renderOpenRouterPanel(op) {
+    const wrap = $("#openrouter-panel");
+    if (!op) { wrap.classList.add("hidden"); return; }
+    wrap.classList.remove("hidden");
+    const flag = $("#openrouter-flag");
+    flag.classList.remove("chip-scen","chip-live","chip-good","chip-crit","chip-model");
+    if (op.error) {
+      flag.classList.add("chip-crit"); flag.textContent = "errored";
+      $("#or-consensus").textContent = "—";
+      $("#or-alpha").textContent = "—";
+      $("#or-meanconf").textContent = "—";
+      $("#or-panelsize").textContent = "—";
+      $("#or-judges").innerHTML = `<div class="text-sm text-[var(--red)]">${op.error}</div>`;
+      return;
+    }
+    flag.classList.add("chip-good");
+    flag.textContent = `${op.n_succeeded}/${op.panel_size} succeeded · ${op.elapsed_s}s`;
+    $("#or-consensus").textContent = op.consensus_risk || "—";
+    $("#or-consensus").style.color =
+      op.consensus_risk === "CRITICAL" ? "var(--red)" :
+      op.consensus_risk === "HIGH" ? "var(--red)" :
+      op.consensus_risk === "MEDIUM" ? "var(--amber)" : "var(--green)";
+    $("#or-alpha").textContent = (op.krippendorff_alpha_ordinal || 0).toFixed(3);
+    $("#or-meanconf").textContent = ((op.mean_confidence||0)*100).toFixed(1) + "%";
+    $("#or-panelsize").textContent = op.panel_size;
+
+    const box = $("#or-judges"); box.innerHTML = "";
+    (op.results || []).forEach(j => {
+      const div = document.createElement("div");
+      div.className = "p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]";
+      const modelShort = (j.model || "").replace(":free","").replace("/","·");
+      if (!j.ok) {
+        div.innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-medium text-sm mono">${modelShort}</div>
+            <span class="chip chip-crit">FAIL</span>
+          </div>
+          <div class="text-xs text-[var(--fg-2)] mt-1">${(j.error||"").slice(0,160)}</div>`;
+      } else {
+        const lvl = j.risk_level || "—";
+        const lvlChip = lvl === "CRITICAL" || lvl === "HIGH" ? "chip-crit" :
+                        lvl === "MEDIUM" ? "chip-model" : "chip-good";
+        const sectors = (j.top_sectors || []).slice(0,3).join(" · ");
+        div.innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <div class="font-medium text-sm mono">${modelShort}</div>
+            <div class="flex items-center gap-2">
+              <span class="chip ${lvlChip}">${lvl}</span>
+              <span class="mono text-xs text-[var(--cyan)]">conf ${fmt(j.confidence,2)}</span>
+              <span class="mono text-xs text-[var(--fg-2)]">${j.latency_s}s</span>
+            </div>
+          </div>
+          ${j.reason ? `<div class="text-xs text-[var(--fg-1)] mt-1">${j.reason}</div>` : ""}
+          ${sectors ? `<div class="text-[10px] text-[var(--fg-2)] mt-1 mono">top sectors: ${sectors}</div>` : ""}`;
+      }
+      box.appendChild(div);
+    });
+  }
+
+  // ---------- backtest panel ----------
+  async function runBacktest() {
+    const btn = $("#run-backtest");
+    btn.textContent = "running…"; btn.classList.remove("chip-live"); btn.classList.add("chip-model");
+    const sum = $("#backtest-summary");
+    sum.innerHTML = '<span class="mono text-[var(--cyan)]">running validation against 8 documented historical events…</span>';
+    try {
+      const r = await fetch("/demo/hormuz-war-room/validate", { method: "POST" });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const j = await r.json();
+      const agg = j.aggregate_accuracy || {};
+      sum.innerHTML = `
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+          <div><div class="text-[var(--fg-2)]">risk band</div><div class="mono text-[var(--green)] text-base">${(agg.risk_level_in_expected_band*100).toFixed(0)}%</div></div>
+          <div><div class="text-[var(--fg-2)]">brent ±30%</div><div class="mono text-[var(--cyan)] text-base">${typeof agg.brent_p90_brackets_documented_peak === "number" ? (agg.brent_p90_brackets_documented_peak*100).toFixed(0)+"%" : agg.brent_p90_brackets_documented_peak}</div></div>
+          <div><div class="text-[var(--fg-2)]">reroute action</div><div class="mono text-[var(--green)] text-base">${(agg.reroute_action_when_doc_reroute_ge_5d*100).toFixed(0)}%</div></div>
+          <div><div class="text-[var(--fg-2)]">india top-3 sane</div><div class="mono text-[var(--green)] text-base">${(agg.india_top3_includes_known_affected_sector*100).toFixed(0)}%</div></div>
+          <div><div class="text-[var(--fg-2)]">cf savings &gt; 0</div><div class="mono text-[var(--green)] text-base">${(agg.counterfactual_positive_savings*100).toFixed(0)}%</div></div>
+          <div><div class="text-[var(--fg-2)]">events tested</div><div class="mono text-base">${j.n_events_no_fatal}/${j.n_events_tested}</div></div>
+        </div>`;
+      const box = $("#backtest-rows"); box.innerHTML = "";
+      (j.per_event_results || []).forEach(row => {
+        if (row.fatal_error) return;
+        const passes = [row.risk_band_pass, row.brent_p90_pass, row.reroute_action_pass,
+                         row.india_top_makes_sense, row.counterfactual_pass];
+        const nPass = passes.filter(x => x === true).length;
+        const nTestable = passes.filter(x => x !== null && x !== undefined).length;
+        const div = document.createElement("div");
+        div.className = "flex items-center justify-between text-xs p-2 rounded border border-[var(--bd)] bg-[var(--bg-2)]";
+        const peakStr = row.brent_peak_documented != null ? `$${row.brent_peak_documented}` : "—";
+        const predStr = row.predicted_brent_p50 != null ? `$${row.predicted_brent_p50.toFixed(1)}` : "—";
+        div.innerHTML = `
+          <div class="mono text-[var(--fg-1)]">${row.event_id}</div>
+          <div class="flex items-center gap-3">
+            <span class="text-[var(--fg-2)]">sev ${row.severity_documented.toFixed(2)}</span>
+            <span class="text-[var(--fg-2)]">peak ${peakStr} → pred ${predStr}</span>
+            <span class="chip ${row.predicted_risk_level==="CRITICAL"?"chip-crit":row.predicted_risk_level==="HIGH"?"chip-crit":"chip-model"}">${row.predicted_risk_level}</span>
+            <span class="mono ${nPass===nTestable?"text-[var(--green)]":"text-[var(--amber)]"}">${nPass}/${nTestable}</span>
+          </div>`;
+        box.appendChild(div);
+      });
+    } catch (e) {
+      sum.innerHTML = `<span class="text-[var(--red)]">backtest failed: ${e.message}</span>`;
+    }
+    btn.textContent = "▶ run again"; btn.classList.add("chip-live"); btn.classList.remove("chip-model");
+  }
+
   // ---------- main run ----------
   async function runWarRoom() {
     const body = {
@@ -624,6 +784,7 @@
       duration_days: parseInt($("#duration").value, 10),
       enable_llm_judges: true,
       include_recent_signals: true,
+      enable_openrouter_panel: $("#enable-openrouter").checked,
     };
     resetStages();
     ["signals","analogs","judges","sectors","cf","receipt"].forEach(s=>setStage(s,"run"));
@@ -685,6 +846,7 @@
     renderHeadlineFacts(resp.live_facts_chokepoint);
     renderAnalogs(resp.live_pipeline.analogs, resp.live_pipeline.signals_used_count);
     renderJudges(resp.live_pipeline.judges);
+    renderOpenRouterPanel(resp.openrouter_panel);
     renderIndia(resp.india_impact_table);
     renderGulf(resp.gulf_impact_table);
     renderActions(resp.live_pipeline.recommended_actions);
@@ -718,6 +880,7 @@
   $("#run-btn").addEventListener("click", runWarRoom);
   $("#receipt-btn").addEventListener("click", openDrawer);
   $("#drawer-close").addEventListener("click", closeDrawer);
+  $("#run-backtest").addEventListener("click", runBacktest);
   $("#copy-btn").addEventListener("click", () => {
     if (!LAST_RECEIPT) return;
     navigator.clipboard.writeText(JSON.stringify(LAST_RECEIPT, null, 2));

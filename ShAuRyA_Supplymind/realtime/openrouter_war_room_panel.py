@@ -115,6 +115,10 @@ def _krippendorff_alpha_ordinal(values: list[str]) -> float:
                 npairs = n1 * n2
             D_e_num += (k1 - k2) ** 2 * npairs
             D_e_den += npairs
+    # Perfect agreement: every judge gave the same value -> D_o = 0
+    # Krippendorff α is conventionally 1.0 in this case.
+    if D_o == 0:
+        return 1.0
     if D_e_den == 0 or D_e_num == 0:
         return 0.0
     D_e = D_e_num / D_e_den

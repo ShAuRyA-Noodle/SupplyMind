@@ -74,8 +74,9 @@ class WarRoomRequest(BaseModel):
                     "horizon. Used by sector price-shock channel.",
     )
     duration_days: int = Field(
-        default=21, ge=1, le=180,
-        description="Operator-asserted disruption duration days.",
+        default=21, ge=1, le=1200,
+        description="Operator-asserted disruption duration days. Cap of 1200 "
+                    "covers multi-year ongoing campaigns (e.g. Houthi Red Sea).",
     )
     enable_llm_judges: bool = Field(
         default=True,
@@ -308,6 +309,17 @@ if router is not None:
         }
         payload["receipt_sha256"] = _stable_hash(payload)
         return payload
+
+    @router.post("/demo/hormuz-war-room/validate", tags=["demo"])
+    def war_room_validate() -> dict:
+        """Run the backtest harness against 8 documented historical events."""
+        try:
+            import scripts.validate_war_room as validator
+            return validator.main()
+        except Exception as e:  # noqa: BLE001
+            logger.error("[war-room] validation failed: %s", e)
+            raise HTTPException(status_code=500,
+                                detail=f"validation failed: {e}")
 
     @router.get("/demo/hormuz-war-room/health", tags=["demo"])
     def war_room_health() -> dict:
