@@ -53,6 +53,29 @@
   .led.bad  { background:var(--red);   box-shadow:0 0 6px var(--red); }
   details > summary { list-style:none; cursor:pointer; }
   details > summary::-webkit-details-marker { display:none; }
+
+  /* Tooltip system — hover for plain-language explanation */
+  .help { position: relative; cursor: help;
+          border-bottom: 1px dotted var(--fg-2); }
+  .help::after {
+    content: attr(data-tip);
+    position: absolute; bottom: 130%; left: 0;
+    background: #0c1018; color: #e8edf6;
+    border: 1px solid var(--cyan); border-radius: 8px;
+    padding: 10px 12px; width: 320px; max-width: 90vw;
+    font-size: 11px; font-weight: 400; line-height: 1.45;
+    text-transform: none; letter-spacing: 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,.55);
+    opacity: 0; pointer-events: none; transition: opacity .18s ease;
+    z-index: 99; white-space: pre-wrap;
+  }
+  .help:hover::after { opacity: 1; }
+  .panel.reliance-flag { border-color: rgba(167,139,250,.5); }
+  .panel.reliance-flag::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--violet), var(--cyan));
+    border-radius: 14px 14px 0 0;
+  }
 </style>
 </head>
 <body class="min-h-screen">
@@ -145,20 +168,23 @@
 
     <div class="hero-grid">
 
-      <!-- Card 1: Hormuz War Room -->
-      <a href="/demo/hormuz-war-room/ui" class="panel p-5 ring block">
+      <!-- Card 1: Hormuz War Room (UPGRADED) -->
+      <a href="/demo/hormuz-war-room/ui" class="panel p-5 ring block relative reliance-flag">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2"><span class="led" id="led-1"></span>
-            <span class="font-semibold">1 · Hormuz War Room</span></div>
-          <span class="chip chip-live">live demo</span>
+            <span class="font-semibold help"
+                data-tip="Hormuz War Room — flagship Theme #3 demo. 14-node IEA-cited chokepoint map + India/Gulf/Reliance sector tables + 25-judge ensemble (3 Ollama + 12 OpenRouter + 10 specialist) + sha256 receipt. Click to open.">1 · Hormuz War Room</span>
+          </div>
+          <span class="chip chip-violet">25-judge · Reliance</span>
         </div>
         <div class="text-sm text-[var(--fg-1)] leading-tight">
-          IEA-cited chokepoint map · India + Gulf sector tables ·
-          6-OpenRouter-judge cross-check · sha256 receipt
+          IEA-cited chokepoint map · India + Gulf + <strong>Reliance Industries</strong>
+          10-subsidiary tables · <strong>25-judge ensemble</strong>
+          (3 Ollama + 12 frontier + 10 specialist) · sha256 receipt
         </div>
         <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--cyan)]">14</span>
-          <span class="text-xs text-[var(--fg-2)]">nodes · 18 edges · IEA cited</span>
+          <span class="stat text-[var(--cyan)]">25</span>
+          <span class="text-xs text-[var(--fg-2)]">judges · 14 nodes · 18 edges · 4 scenario templates</span>
         </div>
       </a>
 
@@ -198,7 +224,7 @@
       </a>
 
       <!-- Card 4: Crisis Library v2 (1500 events) -->
-      <a href="/library/v2/search" class="panel p-5 ring block">
+      <a href="/docs#/library%20%28v2%29" class="panel p-5 ring block">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2"><span class="led" id="led-4"></span>
             <span class="font-semibold">4 · Crisis Library v2</span></div>
@@ -215,7 +241,7 @@
       </a>
 
       <!-- Card 5: Platinum Counterfactual -->
-      <a href="/counterfactual/platinum" class="panel p-5 ring block">
+      <a href="/docs#/training/counterfactual_platinum_counterfactual_platinum_post" class="panel p-5 ring block">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2"><span class="led" id="led-5"></span>
             <span class="font-semibold">5 · Platinum Counterfactual</span></div>
@@ -233,7 +259,7 @@
       </a>
 
       <!-- Card 6: 12-Frontier Panel + Cross-Corpus α -->
-      <a href="/analyst/panel-consensus/scen_001" class="panel p-5 ring block">
+      <a href="/analyst/panel-consensus/2021_Suez_Canal_obstruction" class="panel p-5 ring block">
         <div class="flex items-center justify-between mb-3">
           <div class="flex items-center gap-2"><span class="led" id="led-6"></span>
             <span class="font-semibold">6 · 12-Judge Frontier Panel</span></div>

@@ -157,6 +157,39 @@
     background: linear-gradient(135deg, rgba(167,139,250,.08), rgba(34,211,238,.06));
     border: 1px solid rgba(167,139,250,.4);
   }
+
+  /* Receipt drawer tabs */
+  .drawer-tabs {
+    display: flex; gap: 4px; padding: 0 16px; flex-wrap: wrap;
+    border-bottom: 1px solid var(--bd); background: var(--bg-2);
+  }
+  .drawer-tab {
+    padding: 10px 12px; font-size: 11px; font-weight: 600;
+    color: var(--fg-2); cursor: pointer; border: none; background: transparent;
+    text-transform: uppercase; letter-spacing: .04em;
+    border-bottom: 2px solid transparent;
+    transition: all .15s ease;
+  }
+  .drawer-tab:hover { color: var(--fg-0); }
+  .drawer-tab.active {
+    color: var(--cyan); border-bottom-color: var(--cyan);
+  }
+  .drawer-tab .badge {
+    margin-left: 4px; padding: 1px 6px; border-radius: 999px;
+    background: var(--bg-3); font-size: 10px;
+  }
+  .drawer-pane { display: none; padding: 16px; }
+  .drawer-pane.active { display: block; }
+  .drawer-pane h3 {
+    font-size: 13px; font-weight: 600; margin-bottom: 8px;
+    color: var(--cyan); text-transform: uppercase; letter-spacing: .04em;
+  }
+  .drawer-pane .row {
+    padding: 8px 12px; border: 1px solid var(--bd);
+    background: var(--bg-2); border-radius: 8px;
+    margin-bottom: 6px; font-size: 12px;
+  }
+  .drawer-pane .row strong { color: var(--cyan); }
 </style>
 </head>
 <body class="min-h-screen">
@@ -241,10 +274,14 @@
         </div>
         <div class="flex flex-col gap-1">
           <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)] help"
-                 data-tip="OPENROUTER 6-FRONTIER PANEL — checks our verdict against 6 independent frontier LLMs (GPT-OSS-120B, Gemma-4-31B, GLM-4.5, MiniMax-M2.5, Nemotron-3-Super-120B, Gemma-4-26B).&#10;&#10;Returns Krippendorff α agreement coefficient. Higher α = panels agree, more confidence.">OpenRouter</label>
+                 data-tip="OPENROUTER FRONTIER PANEL — checks our verdict against independent frontier LLMs.&#10;&#10;6-judge: GPT-OSS-120B, Gemma-4-31B, GLM-4.5, MiniMax-M2.5, Nemotron-3-Super-120B, Gemma-4-26B.&#10;12-judge (expand): adds DeepSeek-V3.5, Qwen-3-235B, Llama-4-405B, Mistral-Large-3, Grok-4-mini, Claude-Haiku-4.5.&#10;&#10;Returns Krippendorff α agreement coefficient. Higher α = panels agree, more confidence.">OpenRouter</label>
           <label class="inline-flex items-center gap-2 cursor-pointer">
             <input id="enable-openrouter" type="checkbox" class="w-4 h-4 accent-[var(--cyan)]">
             <span class="text-xs text-[var(--fg-1)]">6-judge panel<br>(+~60s, free)</span>
+          </label>
+          <label class="inline-flex items-center gap-2 cursor-pointer mt-1">
+            <input id="expand-12-judges" type="checkbox" class="w-4 h-4 accent-[var(--violet)]">
+            <span class="text-xs text-[var(--fg-1)]">12-judge expand<br>(+~120s)</span>
           </label>
         </div>
         <div class="flex flex-col gap-1">
@@ -472,6 +509,50 @@
     </div>
   </section>
 
+  <!-- ============================ 25-JUDGE META PANEL ============================ -->
+  <section class="panel p-5 hidden" id="judge-meta-panel">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-semibold help"
+          data-tip="25-JUDGE META PANEL — multi-tier ensemble: 3 local Ollama + up to 12 frontier OpenRouter + 10 deterministic sector specialists. Per Skalse 2022 anti-game literature: independent specialists with non-overlapping reward functions are harder to game than a single generalist judge.">25-Judge meta panel · multi-tier ensemble</h2>
+      <span id="judge-meta-flag" class="chip chip-live">awaiting</span>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+      <div>
+        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)] help"
+             data-tip="Total number of independent judge verdicts collected across local Ollama, frontier OpenRouter, and specialist tiers.">Total judges</div>
+        <div id="judge-meta-total" class="text-xl font-bold mono">—</div>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)] help"
+             data-tip="Median ordinal risk level across the union of all judges (LOW/MEDIUM/HIGH/CRITICAL). Robust to single-judge outliers.">Meta consensus</div>
+        <div id="judge-meta-consensus" class="text-xl font-bold mono">—</div>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)] help"
+             data-tip="Local-Ollama tier consensus (3 judges).">Local Ollama</div>
+        <div id="judge-meta-local" class="text-xl font-bold mono">—</div>
+      </div>
+      <div>
+        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)] help"
+             data-tip="Specialist deterministic tier consensus (10 sector specialists).">Specialists</div>
+        <div id="judge-meta-spec" class="text-xl font-bold mono">—</div>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3" id="judge-meta-tiers">
+      <!-- 3 source-tier cards rendered here -->
+    </div>
+  </section>
+
+  <!-- ============================ SPECIALIST PANEL ============================ -->
+  <section class="panel p-5 hidden" id="specialist-panel">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="font-semibold help"
+          data-tip="10 deterministic sector-specialist judges. Each has narrow specialty (refining, petchem, LNG, tankers, marine insurance, retail, telecom, fertilizer, aviation, power) and weights the 4 reward channels (structural / severity / brent / duration) per its domain. Independent specialists are harder to game than one generalist judge (Skalse 2022).">10 specialist judges · sector-specific deterministic verdicts</h2>
+      <span id="spec-flag" class="chip chip-good">10 specialists · deterministic</span>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" id="specialist-cards"></div>
+  </section>
+
   <!-- ============================ OPENROUTER PANEL + BACKTEST ============================ -->
   <section class="grid-shell">
 
@@ -531,20 +612,62 @@
   </section>
 </main>
 
-<!-- ============================ RECEIPT DRAWER ============================ -->
-<aside id="drawer" class="fixed right-0 top-0 h-full w-full md:w-[520px]
+<!-- ============================ RECEIPT DRAWER (TABBED) ============================ -->
+<aside id="drawer" class="fixed right-0 top-0 h-full w-full md:w-[640px]
        bg-[var(--bg-1)] border-l border-[var(--bd)] transform translate-x-full
        transition-transform duration-300 z-50 flex flex-col">
   <div class="p-4 border-b border-[var(--bd)] flex items-center justify-between">
     <div>
-      <div class="font-semibold">Receipt</div>
-      <div class="text-xs text-[var(--fg-2)] mono">sha256-anchored response</div>
+      <div class="font-semibold">Receipt · sha256-anchored</div>
+      <div class="text-xs text-[var(--fg-2)] mono" id="drawer-sha">—</div>
     </div>
     <button id="drawer-close" class="text-[var(--fg-2)] hover:text-[var(--fg-0)]
             text-xl leading-none">✕</button>
   </div>
-  <div class="p-4 flex-1 overflow-y-auto scrollbar receipt-blob"
-       id="drawer-body"></div>
+
+  <!-- Tab navigation -->
+  <div class="drawer-tabs">
+    <button class="drawer-tab active" data-pane="overview">Overview</button>
+    <button class="drawer-tab" data-pane="inputs">Inputs</button>
+    <button class="drawer-tab" data-pane="signals">Signals <span class="badge" id="tab-badge-signals">0</span></button>
+    <button class="drawer-tab" data-pane="judges">Judges <span class="badge" id="tab-badge-judges">0</span></button>
+    <button class="drawer-tab" data-pane="sectors">Sectors</button>
+    <button class="drawer-tab" data-pane="actions">Actions <span class="badge" id="tab-badge-actions">0</span></button>
+    <button class="drawer-tab" data-pane="raw">Raw JSON</button>
+  </div>
+
+  <!-- Tab panes -->
+  <div class="flex-1 overflow-y-auto scrollbar" id="drawer-content">
+    <div class="drawer-pane active" id="pane-overview">
+      <h3>Headline verdict</h3>
+      <div id="pane-overview-body" class="text-xs text-[var(--fg-1)]"></div>
+    </div>
+    <div class="drawer-pane" id="pane-inputs">
+      <h3>Scenario inputs</h3>
+      <div id="pane-inputs-body" class="text-xs text-[var(--fg-1)]"></div>
+    </div>
+    <div class="drawer-pane" id="pane-signals">
+      <h3>Live signals + analogs</h3>
+      <div id="pane-signals-body" class="text-xs text-[var(--fg-1)]"></div>
+    </div>
+    <div class="drawer-pane" id="pane-judges">
+      <h3>All judge verdicts (across tiers)</h3>
+      <div id="pane-judges-body" class="text-xs text-[var(--fg-1)]"></div>
+    </div>
+    <div class="drawer-pane" id="pane-sectors">
+      <h3>India + Gulf + Reliance impact</h3>
+      <div id="pane-sectors-body" class="text-xs text-[var(--fg-1)]"></div>
+    </div>
+    <div class="drawer-pane" id="pane-actions">
+      <h3>Recommended actions</h3>
+      <div id="pane-actions-body" class="text-xs text-[var(--fg-1)]"></div>
+    </div>
+    <div class="drawer-pane" id="pane-raw">
+      <h3>Raw JSON receipt</h3>
+      <pre class="receipt-blob whitespace-pre-wrap" id="pane-raw-body"></pre>
+    </div>
+  </div>
+
   <div class="p-4 border-t border-[var(--bd)] flex items-center gap-2">
     <button id="copy-btn" class="px-3 py-1.5 rounded border border-[var(--bd)]
             text-xs hover:border-[var(--cyan)] hover:text-[var(--cyan)] transition">
@@ -555,6 +678,9 @@
               text-xs hover:border-[var(--cyan)] hover:text-[var(--cyan)] transition">
       download
     </a>
+    <span class="ml-auto text-[10px] text-[var(--fg-2)] mono">
+      sha computed over canonical JSON (sorted keys)
+    </span>
   </div>
 </aside>
 
@@ -1037,6 +1163,83 @@
   }
   function escapeAttr(s) { return String(s).replace(/"/g, "&quot;").replace(/\n/g, "&#10;"); }
 
+  // ---------- specialist panel render ----------
+  function renderSpecialistPanel(panel) {
+    const sec = $("#specialist-panel");
+    if (!panel || panel.error || !panel.verdicts) {
+      sec.classList.add("hidden");
+      return;
+    }
+    sec.classList.remove("hidden");
+    const flag = $("#spec-flag");
+    flag.textContent = `10 specialists · α=${(panel.aggregate.krippendorff_alpha_ordinal||0).toFixed(3)} · ${panel.aggregate.consensus_risk}`;
+    const box = $("#specialist-cards"); box.innerHTML = "";
+    panel.verdicts.forEach(v => {
+      const div = document.createElement("div");
+      const lvlChip = v.risk_level === "CRITICAL" ? "chip-crit" :
+                       v.risk_level === "HIGH" ? "chip-crit" :
+                       v.risk_level === "MEDIUM" ? "chip-model" : "chip-good";
+      div.className = "p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]";
+      div.innerHTML = `
+        <div class="flex items-center justify-between gap-2 mb-1">
+          <div class="font-medium text-sm">${v.name}</div>
+          <div class="flex items-center gap-2">
+            <span class="chip ${lvlChip}">${v.risk_level}</span>
+            <span class="mono text-xs text-[var(--cyan)]">conf ${fmt(v.confidence,2)}</span>
+          </div>
+        </div>
+        <div class="text-xs text-[var(--fg-2)] mb-2 italic">${v.specialty}</div>
+        <div class="text-xs text-[var(--fg-1)] leading-relaxed">${v.rationale}</div>`;
+      box.appendChild(div);
+    });
+  }
+
+  // ---------- 25-judge meta panel render ----------
+  function renderJudgeMeta(meta) {
+    const sec = $("#judge-meta-panel");
+    if (!meta) { sec.classList.add("hidden"); return; }
+    sec.classList.remove("hidden");
+    const flag = $("#judge-meta-flag");
+    flag.classList.remove("chip-scen");
+    flag.classList.add("chip-live");
+    flag.textContent = `${meta.n_judges_total} judges across 3 tiers`;
+    $("#judge-meta-total").textContent = meta.n_judges_total;
+    const consensus = meta.meta_consensus_risk;
+    $("#judge-meta-consensus").textContent = consensus;
+    $("#judge-meta-consensus").style.color =
+      consensus === "CRITICAL" || consensus === "HIGH" ? "var(--red)" :
+      consensus === "MEDIUM" ? "var(--amber)" : "var(--green)";
+    $("#judge-meta-local").textContent = meta.by_source.local_ollama.consensus || "—";
+    $("#judge-meta-spec").textContent = meta.by_source.specialist_rule_based.consensus || "—";
+
+    const tierBox = $("#judge-meta-tiers"); tierBox.innerHTML = "";
+    [["local_ollama", "Local Ollama (3-judge)"],
+     ["openrouter_frontier", "Frontier OpenRouter"],
+     ["specialist_rule_based", "Sector specialists (10)"]].forEach(([key, label]) => {
+      const t = meta.by_source[key] || {};
+      const div = document.createElement("div");
+      div.className = "p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]";
+      const consensus = t.consensus || "—";
+      const consensusChip = consensus === "CRITICAL" || consensus === "HIGH" ? "chip-crit" :
+                              consensus === "MEDIUM" ? "chip-model" :
+                              consensus === "LOW" ? "chip-good" : "chip-scen";
+      const alphaStr = t.krippendorff_alpha != null ? `α=${t.krippendorff_alpha.toFixed(3)}` : "";
+      div.innerHTML = `
+        <div class="flex items-center justify-between gap-2 mb-2">
+          <div class="font-medium text-sm">${label}</div>
+          <span class="chip ${consensusChip}">${consensus}</span>
+        </div>
+        <div class="text-xs text-[var(--fg-1)] mb-1">
+          <span class="mono text-[var(--cyan)]">${t.n_present || 0}</span> judges contributed
+          ${t.n_succeeded != null && t.n_panel_size ?
+            ` · <span class="mono">${t.n_succeeded}/${t.n_panel_size} succeeded</span>` : ""}
+        </div>
+        ${alphaStr ? `<div class="text-xs text-[var(--fg-2)] mono">${alphaStr} (Krippendorff inter-judge α)</div>` : ""}
+        ${t.skipped ? `<div class="text-xs text-[var(--fg-2)] italic">tier skipped</div>` : ""}`;
+      tierBox.appendChild(div);
+    });
+  }
+
   // ---------- main run ----------
   async function runWarRoom() {
     const body = {
@@ -1047,6 +1250,8 @@
       enable_llm_judges: true,
       include_recent_signals: true,
       enable_openrouter_panel: $("#enable-openrouter").checked,
+      expand_to_12_judges: $("#expand-12-judges").checked,
+      enable_specialist_judges: true,
       scenario_focus: $("#enable-reliance").checked ? "reliance_full_supplychain" : "default",
     };
     resetStages();
@@ -1110,6 +1315,8 @@
     renderAnalogs(resp.live_pipeline.analogs, resp.live_pipeline.signals_used_count);
     renderJudges(resp.live_pipeline.judges);
     renderOpenRouterPanel(resp.openrouter_panel);
+    renderSpecialistPanel(resp.specialist_panel);
+    renderJudgeMeta(resp.judge_meta);
     renderIndia(resp.india_impact_table);
     renderGulf(resp.gulf_impact_table);
     renderReliance(resp.reliance_impact);
@@ -1120,17 +1327,99 @@
     $("#run-btn").textContent = "▶ Run war room";
   }
 
-  // ---------- receipt drawer ----------
+  // ---------- receipt drawer (tabbed) ----------
   function openDrawer() {
-    if (!LAST_RECEIPT) {
-      alert("Run the war room first.");
-      return;
+    if (!LAST_RECEIPT) { alert("Run the war room first."); return; }
+    const r = LAST_RECEIPT;
+    const blob = JSON.stringify(r, null, 2);
+    $("#drawer-sha").textContent = r.receipt_sha256 || "—";
+
+    // OVERVIEW pane
+    const lp = r.live_pipeline || {};
+    const proj = lp.projection || {};
+    const cf = lp.counterfactual || {};
+    $("#pane-overview-body").innerHTML = `
+      <div class="row"><strong>Risk level:</strong> ${lp.risk_level || "—"}</div>
+      <div class="row"><strong>Composite confidence:</strong> ${((r.confidence?.composite || 0)*100).toFixed(1)}% — formula: ${r.confidence?.formula || ""}</div>
+      <div class="row"><strong>Brent P50:</strong> $${proj.brent_projection_usd_bbl_p50?.toFixed(1) || "—"} (p10–p90: $${proj.brent_projection_usd_bbl_p10?.toFixed(1)||"—"} – $${proj.brent_projection_usd_bbl_p90?.toFixed(1)||"—"})</div>
+      <div class="row"><strong>P50 loss saving (with plan):</strong> ${cf.savings_usd != null ? fmtUSD(cf.savings_usd) : "—"} (${cf.savings_pct||0}% vs no-action)</div>
+      <div class="row"><strong>Wall-clock:</strong> ${r.elapsed_s || "—"}s</div>
+      <div class="row"><strong>Receipt sha256:</strong> <span class="mono break-all">${r.receipt_sha256 || "—"}</span></div>
+    `;
+
+    // INPUTS pane
+    const inp = r.scenario_input || {};
+    $("#pane-inputs-body").innerHTML = Object.entries(inp).map(([k,v]) =>
+      `<div class="row"><strong>${k}:</strong> ${typeof v === "string" && v.length > 200 ? v.slice(0,200)+"…" : JSON.stringify(v)}</div>`
+    ).join("");
+
+    // SIGNALS pane
+    const analogs = lp.analogs || [];
+    const sigUsed = lp.signals_used_count || 0;
+    $("#tab-badge-signals").textContent = analogs.length;
+    $("#pane-signals-body").innerHTML =
+      `<div class="row"><strong>Live signals last 24h:</strong> ${sigUsed}</div>` +
+      analogs.map(a => `
+        <div class="row">
+          <strong>${a.name}</strong> · sim ${(a.similarity||0).toFixed(3)} · ${a.date}
+          <div class="text-[var(--fg-2)] mt-1">${a.summary || ""}</div>
+        </div>`).join("");
+
+    // JUDGES pane (combine all 3 tiers)
+    const localJ = lp.judges || [];
+    const orJ = (r.openrouter_panel?.results) || [];
+    const specJ = (r.specialist_panel?.verdicts) || [];
+    const totalJudges = localJ.length + orJ.length + specJ.length;
+    $("#tab-badge-judges").textContent = totalJudges;
+    let judgesHtml = `<div class="row"><strong>Total judges:</strong> ${totalJudges} · meta consensus: ${r.judge_meta?.meta_consensus_risk || "—"}</div>`;
+    if (localJ.length) {
+      judgesHtml += '<div class="mt-3 mb-2 text-[var(--cyan)] font-semibold uppercase text-[10px] tracking-wider">Local Ollama (' + localJ.length + ')</div>';
+      judgesHtml += localJ.map(j => `<div class="row"><strong>${j.name}:</strong> ${j.risk_level} · conf ${j.confidence?.toFixed(2)} — ${j.rationale || ""}</div>`).join("");
     }
-    const blob = JSON.stringify(LAST_RECEIPT, null, 2);
-    $("#drawer-body").innerHTML =
-      `<div class="mb-3"><span class="chip chip-live">sha256</span> `+
-      `<span class="mono break-all">${LAST_RECEIPT.receipt_sha256 || "—"}</span></div>` +
-      `<pre class="whitespace-pre-wrap">${escapeHtml(blob)}</pre>`;
+    if (orJ.length) {
+      judgesHtml += '<div class="mt-3 mb-2 text-[var(--cyan)] font-semibold uppercase text-[10px] tracking-wider">OpenRouter Frontier (' + orJ.length + ')</div>';
+      judgesHtml += orJ.map(j => `<div class="row"><strong class="mono">${(j.model||"").replace(":free","")}:</strong> ${j.risk_level || "FAIL"} · conf ${j.confidence?.toFixed(2)||"—"} — ${j.reason || j.error || ""}</div>`).join("");
+    }
+    if (specJ.length) {
+      judgesHtml += '<div class="mt-3 mb-2 text-[var(--cyan)] font-semibold uppercase text-[10px] tracking-wider">Specialists (' + specJ.length + ')</div>';
+      judgesHtml += specJ.map(j => `<div class="row"><strong>${j.name}:</strong> ${j.risk_level} · conf ${j.confidence?.toFixed(2)} — ${j.rationale}</div>`).join("");
+    }
+    $("#pane-judges-body").innerHTML = judgesHtml;
+
+    // SECTORS pane
+    const india = r.india_impact_table || [];
+    const gulf = r.gulf_impact_table || [];
+    const ril = r.reliance_impact;
+    let secHtml = "";
+    if (india.length) {
+      secHtml += '<div class="text-[var(--cyan)] font-semibold uppercase text-[10px] tracking-wider mb-2">India ('+ india.length +')</div>';
+      secHtml += india.slice(0,5).map(s => `<div class="row">#${s.rank} <strong>${s.display_name}</strong> · score ${s.score} · ₹${(s.impact_inr_cr_30d_point||0).toLocaleString()} Cr</div>`).join("");
+    }
+    if (gulf.length) {
+      secHtml += '<div class="text-[var(--cyan)] font-semibold uppercase text-[10px] tracking-wider mt-3 mb-2">Gulf ('+ gulf.length +')</div>';
+      secHtml += gulf.slice(0,5).map(s => `<div class="row">#${s.rank} <strong>${s.display_name}</strong> · score ${s.score} · $${(s.impact_usd_m_30d_point||0).toLocaleString()}M</div>`).join("");
+    }
+    if (ril) {
+      secHtml += '<div class="text-[var(--violet)] font-semibold uppercase text-[10px] tracking-wider mt-3 mb-2">Reliance Industries ('+ (ril.rows?.length||0) +' subsidiaries)</div>';
+      secHtml += `<div class="row"><strong>Aggregate at-risk:</strong> ₹${(ril.aggregate?.total_revenue_at_risk_inr_cr_30d_point||0).toLocaleString()} Cr · ${(ril.aggregate?.pct_of_fy24_revenue_at_risk_30d_point||0).toFixed(2)}% of FY24</div>`;
+      secHtml += (ril.rows||[]).slice(0,3).map(s => `<div class="row">#${s.rank} <strong>${s.display_name}</strong> · ₹${(s.impact_inr_cr_30d_point||0).toLocaleString()} Cr</div>`).join("");
+    }
+    $("#pane-sectors-body").innerHTML = secHtml;
+
+    // ACTIONS pane
+    const acts = lp.recommended_actions || [];
+    $("#tab-badge-actions").textContent = acts.length;
+    $("#pane-actions-body").innerHTML = acts.map((a,i) => `
+      <div class="row">
+        <strong>${String(i+1).padStart(2,"0")} · ${a.action_type}${a.target ? " · "+a.target : ""}</strong>
+        ${a.estimated_cost_usd != null ? `<br>cost: <span class="text-[var(--amber)]">${fmtUSD(a.estimated_cost_usd)}</span>` : ""}
+        ${a.estimated_loss_avoided_usd != null ? ` · save: <span class="text-[var(--green)]">${fmtUSD(a.estimated_loss_avoided_usd)}</span>` : ""}
+        <div class="text-[var(--fg-2)] mt-1">${a.reason || ""}</div>
+      </div>`).join("");
+
+    // RAW pane
+    $("#pane-raw-body").textContent = blob;
+
     const dl = $("#dl-btn");
     dl.href = "data:application/json;charset=utf-8," + encodeURIComponent(blob);
     $("#drawer").classList.remove("translate-x-full");
@@ -1139,6 +1428,15 @@
   function escapeHtml(s) {
     return s.replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
   }
+  // tab-switch
+  document.querySelectorAll(".drawer-tab").forEach(t => {
+    t.addEventListener("click", () => {
+      document.querySelectorAll(".drawer-tab").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".drawer-pane").forEach(p => p.classList.remove("active"));
+      t.classList.add("active");
+      document.getElementById("pane-" + t.dataset.pane).classList.add("active");
+    });
+  });
 
   // ---------- bind ----------
   $("#run-btn").addEventListener("click", runWarRoom);

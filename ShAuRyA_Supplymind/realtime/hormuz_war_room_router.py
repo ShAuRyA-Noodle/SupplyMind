@@ -95,6 +95,18 @@ class WarRoomRequest(BaseModel):
                     "and report Krippendorff α on their risk_level rankings. "
                     "Adds ~6-12s and uses OpenRouter rate budget.",
     )
+    expand_to_12_judges: bool = Field(
+        default=False,
+        description="If True (and enable_openrouter_panel=True), use the 12-judge "
+                    "frontier panel (DeepSeek + Qwen-3 + Llama-4 + Mistral-3 + "
+                    "Grok-4-mini + Claude-Haiku-4.5 added). Adds ~10-20s.",
+    )
+    enable_specialist_judges: bool = Field(
+        default=True,
+        description="If True, run the 10 deterministic sector-specialist judges "
+                    "(refining/petchem/LNG/tankers/insurance/retail/telecom/"
+                    "fertilizer/aviation/power). Fast (~50ms total).",
+    )
     scenario_focus: str = Field(
         default="default",
         description="Optional scenario focus. 'reliance_full_supplychain' adds a "
@@ -155,6 +167,76 @@ def _aggregate_confidence(judges: list, sector_scores_india: list,
         "signals_corroboration": round(sig_corrob, 4),
         "formula": ("0.55*judge_consensus_conf + 0.25*sector_score_dispersion"
                      " + 0.20*signals_corroboration"),
+    }
+
+
+def _aggregate_meta_judges(local_judges: list, openrouter_panel: dict | None,
+                              specialist_panel: dict | None) -> dict:
+    """Roll up across all judge sources into one 25-judge meta verdict.
+
+    Reports per-source counts, an overall risk consensus (median ordinal),
+    and a meta Krippendorff α computed across the union of all judges'
+    risk_level rankings. Returns honest source attribution so the UI can
+    label each tier (local / frontier / specialist)."""
+    risk_order = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
+    inv = {v: k for k, v in risk_order.items()}
+
+    all_risks: list[str] = []
+    by_source: dict[str, dict] = {}
+
+    # Local Ollama judges
+    local_risks = [j.risk_level for j in local_judges if hasattr(j, "risk_level")]
+    by_source["local_ollama"] = {
+        "n_present": len(local_risks),
+        "risks": local_risks,
+        "consensus": (inv[sorted(risk_order[r] for r in local_risks
+                                  if r in risk_order)[len(local_risks)//2]]
+                       if local_risks else None),
+    }
+    all_risks.extend(local_risks)
+
+    # Frontier OpenRouter judges
+    if openrouter_panel and "results" in openrouter_panel:
+        fr_risks = [r["risk_level"] for r in openrouter_panel["results"]
+                     if r.get("ok") and r.get("risk_level")]
+        by_source["openrouter_frontier"] = {
+            "n_present": len(fr_risks),
+            "n_panel_size": openrouter_panel.get("panel_size", 0),
+            "n_succeeded": openrouter_panel.get("n_succeeded", 0),
+            "risks": fr_risks,
+            "consensus": openrouter_panel.get("consensus_risk"),
+            "krippendorff_alpha": openrouter_panel.get("krippendorff_alpha_ordinal"),
+        }
+        all_risks.extend(fr_risks)
+    else:
+        by_source["openrouter_frontier"] = {"n_present": 0, "skipped": True}
+
+    # Specialist deterministic judges
+    if specialist_panel and "verdicts" in specialist_panel:
+        sp_risks = [v["risk_level"] for v in specialist_panel["verdicts"]]
+        by_source["specialist_rule_based"] = {
+            "n_present": len(sp_risks),
+            "risks": sp_risks,
+            "consensus": specialist_panel["aggregate"]["consensus_risk"],
+            "krippendorff_alpha": specialist_panel["aggregate"]["krippendorff_alpha_ordinal"],
+        }
+        all_risks.extend(sp_risks)
+    else:
+        by_source["specialist_rule_based"] = {"n_present": 0, "skipped": True}
+
+    # Meta consensus across union
+    if all_risks:
+        all_idxs = sorted(risk_order[r] for r in all_risks if r in risk_order)
+        meta_consensus = inv[all_idxs[len(all_idxs)//2]] if all_idxs else "MEDIUM"
+    else:
+        meta_consensus = "UNKNOWN"
+
+    return {
+        "n_judges_total": len(all_risks),
+        "by_source": by_source,
+        "meta_consensus_risk": meta_consensus,
+        "framework": ("Multi-tier ensemble: local Ollama + frontier OpenRouter "
+                       "+ deterministic sector specialists. Skalse 2022 anti-game."),
     }
 
 
@@ -271,7 +353,7 @@ if router is not None:
         # ---- Stage 3: chokepoint graph (static, IEA-cited)
         chokepoint = graph_mod.get_graph()
 
-        # ---- Stage 3b (optional): 6-judge OpenRouter cross-check
+        # ---- Stage 3b (optional): 6 or 12-judge OpenRouter cross-check
         openrouter_panel: dict | None = None
         if req.enable_openrouter_panel:
             try:
@@ -285,10 +367,39 @@ if router is not None:
                     brent=req.brent_price_usd_bbl,
                     duration=req.duration_days,
                     top_analog=top_analog,
+                    expand_to_12=req.expand_to_12_judges,
                 )
             except Exception as e:  # noqa: BLE001
                 logger.warning("[war-room] OpenRouter panel failed: %s", e)
                 openrouter_panel = {"error": str(e)[:300]}
+
+        # ---- Stage 3c: 10 specialist judges (deterministic, ~50ms)
+        specialist_panel: dict | None = None
+        if req.enable_specialist_judges:
+            try:
+                from ShAuRyA_Supplymind.realtime.specialist_judges import (
+                    run_all as run_specialists, aggregate as aggregate_specialists,
+                )
+                spec_verdicts = run_specialists(
+                    severity=req.severity,
+                    brent_price_usd_bbl=req.brent_price_usd_bbl,
+                    duration_days=req.duration_days,
+                )
+                spec_agg = aggregate_specialists(spec_verdicts)
+                specialist_panel = {
+                    "verdicts": spec_verdicts,
+                    "aggregate": spec_agg,
+                }
+            except Exception as e:  # noqa: BLE001
+                logger.warning("[war-room] specialist panel failed: %s", e)
+                specialist_panel = {"error": str(e)[:300]}
+
+        # ---- Stage 3d: meta-aggregation across all judge sources (25-judge total)
+        all_judges_meta = _aggregate_meta_judges(
+            local_judges=list(live.judges),
+            openrouter_panel=openrouter_panel,
+            specialist_panel=specialist_panel,
+        )
 
         # ---- Stage 4: aggregated confidence + caveats
         confidence = _aggregate_confidence(
@@ -322,6 +433,8 @@ if router is not None:
                 "counterfactual": live_dump["counterfactual"],
             },
             "openrouter_panel": openrouter_panel,
+            "specialist_panel": specialist_panel,
+            "judge_meta": all_judges_meta,
             "india_impact_table": india_rows,
             "gulf_impact_table": gulf_rows,
             "reliance_impact": reliance_block,
