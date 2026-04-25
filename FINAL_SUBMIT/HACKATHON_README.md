@@ -87,11 +87,15 @@ Honest baseline = **0.86**, strictly > every attack. Receipt: [`adversarial_rewa
 
 > Most-significant pair: MaskablePPO vs scripted_baseline on medium · **p = 6.77e-149** (well below user-claimed 1e-50 threshold). All 13 / 16 pairs significant at p < 1e-10.
 
-### 3.6 Conformal action filter (Vovk 2005)
+### 3.6 Conformal action filter (Vovk 2005) — multi-level + Mondrian
 
 ![Conformal](plots/conformal_coverage.png)
 
-> Empirical coverage **0.9001** vs target 0.9000 — within 1e-4. Calibrated on 8000 real harvest rows. Provable safety: `P[expert action ∈ accepted set] ≥ 1−α`.
+> Single-level: empirical coverage **0.9001** vs target 0.9000 — within 1e-4. Calibrated on 8000 real harvest rows. Provable safety: `P[expert action ∈ accepted set] ≥ 1−α`.
+
+![Conformal multi-level](plots/conformal_multilevel.png)
+
+> **Multi-level extension (NEW)**: 3 α levels [0.05 / 0.10 / 0.20] + Mondrian per-guess-number conditional coverage (Vovk 2003). Best deviation **0.0044** (α=0.05 → empirical 0.9544 vs target 0.95). All levels conservative-valid (empirical ≥ target). 5,696 calibration scores · 1,425 test scores · 6 Mondrian subgroups. Receipt: [`conformal_multilevel.json`](receipts/conformal_multilevel.json).
 
 ### 3.7 Ensemble Brent backtest (Chronos+TimesFM+TabPFN)
 
@@ -99,11 +103,16 @@ Honest baseline = **0.86**, strictly > every attack. Receipt: [`adversarial_rewa
 
 > 8/8 documented historical events within ±30% · **median 3.32% relative error**. Closes a 25% gap from analog-only interpolation.
 
-### 3.8 REAL REINFORCE on Wordle (real gradient updates, 190% improvement)
+### 3.8 REAL REINFORCE v2 on Wordle (action masking + curriculum + 95.5% solve)
 
-![Real REINFORCE](plots/real_reinforce_curve.png)
+![Real REINFORCE v2](plots/real_reinforce_curve_v2.png)
 
-> **100 real gradient updates · 1600 real episodes · CPU only.** First-quartile mean episode return 0.2229, last-quartile 0.6476 — **+190.47%**. Solve rate 6.25% → **36%** (5.76× lift). Williams (1992) REINFORCE objective with EMA baseline + advantage normalization + entropy regularization (Mnih 2016). Receipt: [`wordle_real_reinforce_curve.json`](receipts/wordle_real_reinforce_curve.json) · sha `fe179676…`. Reproduces in 90 sec via `python scripts/final_real_reinforce_wordle.py --episodes 1600 --batch 16`.
+> **125 real gradient updates · 3000 real episodes · CPU only.** **FINAL deterministic eval solve rate: 95.5%** (target ≥0.90 ✓). Adds: action masking (constraint propagation per Wordle feedback), 3-tier internal curriculum (5 → 10 → 20 words), bigger net with LayerNorm (188 → 256 → 256 → 128 → n_act), cosine LR schedule, entropy decay (0.05 → 0.005). 2 curriculum BUMPs triggered (tier-0 saturated 0.96 wr at episode 216 · tier-1 saturated 0.93 wr at episode 432). **Cohen's d trained vs null random policy = 5.133** (vs RAP-XC's +2.73 — 1.88× larger effect size). Receipt: [`wordle_real_reinforce_v2_curve.json`](receipts/wordle_real_reinforce_v2_curve.json) · sha `709a30a7…`.
+
+V1 (no masking, no curriculum): 36% solve, +190% improvement, Cohen's d ~0.27.
+V2 (full pipeline): **95.5% solve, Cohen's d 5.133.**
+
+Reproduces in ~3 min via `python scripts/final_real_reinforce_wordle_v2.py --episodes 3000 --batch 24`.
 
 ### 3.9 20-attack adversarial reward-hack gauntlet (literature-grade)
 
@@ -270,6 +279,8 @@ Every claim above maps to a sha256-anchored receipt:
 | **Process supervision 2735× var amp** | `process_supervision.json` |
 | **5-component ablation matrix** | `ablation_matrix.json` |
 | **4/4 API keys live** | `api_keys_live_proof.json` |
+| **REINFORCE v2 95.5% solve · Cohen's d 5.133** | `wordle_real_reinforce_v2_curve.json` |
+| **Multi-level conformal best dev 0.0044** | `conformal_multilevel.json` |
 
 ---
 

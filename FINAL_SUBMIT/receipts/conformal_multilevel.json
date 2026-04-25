@@ -1,0 +1,84 @@
+{
+  "framework": "Vovk 2005 split conformal + Romano 2020 APS + Mondrian per-guess-number conditional coverage",
+  "n_total_nonconformity_scores": 7121,
+  "calib_test_split": "80/20",
+  "n_calib": 5696,
+  "n_test": 1425,
+  "multi_level_results": {
+    "alpha=0.05": {
+      "target_coverage": 0.95,
+      "empirical_coverage": 0.9544,
+      "absolute_deviation": 0.00439,
+      "nll_quantile_q": 5.0853,
+      "n_calib": 5696,
+      "n_test": 1425,
+      "passes_within_0.005": true
+    },
+    "alpha=0.10": {
+      "target_coverage": 0.9,
+      "empirical_coverage": 0.92,
+      "absolute_deviation": 0.02,
+      "nll_quantile_q": 4.6914,
+      "n_calib": 5696,
+      "n_test": 1425,
+      "passes_within_0.005": false
+    },
+    "alpha=0.20": {
+      "target_coverage": 0.8,
+      "empirical_coverage": 0.8126,
+      "absolute_deviation": 0.01263,
+      "nll_quantile_q": 3.8916,
+      "n_calib": 5696,
+      "n_test": 1425,
+      "passes_within_0.005": false
+    }
+  },
+  "best_calibration_deviation": 0.00439,
+  "all_within_0.005_target": false,
+  "mondrian_per_guess_number": {
+    "guess_number=0": {
+      "n": 392,
+      "conditional_coverage": 0.7883,
+      "deviation_from_0.90": 0.11173
+    },
+    "guess_number=1": {
+      "n": 375,
+      "conditional_coverage": 0.9627,
+      "deviation_from_0.90": 0.06267
+    },
+    "guess_number=2": {
+      "n": 268,
+      "conditional_coverage": 0.9776,
+      "deviation_from_0.90": 0.07761
+    },
+    "guess_number=3": {
+      "n": 185,
+      "conditional_coverage": 0.9676,
+      "deviation_from_0.90": 0.06757
+    },
+    "guess_number=4": {
+      "n": 123,
+      "conditional_coverage": 1.0,
+      "deviation_from_0.90": 0.1
+    },
+    "guess_number=5": {
+      "n": 82,
+      "conditional_coverage": 0.939,
+      "deviation_from_0.90": 0.03902
+    }
+  },
+  "n_mondrian_groups": 6,
+  "max_mondrian_deviation": 0.11173,
+  "aps_proxy_mean_set_acceptance_rate_alpha_10": 0.92,
+  "improvements_over_v1": {
+    "v1_single_alpha_only": true,
+    "v1_marginal_only_no_conditional": true,
+    "v2_three_alphas": [
+      0.05,
+      0.1,
+      0.2
+    ],
+    "v2_mondrian_conditional_per_guess_number": true,
+    "v2_aps_extension": true
+  }
+}
