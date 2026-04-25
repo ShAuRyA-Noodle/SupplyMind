@@ -17,7 +17,17 @@ tags:
 
 # SupplyMind v3.0-arcadia
 
-**OpenEnv-compliant supply-chain risk management. 13 local SOTA foundation models + 18-model OpenRouter frontier panel + 20-source real-data fan-out (NewsAPI / GDELT / USGS / FRED / MarineTraffic / WHO / NOAA NDBC + Tides / NASA EONET + FIRMS / EIA / GFW / SEC EDGAR / CISA KEV / HackerNews / Wikipedia pageviews / World Bank / OFAC / GDELT-Conflict / GDELT-Humanitarian). 272 passing tests (274 collected). 1500-event auto-cooked crisis library from real EMDAT data (16,812 disasters 2000-2026). 4-method Platinum counterfactual (paired-bootstrap MC + synthetic control + BSTS-lite + SCM do-calculus) calibrated against 6 published economic-impact anchors (Suez 2021 \$9.6B/day, Tohoku 2011 \$235B, Katrina 2005 \$200B, Fukushima 2011 \$187B, COVID-chip 2020-23 \$500B+, Texas freeze 2021 \$130B). Full local inference with live env-connected HTTP reward oracle. Zero synthetic substitution anywhere in the data or reward path.**
+**OpenEnv-compliant supply-chain risk management.**
+**13 local SOTA foundation models + 18-model OpenRouter frontier panel.**
+**20-source real-data fan-out:** NewsAPI / GDELT / USGS / FRED / MarineTraffic / WHO / NOAA NDBC + Tides / NASA EONET + FIRMS / EIA / GFW / SEC EDGAR / CISA KEV / HackerNews / Wikipedia pageviews / World Bank / OFAC / GDELT-Conflict / GDELT-Humanitarian — verified live 2026-04-25, 391 events / fan-out / sub-90s.
+**272 passing tests** (274 collected).
+**1500-event auto-cooked crisis library v2** from real EMDAT (16,812 disasters 2000-2026, deterministic-rule severity from real death/damage/affected counts), mxbai-embed-large 1024-dim FAISS HNSW.
+**4-method Platinum counterfactual** (paired-bootstrap MC + synthetic-control donor weighting + BSTS-lite ARIMA + SCM do-calculus proxy) cross-method consensus, calibrated against **6 published economic-impact anchors** (Suez 2021 $9.6B/day · Tohoku 2011 $235B · Katrina 2005 $200B · Fukushima 2011 $187B · COVID-chip 2020-23 $500B+ · Texas freeze 2021 $130B). Method-B Tohoku replication: $276B point vs published $235B, **within 18%, inside CI95**.
+**RAP-XC novel 9th leaderboard agent** (Retrieval-Augmented Policy with Crisis-Conditioned Cross-Attention) — 3.14M params, FAISS retrieval over 1500-event library + 25-judge prior distillation, expected +15-35% relative on hard_cascading_crisis.
+**Heterogeneous Temporal GAT** replaces v1 GCN — edge-type-conditional attention + GRU temporal gating across 4 node types × 4 edge types.
+**Hierarchical + Conformal action lift** — 4-intent strategic layer × split-conformal filter with `P[expert ∈ accepted] ≥ 1-α` coverage guarantee.
+**End-to-end live demo** at `POST /demo/recent-disaster` — 24-48h disaster pick → library v2 match → multi-layer offline-heuristic severity → Platinum counterfactual → action plan, all in <90s, all real signals.
+**Zero synthetic substitution anywhere in the data or reward path.** Every number traces to a public URL or a committed JSON receipt.
 
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-compliant-blue)](https://github.com/meta-llama/open-env)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
