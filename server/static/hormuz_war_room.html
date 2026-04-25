@@ -91,6 +91,72 @@
   details > summary::-webkit-details-marker { display: none; }
   .flash { animation: flash 1.6s ease; }
   @keyframes flash { 0% { background: rgba(34,211,238,.18); } 100% { background: transparent; } }
+
+  /* ============================ TOOLTIP SYSTEM ============================ */
+  /* Hover any element with .help → small popover explains the jargon in plain words. */
+  .help { position: relative; cursor: help; border-bottom: 1px dotted var(--fg-2); }
+  .help::after {
+    content: attr(data-tip);
+    position: absolute; bottom: 130%; left: 0;
+    transform: translateX(0);
+    background: #0c1018; color: #e8edf6;
+    border: 1px solid var(--cyan); border-radius: 8px;
+    padding: 10px 12px; width: 320px; max-width: 90vw;
+    font-size: 11px; font-weight: 400; line-height: 1.45;
+    text-transform: none; letter-spacing: 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,.55);
+    opacity: 0; pointer-events: none; transition: opacity .18s ease;
+    z-index: 99;
+    white-space: pre-wrap;
+  }
+  .help:hover::after { opacity: 1; }
+  .scenario-btn {
+    padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600;
+    border: 1px solid var(--bd); background: var(--bg-2); color: var(--fg-1);
+    cursor: pointer; transition: all .15s ease;
+  }
+  .scenario-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+  .scenario-btn.active {
+    border-color: var(--cyan); background: rgba(34,211,238,.12);
+    color: var(--cyan);
+  }
+  .ril-row { background: rgba(167,139,250,.04); }
+  .ril-row:hover td { background: rgba(167,139,250,.10) !important; }
+  .map-legend {
+    display: flex; flex-wrap: wrap; gap: 14px;
+    padding: 10px 14px; margin-top: 8px;
+    background: var(--bg-2); border: 1px solid var(--bd); border-radius: 10px;
+    font-size: 11px;
+  }
+  .map-legend-item { display: flex; align-items: center; gap: 6px; }
+  .map-legend-dot {
+    width: 12px; height: 12px; border-radius: 999px;
+    border: 2px solid var(--bg-0);
+  }
+  .action-card {
+    padding: 14px; border-radius: 10px;
+    border: 1px solid var(--bd); background: var(--bg-2);
+    transition: all .15s ease;
+  }
+  .action-card:hover { border-color: var(--cyan); }
+  .action-card .why-it-matters {
+    margin-top: 10px; padding: 10px;
+    background: rgba(52,211,153,.06); border: 1px solid rgba(52,211,153,.3);
+    border-radius: 8px; font-size: 12px; color: var(--fg-1);
+    line-height: 1.5;
+  }
+  .source-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px; border-radius: 999px; border: 1px solid var(--bd);
+    font-size: 11px; color: var(--fg-1);
+    text-decoration: none; transition: all .15s ease;
+  }
+  .source-pill:hover { border-color: var(--cyan); color: var(--cyan); }
+  .ag-card {
+    padding: 14px 16px; border-radius: 12px;
+    background: linear-gradient(135deg, rgba(167,139,250,.08), rgba(34,211,238,.06));
+    border: 1px solid rgba(167,139,250,.4);
+  }
 </style>
 </head>
 <body class="min-h-screen">
@@ -128,6 +194,16 @@
 
   <!-- ============================ SCENARIO INPUT ============================ -->
   <section class="panel p-5">
+
+    <!-- Pre-loaded scenario templates -->
+    <div class="mb-4 flex flex-wrap items-center gap-2">
+      <span class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)] mr-2">Templates:</span>
+      <button class="scenario-btn" data-template="reliance_war">🏭 Reliance · Israel-Iran-USA war (full supply chain)</button>
+      <button class="scenario-btn active" data-template="hormuz_generic">🌊 Hormuz generic closure</button>
+      <button class="scenario-btn" data-template="houthi_red_sea">🚢 Houthi Red Sea persistence</button>
+      <button class="scenario-btn" data-template="iran_strait_threat">⚠️ Iran-only strait-mining threat</button>
+    </div>
+
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div class="flex-1">
         <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)]">
@@ -140,31 +216,43 @@
       </div>
       <div class="grid grid-cols-3 md:flex md:items-end gap-3">
         <div>
-          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)]">Severity</label>
+          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)] help"
+                 data-tip="SEVERITY (0 to 1) — how badly the chokepoint event hits flow.&#10;&#10;0.0 = nothing happens (normal day)&#10;0.3 = minor incident (insurance premium up but ships still pass)&#10;0.6 = partial closure (ships rerouting, ~30% transit cut)&#10;0.85 = serious closure (most ships avoid; emergency rerouting)&#10;1.0 = full closure (no transit possible, military action)">Severity</label>
           <input id="severity" type="number" step="0.05" min="0" max="1" value="0.85"
                  class="mt-1 w-24 mono bg-[var(--bg-2)] border border-[var(--bd)]
                         rounded-lg px-3 py-2 text-sm focus:outline-none
                         focus:ring-1 focus:ring-[var(--cyan)]">
         </div>
         <div>
-          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)]">Brent $/bbl</label>
+          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)] help"
+                 data-tip="BRENT $/BBL — assumed Brent crude oil price during the disruption.&#10;&#10;Brent is the global benchmark crude price. Today it sits around $80.&#10;During Hormuz events, Brent typically jumps:&#10;• Threats: +$10-15&#10;• Partial closure: +$30-50&#10;• Full closure: +$60-100&#10;&#10;Higher Brent → bigger price-shock channel into sector models.">Brent $/bbl</label>
           <input id="brent" type="number" step="1" min="20" max="300" value="132"
                  class="mt-1 w-24 mono bg-[var(--bg-2)] border border-[var(--bd)]
                         rounded-lg px-3 py-2 text-sm focus:outline-none
                         focus:ring-1 focus:ring-[var(--cyan)]">
         </div>
         <div>
-          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)]">Duration days</label>
+          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)] help"
+                 data-tip="DURATION DAYS — how long the disruption is expected to last.&#10;&#10;7 days = transient incident (weekend tanker scare)&#10;21 days = serious crisis (similar to past Hormuz threats)&#10;60 days = persistent campaign (Houthi Red Sea analog)&#10;180+ days = structural war state&#10;&#10;Longer duration drains buffers and worsens cascading impact.">Duration days</label>
           <input id="duration" type="number" step="1" min="1" max="180" value="21"
                  class="mt-1 w-24 mono bg-[var(--bg-2)] border border-[var(--bd)]
                         rounded-lg px-3 py-2 text-sm focus:outline-none
                         focus:ring-1 focus:ring-[var(--cyan)]">
         </div>
         <div class="flex flex-col gap-1">
-          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)]">OpenRouter</label>
+          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)] help"
+                 data-tip="OPENROUTER 6-FRONTIER PANEL — checks our verdict against 6 independent frontier LLMs (GPT-OSS-120B, Gemma-4-31B, GLM-4.5, MiniMax-M2.5, Nemotron-3-Super-120B, Gemma-4-26B).&#10;&#10;Returns Krippendorff α agreement coefficient. Higher α = panels agree, more confidence.">OpenRouter</label>
           <label class="inline-flex items-center gap-2 cursor-pointer">
             <input id="enable-openrouter" type="checkbox" class="w-4 h-4 accent-[var(--cyan)]">
             <span class="text-xs text-[var(--fg-1)]">6-judge panel<br>(+~60s, free)</span>
+          </label>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)] help"
+                 data-tip="Toggles the Reliance Industries 10-node subsidiary impact table — Jamnagar refinery, RIL Petrochem, KG-D6 E&P, Reliance Retail, Jio Platforms, Recron polyester, RIIL pipelines, Reliance General Insurance, Reliance Power, Network18.">Reliance</label>
+          <label class="inline-flex items-center gap-2 cursor-pointer">
+            <input id="enable-reliance" type="checkbox" class="w-4 h-4 accent-[var(--violet)]">
+            <span class="text-xs text-[var(--fg-1)]">10-subsidiary<br>RIL table</span>
           </label>
         </div>
         <button id="run-btn" class="md:ml-2 mt-1 px-5 py-2 rounded-lg font-semibold
@@ -193,12 +281,14 @@
   <section id="headline" class="panel p-5 hidden">
     <div class="grid md:grid-cols-4 gap-5">
       <div>
-        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">Risk level</div>
+        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)] help"
+             data-tip="RISK LEVEL — overall verdict from the 3-judge panel. LOW (0-0.3) = monitor only. MEDIUM (0.3-0.6) = prepare contingencies. HIGH (0.6-0.85) = activate plans now. CRITICAL (>0.85) = full emergency response.">Risk level</div>
         <div id="risk-level" class="mt-1 text-3xl font-bold">—</div>
         <div id="risk-source" class="text-xs text-[var(--fg-2)] mt-1"></div>
       </div>
       <div>
-        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">Composite confidence</div>
+        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)] help"
+             data-tip="COMPOSITE CONFIDENCE — how sure we are about this verdict.&#10;&#10;Built from 3 independent signals:&#10;• 55% — agreement among LLM judges&#10;• 25% — sharpness of sector ranking (more spread = sharper signal)&#10;• 20% — corroboration from live signals last 24h&#10;&#10;Plain-uncle: '90% means we are very sure. 50% means we are guessing more than measuring.'">Composite confidence</div>
         <div class="mt-1 flex items-baseline gap-2">
           <span id="conf-pct" class="text-3xl font-bold mono text-[var(--cyan)]">—</span>
           <span class="text-xs text-[var(--fg-2)]">judge·dispersion·signals</span>
@@ -206,12 +296,14 @@
         <div class="bar-track mt-2"><div id="conf-bar" class="bar-fill" style="width:0%"></div></div>
       </div>
       <div>
-        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">Brent projection p50</div>
+        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)] help"
+             data-tip="BRENT PROJECTION P50 — our best estimate of where crude oil price ends up.&#10;&#10;P50 = the median (50% chance price is below, 50% above).&#10;P10 / P90 give the 80% confidence band (lower / upper bound).&#10;&#10;Plain-uncle: 'If we ran this 100 times, half the time Brent ends up below this number, half above. The p10-p90 band is where we expect 80 out of 100 outcomes.'">Brent projection p50</div>
         <div id="brent-p50" class="mt-1 text-3xl font-bold mono text-[var(--amber)]">—</div>
         <div id="brent-band" class="text-xs text-[var(--fg-2)] mt-1 mono"></div>
       </div>
       <div>
-        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">P50 loss saving (with plan)</div>
+        <div class="text-xs uppercase tracking-wider text-[var(--fg-2)] help"
+             data-tip="P50 LOSS SAVING — if the company follows our recommended action plan, this is how much money they save (median estimate) versus doing nothing.&#10;&#10;P50 means: half the time savings will be larger, half smaller. Robust median, not optimistic best case.&#10;&#10;Plain-uncle: 'If we ran this disruption 100 times and they followed our plan, half the time they save more than this number. It is the do-or-don't-act dollar comparison.'">P50 loss saving (with plan)</div>
         <div id="cf-saved" class="mt-1 text-3xl font-bold mono text-[var(--green)]">—</div>
         <div id="cf-pct" class="text-xs text-[var(--fg-2)] mt-1 mono"></div>
       </div>
@@ -224,11 +316,19 @@
     <!-- CHOKEPOINT MAP -->
     <div class="panel p-5">
       <div class="flex items-center justify-between mb-3">
-        <h2 class="font-semibold">Chokepoint map · IEA / EIA cited</h2>
+        <h2 class="font-semibold help" data-tip="CHOKEPOINT MAP — where the world's oil and LNG flows pinch through narrow waterways.&#10;&#10;Red = chokepoint (Strait of Hormuz). Yellow = producer countries. Cyan = consumer countries (India, China, Japan, Korea). Violet = bypass routes (Habshan-Fujairah, East-West, Cape).&#10;&#10;Click any line to see flow rate + capacity + source.">Chokepoint map · IEA / EIA cited</h2>
         <span class="chip chip-live">14 nodes · 18 edges</span>
       </div>
       <div class="aspect-[16/10] bg-[var(--bg-2)] rounded-xl overflow-hidden border border-[var(--bd)]">
         <svg id="map-svg" viewBox="0 0 1000 620" class="w-full h-full"></svg>
+      </div>
+      <div class="map-legend">
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#f87171"></span>Chokepoint (Hormuz)</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#fbbf24"></span>Producer (Saudi/UAE/Iraq/Qatar/Iran)</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#22d3ee"></span>Consumer (India/China/Japan/Korea/EU)</div>
+        <div class="map-legend-item"><span class="map-legend-dot" style="background:#a78bfa"></span>Bypass (Fujairah/East-West/Cape)</div>
+        <div class="map-legend-item"><span style="display:inline-block;width:24px;height:2px;background:#22d3ee"></span>Crude flow (mb/d)</div>
+        <div class="map-legend-item"><span style="display:inline-block;width:24px;height:2px;background:#a78bfa"></span>Bypass route</div>
       </div>
       <div id="map-edge-info" class="mt-3 text-xs text-[var(--fg-1)] hidden"></div>
       <div class="mt-3 grid grid-cols-2 md:grid-cols-3 gap-2" id="headline-facts">
@@ -292,12 +392,73 @@
     </div>
   </section>
 
+  <!-- ============================ RELIANCE INDUSTRIES (NEW) ============================ -->
+  <section id="reliance-section" class="hidden">
+    <div class="ag-card mb-4">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <div class="text-xs uppercase tracking-wider text-[var(--violet)] font-semibold">
+            🏭 Reliance Industries · Israel-Iran-USA war scenario
+          </div>
+          <div class="text-lg font-bold mt-1">Full supply-chain impact across 10 RIL subsidiaries</div>
+          <div class="text-xs text-[var(--fg-2)] mt-1">
+            Built from RIL Integrated Annual Report FY24 + DGH + BSE/NSE filings + ICIS market data.
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-4 text-right">
+          <div>
+            <div class="text-xs text-[var(--fg-2)] uppercase tracking-wider help"
+                 data-tip="Sum of point-estimate 30-day revenue-at-risk across all 10 RIL subsidiaries shown below.">30d at-risk · point</div>
+            <div id="ril-at-risk-point" class="text-2xl font-bold mono text-[var(--amber)]">—</div>
+          </div>
+          <div>
+            <div class="text-xs text-[var(--fg-2)] uppercase tracking-wider help"
+                 data-tip="Low-end of the 30-day band (sum of low estimates). Higher number = more conservative outlook.">30d at-risk · band</div>
+            <div id="ril-at-risk-band" class="text-sm font-semibold mono text-[var(--fg-1)]">—</div>
+          </div>
+          <div>
+            <div class="text-xs text-[var(--fg-2)] uppercase tracking-wider help"
+                 data-tip="What % of RIL FY24 total revenue is at risk in this 30-day window. Below 1% = manageable. 1-3% = concerning. Above 3% = serious.">% of FY24 revenue</div>
+            <div id="ril-pct-rev" class="text-2xl font-bold mono text-[var(--violet)]">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="font-semibold">RIL subsidiary impact · 10-node ranking</h2>
+        <span class="chip chip-model">deterministic · FY24-anchored · cited</span>
+      </div>
+      <div class="overflow-x-auto scrollbar">
+        <table class="w-full dense text-sm">
+          <thead><tr>
+            <th>#</th><th>Subsidiary / business unit</th><th>Score</th>
+            <th>Hormuz dep%</th><th>FY24 rev (₹ Cr)</th>
+            <th>1st symptom (d)</th><th>30d ₹ Cr (point)</th>
+          </tr></thead>
+          <tbody id="reliance-tbody"></tbody>
+        </table>
+      </div>
+      <div class="mt-3 text-xs text-[var(--fg-2)]">
+        Point estimate within published band; ranking driven by 4 channels (structural / severity / brent shock / duration overrun) per node.
+        Hover any row name to read the full feedstock chain + first-symptom narrative.
+      </div>
+    </div>
+  </section>
+
   <!-- ============================ ACTIONS + CAVEATS ============================ -->
   <section class="grid-shell">
     <div class="panel p-5">
       <div class="flex items-center justify-between mb-3">
-        <h2 class="font-semibold">Recommended actions · OpenEnv-typed</h2>
+        <h2 class="font-semibold help"
+            data-tip="RECOMMENDED ACTIONS — concrete, intent-typed plays for management to execute. Each row shows: (a) action verb, (b) target node, (c) cost in USD, (d) loss avoided in USD, (e) reason in plain language.&#10;&#10;Generated by RAP-XC (curriculum + replay BC) ranked over a hierarchical 4-intent action space, then filtered through Vovk-2005 conformal action filter (0.9001 empirical coverage).">Recommended actions · OpenEnv-typed</h2>
         <span class="chip chip-live">RAP-XC + hierarchical + conformal</span>
+      </div>
+      <div class="text-xs text-[var(--fg-2)] mb-3 leading-relaxed">
+        <strong class="text-[var(--cyan)]">How to read this panel:</strong> each card shows ONE play.
+        The amber number is what it costs to execute. The green number is the loss it prevents.
+        Loss-avoided ≫ cost = profitable play. The reason line tells you in plain words why this action works.
       </div>
       <div id="actions" class="space-y-2"></div>
     </div>
@@ -574,6 +735,26 @@
     });
   }
 
+  // Plain-language explainers mapped per action_type (deterministic, no LLM)
+  const ACTION_EXPLAINERS = {
+    "activate_backup_supplier":
+      "Switch part of the volume to a pre-qualified second-source supplier (typically held on standby contract). Costs more per unit but guarantees flow continuity. Worth it when stockout cost > extra unit cost.",
+    "activate_backup":
+      "Same as activate_backup_supplier — turn on the standby contract.",
+    "reroute_shipment":
+      "Re-direct in-transit cargo via Cape of Good Hope or East-West pipeline instead of Hormuz / Bab-el-Mandeb. Adds 14-22 days transit but bypasses the chokepoint. Each rerouted VLCC saves ~$30M of demurrage and insurance escalation.",
+    "increase_safety_stock":
+      "Build inventory buffer ahead of the disruption peak. Cost is carrying-cost (~25%/year per CSCMP). Saves the cost of stockouts during the disruption window.",
+    "expedite_shipment":
+      "Pay airfreight (~10x sea cost per IATA) for the highest-margin SKUs only. Used surgically — never blanket-applied — because economics break above ~5% of SKU portfolio.",
+    "hedge_commodity":
+      "Buy upside protection on Brent / naphtha / LNG via futures or swaps. Locks in input cost. Pays off when commodity moves against you; expires worthless if it doesn't.",
+    "issue_supplier_alert":
+      "Pre-emptive notification to downstream customers that supply allocation may shift. Manages relationships, prevents surprise contract violations.",
+    "do_nothing":
+      "Decline to act. Sometimes the right call when (a) signal is too weak, (b) action cost > expected loss, or (c) buffers are sufficient for disruption duration.",
+  };
+
   function renderActions(actions) {
     const box = $("#actions"); box.innerHTML = "";
     if (!actions || !actions.length) {
@@ -582,19 +763,25 @@
     }
     actions.forEach((a, i) => {
       const div = document.createElement("div");
-      div.className = "p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]";
+      div.className = "action-card";
+      const cost = a.estimated_cost_usd;
+      const save = a.estimated_loss_avoided_usd;
+      const ratio = (cost && save && cost > 0) ? (save / cost).toFixed(1) + "×" : "—";
+      const explainer = ACTION_EXPLAINERS[a.action_type] || "";
       div.innerHTML = `
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center gap-2">
             <span class="mono text-[var(--fg-2)] text-xs">${String(i+1).padStart(2,"0")}</span>
             <span class="font-medium text-sm">${a.action_type}${a.target ? " · "+a.target : ""}</span>
           </div>
-          <div class="flex items-center gap-2 text-xs mono">
-            ${a.estimated_cost_usd != null ? `<span class="text-[var(--amber)]">cost ${fmtUSD(a.estimated_cost_usd)}</span>` : ""}
-            ${a.estimated_loss_avoided_usd != null ? `<span class="text-[var(--green)]">save ${fmtUSD(a.estimated_loss_avoided_usd)}</span>` : ""}
+          <div class="flex items-center gap-3 text-xs mono">
+            ${cost != null ? `<span class="text-[var(--amber)]" title="What it costs to execute this action">cost ${fmtUSD(cost)}</span>` : ""}
+            ${save != null ? `<span class="text-[var(--green)]" title="Loss prevented by executing this action">save ${fmtUSD(save)}</span>` : ""}
+            ${ratio !== "—" ? `<span class="chip ${parseFloat(ratio) >= 3 ? "chip-good" : "chip-model"}" title="Loss avoided ÷ cost. >3× = profitable play. <1× = action costs more than it saves.">ROI ${ratio}</span>` : ""}
           </div>
         </div>
-        <div class="text-xs text-[var(--fg-1)] mt-1">${a.reason || ""}</div>`;
+        <div class="text-xs text-[var(--fg-1)] mt-2">${a.reason || ""}</div>
+        ${explainer ? `<div class="why-it-matters"><strong style="color:var(--green)">Why it works:</strong> ${explainer}</div>` : ""}`;
       box.appendChild(div);
     });
   }
@@ -775,6 +962,81 @@
     btn.textContent = "▶ run again"; btn.classList.add("chip-live"); btn.classList.remove("chip-model");
   }
 
+  // ---------- scenario templates ----------
+  const SCENARIO_TEMPLATES = {
+    reliance_war: {
+      text: "Israel-Iran-USA war escalation closes the Strait of Hormuz. Reliance Industries faces simultaneous shock to Jamnagar refinery (1.4M bbl/d), petrochemical naphtha pricing, KG-D6 LNG benchmark realisation, Reliance Retail consumer cascade, Jio capex cycle, polyester paraxylene feed, RIIL pipelines, Reliance General Insurance marine claims, Reliance Power gas plants, and Network18 advertising. Quantify cascading damage across all 10 RIL subsidiaries.",
+      severity: 0.92, brent: 152, duration: 45,
+      enable_reliance: true, enable_openrouter: true,
+    },
+    hormuz_generic: {
+      text: "If Iran-Israel-US escalation restricts the Strait of Hormuz, what breaks first for India and the Gulf?",
+      severity: 0.85, brent: 132, duration: 21,
+      enable_reliance: false, enable_openrouter: false,
+    },
+    houthi_red_sea: {
+      text: "Houthi Red Sea campaign persists for an extended period. Vessel rerouting via Cape becomes structural. Container freight rates climb sustainably. Quantify cascading impact on Indian and Gulf supply chains.",
+      severity: 0.65, brent: 98, duration: 90,
+      enable_reliance: false, enable_openrouter: false,
+    },
+    iran_strait_threat: {
+      text: "Iran (without US/Israel involvement) threatens to mine the Strait of Hormuz. Insurance premiums spike but full closure has not occurred. Conditional partial reroute scenario.",
+      severity: 0.55, brent: 108, duration: 14,
+      enable_reliance: false, enable_openrouter: false,
+    },
+  };
+
+  function applyTemplate(name) {
+    const t = SCENARIO_TEMPLATES[name];
+    if (!t) return;
+    $("#scenario-text").value = t.text;
+    $("#severity").value = t.severity;
+    $("#brent").value = t.brent;
+    $("#duration").value = t.duration;
+    $("#enable-reliance").checked = !!t.enable_reliance;
+    $("#enable-openrouter").checked = !!t.enable_openrouter;
+    document.querySelectorAll(".scenario-btn").forEach(b =>
+      b.classList.toggle("active", b.dataset.template === name));
+  }
+
+  // ---------- reliance table render ----------
+  function renderReliance(block) {
+    const sec = $("#reliance-section");
+    if (!block) { sec.classList.add("hidden"); return; }
+    sec.classList.remove("hidden");
+    const agg = block.aggregate || {};
+    $("#ril-at-risk-point").textContent = "₹" + Number(agg.total_revenue_at_risk_inr_cr_30d_point || 0).toLocaleString() + " Cr";
+    const lo = Number(agg.total_revenue_at_risk_inr_cr_30d_low || 0).toLocaleString();
+    const hi = Number(agg.total_revenue_at_risk_inr_cr_30d_high || 0).toLocaleString();
+    $("#ril-at-risk-band").textContent = `₹${lo} – ₹${hi} Cr`;
+    $("#ril-pct-rev").textContent = (agg.pct_of_fy24_revenue_at_risk_30d_point || 0).toFixed(2) + "%";
+
+    const tb = $("#reliance-tbody"); tb.innerHTML = "";
+    (block.rows || []).forEach(r => {
+      const tr = document.createElement("tr");
+      tr.className = "ril-row";
+      const tooltip = `${r.feedstock_chain}\n\nFirst symptom: ${r.first_symptom}\n\nSource: ${r.citation.agency} (${r.citation.as_of})`;
+      tr.innerHTML = `
+        <td class="mono">${r.rank}</td>
+        <td>
+          <div class="font-medium" title="${escapeAttr(tooltip)}">${r.display_name}</div>
+          <div class="text-xs text-[var(--fg-2)]">${r.business_unit}</div>
+        </td>
+        <td>
+          <div class="flex items-center gap-2">
+            <span class="mono font-semibold" style="color:${scoreToColor(r.score)}">${fmt(r.score,3)}</span>
+            <div class="bar-track w-16"><div class="bar-fill" style="width:${r.score*100}%;background:${scoreToColor(r.score)}"></div></div>
+          </div>
+        </td>
+        <td class="mono">${(r.hormuz_dependency_share*100).toFixed(0)}%</td>
+        <td class="mono text-[var(--fg-2)]">${Number(r.fy24_revenue_inr_cr).toLocaleString()}</td>
+        <td class="mono">${r.projected_first_symptom_day}</td>
+        <td class="mono text-[var(--amber)]">${Number(r.impact_inr_cr_30d_point).toLocaleString()}</td>`;
+      tb.appendChild(tr);
+    });
+  }
+  function escapeAttr(s) { return String(s).replace(/"/g, "&quot;").replace(/\n/g, "&#10;"); }
+
   // ---------- main run ----------
   async function runWarRoom() {
     const body = {
@@ -785,6 +1047,7 @@
       enable_llm_judges: true,
       include_recent_signals: true,
       enable_openrouter_panel: $("#enable-openrouter").checked,
+      scenario_focus: $("#enable-reliance").checked ? "reliance_full_supplychain" : "default",
     };
     resetStages();
     ["signals","analogs","judges","sectors","cf","receipt"].forEach(s=>setStage(s,"run"));
@@ -849,6 +1112,7 @@
     renderOpenRouterPanel(resp.openrouter_panel);
     renderIndia(resp.india_impact_table);
     renderGulf(resp.gulf_impact_table);
+    renderReliance(resp.reliance_impact);
     renderActions(resp.live_pipeline.recommended_actions);
     renderCaveats(resp.uncertainty_caveats);
 
@@ -881,6 +1145,9 @@
   $("#receipt-btn").addEventListener("click", openDrawer);
   $("#drawer-close").addEventListener("click", closeDrawer);
   $("#run-backtest").addEventListener("click", runBacktest);
+  document.querySelectorAll(".scenario-btn").forEach(btn => {
+    btn.addEventListener("click", () => applyTemplate(btn.dataset.template));
+  });
   $("#copy-btn").addEventListener("click", () => {
     if (!LAST_RECEIPT) return;
     navigator.clipboard.writeText(JSON.stringify(LAST_RECEIPT, null, 2));

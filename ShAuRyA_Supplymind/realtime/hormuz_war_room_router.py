@@ -39,6 +39,7 @@ from ShAuRyA_Supplymind.scenarios import (
     india_industry_exposure as india_mod,
     gulf_industry_exposure as gulf_mod,
     hormuz_chokepoint_graph as graph_mod,
+    reliance_industries_exposure as reliance_mod,
 )
 from ShAuRyA_Supplymind.realtime.hormuz_endpoint import (
     ScenarioRequest,
@@ -93,6 +94,13 @@ class WarRoomRequest(BaseModel):
         description="If True, fan out to 6 frontier OpenRouter judges in parallel "
                     "and report Krippendorff α on their risk_level rankings. "
                     "Adds ~6-12s and uses OpenRouter rate budget.",
+    )
+    scenario_focus: str = Field(
+        default="default",
+        description="Optional scenario focus. 'reliance_full_supplychain' adds a "
+                    "Reliance Industries 10-node subsidiary impact table built "
+                    "from FY24 RIL Integrated Annual Report disclosures + DGH/PIB "
+                    "filings. 'default' returns only the India + Gulf tables.",
     )
 
 
@@ -238,6 +246,28 @@ if router is not None:
             duration_days=req.duration_days,
         )
 
+        # Optional: Reliance Industries 10-node subsidiary table
+        reliance_block: dict | None = None
+        if req.scenario_focus == "reliance_full_supplychain":
+            reliance_rows = reliance_mod.score_all(
+                severity=req.severity,
+                brent_price_usd_bbl=req.brent_price_usd_bbl,
+                duration_days=req.duration_days,
+            )
+            reliance_agg = reliance_mod.aggregate_revenue_at_risk_inr_cr(reliance_rows)
+            reliance_block = {
+                "rows": reliance_rows,
+                "aggregate": reliance_agg,
+                "scenario_label": (
+                    "Reliance Industries · full supply-chain impact under "
+                    "Israel-Iran-USA Hormuz escalation"
+                ),
+                "data_attribution": (
+                    "RIL Integrated Annual Report FY24 + DGH + BSE/NSE filings + "
+                    "ICIS naphtha/PX market data + Lloyd's war-risk index + IRDAI"
+                ),
+            }
+
         # ---- Stage 3: chokepoint graph (static, IEA-cited)
         chokepoint = graph_mod.get_graph()
 
@@ -294,6 +324,7 @@ if router is not None:
             "openrouter_panel": openrouter_panel,
             "india_impact_table": india_rows,
             "gulf_impact_table": gulf_rows,
+            "reliance_impact": reliance_block,
             "chokepoint_graph": {
                 "nodes": chokepoint["nodes"],
                 "edges": chokepoint["edges"],
