@@ -43,10 +43,13 @@ def fetch_macro_signals() -> list[dict]:
                 params = {"format": "json", "per_page": 5,
                           "date": "2018:2024"}
                 try:
-                    data = http_get_json(url, params=params, timeout=20)
+                    # Tight timeout — World Bank API often hangs.
+                    # Max 4s/call * 42 calls = 168s worst-case but
+                    # most return quickly; if any hang, we move on.
+                    data = http_get_json(url, params=params, timeout=4)
                 except Exception as e:  # noqa: BLE001
-                    logger.warning("[worldbank] %s/%s failed: %s",
-                                    iso3, ind_code, str(e)[:60])
+                    logger.warning("[worldbank] %s/%s skipped (%s)",
+                                    iso3, ind_code, str(e)[:40])
                     continue
                 # WB returns [meta, list]
                 if not isinstance(data, list) or len(data) < 2: continue
