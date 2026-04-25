@@ -107,7 +107,7 @@ Honest baseline = **0.86**, strictly > every attack. Receipt: [`adversarial_rewa
 
 ![Real REINFORCE v2](plots/real_reinforce_curve_v2.png)
 
-> **125 real gradient updates · 3000 real episodes · CPU only.** **FINAL deterministic eval solve rate: 95.5%** (target ≥0.90 ✓). Adds: action masking (constraint propagation per Wordle feedback), 3-tier internal curriculum (5 → 10 → 20 words), bigger net with LayerNorm (188 → 256 → 256 → 128 → n_act), cosine LR schedule, entropy decay (0.05 → 0.005). 2 curriculum BUMPs triggered (tier-0 saturated 0.96 wr at episode 216 · tier-1 saturated 0.93 wr at episode 432). **Cohen's d trained vs null random policy = 5.133** (vs RAP-XC's +2.73 — 1.88× larger effect size). Receipt: [`wordle_real_reinforce_v2_curve.json`](receipts/wordle_real_reinforce_v2_curve.json) · sha `709a30a7…`.
+> **156 real gradient updates · 4,992 real episodes · CPU only.** **FINAL deterministic eval solve rate: 97.0%** (target ≥0.90 ✓; reproducible 95.5-97.0% across configs). Adds: action masking (constraint propagation per Wordle feedback), 3-tier internal curriculum (5 → 10 → 20 words), bigger net with LayerNorm (188 → 256 → 256 → 128 → n_act), cosine LR schedule, entropy decay (0.05 → 0.005). 2 curriculum BUMPs triggered (tier-0 saturated **0.98 wr** at episode 224 · tier-1 saturated **0.95 wr** at episode 448). **Cohen's d trained vs null random policy = 4.41-5.13** (range across seeds; both far past Cohen 1988's "very large" 1.2 threshold). Receipt: [`wordle_real_reinforce_v2_curve.json`](receipts/wordle_real_reinforce_v2_curve.json) · sha `dd34457756…`.
 
 V1 (no masking, no curriculum): 36% solve, +190% improvement, Cohen's d ~0.27.
 V2 (full pipeline): **95.5% solve, Cohen's d 5.133.**
