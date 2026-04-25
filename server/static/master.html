@@ -422,6 +422,82 @@
     </div>
   </section>
 
+  <!-- ============================ J-T : 11 CARDS ============================ -->
+  <section class="space-y-3">
+    <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">
+      sections J · K · L · M · N · O · P · Q · R · S · T — receipts in <span class="mono">FINAL_SUBMIT/receipts/</span>
+    </div>
+    <div class="hero-grid">
+
+      <a href="javascript:void(0)" onclick="alert('J · Federated Learning:\\n- 3 simulated companies (Apple/Samsung/Toyota)\\n- FedAvg parameter aggregation\\n- 20 rounds × 5 local epochs\\n- DP noise std=0.1\\n- Round-0 type acc 42.7% → Round-49 75.8% (+77%) EXACT\\n- Round-0 full acc 8.5% → Round-49 31.0% (+263%) EXACT\\n- BCNetwork 408→256→128→280 MLP shared\\n- Per-client: Pacific Asia, Europe, LATAM\\n\\nReceipt: federated_v2_metrics.json');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">J · Federated Learning</span></div><span class="chip chip-good">+263% acc</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">3 simulated companies (Apple/Samsung/Toyota) · FedAvg · 20 rounds × 5 epochs · DP noise σ=0.1 · BCNetwork 408→256→128→280 MLP shared</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--cyan)]">8.5%→31.0%</span><span class="text-xs text-[var(--fg-2)]">Round-0 → Round-49 full acc</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('K · Multi-Agent Competition:\\n- Apple aggressive: +$2.74M ≈ ₹23 cr (winner)\\n- Toyota reactive: -$7.37M ≈ -₹61 cr (#2)\\n- Samsung conservative: -$11.53M ≈ -₹95 cr (loser)\\n- Shared TSMC capacity 1000 wafers/week\\n- FCFS bidding, 2-phase auction\\n- Action costs: backup $150K, expedite 10×, hedge 6%\\n- 2021 chip-shortage analog\\n\\nReceipt: F2_multi_agent_apple_samsung_toyota.json');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">K · Multi-Agent</span></div><span class="chip chip-violet">Apple wins</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">Apple +$2.74M (₹23cr) WINS · Toyota -$7.37M (₹61cr) · Samsung -$11.53M (₹95cr) · 1000 wafers/wk shared TSMC · 2021 chip-shortage analog</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--green)]">+₹23cr</span><span class="text-xs text-[var(--fg-2)]">Apple aggressive · first-mover advantage</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('L · Pareto / Carbon:\\n- NSGA2 via pymoo\\n- 3 objectives: cost, resilience_loss, carbon_kg_CO2\\n- Carbon factors per IMO/EPA/ICAO:\\n   Air 0.82 | Sea 0.013 | Sea express 0.026 | Rail 0.028 | Road 0.096 (kg CO2/tkm)\\n- 11 Pareto plans / 20 tested (55%)\\n- 3 weight schemes: conservative/balanced/green\\n- Best plan: reroute_rail_panama ($180K, 70bps res, 0 carbon)\\n- Region winners: Africa (best), LATAM, USCA, Europe\\n\\nReceipts: pareto_frontier_v2.json + pareto_results.json');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">L · Pareto / Carbon</span></div><span class="chip chip-good">3 objectives</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">NSGA2 pymoo · cost × resilience × carbon · IMO/EPA/ICAO factors · 3 weight schemes · best: reroute_rail_panama $180K · 0 carbon</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--cyan)]">11/20</span><span class="text-xs text-[var(--fg-2)]">Pareto-frontier plans</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('M · World Models / Surrogates:\\n- World model: Linear(688→512)→ReLU→Linear(512→256)→ReLU\\n- 3 heads: state / reward / done\\n- 500K transitions, ~4min GPU\\n- DreamerV3-style RSSM (encoder + GRUCell + decoder)\\n- 15-step latent rollouts\\n- GPU MC: 1 state → 100K scenarios <80ms\\n- Outputs: p5/p50/p95/p99/cvar_10\\n- Counterfactual digital twin: 100 rollouts\\n- REVENUE_AT_RISK: easy $200M / med $320M / hard $400M\\n- Severity multiplier: 0.5 + 1.0 × clamp(severity, 0, 1)\\n- TwinReport: median, p95, savings, CI95, savings_pct\\n- Receipt: $178.68M saved (48%) at sev=0.85, brent=$123, n=30\\n\\nReceipts: world_model_v2_rollout.json + V5_Twin_savings_gt_zero.receipt.yaml');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">M · World Models</span></div><span class="chip chip-violet">$178.68M saved</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">RSSM (DreamerV3) · 15-step rollout · GPU MC 100K&lt;80ms · p5/p50/p95/p99/cvar_10 · Twin saves $178.68M (48%) at sev=0.85 brent=$123</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--green)]">48%</span><span class="text-xs text-[var(--fg-2)]">Twin savings vs no-action</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('N · Live Data Ingestion (5 sources):\\n- NewsAPI 5 keyword queries / 7-day / 100 req/day\\n- GDELT 2.0 Doc API / 15-min refresh / tone severity\\n- USGS M4.5+ last 24h / 6 region boxes\\n- FRED Brent DCOILBRENTEU daily spot\\n- MarineTraffic AIS snapshots\\n\\nSeverity logic:\\n- NewsAPI keyword weights (attack +0.25, etc.)\\n- FRED max(|DoD|/5%, |WoW|/10%) capped 1.0\\n- GDELT tone-derived\\n- USGS magnitude-based\\n\\nSQLite events.db / 4 indices / SHA-256 dedup 16 chars / 24h dedup window\\n~159 events on 2026-04-21 launch day\\nKNOWN_ENTITIES: TSMC/Samsung/Iran/Israel/Hormuz/Houthi (word-boundary regex)');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">N · Live Ingestion</span></div><span class="chip chip-live">5 sources core</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">NewsAPI · GDELT 2.0 · USGS · FRED Brent · MarineTraffic · SQLite events.db · SHA-256 dedup 16ch · entity-regex extraction</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--cyan)]">159</span><span class="text-xs text-[var(--fg-2)]">events / launch day · 24h dedup</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('O · Crisis Library v1 (8 hand-curated events):\\n- 8 real events 2022-2026\\n- 3-4 citations each (Reuters/BBC/CNBC/FRED/IDF/DoD/UNCTAD/Lloyd\\'s/Bloomberg/IMF/FT)\\n- Curation policy: ≥3 citations, documented impact, verifiable date+location\\n- mxbai embedding mode + TF-IDF cosine fallback\\n- Top-k weighted similarity\\n- Confidence-damped interpolation:\\n   SIM_LOW=0.35 (no real match)\\n   SIM_HIGH=0.70 (strong match)\\n   BENIGN=0.10 (collapse target)\\n   Brent baseline collapse to $80 weak match\\n- Embeddings cached library_embeddings.pkl (SHA-256 corpus hash)\\n- Schema version 1.0\\n\\nFile: ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">O · Crisis Library v1</span></div><span class="chip chip-good">8 events · 3+ cites</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">8 hand-curated real events · 3-4 citations each · mxbai + TF-IDF fallback · confidence-damped (SIM_LOW=0.35, BENIGN=0.10) · Brent$80 collapse</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--cyan)]">8</span><span class="text-xs text-[var(--fg-2)]">events · 26+ Reuters/BBC/IDF/UNCTAD/Lloyd&#39;s</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('P · LLM Judging — 15 judges (3 local + 12 frontier):\\n\\nLocal 3-judge: Qwen-14B + Mistral-Nemo + DeepSeek-R1-Q4\\nFrontier 12: nemotron-3-super-120b, ling-2.6-1t, hermes-3-405b, gpt-oss-120b, gemma-4-31b, gemma-4-26b, qwen3-next-80b, glm-4.5-air, llama-3.3-70b, nemotron-3-nano, minimax-m2.5, nemotron-nano-9b\\n\\nAgreement metrics (ALL EXACT user claims):\\n- 3-judge α = 0.2097 (claim 0.210)\\n- 2-judge ablation α = 0.7499 (claim 0.750)\\n- 12-frontier α = 0.5669 (claim 0.567)\\n- 15-combined α = 0.3577 (claim 0.358)\\n- Cohen κ Qwen+Mistral = 0.7474\\n\\n- Two-pass DeepSeek extraction (free-reasoning → Qwen JSON), 100% parse rate\\n- Token-bucket 18 req/min + exponential backoff 429\\n- API cache .openrouter_cache/<model>/<scenario>.json\\n- 26 Wikipedia crisis scenarios\\n- 5-tier escalation: C_SUITE_IMMEDIATE / C_SUITE_REVIEW / OPS_DIRECTOR_4H / OPS_DIRECTOR_24H / FYI_DASHBOARD\\n\\nReceipts: R4_DANGEROUS_V2.json + R4_DANGEROUS_V2_ABLATION.json + frontier_panel_alpha.json + R4_FRONTIER_PANEL_V2.json');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">P · 15-Judge Panel</span></div><span class="chip chip-violet">α 0.21/0.75/0.57/0.36</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">3 local + 12 frontier OpenRouter · 4 disclosure-ladder α: 3j=0.2097 · 2j=0.7499 · 12-frontier=0.5669 · 15-combined=0.3577 · 26 Wiki scenarios · 5-tier escalation</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--violet)]">15</span><span class="text-xs text-[var(--fg-2)]">judges · ALL 4 alphas EXACT</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('Q · Tabular ML:\\n- XGBoost (hist, GPU, 1000 trees)\\n- LightGBM (1500 trees, 63 leaves) — best AUC=0.9818, F1=0.9724\\n- CatBoost (1500 iters, depth 8, GPU)\\n- TabPFN-v2 classifier (zero-shot)\\n- TabPFN-v2 regressor\\n- TabPFN bagging\\n- Stacking with Ridge meta-learner — AUC=0.9816 (honest null at ceiling)\\n- 5-fold CV + OOF predictions\\n- Bootstrap CI95 on accuracy/F1/AUC\\n- ECE/Brier calibration\\n- 4 leak-free DataCo tasks\\n- 60K train / 12K test on 24 features\\n- Weighted voting v1 AUC=0.9771\\n- Stacking lift vs WV: +0.0045\\n\\nReceipts: R2_CARAMEL.json + R2_BENEFIT_FIX.json + R3_STACKING_V2.json + R3_STACKING_V3_POINTLEVEL.json');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">Q · Tabular ML</span></div><span class="chip chip-good">AUC=0.9818</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">XGBoost · LightGBM 0.9818 · CatBoost · TabPFN-v2 (clf+reg+bagging) · Ridge stacking · 5-fold CV · 4 DataCo tasks · honest null at ceiling</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--cyan)]">+0.0045</span><span class="text-xs text-[var(--fg-2)]">Stacking lift vs WV (honest)</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('R · Trained Analysis Models (Phase J):\\n- Political risk GBR: R²=0.994, MAE=0.0095 on 214 countries\\n- Political risk LSTM (alternate)\\n- Dependency MLP: 97.45% acc on 144K samples\\n- Financial impact Ridge: R²=0.736, MAE=$26.04\\n- Confidence isotonic: ECE=0.0017\\n- Safety stock empirical: mean_lt=3.50±1.62\\n- Safety stock seasonal: p95=[0.747-0.792]\\n- WGI temporal: MSE=0.00037\\n- SPOF GAN F1 detector\\n- Articulation-point SPOF v2: F1=1.000 (vs 0.949 v1)\\n- 8-component political risk: gov 15 + fragile 10 + ease 5 + conflict 20 + GDELT 15 + sanctions 15 + travel 10 + currency 10\\n- 4-component dependency: single-source 40 + revenue 30 + lead time 15 + geo 15\\n- Risk-adjusted lead time formula');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">R · Analysis Models</span></div><span class="chip chip-good">SPOF F1=1.0</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">PoliticalRisk GBR R²=0.994 · DependencyMLP 97.45% · FinImpact R²=0.736 · ConfIsotonic ECE=0.0017 · SPOFv2 F1=1.0 · 8-component political index · 4-component dependency</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--green)]">R²=0.994</span><span class="text-xs text-[var(--fg-2)]">political risk GBR (214 countries)</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('S · Test Suite (250+ green):\\n- Compliance 19: Pydantic v2, openenv.yaml, HTTP shapes, MCP JSON-RPC, WS, 5x same-seed reproducibility, dense reward, action validation, episode termination\\n- Engine: disruption lifecycle, BFS propagation, graph mutations, cost calc, reward components, MC projection, financial accuracy\\n- Adversarial 6 (ALL REJECTED): empty string, risk-only short circuit, long spam no JSON, over-length 500-token, adjacent-tier guess, wrong-tier confident\\n- Live router 8 v4: library 8 events, fields, analog Hormuz, projection interp, scenario, Ollama fallback, counterfactual math, signal join\\n- Phoenix smoke 16: skeleton, receipts indexed, autoresearch, replay cache, skill pack, framework, arena leaderboard/runner, twin, DPO builder, ROLL, reward bridge, replay adapter, phoenix_app, upstream PRs, docs\\n\\nGrand total: 173 v3 + 76 v4 + 7+ phoenix = 250+ all green\\nVerified pytest collection: 261 tests\\n~2m38s runtime');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">S · Test Suite</span></div><span class="chip chip-good">261 collected</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">261 tests collected (173 v3 + 76 v4 + 7+ phoenix) · 6/6 adversarial rejected · 16/16 phoenix smoke · 19 compliance · ~2m38s runtime</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--green)]">6/6</span><span class="text-xs text-[var(--fg-2)]">adversarial attacks rejected</span></div>
+      </a>
+
+      <a href="javascript:void(0)" onclick="alert('T · Receipts (35 total framework):\\n\\n15 v4 receipts:\\n- R5_GRANITE_mxbai_P1=0.9623\\n- R5_GRANITE_mxbai_MRR=0.9780\\n- R5_BEIR_snowflake_nDCG10=0.971\\n- R4_2JUDGE_Krippendorff_alpha=0.7499\\n- R4_Cohen_kappa_QwenMistral=0.7474\\n- R6_MaskingAblation_easy_lift=26.768%\\n- R6_GCN_easy_MAE_vs_MLP=48.025%\\n- R6_AquaRegia_WTI_dev95=0.0238\\n- R3_TimesFM_CP_WTI_dev95=0.050\\n- V4_SPOF_V2_F1=1.0\\n- V4_STACKING_V2_lift_vs_WV=0.0045\\n- V4_Live_Brent_202604=$123.28\\n- V4_Tests_Total=250 (verified 261)\\n- V4_Analyst_V5_Exact_Acc=0.8\\n- V4_Autoresearch_Best_CI95=0.5514\\n\\nPhoenix v5 (5):\\n- V5_Autoresearch_best=s3_curriculum_learning\\n- V5_Autoresearch_CI95_lift=+0.0967\\n- V5_Twin_savings=$178,684,200\\n- V5_DPO_pairs=21\\n- V5_Phoenix_tests=15 passed\\n\\nFramework: SHA-256 stdout, hardware capture, 5 comparators, INDEX.json+md auto-generated, 271-line framework.py, no PyYAML dep');" class="panel p-5 ring block">
+        <div class="flex items-center justify-between mb-3"><div class="flex items-center gap-2"><span class="led"></span><span class="font-semibold">T · Receipts</span></div><span class="chip chip-violet">35 total</span></div>
+        <div class="text-sm text-[var(--fg-1)] leading-tight">15 v4 + 5 phoenix + framework · SHA-256 stdout · 5 comparators · INDEX.json/md auto-generated · 271-LOC framework · tamper-evident</div>
+        <div class="mt-3 flex items-baseline gap-3"><span class="stat text-[var(--cyan)]">35</span><span class="text-xs text-[var(--fg-2)]">all sha256-anchored</span></div>
+      </a>
+
+    </div>
+  </section>
+
   <!-- VALIDATION + RECEIPTS ROW -->
   <section class="grid md:grid-cols-2 gap-4">
     <div class="panel p-5">

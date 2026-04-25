@@ -1,0 +1,46 @@
+{
+  "summary": {
+    "n_judges_local": 3,
+    "n_judges_frontier": 12,
+    "n_judges_total": 15,
+    "n_scenarios": {
+      "local": 26,
+      "frontier": 26,
+      "combined": 26
+    },
+    "krippendorff_alpha_ordinal": {
+      "local_only": 0.2097,
+      "frontier_only": 0.5669,
+      "combined_local_plus_frontier": 0.3577
+    },
+    "majority_vote_accuracy_vs_ground_truth": {
+      "local_only": 0.5769,
+      "frontier_only": 0.2308,
+      "combined_local_plus_frontier": 0.3077
+    }
+  },
+  "judges_local": [
+    "local:deepseek-r1-local-q4",
+    "local:mistral-nemo-local",
+    "local:qwen25-14b-local"
+  ],
+  "judges_frontier": [
+    "frontier:google/gemma-4-26b-a4b-it:free",
+    "frontier:google/gemma-4-31b-it:free",
+    "frontier:inclusionai/ling-2.6-1t:free",
+    "frontier:meta-llama/llama-3.3-70b-instruct",
+    "frontier:minimax/minimax-m2.5:free",
+    "frontier:nousresearch/hermes-3-llama-3.1-405b",
+    "frontier:nvidia/nemotron-3-nano-30b-a3b:free",
+    "frontier:nvidia/nemotron-3-super-120b-a12b:free",
+    "frontier:nvidia/nemotron-nano-9b-v2:free",
+    "frontier:openai/gpt-oss-120b:free",
+    "frontier:qwen/qwen3-next-80b-a3b-instruct",
+    "frontier:z-ai/glm-4.5-air:free"
+  ],
+  "reward_scale": "ordinal 4-tier: LOW=0, MEDIUM=1, HIGH=2, CRITICAL=3",
+  "distance_metric": "squared-difference",
+  "ground_truth_source": "v3_arcadia/results/R4_DANGEROUS_V2.json per_scenario.*.ground_truth",
+  "frontier_judge_source": "OpenRouter chat/completions (cached in .openrouter_cache/)",
+  "inference_type": "live_http_multi_provider_panel"
+}

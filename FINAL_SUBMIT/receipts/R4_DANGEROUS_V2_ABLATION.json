@@ -1,0 +1,397 @@
+{
+  "description": "R4 ablation: DeepSeek-R1-Q4 reassigned to devil's-advocate (consulted, not voting). Primary consensus = Qwen-14B + Mistral-Nemo.",
+  "primary_judges": [
+    "qwen25-14b-local",
+    "mistral-nemo-local"
+  ],
+  "devils_advocate": "deepseek-r1-local-q4",
+  "n_scenarios": 26,
+  "agreement_primary_panel": {
+    "krippendorff_alpha_ordinal": 0.7499056959637873,
+    "cohen_weighted_kappa_qwen_vs_mistral": 0.7473841554559043
+  },
+  "accuracy_vs_ground_truth": {
+    "primary_majority_vote": {
+      "correct": 16,
+      "total": 26,
+      "accuracy": 0.6153846153846154
+    },
+    "three_judge_majority_vote_ORIGINAL": {
+      "correct": 18,
+      "total": 26,
+      "accuracy": 0.6923076923076923
+    },
+    "devils_advocate_deepseek": {
+      "correct": 8,
+      "total": 26,
+      "accuracy": 0.3076923076923077
+    }
+  },
+  "confusion_matrix_primary": [
+    [
+      7,
+      0,
+      0,
+      0
+    ],
+    [
+      2,
+      5,
+      0,
+      0
+    ],
+    [
+      0,
+      5,
+      3,
+      1
+    ],
+    [
+      0,
+      0,
+      2,
+      1
+    ]
+  ],
+  "confusion_matrix_three_judge_ORIGINAL": [
+    [
+      7,
+      0,
+      0,
+      0
+    ],
+    [
+      2,
+      3,
+      2,
+      0
+    ],
+    [
+      0,
+      2,
+      7,
+      0
+    ],
+    [
+      0,
+      0,
+      2,
+      1
+    ]
+  ],
+  "calibration_ece_primary": 0.2894230769230769,
+  "per_scenario": {
+    "2011_T\u014dhoku_earthquake_and_tsunami": {
+      "ground_truth": "CRITICAL",
+      "primary_panel_ratings": [
+        4,
+        4
+      ],
+      "primary_majority": "CRITICAL",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "CRITICAL",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "2020\u20132023_global_chip_shortage": {
+      "ground_truth": "CRITICAL",
+      "primary_panel_ratings": [
+        3,
+        3
+      ],
+      "primary_majority": "HIGH",
+      "devil_rating": "CRITICAL",
+      "three_judge_majority": "HIGH",
+      "primary_correct": false,
+      "devil_correct": true
+    },
+    "2021_Suez_Canal_obstruction": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        3,
+        3
+      ],
+      "primary_majority": "HIGH",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "HIGH",
+      "primary_correct": true,
+      "devil_correct": true
+    },
+    "Bab-el-Mandeb": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        2,
+        1
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "MEDIUM",
+      "primary_correct": false,
+      "devil_correct": true
+    },
+    "Baltic_Dry_Index": {
+      "ground_truth": "LOW",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "LOW",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Bullwhip_effect": {
+      "ground_truth": "MEDIUM",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "LOW",
+      "primary_correct": false,
+      "devil_correct": false
+    },
+    "CHIPS_and_Science_Act": {
+      "ground_truth": "MEDIUM",
+      "primary_panel_ratings": [
+        1,
+        2
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "MEDIUM",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Container_ship": {
+      "ground_truth": "LOW",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "LOW",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Enterprise_resource_planning": {
+      "ground_truth": "LOW",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "MEDIUM",
+      "three_judge_majority": "LOW",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Ever_Given": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        2,
+        3
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "HIGH",
+      "primary_correct": false,
+      "devil_correct": true
+    },
+    "Foxconn": {
+      "ground_truth": "MEDIUM",
+      "primary_panel_ratings": [
+        3,
+        2
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "HIGH",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Inventory": {
+      "ground_truth": "LOW",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "LOW",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Just-in-time_manufacturing": {
+      "ground_truth": "MEDIUM",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "LOW",
+      "primary_correct": false,
+      "devil_correct": false
+    },
+    "Logistics": {
+      "ground_truth": "LOW",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "LOW",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Port_of_Los_Angeles": {
+      "ground_truth": "MEDIUM",
+      "primary_panel_ratings": [
+        2,
+        2
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "MEDIUM",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Port_of_Singapore": {
+      "ground_truth": "MEDIUM",
+      "primary_panel_ratings": [
+        3,
+        2
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "HIGH",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Red_Sea_crisis": {
+      "ground_truth": "CRITICAL",
+      "primary_panel_ratings": [
+        3,
+        3
+      ],
+      "primary_majority": "HIGH",
+      "devil_rating": "CRITICAL",
+      "three_judge_majority": "HIGH",
+      "primary_correct": false,
+      "devil_correct": true
+    },
+    "Samsung_Electronics": {
+      "ground_truth": "MEDIUM",
+      "primary_panel_ratings": [
+        2,
+        1
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "MEDIUM",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "Semiconductor_industry": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        2,
+        1
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "CRITICAL",
+      "three_judge_majority": "MEDIUM",
+      "primary_correct": false,
+      "devil_correct": false
+    },
+    "Strait_of_Hormuz": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        4,
+        3
+      ],
+      "primary_majority": "CRITICAL",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "HIGH",
+      "primary_correct": false,
+      "devil_correct": true
+    },
+    "Strait_of_Malacca": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        3,
+        3
+      ],
+      "primary_majority": "HIGH",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "HIGH",
+      "primary_correct": true,
+      "devil_correct": true
+    },
+    "Suez_Canal": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        3,
+        1
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "CRITICAL",
+      "three_judge_majority": "HIGH",
+      "primary_correct": false,
+      "devil_correct": false
+    },
+    "Supply_chain_attack": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        2,
+        3
+      ],
+      "primary_majority": "MEDIUM",
+      "devil_rating": "CRITICAL",
+      "three_judge_majority": "HIGH",
+      "primary_correct": false,
+      "devil_correct": false
+    },
+    "Supply_chain_management": {
+      "ground_truth": "LOW",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "LOW",
+      "primary_correct": true,
+      "devil_correct": false
+    },
+    "TSMC": {
+      "ground_truth": "HIGH",
+      "primary_panel_ratings": [
+        3,
+        3
+      ],
+      "primary_majority": "HIGH",
+      "devil_rating": "HIGH",
+      "three_judge_majority": "HIGH",
+      "primary_correct": true,
+      "devil_correct": true
+    },
+    "Warehouse": {
+      "ground_truth": "LOW",
+      "primary_panel_ratings": [
+        1,
+        1
+      ],
+      "primary_majority": "LOW",
+      "devil_rating": "MEDIUM",
+      "three_judge_majority": "LOW",
+      "primary_correct": true,
+      "devil_correct": false
+    }
+  }
+}
