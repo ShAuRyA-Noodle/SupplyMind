@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "framework": "Out-of-training-distribution generalization eval",
+  "trained_pool_size": 20,
+  "test_pool_size_50": 50,
+  "test_pool_size_20": 20,
+  "n_eps_per_setting": 200,
+  "with_masking_action_filter": true,
+  "solve_rate_at_20_words_with_mask": 0.925,
+  "solve_rate_at_50_words_with_mask": 0.89,
+  "solve_rate_at_100_words_with_mask": 0.89,
+  "interpretation": "Action masking + entropy-driven random search achieves 92.5% at 20-word pool, 89.0% at 50-word pool, 89.0% at 100-word pool. The masking layer is the constraint solver; trained policy contributes ranking/efficiency on top. Solve rate scales with pool size, as expected (more candidates per turn = more guesses needed)."
+}

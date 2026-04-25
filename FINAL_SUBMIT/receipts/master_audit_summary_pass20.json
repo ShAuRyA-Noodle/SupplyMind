@@ -1,0 +1,25 @@
+{
+  "started_at": 1777144872.3855524,
+  "receipts": {
+    "v2_inferential_stats": "0fa2bf469b9e8955f1b005cd708553b00eec91bdee7dd5c7fbc84b47f7a0fead",
+    "statistical_power_analysis": "6da3882a4519a30558ed4a43ae62c38a6152e65e384e775db1d980a3eb8a37ef",
+    "tier3_generalization": "95970f6edd7b18f45cc827212e77d06ec950def09f8e2ce0061f9b4719ef185e",
+    "conformal_tight_v3": "f913ba5db573d081cf186c863a01cdbf6e8ce6215fc92f17c285dfd5f5718762",
+    "chained_live_demo": "b2cb3ac2390229e032b5a60340c37c86536be5185b6ec330a99cde50a1dc8963"
+  },
+  "finished_at": 1777144927.54549,
+  "wall_clock_s": 55.16,
+  "headlines": {
+    "wilcoxon_p": 6.637460878885485e-35,
+    "cohens_d_ci95": [
+      2.6597,
+      3.9585
+    ],
+    "min_d_at_n200": 0.2802,
+    "tier3_solve_rate_50_words": 0.89,
+    "conformal_tight_best_dev": 0.00765,
+    "chained_demo_stages_ok": 6,
+    "chained_demo_n_stages": 6,
+    "chained_demo_total_s": 7.16
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "framework": "Cohen 1988 two-sample t-test power formula",
+  "alpha": 0.05,
+  "n_per_group_required": {
+    "d=0.2": {
+      "power=0.8": 393,
+      "power=0.9": 526,
+      "power=0.95": 650
+    },
+    "d=0.5": {
+      "power=0.8": 63,
+      "power=0.9": 85,
+      "power=0.95": 104
+    },
+    "d=0.8": {
+      "power=0.8": 25,
+      "power=0.9": 33,
+      "power=0.95": 41
+    },
+    "d=1.2": {
+      "power=0.8": 11,
+      "power=0.9": 15,
+      "power=0.95": 19
+    },
+    "d=2.0": {
+      "power=0.8": 4,
+      "power=0.9": 6,
+      "power=0.95": 7
+    },
+    "d=2.73": {
+      "power=0.8": 3,
+      "power=0.9": 3,
+      "power=0.95": 4
+    },
+    "d=5.133": {
+      "power=0.8": 2,
+      "power=0.9": 2,
+      "power=0.95": 2
+    }
+  },
+  "our_actual_n_per_group": 200,
+  "min_d_detectable_at_80_power": 0.2802,
+  "our_observed_d_5_133_vs_min_detectable": 18.32,
+  "interpretation": "With n=200, we can detect d as small as 0.280 at 80% power. Our observed d=5.133 is 18.3x larger than detectable threshold. Statistical power is essentially 1.0."
+}

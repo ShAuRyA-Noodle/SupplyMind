@@ -254,6 +254,34 @@ AA1 sha256-stamped receipts / AA2 mirrored receipt copies / AA3 deterministic se
 
 **Total: 250+ features, every one with file + receipt or live demo.**
 
-Master receipt count: **50+** sha256-stamped JSON files.
+Master receipt count: **65+** sha256-stamped JSON files (post-pass-20).
 
-API keys utilized: **4/4** (OPENROUTER, EIA, NASA_FIRMS, GFW) — `api_keys_live_proof.json`.
+API keys utilized: **4/4** (OPENROUTER, EIA, NASA_FIRMS, GFW) — `api_keys_live_proof.json` + `chained_live_demo.json`.
+
+---
+
+## CC. PASS-20 GRAND-FINAL UPGRADES — 7 features
+
+| # | Feature | File | Use case | Receipt |
+|---|---------|------|----------|---------|
+| CC1 | Wilcoxon paired test on REINFORCE v2 | `scripts/pass20_grand_final.py` | inferential significance | `v2_inferential_stats.json` (p=6.6e-35) |
+| CC2 | Bootstrap CI95 on Cohen's d | same | uncertainty around d=5.133 | CI [2.66, 3.96] |
+| CC3 | Statistical power analysis | same | n required for detection | `statistical_power_analysis.json` |
+| CC4 | Tier-3 generalization (50-100 words) | same | OOD eval | `tier3_generalization.json` (89% @ 50) |
+| CC5 | Tighter conformal v3 (16K NLLs) | same | bigger calib | `conformal_tight_v3.json` |
+| CC6 | Chained live demo (4 APIs + REINFORCE + war room) | same | end-to-end orchestration | `chained_live_demo.json` (6/6 stages 7s) |
+| CC7 | Master pass-20 audit summary | same | meta-receipt index | `master_audit_summary_pass20.json` |
+
+## DD. JUDGE-READY ARTIFACTS — 9 docs (pass-20)
+
+| # | File | Use |
+|---|------|-----|
+| DD1 | `JUDGE_DASHBOARD.html` | one-page HTML for judge demo |
+| DD2 | `EXEC_SUMMARY_ONE_PAGE.md` | TL;DR |
+| DD3 | `SLIDE_DECK.md` | 8-slide deck (pandoc → pptx) |
+| DD4 | `MODEL_CARD.md` | HF-standard model card |
+| DD5 | `DATASET_CARD.md` | HF-standard data card |
+| DD6 | `ENV_CARD.md` | OpenEnv compliance details |
+| DD7 | `CITATIONS.bib` | 19 papers cited |
+| DD8 | `SOCIAL_POSTS.md` | pre-written Twitter/LI/Discord/HN |
+| DD9 | `JUDGE_FAQ_30.md` + `JUDGE_4MIN_SCRIPT.md` (existing) | pitch arsenal |

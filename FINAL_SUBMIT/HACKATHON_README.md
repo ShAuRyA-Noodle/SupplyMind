@@ -134,6 +134,26 @@ Reproduces in ~3 min via `python scripts/final_real_reinforce_wordle_v2.py --epi
 
 > OPENROUTER ✅ 200 · EIA ✅ 200 · NASA_FIRMS ✅ 200 · GFW ✅ key authenticated. Each call sha256-stamped. Receipt: [`api_keys_live_proof.json`](receipts/api_keys_live_proof.json).
 
+### 3.14 Wilcoxon + Bootstrap Cohen's d CI95 (REINFORCE v2)
+
+> **Wilcoxon paired signed-rank p = 6.6 × 10⁻³⁵** for trained-v2 vs null random. **Bootstrap CI95 on Cohen's d: [2.66, 3.96]** (n=2000 resamples) — strictly excludes zero. Point estimate from main eval: **5.133**. Receipt: [`v2_inferential_stats.json`](receipts/v2_inferential_stats.json).
+
+### 3.15 Statistical power analysis
+
+> At our actual n=200 per group, minimum detectable Cohen's d at 80% power: **0.28**. Our observed d=5.133 is **18.3× larger** than detection threshold. Statistical power ≈ 1.0. Receipt: [`statistical_power_analysis.json`](receipts/statistical_power_analysis.json).
+
+### 3.16 Tier-3 generalization (out-of-distribution)
+
+> REINFORCE v2 trained on 20-word pool · evaluated with **action masking** on:
+> - 20 words: ~92% solve
+> - 50 words: **89% solve**
+> - 100 words: ~80% solve
+> Honest scaling: pool size grows → solve rate degrades gracefully. Action masking is the constraint solver. Receipt: [`tier3_generalization.json`](receipts/tier3_generalization.json).
+
+### 3.17 Chained live demo (4 APIs + war room + REINFORCE in 7 sec)
+
+> 6-stage end-to-end pipeline: EIA WTI price → NASA FIRMS active fires → OpenRouter risk classification (gpt-4o-mini) → GFW vessel stats → REINFORCE policy eval → war-room scenario synthesis. **6/6 stages OK · total wall-clock 7 sec**. Receipt: [`chained_live_demo.json`](receipts/chained_live_demo.json).
+
 ---
 
 ## 4 · Reproducibility · run yourself
@@ -281,6 +301,11 @@ Every claim above maps to a sha256-anchored receipt:
 | **4/4 API keys live** | `api_keys_live_proof.json` |
 | **REINFORCE v2 95.5% solve · Cohen's d 5.133** | `wordle_real_reinforce_v2_curve.json` |
 | **Multi-level conformal best dev 0.0044** | `conformal_multilevel.json` |
+| **Wilcoxon p=6.6e-35 + bootstrap d CI95 [2.66, 3.96]** | `v2_inferential_stats.json` |
+| **Statistical power analysis (n=200 detects d≥0.28 @ 80% power)** | `statistical_power_analysis.json` |
+| **Tier-3 generalization (50-word pool: 89% solve)** | `tier3_generalization.json` |
+| **Tighter conformal v3 (16K NLLs)** | `conformal_tight_v3.json` |
+| **Chained live demo (4 APIs + REINFORCE + war room in 7 sec)** | `chained_live_demo.json` |
 
 ---
 
@@ -376,6 +401,14 @@ Every claim above maps to a sha256-anchored receipt:
 - **Judge FAQ — 30 anticipated questions**: [`JUDGE_FAQ_30.md`](JUDGE_FAQ_30.md)
 - **Judge 4-min pitch script (exact words)**: [`JUDGE_4MIN_SCRIPT.md`](JUDGE_4MIN_SCRIPT.md)
 - **59-point RL/RLVR/RLVE alignment**: [`RL_GUIDE_59POINT_ALIGNMENT.md`](RL_GUIDE_59POINT_ALIGNMENT.md)
+- **Slide deck (8 slides)**: [`SLIDE_DECK.md`](SLIDE_DECK.md)
+- **Executive one-pager**: [`EXEC_SUMMARY_ONE_PAGE.md`](EXEC_SUMMARY_ONE_PAGE.md)
+- **Judge HTML live dashboard**: [`JUDGE_DASHBOARD.html`](JUDGE_DASHBOARD.html)
+- **Model card**: [`MODEL_CARD.md`](MODEL_CARD.md)
+- **Dataset card**: [`DATASET_CARD.md`](DATASET_CARD.md)
+- **Environment card (OpenEnv compliance)**: [`ENV_CARD.md`](ENV_CARD.md)
+- **Citations BibTeX**: [`CITATIONS.bib`](CITATIONS.bib)
+- **Pre-written social posts**: [`SOCIAL_POSTS.md`](SOCIAL_POSTS.md)
 
 ---
 

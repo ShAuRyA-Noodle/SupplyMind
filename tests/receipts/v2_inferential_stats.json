@@ -1,0 +1,17 @@
+{
+  "ok": true,
+  "framework": "Wilcoxon signed-rank (one-sided 'greater') + non-parametric bootstrap CI95 on Cohen's d",
+  "n_paired": 200,
+  "wilcoxon_statistic": 20100.0,
+  "wilcoxon_p_value": 6.637460878885485e-35,
+  "wilcoxon_significant_at_1e_minus_5": true,
+  "n_bootstrap_resamples": 2000,
+  "cohens_d_bootstrap_median": 3.2054,
+  "cohens_d_bootstrap_ci95_low": 2.6597,
+  "cohens_d_bootstrap_ci95_high": 3.9585,
+  "ci95_excludes_zero": true,
+  "trained_n_eps": 200,
+  "untrained_n_eps": 200,
+  "trained_mean": 1.5982,
+  "untrained_mean": 0.2203
+}

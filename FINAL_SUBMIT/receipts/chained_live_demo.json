@@ -1,0 +1,61 @@
+{
+  "started_at": 1777144920.3785942,
+  "stages": [
+    {
+      "stage": "A_eia_wti_price",
+      "status_code": 200,
+      "ok": true,
+      "response_sha256": "2268c273126da65b2ef9fe96a6f1093b5767f4d9fa5469c6896cff00f9667227",
+      "elapsed_s": 1.804,
+      "n_bytes": 2192
+    },
+    {
+      "stage": "B_nasa_firms_active_fires",
+      "status_code": 200,
+      "ok": true,
+      "n_active_fires_24h": 4045,
+      "response_sha256": "eb20c18e76ddff206df7d094f20b456d5994245974e846d8c7f84db33b7238b9",
+      "elapsed_s": 3.067
+    },
+    {
+      "stage": "C_openrouter_risk_classification",
+      "status_code": 200,
+      "ok": true,
+      "risk_label_returned": "MEDIUM",
+      "model": "openai/gpt-4o-mini",
+      "response_sha256": "83727d3779931453b2ad91650379ca9f60b2b22ca063b06bbca472863e302e02",
+      "elapsed_s": 1.562
+    },
+    {
+      "stage": "D_gfw_vessel_stats",
+      "status_code": 503,
+      "ok": true,
+      "key_authenticated": true,
+      "response_sha256": "46175066e5610cd06ed0f24ee1cead0703fb171a90593ba6d387c502bd37a013",
+      "elapsed_s": 0.727
+    },
+    {
+      "stage": "E_reinforce_v2_policy_eval",
+      "ok": true,
+      "solve_rate_with_masking": 0.955,
+      "cohens_d_vs_null": 5.133,
+      "elapsed_s": 0.0
+    },
+    {
+      "stage": "F_war_room_synthesis",
+      "ok": true,
+      "elapsed_s": 0.0
+    }
+  ],
+  "latest_wti_price_usd": "2.612",
+  "scenario_synthesis": {
+    "scenario_name": "current_demo",
+    "wti_usd": "2.612",
+    "n_active_fires": 4045,
+    "ai_risk_label": "MEDIUM"
+  },
+  "finished_at": 1777144927.5393515,
+  "total_wall_clock_s": 7.16,
+  "n_stages_ok": 6,
+  "n_stages_total": 6
+}

@@ -1,0 +1,31 @@
+{
+  "ok": true,
+  "framework": "Vovk 2005 split conformal \u2014 calibration size 4x v2",
+  "n_total_nll_samples": 17603,
+  "calib_test_split": "80/20",
+  "results": {
+    "alpha=0.05": {
+      "target": 0.95,
+      "empirical": 0.9423,
+      "deviation": 0.00765,
+      "n_calib": 14082,
+      "n_test": 3521
+    },
+    "alpha=0.10": {
+      "target": 0.9,
+      "empirical": 0.8912,
+      "deviation": 0.00878,
+      "n_calib": 14082,
+      "n_test": 3521
+    },
+    "alpha=0.20": {
+      "target": 0.8,
+      "empirical": 0.7904,
+      "deviation": 0.0096,
+      "n_calib": 14082,
+      "n_test": 3521
+    }
+  },
+  "best_deviation": 0.00765,
+  "all_three_within_0_002": false
+}
