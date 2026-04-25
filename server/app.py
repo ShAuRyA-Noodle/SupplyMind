@@ -124,6 +124,15 @@ try:
 except Exception as _e:  # noqa: BLE001
     logger.info("v11 port-imagery router not mounted (%s)", _e)
 
+# v15 — Wordle RLVR canonical demo (Meta OpenEnv x Scaler hackathon-guide bridge).
+try:
+    from ShAuRyA_Phoenix.wordle_env.router import router as _wordle_router
+    if _wordle_router is not None:
+        app.include_router(_wordle_router, tags=["wordle (v15)"])
+        logger.info("mounted Wordle RLVR router (v15)")
+except Exception as _e:  # noqa: BLE001
+    logger.info("v15 wordle router not mounted (%s)", _e)
+
 
 # v5 arcadia-live-II (Phoenix) — mount OpenEnv Arena + Counterfactual Twin +
 # Hormuz offline replay. Each graceful-no-op independently.

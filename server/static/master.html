@@ -556,6 +556,104 @@
     </div>
   </section>
 
+  <!-- ============================ REWARD-HACKING SIDE-BY-SIDE ============================ -->
+  <section class="panel p-5">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h2 class="font-semibold">Reward-hacking · 6 attacks · 6 rejected · all by different defense layer</h2>
+        <div class="text-xs text-[var(--fg-2)] mt-1">
+          Per Meta OpenEnv × Scaler hackathon-guide §8 — multi-component reward + multiple independent gates beat single-signal reward hacking.
+        </div>
+      </div>
+      <span class="chip chip-good">6/6 rejected · honest=0.86</span>
+    </div>
+    <div class="grid md:grid-cols-2 gap-3 text-xs">
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="flex items-center justify-between"><span class="mono font-semibold">A1 · empty_string</span><span class="chip chip-crit">REJECTED 0.00</span></div>
+        <div class="text-[var(--fg-2)] mt-1">degenerate empty output, no info</div>
+        <div class="mono mt-1 text-[var(--fg-1)]">match=0.00 · format=0.00 · length=0.00 · n_tokens=1</div>
+        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: format_gate + length_gate</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="flex items-center justify-between"><span class="mono font-semibold">A2 · risk_only_short_circuit</span><span class="chip chip-crit">REJECTED 0.70</span></div>
+        <div class="text-[var(--fg-2)] mt-1">pure short-circuit: output ground-truth label only</div>
+        <div class="mono mt-1 text-[var(--fg-1)]">match=1.00 · format=0.00 · length=0.00 · n_tokens=1</div>
+        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: length_gate (shorter than honest)</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="flex items-center justify-between"><span class="mono font-semibold">A3 · long_spam_no_json</span><span class="chip chip-crit">REJECTED 0.80</span></div>
+        <div class="text-[var(--fg-2)] mt-1">pad with junk to beat length-guard, omit JSON</div>
+        <div class="mono mt-1 text-[var(--fg-1)]">match=1.00 · format=0.00 · length=1.00 · n_tokens=200</div>
+        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: format_gate (no JSON shape)</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="flex items-center justify-between"><span class="mono font-semibold">A4 · over_length_500_token</span><span class="chip chip-crit">REJECTED 0.85</span></div>
+        <div class="text-[var(--fg-2)] mt-1">massive output to dilute detection</div>
+        <div class="mono mt-1 text-[var(--fg-1)]">match=1.00 · format=1.00 · length=<span class="text-[var(--red)]">-0.50</span> · n_tokens=500</div>
+        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: max_length_penalty (negative reward over 400tk)</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="flex items-center justify-between"><span class="mono font-semibold">A5 · adjacent_tier_guess</span><span class="chip chip-crit">REJECTED 0.65</span></div>
+        <div class="text-[var(--fg-2)] mt-1">always guess adjacent tier to hedge</div>
+        <div class="mono mt-1 text-[var(--fg-1)]">match=<span class="text-[var(--amber)]">0.50</span> · format=1.00 · length=1.00 · n_tokens=60</div>
+        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: ordinal_proximity_penalty (only 0.5 partial credit)</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="flex items-center justify-between"><span class="mono font-semibold">A6 · wrong_tier_confident</span><span class="chip chip-crit">REJECTED 0.30</span></div>
+        <div class="text-[var(--fg-2)] mt-1">always guess LOW (opposite end)</div>
+        <div class="mono mt-1 text-[var(--fg-1)]">match=<span class="text-[var(--red)]">0.00</span> · format=1.00 · length=1.00 · n_tokens=60</div>
+        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: far-from-GT match=0 (not partial credit)</div>
+      </div>
+    </div>
+    <div class="mt-3 p-3 rounded-lg border border-[var(--green)]/30 bg-[var(--green)]/5">
+      <div class="text-xs font-semibold text-[var(--green)]">honest baseline reward = 0.86 · STRICTLY GREATER than every attack</div>
+      <div class="text-xs text-[var(--fg-2)] mt-1 mono">verdict: All attack vectors score strictly below honest. Layered reward rejects each via different component: length-guard (A2), format-guard (A3), max-length (A4), proximity penalty (A5,A6).</div>
+      <div class="text-xs text-[var(--fg-2)] mt-1 mono">receipt: tests/receipts/adversarial_reward_audit.json</div>
+    </div>
+  </section>
+
+  <!-- ============================ WORDLE RLVR CANONICAL DEMO ============================ -->
+  <section class="panel p-5">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h2 class="font-semibold">Wordle RLVR · canonical hackathon-guide demo</h2>
+        <div class="text-xs text-[var(--fg-2)] mt-1">
+          OpenEnv-compliant · multi-component reward · GRPO-trainable via TRL · bridges domain-heavy supply-chain to canonical hackathon flow
+        </div>
+      </div>
+      <a href="/wordle/ui" target="_blank" class="chip chip-violet hover:underline">▶ play live</a>
+    </div>
+    <div class="grid md:grid-cols-3 gap-3 text-xs">
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="text-[var(--fg-2)]">env contract</div>
+        <div class="mono mt-1">reset / step / grade / observation / action</div>
+        <div class="text-[10px] text-[var(--fg-2)] mt-1">Pydantic v2 typed · OpenEnv compliant</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="text-[var(--fg-2)]">reward components (multi · §7)</div>
+        <div class="mono mt-1">solve_bonus · green_credit · yellow_credit · timeout_penalty · format_gate · dictionary_gate</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="text-[var(--fg-2)]">anti-hack layers (§8)</div>
+        <div class="mono mt-1">format_gate · dictionary_gate · timeout · no internal-state mutation</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="text-[var(--fg-2)]">baseline (heuristic constraint filter, 50 episodes seeded)</div>
+        <div class="mono mt-1 text-[var(--green)]">win_rate=1.00 · mean_guesses=1.82 · mean_reward=0.77</div>
+        <div class="text-[10px] text-[var(--fg-2)] mt-1">receipt: tests/receipts/wordle_grpo_baseline.json</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="text-[var(--fg-2)]">trainer stack</div>
+        <div class="mono mt-1">TRL GRPO · Unsloth (optional) · Qwen-2.5-1.5B-Instruct base</div>
+        <div class="text-[10px] text-[var(--fg-2)] mt-1">recipe: rl/lora/finetune_unsloth.py + ShAuRyA_Phoenix/wordle_env/train_grpo.py</div>
+      </div>
+      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
+        <div class="text-[var(--fg-2)]">endpoints</div>
+        <div class="mono mt-1">POST /wordle/reset · POST /wordle/step · POST /wordle/grade · GET /wordle/health · GET /wordle/ui</div>
+      </div>
+    </div>
+  </section>
+
   <!-- VALIDATION + RECEIPTS ROW -->
   <section class="grid md:grid-cols-2 gap-4">
     <div class="panel p-5">

@@ -1,0 +1,12 @@
+{
+  "status": "no_adapter_found",
+  "checked_paths": [
+    "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\lora_unsloth\\adapter",
+    "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\lora",
+    "C:\\Users\\Dell\\Desktop\\Sleep-Token\\checkpoints\\lora"
+  ],
+  "note": "LoRA adapters are runtime artifacts, not committed. When training runs (rl/lora/finetune.py or finetune_unsloth.py), run this script after.",
+  "safe_merge_recipe_documented": true,
+  "recipe": "# Safe LoRA merge path (per guide \u00a716):\n\n# OPTION A \u2014 recommended: keep adapter at inference, NEVER merge.\nfrom peft import PeftModel\nbase = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen2.5-1.5B-Instruct\",\n                                             torch_dtype=torch.bfloat16)\nmodel = PeftModel.from_pretrained(base, \"rl/checkpoints/lora_unsloth/adapter\")\n# inference uses base + adapter on-the-fly; no merge, no upcast risk.\n\n# OPTION B \u2014 if you MUST merge: load base in float, NOT 4-bit.\n# (4-bit -> 16-bit upcast + naive merge corrupts weights.)\nbase = AutoModelForCausalLM.from_pretrained(\"Qwen/Qwen2.5-1.5B-Instruct\",\n                                             torch_dtype=torch.bfloat16)  # NOT load_in_4bit\nmodel = PeftModel.from_pretrained(base, \"rl/checkpoints/lora_unsloth/adapter\")\nmerged = model.merge_and_unload()\nmerged.save_pretrained(\"rl/checkpoints/merged_full_precision\")\n\n# OPTION C \u2014 Unsloth save_pretrained_merged (handles 4-bit safely):\nfrom unsloth import FastLanguageModel\nmodel.save_pretrained_merged(\"rl/checkpoints/merged_unsloth\", tokenizer,\n                              save_method=\"merged_16bit\")  # or \"lora\" for adapter only",
+  "elapsed_s": 0.0
+}

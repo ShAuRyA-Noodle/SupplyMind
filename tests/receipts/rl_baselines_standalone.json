@@ -1,0 +1,32 @@
+{
+  "task": "easy",
+  "trainers": {
+    "recurrent_ppo": {
+      "status": "trained_ok",
+      "algo": "RecurrentPPO",
+      "policy": "MlpLstmPolicy(lstm_hidden=128, n_lstm_layers=1)",
+      "task": "easy",
+      "total_timesteps": 0,
+      "checkpoint": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\recurrent_ppo_easy.zip",
+      "elapsed_s": 3.64,
+      "user_finding": "REJECTED on supply-chain env (collapsed to ~0.30 mean reward)"
+    },
+    "a2c": {
+      "status": "trained_ok",
+      "algo": "A2C",
+      "task": "easy",
+      "total_timesteps": 0,
+      "checkpoint": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\rl\\checkpoints\\a2c_easy.zip",
+      "elapsed_s": 0.06
+    },
+    "sac_discrete": {
+      "status": "skeleton_only",
+      "algo": "SAC-Discrete",
+      "task": "easy",
+      "note": "SAC-Discrete is not in stock SB3. Implementation requires the `discrete_sac_pytorch` package or custom Q-target softmax. Skeleton wired; full training requires that dep.",
+      "install": "pip install discrete-sac-pytorch",
+      "expected_total_timesteps": 0,
+      "elapsed_s": 0.0
+    }
+  }
+}

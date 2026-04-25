@@ -1,0 +1,9 @@
+{
+  "n_episodes": 50,
+  "n_won": 50,
+  "win_rate": 1.0,
+  "mean_cumulative_reward": 0.7699,
+  "mean_guesses_used": 1.82,
+  "policy": "heuristic_constraint_filter",
+  "seed": 42
+}
