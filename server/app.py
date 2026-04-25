@@ -1005,6 +1005,39 @@ async def analyst_holdout_eval(req: HoldoutEvalRequest) -> HoldoutEvalResponse:
 
 
 # ============================================================
+# /demo/recent-disaster — 24-48h end-to-end keystone demo (pass 7 C10)
+# ============================================================
+#
+# The keystone that ties together everything:
+#   20-source fan-out -> recent disaster pick -> library v2 match ->
+#   multi-layer severity heuristic -> 4-method counterfactual -> action plan.
+# Zero synthetic substitution. Every number traces to a real source URL.
+
+
+class RecentDisasterRequest(BaseModel):
+    fan_out_timeout_s: float = Field(45.0, ge=10.0, le=120.0)
+    library_top_k: int = Field(5, ge=1, le=20)
+    counterfactual_episodes: int = Field(20, ge=1, le=200)
+    target_severity_min: float = Field(0.4, ge=0.0, le=1.0)
+
+
+@app.post("/demo/recent-disaster", tags=["demo"])
+async def demo_recent_disaster(req: RecentDisasterRequest) -> dict:
+    """End-to-end pipeline: pulls real signals from 20 sources for the
+    last 24-48h, picks the highest-severity event, matches against the
+    1500-event EMDAT library v2, runs the 4-method Platinum counterfactual,
+    and returns a structured action plan.
+    """
+    from ShAuRyA_Supplymind.realtime.demo_orchestrator import run_demo
+    return run_demo(
+        fan_out_timeout_s=req.fan_out_timeout_s,
+        library_top_k=req.library_top_k,
+        counterfactual_episodes=req.counterfactual_episodes,
+        target_severity_min=req.target_severity_min,
+    )
+
+
+# ============================================================
 # /library/v2/search — auto-cooked 1500-event crisis library (pass 6 C5)
 # ============================================================
 

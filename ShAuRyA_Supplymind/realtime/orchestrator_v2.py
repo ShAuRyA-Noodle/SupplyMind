@@ -10,7 +10,10 @@ from __future__ import annotations
 
 import logging
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import (
+    ThreadPoolExecutor, as_completed,
+    TimeoutError as FuturesTimeoutError,
+)
 from typing import Callable
 
 from .sources_v2 import (
@@ -21,19 +24,47 @@ from .sources_v2 import (
 
 # Existing v1 sources (NewsAPI, GDELT, USGS, MarineTraffic, FRED Brent)
 # wired in via server.app /live/recent-events endpoint already; we
-# re-aggregate them here for a unified view.
+# re-aggregate them here for a unified view. Adapter converts the v1
+# Event dataclass -> the v2 standard event dict.
 from .sources import fred_brent, gdelt as gdelt_v1, newsapi, usgs
 
 logger = logging.getLogger(__name__)
 
 
+def _v1_event_to_dict(ev) -> dict:
+    """Adapter: v1 Event dataclass -> v2 standard event dict."""
+    return {
+        "source":          getattr(ev, "source", "?"),
+        "event_id":        f"{getattr(ev, 'source', '?')}_{getattr(ev, 'text_hash', '?')[:24]}",
+        "title":           (getattr(ev, "raw_text", "") or "")[:160],
+        "description":     (getattr(ev, "raw_text", "") or "")[:1500],
+        "occurred_at_utc": getattr(ev, "ts_iso", None),
+        "lat":             (getattr(ev, "meta", {}) or {}).get("lat"),
+        "lon":             (getattr(ev, "meta", {}) or {}).get("lon"),
+        "severity_proxy":  float(getattr(ev, "severity", 0.0)),
+        "raw_url":         (getattr(ev, "urls", []) or ["?"])[0],
+        "fetched_at_utc":  None,
+        "inference_type":  f"live_{getattr(ev, 'source', '?')}",
+        "extra":           {"event_type": getattr(ev, "event_type", "?"),
+                             "region": getattr(ev, "region", "?")},
+    }
+
+
+def _wrap_v1(fn: Callable, **kwargs) -> Callable[[], list[dict]]:
+    """Wrap a v1 fetch() function so it returns the v2 dict schema."""
+    def _inner():
+        events = fn(**kwargs) or []
+        return [_v1_event_to_dict(e) for e in events]
+    return _inner
+
+
 # Source spec: (label, callable, default_args, role)
 SOURCE_FLEET: list[tuple[str, Callable, dict, str]] = [
     # --- v1 baseline (5) ---
-    ("newsapi",            newsapi.fetch_recent,           {"days": 7, "page_size": 30}, "news"),
-    ("gdelt_v1",           gdelt_v1.fetch_recent_events,   {"timespan": "7d"},          "geopol"),
-    ("usgs_quakes",        usgs.fetch_recent_quakes,       {"min_magnitude": 4.5},      "natural"),
-    ("fred_brent",         fred_brent.fetch_latest,        {},                          "commodity"),
+    ("newsapi",            _wrap_v1(newsapi.fetch, lookback_minutes=2880),     {}, "news"),
+    ("gdelt_v1",           _wrap_v1(gdelt_v1.fetch, lookback_minutes=2880),    {}, "geopol"),
+    ("usgs_quakes",        _wrap_v1(usgs.fetch),                                {}, "natural"),
+    ("fred_brent",         _wrap_v1(fred_brent.fetch),                          {}, "commodity"),
     # --- v2 expansion (15) ---
     ("who_don",            who_don.fetch_recent,                           {"limit": 20}, "health"),
     ("gdelt_conflict",     gdelt_conflict.fetch_conflict_events,           {"timespan": "7d"}, "conflict"),
@@ -71,14 +102,29 @@ def fan_out_all(
             ex.submit(_safe_call, label, fn, kwargs): label
             for (label, fn, kwargs, _role) in SOURCE_FLEET
         }
-        for fut in as_completed(futures, timeout=timeout_s + 5):
-            label = futures[fut]
-            try:
-                ok_events = fut.result(timeout=timeout_s)
-                results[label] = ok_events
-            except Exception as e:  # noqa: BLE001
-                errors[label] = f"{type(e).__name__}: {str(e)[:160]}"
-                results[label] = []
+        try:
+            for fut in as_completed(futures, timeout=timeout_s):
+                label = futures[fut]
+                try:
+                    ok_events = fut.result(timeout=2)
+                    results[label] = ok_events
+                except Exception as e:  # noqa: BLE001
+                    errors[label] = f"{type(e).__name__}: {str(e)[:160]}"
+                    results[label] = []
+        except FuturesTimeoutError:
+            # Some sources still running — record them as timeouts and move on
+            for fut, label in futures.items():
+                if label not in results:
+                    if fut.done():
+                        try:
+                            results[label] = fut.result(timeout=1)
+                        except Exception as e:  # noqa: BLE001
+                            errors[label] = f"{type(e).__name__}: {str(e)[:160]}"
+                            results[label] = []
+                    else:
+                        errors[label] = f"timeout after {timeout_s}s (still running)"
+                        results[label] = []
+                        fut.cancel()
 
     all_events: list[dict] = []
     role_map = {label: role for label, _, _, role in SOURCE_FLEET}
