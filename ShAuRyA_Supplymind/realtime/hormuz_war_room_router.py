@@ -48,6 +48,7 @@ from ShAuRyA_Supplymind.realtime.hormuz_endpoint import (
 logger = logging.getLogger(__name__)
 
 UI_HTML_PATH = Path(__file__).resolve().parents[2] / "server" / "static" / "hormuz_war_room.html"
+MASTER_HTML_PATH = Path(__file__).resolve().parents[2] / "server" / "static" / "master.html"
 
 router = APIRouter() if APIRouter is not None else None
 
@@ -195,6 +196,16 @@ if router is not None:
                 detail=f"war-room HTML not found at {UI_HTML_PATH}",
             )
         return HTMLResponse(UI_HTML_PATH.read_text(encoding="utf-8"))
+
+    @router.get("/demo/master", include_in_schema=False)
+    @router.get("/demo/master/ui", include_in_schema=False)
+    def master_ui():
+        if HTMLResponse is None:
+            raise HTTPException(status_code=500, detail="HTMLResponse unavailable")
+        if not MASTER_HTML_PATH.exists():
+            raise HTTPException(status_code=500,
+                                detail=f"master HTML not found at {MASTER_HTML_PATH}")
+        return HTMLResponse(MASTER_HTML_PATH.read_text(encoding="utf-8"))
 
     @router.post("/demo/hormuz-war-room", tags=["demo"])
     def war_room_orchestrate(req: WarRoomRequest) -> dict:

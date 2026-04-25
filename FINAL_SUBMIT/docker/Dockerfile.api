@@ -1,0 +1,25 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# System deps for sentence-transformers, faiss, torch
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential git curl ca-certificates libgomp1 \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Repo (excluding models — they get mounted as a volume)
+COPY . /app/
+
+# Models live at /app/models — mount your local models/ dir as this volume
+VOLUME /app/models
+
+EXPOSE 8000
+
+# Pre-warm not done in image — runs in lifespan handler at startup
+ENV PYTHONIOENCODING=utf-8
+ENV OLLAMA_MAX_LOADED_MODELS=1
+
+CMD ["uvicorn", "server.app:app", "--host", "0.0.0.0", "--port", "8000"]

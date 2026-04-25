@@ -1,0 +1,35 @@
+{
+  "generated_at_utc": "2026-04-25T09:34:13Z",
+  "n_transitions_total": 40000,
+  "n_train": 32000,
+  "n_calibration": 8000,
+  "ref_policy_train_losses": [
+    3.693697222709656,
+    1.9243778076171876,
+    1.9152100334167481,
+    1.909162184715271,
+    1.9038093919754029,
+    1.8957960233688353,
+    1.8850546293258668,
+    1.8744747772216797
+  ],
+  "conformal_filter": {
+    "nll_quantile": 3.45420241355896,
+    "alpha": 0.1,
+    "n_calibration": 8000,
+    "n_actions": 280,
+    "expected_coverage": 0.9,
+    "method": "split_conformal_nll"
+  },
+  "empirical_coverage_on_cal": 0.9001250267028809,
+  "n_accepted_actions_per_row_mean": 8.865374565124512,
+  "n_accepted_actions_per_row_median": 9.0,
+  "n_accepted_actions_per_row_min": 5.0,
+  "n_accepted_actions_per_row_max": 11.0,
+  "alpha": 0.1,
+  "expected_coverage_1_minus_alpha": 0.9,
+  "elapsed_s": 2.56,
+  "weights_path": "ShAuRyA_Phoenix\\action_v2\\conformal_calibrated.pt",
+  "transitions_source": "ShAuRyA_Phoenix\\experiments\\rap_xc_v1\\transitions.npz",
+  "method": "split_conformal_NLL_on_real_harvested_trajectories"
+}

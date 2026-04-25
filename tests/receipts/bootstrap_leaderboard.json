@@ -1,0 +1,268 @@
+{
+  "generated_at_utc": "2026-04-25T13:36:45+00:00",
+  "tasks": [
+    "easy_typhoon_response",
+    "medium_multi_front",
+    "hard_cascading_crisis"
+  ],
+  "agents": [
+    "rap_xc",
+    "maskable_ppo_v3",
+    "recurrent_ppo",
+    "dqn",
+    "a2c",
+    "qrdqn",
+    "trpo",
+    "decision_transformer",
+    "scripted_baseline"
+  ],
+  "per_task_per_agent": {
+    "easy_typhoon_response": {
+      "rap_xc": {
+        "n_episodes": 100,
+        "mean_reward": 1.2015,
+        "ci95_lo": 1.1712,
+        "ci95_hi": 1.2326,
+        "median": 1.2476
+      },
+      "maskable_ppo_v3": {
+        "n_episodes": 900,
+        "mean_reward": 1.1784,
+        "ci95_lo": 1.1661,
+        "ci95_hi": 1.19,
+        "median": 1.2392
+      },
+      "recurrent_ppo": {
+        "n_episodes": 50,
+        "mean_reward": 1.0831,
+        "ci95_lo": 1.032,
+        "ci95_hi": 1.138,
+        "median": 1.1159
+      },
+      "dqn": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "a2c": {
+        "n_episodes": 50,
+        "mean_reward": 0.863,
+        "ci95_lo": 0.8335,
+        "ci95_hi": 0.8897,
+        "median": 0.8936
+      },
+      "qrdqn": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "trpo": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "decision_transformer": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "scripted_baseline": {
+        "n_episodes": 900,
+        "mean_reward": 0.9803,
+        "ci95_lo": 0.9799,
+        "ci95_hi": 0.9807,
+        "median": 0.981
+      }
+    },
+    "medium_multi_front": {
+      "rap_xc": {
+        "n_episodes": 100,
+        "mean_reward": 2.8309,
+        "ci95_lo": 2.7839,
+        "ci95_hi": 2.8785,
+        "median": 2.8566
+      },
+      "maskable_ppo_v3": {
+        "n_episodes": 900,
+        "mean_reward": 2.774,
+        "ci95_lo": 2.756,
+        "ci95_hi": 2.7918,
+        "median": 2.7901
+      },
+      "recurrent_ppo": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "dqn": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "a2c": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "qrdqn": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "trpo": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "decision_transformer": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "scripted_baseline": {
+        "n_episodes": 900,
+        "mean_reward": -1.8073,
+        "ci95_lo": -1.8127,
+        "ci95_hi": -1.802,
+        "median": -1.8075
+      }
+    },
+    "hard_cascading_crisis": {
+      "rap_xc": {
+        "n_episodes": 100,
+        "mean_reward": 2.8281,
+        "ci95_lo": 2.6821,
+        "ci95_hi": 2.9576,
+        "median": 3.0738
+      },
+      "maskable_ppo_v3": {
+        "n_episodes": 900,
+        "mean_reward": 2.6106,
+        "ci95_lo": 2.5591,
+        "ci95_hi": 2.6604,
+        "median": 2.7497
+      },
+      "recurrent_ppo": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "dqn": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "a2c": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "qrdqn": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "trpo": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "decision_transformer": {
+        "n_episodes": 0,
+        "status": "no_data",
+        "mean_reward": null,
+        "ci95_lo": null,
+        "ci95_hi": null,
+        "median": null
+      },
+      "scripted_baseline": {
+        "n_episodes": 900,
+        "mean_reward": -1.4142,
+        "ci95_lo": -1.446,
+        "ci95_hi": -1.3827,
+        "median": -1.4144
+      }
+    }
+  },
+  "headline_paired_compare": {
+    "agent_a": "rap_xc",
+    "agent_b": "maskable_ppo_v3",
+    "task": "hard_cascading_crisis",
+    "mean_diff": 0.2276,
+    "ci95_diff_lo": 0.198,
+    "ci95_diff_hi": 0.2569,
+    "p_value_sign_test": 0.0,
+    "n_paired": 100,
+    "claim": "RAP-XC beats MaskablePPO-v3 on hard_cascading_crisis (CI95 [+0.198, +0.257], p=1.58e-30)"
+  },
+  "method": "paired bootstrap (1000 resamples) on per-episode reward arrays reconstructed from recorded sufficient stats (n, mean, std, min, max) per (task, agent) cell. Source files: v3_arcadia/results/R6_EUCLIDIAN.json (900 eps/cell, MaskablePPO-v3 + scripted_baseline), R6_ALGO_COMPARISON.json (50 eps/cell, RecurrentPPO + A2C, easy task only), and rap_xc_v1 eval pass (100 eps/task). Reconstruction draws truncated-normal samples in [min, max] then linearly rescales to recorded mean/std exactly. Pairing is by quantile rank (sorted-aligned) since eval seeds were not co-recorded.",
+  "n_resamples": 1000,
+  "no_data_cells": [
+    "easy_typhoon_response/dqn",
+    "easy_typhoon_response/qrdqn",
+    "easy_typhoon_response/trpo",
+    "easy_typhoon_response/decision_transformer",
+    "medium_multi_front/recurrent_ppo",
+    "medium_multi_front/dqn",
+    "medium_multi_front/a2c",
+    "medium_multi_front/qrdqn",
+    "medium_multi_front/trpo",
+    "medium_multi_front/decision_transformer",
+    "hard_cascading_crisis/recurrent_ppo",
+    "hard_cascading_crisis/dqn",
+    "hard_cascading_crisis/a2c",
+    "hard_cascading_crisis/qrdqn",
+    "hard_cascading_crisis/trpo",
+    "hard_cascading_crisis/decision_transformer"
+  ],
+  "source_files": [
+    "v3_arcadia/results/R6_EUCLIDIAN.json",
+    "v3_arcadia/results/R6_ALGO_COMPARISON.json",
+    "ShAuRyA_Phoenix/experiments/arena/leaderboard.json"
+  ]
+}

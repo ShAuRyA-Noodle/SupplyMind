@@ -1,0 +1,180 @@
+{
+  "generated_at_utc": "2026-04-25T08:52:26Z",
+  "n_graphs_trained": 3,
+  "method": "HetTemporalGAT vs v1 R6_PROVIDER_V2 GCN",
+  "task": "arrival_time_regression on noisy-edge supply-chain graphs",
+  "training_per_graph": {
+    "epochs": 60,
+    "n_train": 128,
+    "n_test": 32,
+    "optimizer": "AdamW lr=1e-3 wd=0.01",
+    "loss": "smooth_l1_loss"
+  },
+  "results_per_graph": [
+    {
+      "graph": "easy_graph",
+      "n_nodes": 12,
+      "n_edges": 12,
+      "epochs": 60,
+      "n_train": 128,
+      "n_test": 32,
+      "n_parameters": 19489,
+      "hetgat_test_mae_final": 8.490921877324581,
+      "elapsed_s": 83.22,
+      "history": [
+        {
+          "epoch": 0,
+          "train_loss": 15.938679456710815,
+          "test_mae": 16.573441833257675,
+          "elapsed_s": 2.02
+        },
+        {
+          "epoch": 20,
+          "train_loss": 11.761463165283203,
+          "test_mae": 12.450434118509293,
+          "elapsed_s": 29.24
+        },
+        {
+          "epoch": 40,
+          "train_loss": 9.44724154472351,
+          "test_mae": 10.163946740329266,
+          "elapsed_s": 56.96
+        },
+        {
+          "epoch": 59,
+          "train_loss": 7.858633518218994,
+          "test_mae": 8.490921877324581,
+          "elapsed_s": 83.22
+        }
+      ],
+      "r6_v1_gcn_baseline": {
+        "gnn_mae": 9.20589906692505,
+        "mlp_mae": 17.712093811035157,
+        "one_hop_mae": 29.553308786787092,
+        "v1_improvement_vs_mlp_pct": 48.0247837147887
+      },
+      "hetgat_vs_v1_gcn_pct": 7.77
+    },
+    {
+      "graph": "medium_graph",
+      "n_nodes": 25,
+      "n_edges": 29,
+      "epochs": 60,
+      "n_train": 128,
+      "n_test": 32,
+      "n_parameters": 19489,
+      "hetgat_test_mae_final": 12.345435217022896,
+      "elapsed_s": 96.64,
+      "history": [
+        {
+          "epoch": 0,
+          "train_loss": 19.72754669189453,
+          "test_mae": 20.096861988306046,
+          "elapsed_s": 1.7
+        },
+        {
+          "epoch": 20,
+          "train_loss": 16.552949905395508,
+          "test_mae": 16.9268466681242,
+          "elapsed_s": 29.27
+        },
+        {
+          "epoch": 40,
+          "train_loss": 13.951690912246704,
+          "test_mae": 14.393796414136887,
+          "elapsed_s": 66.29
+        },
+        {
+          "epoch": 59,
+          "train_loss": 11.835591077804565,
+          "test_mae": 12.345435217022896,
+          "elapsed_s": 96.64
+        }
+      ],
+      "r6_v1_gcn_baseline": {
+        "gnn_mae": 14.05237404346466,
+        "mlp_mae": 27.562243633270263,
+        "one_hop_mae": 23.25141793220304,
+        "v1_improvement_vs_mlp_pct": 49.01585578286486
+      },
+      "hetgat_vs_v1_gcn_pct": 12.15
+    },
+    {
+      "graph": "hard_graph",
+      "n_nodes": 40,
+      "n_edges": 47,
+      "epochs": 60,
+      "n_train": 128,
+      "n_test": 32,
+      "n_parameters": 19489,
+      "hetgat_test_mae_final": 9.309911146759987,
+      "elapsed_s": 89.57,
+      "history": [
+        {
+          "epoch": 0,
+          "train_loss": 16.83004093170166,
+          "test_mae": 17.107094168663025,
+          "elapsed_s": 1.8
+        },
+        {
+          "epoch": 20,
+          "train_loss": 13.139069080352783,
+          "test_mae": 13.470923140645027,
+          "elapsed_s": 32.82
+        },
+        {
+          "epoch": 40,
+          "train_loss": 10.599762439727783,
+          "test_mae": 11.052453741431236,
+          "elapsed_s": 61.91
+        },
+        {
+          "epoch": 59,
+          "train_loss": 8.773984432220459,
+          "test_mae": 9.309911146759987,
+          "elapsed_s": 89.57
+        }
+      ],
+      "r6_v1_gcn_baseline": {
+        "gnn_mae": 10.347342171669005,
+        "mlp_mae": 28.483039016723634,
+        "one_hop_mae": 16.03428017649916,
+        "v1_improvement_vs_mlp_pct": 63.67191659010252
+      },
+      "hetgat_vs_v1_gcn_pct": 10.03
+    }
+  ],
+  "summary_table": [
+    {
+      "graph": "easy_graph",
+      "n_nodes": 12,
+      "n_edges": 12,
+      "hetgat_test_mae": 8.491,
+      "v1_gcn_test_mae": 9.206,
+      "mlp_baseline_mae": 17.712,
+      "hetgat_vs_v1_gcn_pct": 7.77,
+      "parameters": 19489
+    },
+    {
+      "graph": "medium_graph",
+      "n_nodes": 25,
+      "n_edges": 29,
+      "hetgat_test_mae": 12.345,
+      "v1_gcn_test_mae": 14.052,
+      "mlp_baseline_mae": 27.562,
+      "hetgat_vs_v1_gcn_pct": 12.15,
+      "parameters": 19489
+    },
+    {
+      "graph": "hard_graph",
+      "n_nodes": 40,
+      "n_edges": 47,
+      "hetgat_test_mae": 9.31,
+      "v1_gcn_test_mae": 10.347,
+      "mlp_baseline_mae": 28.483,
+      "hetgat_vs_v1_gcn_pct": 10.03,
+      "parameters": 19489
+    }
+  ],
+  "verdict": "HetTemporalGAT beats v1 GCN on all 3 graphs (easy +7.77%, medium +12.15%, hard +10.03%) on arrival-time regression with same n_train/n_test bounds. Heterogeneous edge-type attention + GRU temporal gating are the architectural wins."
+}

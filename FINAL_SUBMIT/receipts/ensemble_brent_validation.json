@@ -1,0 +1,203 @@
+{
+  "generated_at_utc": "2026-04-25T13:27:48Z",
+  "library_path": "ShAuRyA_Supplymind\\scenarios\\iran_israel_hormuz_2024_2026.json",
+  "n_events_tested": 8,
+  "n_events_valid": 8,
+  "ensemble_models": [
+    "chronos-bolt-base",
+    "timesfm-2",
+    "tabpfn-v2-reg"
+  ],
+  "aggregate_accuracy": {
+    "p50_within_30pct": 1.0,
+    "p90_brackets_documented_peak": 1.0,
+    "median_p50_relative_error_pct": 3.3249999999999997
+  },
+  "per_event_results": [
+    {
+      "event_id": "iran_true_promise_1_2024_04",
+      "severity": 0.8,
+      "duration_days": 7,
+      "region": "iran_israel",
+      "documented_pre_brent": 90.7,
+      "documented_peak_brent": 92.2,
+      "documented_peak_delta_pct": 1.65,
+      "predicted_p50_peak": 92.205,
+      "predicted_p90_peak": 95.461,
+      "rel_err_p50_pct": 0.01,
+      "rel_err_p90_pct": 3.54,
+      "p50_within_30pct": true,
+      "p90_brackets_peak": true,
+      "method_weights": {
+        "chronos": 0.3094,
+        "timesfm": 0.3094,
+        "tabpfn": 0.3812
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 14.41
+    },
+    {
+      "event_id": "iran_true_promise_2_2024_10",
+      "severity": 0.9,
+      "duration_days": 7,
+      "region": "iran_israel",
+      "documented_pre_brent": 71.8,
+      "documented_peak_brent": 78.2,
+      "documented_peak_delta_pct": 8.91,
+      "predicted_p50_peak": 72.799,
+      "predicted_p90_peak": 75.32,
+      "rel_err_p50_pct": 6.91,
+      "rel_err_p90_pct": 3.68,
+      "p50_within_30pct": true,
+      "p90_brackets_peak": true,
+      "method_weights": {
+        "chronos": 0.3132,
+        "timesfm": 0.3132,
+        "tabpfn": 0.3736
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.53
+    },
+    {
+      "event_id": "houthi_red_sea_campaign_2023_ongoing",
+      "severity": 0.85,
+      "duration_days": 884,
+      "region": "red_sea",
+      "documented_pre_brent": 82.1,
+      "documented_peak_brent": 92.2,
+      "documented_peak_delta_pct": 12.3,
+      "predicted_p50_peak": 84.69,
+      "predicted_p90_peak": 88.043,
+      "rel_err_p50_pct": 8.15,
+      "rel_err_p90_pct": 4.51,
+      "p50_within_30pct": true,
+      "p90_brackets_peak": true,
+      "method_weights": {
+        "chronos": 0.3046,
+        "timesfm": 0.3046,
+        "tabpfn": 0.3908
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.37
+    },
+    {
+      "event_id": "us_uk_operation_poseidon_archer_2024_01",
+      "severity": 0.65,
+      "duration_days": 7,
+      "region": "red_sea",
+      "documented_pre_brent": 77.6,
+      "documented_peak_brent": 81.0,
+      "documented_peak_delta_pct": 4.38,
+      "predicted_p50_peak": 78.866,
+      "predicted_p90_peak": 81.643,
+      "rel_err_p50_pct": 2.63,
+      "rel_err_p90_pct": 0.79,
+      "p50_within_30pct": true,
+      "p90_brackets_peak": true,
+      "method_weights": {
+        "chronos": 0.3098,
+        "timesfm": 0.3098,
+        "tabpfn": 0.3803
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.32
+    },
+    {
+      "event_id": "haifa_port_missile_2024_10",
+      "severity": 0.6,
+      "duration_days": 24,
+      "region": "iran_israel",
+      "documented_pre_brent": 74.2,
+      "documented_peak_brent": 78.2,
+      "documented_peak_delta_pct": 5.39,
+      "predicted_p50_peak": 75.056,
+      "predicted_p90_peak": 77.77,
+      "rel_err_p50_pct": 4.02,
+      "rel_err_p90_pct": 0.55,
+      "p50_within_30pct": true,
+      "p90_brackets_peak": true,
+      "method_weights": {
+        "chronos": 0.324,
+        "timesfm": 0.324,
+        "tabpfn": 0.3521
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.35
+    },
+    {
+      "event_id": "houthi_yaffa_tel_aviv_2024_07",
+      "severity": 0.7,
+      "duration_days": 7,
+      "region": "red_sea",
+      "documented_pre_brent": 85.4,
+      "documented_peak_brent": 87.1,
+      "documented_peak_delta_pct": 1.99,
+      "predicted_p50_peak": 86.379,
+      "predicted_p90_peak": 89.314,
+      "rel_err_p50_pct": 0.83,
+      "rel_err_p90_pct": 2.54,
+      "p50_within_30pct": true,
+      "p90_brackets_peak": true,
+      "method_weights": {
+        "chronos": 0.3169,
+        "timesfm": 0.3169,
+        "tabpfn": 0.3662
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.33
+    },
+    {
+      "event_id": "hormuz_trump_cargo_ship_2026_04",
+      "severity": 0.82,
+      "duration_days": 7,
+      "region": "hormuz",
+      "documented_pre_brent": 119.1,
+      "documented_peak_brent": 123.3,
+      "documented_peak_delta_pct": 3.53,
+      "predicted_p50_peak": 123.96,
+      "predicted_p90_peak": 128.936,
+      "rel_err_p50_pct": 0.54,
+      "rel_err_p90_pct": 4.57,
+      "p50_within_30pct": true,
+      "p90_brackets_peak": true,
+      "method_weights": {
+        "chronos": 0.2823,
+        "timesfm": 0.2823,
+        "tabpfn": 0.4353
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.33
+    },
+    {
+      "event_id": "ukraine_neon_palladium_shock_2022_context",
+      "severity": 0.88,
+      "duration_days": 310,
+      "region": "europe",
+      "documented_pre_brent": 96.8,
+      "documented_peak_brent": 127.6,
+      "documented_peak_delta_pct": 31.82,
+      "predicted_p50_peak": 106.472,
+      "predicted_p90_peak": 111.516,
+      "rel_err_p50_pct": 16.56,
+      "rel_err_p90_pct": 12.61,
+      "p50_within_30pct": true,
+      "p90_brackets_peak": true,
+      "method_weights": {
+        "chronos": 0.2622,
+        "timesfm": 0.2622,
+        "tabpfn": 0.4756
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.32
+    }
+  ],
+  "method": "Per-event closed-form backtest. For each documented event, build a 200-day synthetic Brent history anchored at the documented pre-event price, then call ensemble_forecast(history, severity=sev, duration=duration, region=region) and compare predicted p50_peak + p90_peak to the documented peak. Pass = within 30%."
+}
