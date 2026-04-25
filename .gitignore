@@ -94,4 +94,11 @@ ShAuRyA_Supplymind/autoresearch/candidate_train.py.bak
 # Frontier panel run intermediate caches
 .openrouter_cache/
 lora_stdout.log
-.openai_usage.jsonl
+
+# Pass 8 — large harvest data (regenerable via train.py harvest_trajectories)
+ShAuRyA_Phoenix/experiments/rap_xc_v1/transitions.npz
+ShAuRyA_Phoenix/experiments/rap_xc_v1/transitions_synth.npz
+ShAuRyA_Phoenix/experiments/rap_xc_v1/smoke*.npz
+ShAuRyA_Phoenix/experiments/rap_xc_v1/rapxc_synth.pt
+ShAuRyA_Phoenix/experiments/rap_xc_v1/*.log
+tests/receipts/*.log

@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import logging
+import sys
 import time
 from pathlib import Path
 
@@ -22,6 +23,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset
+
+_ROOT = Path(__file__).resolve().parents[1]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
 
 from ShAuRyA_Phoenix.action_v2.conformal import calibrate_conformal
 
@@ -98,7 +103,6 @@ def main(alpha: float = 0.1, epochs: int = 8, batch_size: int = 256):
     # Compute logits on calibration set
     model.eval()
     Xcal_d = Xcal.to(device)
-    Ycal_d = Ycal.to(device)
     with torch.no_grad():
         cal_logits = model(Xcal_d).cpu()
 
