@@ -40,6 +40,6 @@ def test_render_leaderboard_includes_header():
     assert "Rank" in md and "CI95 lower" in md
 
 
-def test_read_leaderboard_returns_list_even_when_empty(tmp_path, monkeypatch):
-    monkeypatch.setattr(lb, "LEADERBOARD_PATH", tmp_path / "nope.jsonl")
+def test_read_leaderboard_returns_list_even_when_empty(monkeypatch):
+    monkeypatch.setattr(lb, "LEADERBOARD_PATH", PROJECT_ROOT / ".missing_leaderboard_for_test.jsonl")
     assert lb.read_leaderboard() == []

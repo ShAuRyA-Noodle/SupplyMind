@@ -152,6 +152,32 @@ def _call_ollama_judge(model: str, prompt: str) -> dict:
     }
 
 
+def _scenario_text_severity_floor(scenario_text: str) -> float:
+    """Minimum severity implied directly by the operator-provided scenario text."""
+    text = scenario_text.lower()
+    high_markers = (
+        "close strait of hormuz",
+        "hormuz closure",
+        "ballistic missile",
+        "major carriers pause",
+        "bookings pause",
+        "brent crude surges",
+        "surges past 120",
+        "persian gulf bookings",
+    )
+    critical_markers = (
+        "strait of hormuz closed",
+        "full closure",
+        "mined strait",
+        "naval blockade",
+    )
+    if any(marker in text for marker in critical_markers):
+        return 0.82
+    if any(marker in text for marker in high_markers):
+        return 0.68
+    return 0.0
+
+
 def _rubric_judge(scenario_text: str, projection: dict, signals: list[dict]) -> dict:
     """Deterministic fallback when Ollama is unavailable.
 
@@ -159,7 +185,9 @@ def _rubric_judge(scenario_text: str, projection: dict, signals: list[dict]) -> 
     >= 0.35 -> MEDIUM; else LOW. Confidence proportional to signal count.
     """
     start = time.time()
-    sev = (projection or {}).get("severity_p50") or 0.3
+    analog_sev = (projection or {}).get("severity_p50") or 0.3
+    text_floor = _scenario_text_severity_floor(scenario_text)
+    sev = max(analog_sev, text_floor)
     if sev >= 0.80:
         level = "CRITICAL"
     elif sev >= 0.60:
@@ -173,7 +201,8 @@ def _rubric_judge(scenario_text: str, projection: dict, signals: list[dict]) -> 
         "risk_level": level,
         "confidence": round(conf, 2),
         "rationale": (f"Rubric assessment (Ollama unavailable). "
-                      f"Analog severity P50={sev:.2f} mapped to {level}. "
+                      f"Analog severity P50={analog_sev:.2f}; text floor={text_floor:.2f}; "
+                      f"mapped severity={sev:.2f} to {level}. "
                       f"{len(signals or [])} recent signals corroborate."),
         "latency_s": round(time.time() - start, 2),
         "inference_type": "rubric_fallback",

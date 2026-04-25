@@ -4,10 +4,13 @@ LoRA Fine-tune for SupplyMind Explainability.
 Fine-tunes a small LLM (Qwen2.5-1.5B or similar) using LoRA (PEFT)
 to generate supply chain risk explanations from state descriptions.
 
-Uses PEFT + TRL (Windows-compatible, no unsloth needed).
+Uses PEFT + TRL (Windows-compatible, no unsloth needed). The default path is
+QLoRA: bitsandbytes 4-bit NF4 + LoRA adapters, so the 1.5B explanation model
+fits on a single consumer GPU while saving only the adapter.
 
 Requirements:
-    Python 3.11 venv with: torch, peft, trl, transformers, accelerate, bitsandbytes
+    Python 3.11 venv with: torch, peft, trl, transformers, accelerate,
+    bitsandbytes, datasets
 
 Usage (from .venv311):
     cd C:\\Users\\Dell\\Desktop\\Sleep-Token
@@ -152,19 +155,22 @@ def finetune(
     batch_size: int = 4,
     max_seq_length: int = 512,
     device: str = "cuda",
+    quantization: str = "nf4",
 ) -> Path:
     """Fine-tune LLM with LoRA on supply chain explanation data."""
     import torch
     from peft import LoraConfig, get_peft_model, TaskType
-    from transformers import AutoModelForCausalLM, AutoTokenizer, TrainingArguments
+    from transformers import AutoModelForCausalLM, AutoTokenizer
     from trl import SFTTrainer, SFTConfig
 
     CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
+    use_4bit = quantization.lower() in {"nf4", "4bit", "qlora"}
 
     logger.info("=" * 60)
     logger.info("LoRA Fine-Tuning")
     logger.info("  Model: %s", model_name)
     logger.info("  LoRA r=%d, alpha=%d", lora_r, lora_alpha)
+    logger.info("  Quantization: %s", "bitsandbytes 4-bit NF4" if use_4bit else "none")
     logger.info("  Epochs: %d | LR: %.0e | Batch: %d", epochs, lr, batch_size)
     logger.info("  Device: %s | GPU: %s", device,
                 torch.cuda.get_device_name(0) if torch.cuda.is_available() else "CPU")
@@ -191,12 +197,38 @@ def finetune(
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
 
-    model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        torch_dtype=torch.float16,
-        device_map="auto",
-        trust_remote_code=True,
-    )
+    model_kwargs = {
+        "trust_remote_code": True,
+        "device_map": "auto" if device == "cuda" else None,
+    }
+    if use_4bit:
+        try:
+            from transformers import BitsAndBytesConfig
+            model_kwargs["quantization_config"] = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_compute_dtype=(
+                    torch.bfloat16
+                    if torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+                    else torch.float16
+                ),
+                bnb_4bit_use_double_quant=True,
+            )
+        except Exception as e:  # noqa: BLE001
+            raise RuntimeError(
+                "NF4 QLoRA requested, but bitsandbytes/transformers quantization "
+                f"is unavailable: {e}"
+            ) from e
+    else:
+        model_kwargs["torch_dtype"] = (
+            torch.bfloat16
+            if torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+            else torch.float16
+        )
+
+    model = AutoModelForCausalLM.from_pretrained(model_name, **model_kwargs)
+    if not use_4bit and device == "cuda" and torch.cuda.is_available():
+        model = model.to("cuda")
 
     # LoRA config
     lora_config = LoraConfig(
@@ -249,6 +281,30 @@ def finetune(
     adapter_path = CHECKPOINT_DIR / "supplymind_lora"
     model.save_pretrained(str(adapter_path))
     tokenizer.save_pretrained(str(adapter_path))
+    manifest = {
+        "base_model": model_name,
+        "training_examples": len(raw_data),
+        "dataset_path": str(dataset_path.relative_to(PROJECT_ROOT)),
+        "output_adapter": str(adapter_path.relative_to(PROJECT_ROOT)),
+        "adapter_only": True,
+        "quantization": "bitsandbytes_nf4_4bit" if use_4bit else "none",
+        "lora": {
+            "r": lora_r,
+            "alpha": lora_alpha,
+            "dropout": 0.05,
+            "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
+        },
+        "trainer": "trl.SFTTrainer",
+        "epochs": epochs,
+        "learning_rate": lr,
+        "batch_size": batch_size,
+        "gradient_accumulation_steps": 4,
+        "max_seq_length": max_seq_length,
+        "elapsed_seconds": round(elapsed, 3),
+    }
+    (adapter_path / "supplymind_lora_manifest.json").write_text(
+        json.dumps(manifest, indent=2), encoding="utf-8"
+    )
 
     logger.info("=" * 60)
     logger.info("LoRA fine-tuning done in %.1f min", elapsed / 60)
@@ -270,11 +326,20 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=3)
     parser.add_argument("--lr", type=float, default=2e-4)
     parser.add_argument("--lora-r", type=int, default=16)
+    parser.add_argument("--lora-alpha", type=int, default=32)
     parser.add_argument("--batch-size", type=int, default=4)
     parser.add_argument("--device", default="cuda")
+    parser.add_argument(
+        "--quantization",
+        default="nf4",
+        choices=["nf4", "4bit", "qlora", "none"],
+        help="Default nf4 enables bitsandbytes 4-bit QLoRA.",
+    )
     args = parser.parse_args()
     finetune(model_name=args.model, epochs=args.epochs, lr=args.lr,
-             lora_r=args.lora_r, batch_size=args.batch_size, device=args.device)
+             lora_r=args.lora_r, lora_alpha=args.lora_alpha,
+             batch_size=args.batch_size, device=args.device,
+             quantization=args.quantization)
 
 
 if __name__ == "__main__":

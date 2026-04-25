@@ -129,7 +129,7 @@
       "most_used_action": "hedge_commodity"
     }
   },
-  "wall_clock_s": 0.8,
+  "wall_clock_s": 1.1,
   "dt_checkpoint_present": true,
   "note": "Surrogate DT slider: same conditioning pattern as v2 DT (return-to-go -> action distribution). If rl/checkpoints/dt_best.pt is present, run `python -m rl.decision_transformer.train --eval-only` for the actual transformer-based rollouts."
 }

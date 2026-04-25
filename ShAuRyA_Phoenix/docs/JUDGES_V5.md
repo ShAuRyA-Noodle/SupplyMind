@@ -7,8 +7,8 @@
 ## The 30-second pitch
 
 SupplyMind v5.0-phoenix-ascensionism is an OpenEnv-compliant supply-chain risk
-environment. 13 local SOTA models, 261K real data points, **256+ passing tests**
-(173 v3 + 76 v4 + 7+ v5 new), 20 one-bash-command receipts, live geopolitical
+environment. 13 local SOTA models, 261K real data points, **275 passing tests**
+(277 collected; 2 live tests skipped unless API keys are present), 20 one-bash-command receipts, live geopolitical
 pipeline, Karpathy autoresearch loop with two accepted experiments, a
 DPO-fine-tuned risk judge, an OpenEnv Arena where you can drop your own
 PyTorch policy, and two upstream PRs — to **meta-pytorch/openenv** and

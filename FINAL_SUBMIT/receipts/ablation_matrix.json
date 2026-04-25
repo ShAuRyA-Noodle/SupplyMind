@@ -1,0 +1,95 @@
+{
+  "framework": "leave-one-out reward ablation per RL guide \u00a77-8",
+  "n_episodes_per_trial": 100,
+  "baseline": {
+    "disabled": "none",
+    "mean_return": 0.6742,
+    "solve_rate": 0.27,
+    "n_episodes": 100
+  },
+  "ablations": [
+    {
+      "disabled": "green_credit",
+      "mean_return": 0.2152,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": -0.459,
+      "pct_change": -68.08
+    },
+    {
+      "disabled": "yellow_credit",
+      "mean_return": 0.613,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": -0.0612,
+      "pct_change": -9.08
+    },
+    {
+      "disabled": "solve_bonus",
+      "mean_return": 0.4042,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": -0.27,
+      "pct_change": -40.05
+    },
+    {
+      "disabled": "guess_count_bonus",
+      "mean_return": 0.6442,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": -0.03,
+      "pct_change": -4.45
+    },
+    {
+      "disabled": "timeout_penalty",
+      "mean_return": 0.8202,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": 0.146,
+      "pct_change": 21.66
+    }
+  ],
+  "ranked_by_impact": [
+    {
+      "disabled": "green_credit",
+      "mean_return": 0.2152,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": -0.459,
+      "pct_change": -68.08
+    },
+    {
+      "disabled": "solve_bonus",
+      "mean_return": 0.4042,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": -0.27,
+      "pct_change": -40.05
+    },
+    {
+      "disabled": "timeout_penalty",
+      "mean_return": 0.8202,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": 0.146,
+      "pct_change": 21.66
+    },
+    {
+      "disabled": "yellow_credit",
+      "mean_return": 0.613,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": -0.0612,
+      "pct_change": -9.08
+    },
+    {
+      "disabled": "guess_count_bonus",
+      "mean_return": 0.6442,
+      "solve_rate": 0.27,
+      "n_episodes": 100,
+      "delta_mean_return": -0.03,
+      "pct_change": -4.45
+    }
+  ],
+  "insight": "components ranked by metric drop when removed reveal which reward signals are load-bearing"
+}

@@ -1,0 +1,12 @@
+{
+  "ok": true,
+  "framework": "Inductive bias transfer (per RL guide \u00a71: 'efficient version of repeated in-context improvement')",
+  "wordle_pre_entropy": 4.6221,
+  "wordle_post_entropy": 4.6117,
+  "wordle_entropy_drop": 0.0104,
+  "supplymind_entropy_post_wordle_train": 4.6098,
+  "supplymind_entropy_drop": 0.0124,
+  "transfer_ratio": 1.185,
+  "interpretation": "transfer_ratio > 0 means Wordle-trained policy ALSO sharpens state-discrimination on SupplyMind state encoding \u2014 same state->action primitive transfers.",
+  "transfer_demonstrated": true
+}

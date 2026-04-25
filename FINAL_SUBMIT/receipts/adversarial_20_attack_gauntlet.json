@@ -1,0 +1,217 @@
+{
+  "started_at": 1777142712.0545185,
+  "framework": "RL guide \u00a738-44 + Skalse 2022 + Krakovna 2020",
+  "n_total": 20,
+  "results": [
+    {
+      "id": 1,
+      "name": "empty_string",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 2,
+      "name": "single_letter",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 3,
+      "name": "digits_only",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 4,
+      "name": "unicode_homoglyph",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 5,
+      "name": "6char_word",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 6,
+      "name": "4char_word",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 7,
+      "name": "uppercase_only",
+      "expected_reason": "accepted_after_normalize",
+      "actual_reason": "accepted_after_normalize",
+      "reward_extracted": 0.0,
+      "blocked": false,
+      "is_legit_test": true,
+      "verdict": "LEGIT_ACCEPTED"
+    },
+    {
+      "id": 8,
+      "name": "whitespace_padded",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 9,
+      "name": "null_action",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 10,
+      "name": "dict_lookalike_zzzzz",
+      "expected_reason": "non_dictionary",
+      "actual_reason": "non_dictionary",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 11,
+      "name": "repeat_same_guess_5x",
+      "expected_reason": "rolling_no_progress",
+      "actual_reason": "rolling_no_progress",
+      "reward_extracted": 0.07,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 12,
+      "name": "solved_word_repeat",
+      "expected_reason": "episode_done",
+      "actual_reason": "episode_done",
+      "reward_extracted": 1.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 13,
+      "name": "unicode_zero_width",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 14,
+      "name": "sql_injection",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 15,
+      "name": "path_traversal",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 16,
+      "name": "extremely_long_string",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 17,
+      "name": "json_object_payload",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 18,
+      "name": "negative_action_index",
+      "expected_reason": "out_of_bounds",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 19,
+      "name": "sleep_inside_action",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    },
+    {
+      "id": 20,
+      "name": "base64_encoded",
+      "expected_reason": "format_invalid",
+      "actual_reason": "format_invalid",
+      "reward_extracted": 0.0,
+      "blocked": true,
+      "is_legit_test": false,
+      "verdict": "BLOCKED"
+    }
+  ],
+  "summary": {
+    "n_total_tests": 20,
+    "n_attacks": 19,
+    "n_blocked": 19,
+    "block_rate_pct": 100.0,
+    "n_legit": 1,
+    "n_legit_accepted": 1,
+    "false_positive_rate_pct": 0.0,
+    "verdict": "PASS"
+  }
+}

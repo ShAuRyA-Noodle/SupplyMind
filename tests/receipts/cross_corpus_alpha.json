@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-04-25T09:37:16Z",
+  "generated_at_utc": "2026-04-25T10:14:02Z",
   "n_events_sampled": 30,
   "n_judges": 6,
   "judges": [
@@ -12,12 +12,12 @@
   ],
   "ground_truth_source": "v2 library deterministic severity rule on real EMDAT death/damage/affected counts",
   "krippendorff_alpha_ordinal": {
-    "overall": 0.5436,
+    "overall": 0.4296,
     "per_tier": {
-      "LOW": 0.4814,
-      "MEDIUM": 0.1268,
-      "HIGH": -0.2877,
-      "CRITICAL": 0.4077
+      "LOW": -0.0097,
+      "MEDIUM": 0.0393,
+      "HIGH": -0.1151,
+      "CRITICAL": 0.4184
     },
     "per_tier_n_events": {
       "LOW": 8,
@@ -27,46 +27,43 @@
     }
   },
   "accuracy_per_judge_vs_emdat_gt": {
-    "gpt-oss-120b:free": 0.4333,
-    "gemma-4-31b-it:free": 0.5,
-    "minimax-m2.5:free": 0.5667,
-    "nemotron-3-super-120b-a12b:free": 0.4444,
-    "gemma-4-26b-a4b-it:free": 0.4667
+    "gpt-oss-120b:free": 0.5333,
+    "gemma-4-31b-it:free": 0.2667,
+    "minimax-m2.5:free": 0.4828,
+    "nemotron-3-super-120b-a12b:free": 0.4348,
+    "gemma-4-26b-a4b-it:free": 0.5
   },
-  "elapsed_s": 3345.81,
+  "elapsed_s": 2482.76,
   "openrouter_budget": {
-    "per_min_used": 6,
+    "per_min_used": 9,
     "per_min_budget": 18,
-    "per_day_used": 266,
+    "per_day_used": 274,
     "per_day_budget": 950
   },
   "n_calls_attempted": 180,
-  "n_calls_succeeded": 114,
+  "n_calls_succeeded": 107,
   "table": {
     "2025-0847-KHM": {
       "openai/gpt-oss-120b:free": "MEDIUM",
       "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
+      "nvidia/nemotron-3-super-120b-a12b:free": "MEDIUM",
+      "google/gemma-4-26b-a4b-it:free": "MEDIUM"
     },
     "2000-0052-RUS": {
       "openai/gpt-oss-120b:free": "LOW",
       "google/gemma-4-31b-it:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "LOW",
-      "google/gemma-4-26b-a4b-it:free": "LOW"
+      "nvidia/nemotron-3-super-120b-a12b:free": "LOW"
     },
     "2001-0343-COL": {
       "openai/gpt-oss-120b:free": "LOW",
-      "google/gemma-4-31b-it:free": "LOW",
-      "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "LOW"
-    },
-    "2001-0156-COL": {
-      "openai/gpt-oss-120b:free": "LOW",
-      "google/gemma-4-31b-it:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
       "nvidia/nemotron-3-super-120b-a12b:free": "LOW",
       "google/gemma-4-26b-a4b-it:free": "LOW"
+    },
+    "2001-0156-COL": {
+      "openai/gpt-oss-120b:free": "LOW",
+      "minimax/minimax-m2.5:free": "LOW"
     },
     "2004-0596-IRL": {
       "openai/gpt-oss-120b:free": "LOW",
@@ -75,146 +72,142 @@
     },
     "2002-0414-IDN": {
       "openai/gpt-oss-120b:free": "HIGH",
-      "google/gemma-4-31b-it:free": "MEDIUM",
-      "minimax/minimax-m2.5:free": "HIGH",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
-      "google/gemma-4-26b-a4b-it:free": "MEDIUM"
+      "minimax/minimax-m2.5:free": "LOW",
+      "nvidia/nemotron-3-super-120b-a12b:free": "HIGH"
     },
     "2022-0804-FRA": {
       "openai/gpt-oss-120b:free": "HIGH",
-      "google/gemma-4-31b-it:free": "LOW",
-      "minimax/minimax-m2.5:free": "LOW",
+      "minimax/minimax-m2.5:free": "MEDIUM",
       "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
     },
     "2000-0288-TZA": {
       "openai/gpt-oss-120b:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "LOW"
+      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
+      "google/gemma-4-26b-a4b-it:free": "LOW"
     },
     "2019-0306-USA": {
-      "openai/gpt-oss-120b:free": "LOW",
+      "openai/gpt-oss-120b:free": "MEDIUM",
       "minimax/minimax-m2.5:free": "LOW",
       "nvidia/nemotron-3-super-120b-a12b:free": "LOW",
       "google/gemma-4-26b-a4b-it:free": "LOW"
     },
     "2000-0093-CHN": {
-      "openai/gpt-oss-120b:free": "LOW",
-      "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "LOW",
-      "google/gemma-4-26b-a4b-it:free": "LOW"
+      "openai/gpt-oss-120b:free": "MEDIUM",
+      "google/gemma-4-31b-it:free": "LOW",
+      "minimax/minimax-m2.5:free": "LOW"
     },
     "2000-0131-TCD": {
       "openai/gpt-oss-120b:free": "MEDIUM",
-      "minimax/minimax-m2.5:free": "MEDIUM",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
+      "google/gemma-4-31b-it:free": "LOW",
+      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
+      "google/gemma-4-26b-a4b-it:free": "LOW"
     },
     "2000-0400-CHN": {
       "openai/gpt-oss-120b:free": "HIGH",
-      "minimax/minimax-m2.5:free": "MEDIUM",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
-      "google/gemma-4-26b-a4b-it:free": "MEDIUM"
+      "minimax/minimax-m2.5:free": "LOW"
     },
     "2000-0889-IDN": {
       "openai/gpt-oss-120b:free": "HIGH",
       "google/gemma-4-31b-it:free": "LOW",
-      "minimax/minimax-m2.5:free": "HIGH",
-      "nvidia/nemotron-3-super-120b-a12b:free": "HIGH",
-      "google/gemma-4-26b-a4b-it:free": "HIGH"
+      "minimax/minimax-m2.5:free": "MEDIUM"
     },
     "2001-0120-CAF": {
       "openai/gpt-oss-120b:free": "HIGH",
-      "minimax/minimax-m2.5:free": "HIGH"
+      "google/gemma-4-31b-it:free": "LOW",
+      "minimax/minimax-m2.5:free": "MEDIUM",
+      "nvidia/nemotron-3-super-120b-a12b:free": "HIGH"
     },
     "2002-0378-IRN": {
       "openai/gpt-oss-120b:free": "MEDIUM",
+      "google/gemma-4-31b-it:free": "MEDIUM",
       "minimax/minimax-m2.5:free": "HIGH",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
+      "nvidia/nemotron-3-super-120b-a12b:free": "HIGH"
     },
     "2022-0405-PAK": {
       "openai/gpt-oss-120b:free": "CRITICAL",
-      "minimax/minimax-m2.5:free": "CRITICAL",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
-      "google/gemma-4-26b-a4b-it:free": "CRITICAL"
-    },
-    "2004-0659-LKA": {
-      "openai/gpt-oss-120b:free": "HIGH",
       "google/gemma-4-31b-it:free": "CRITICAL",
       "minimax/minimax-m2.5:free": "CRITICAL",
       "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
     },
+    "2004-0659-LKA": {
+      "openai/gpt-oss-120b:free": "CRITICAL",
+      "google/gemma-4-31b-it:free": "CRITICAL",
+      "minimax/minimax-m2.5:free": "CRITICAL",
+      "google/gemma-4-26b-a4b-it:free": "CRITICAL"
+    },
     "2020-0530-GBR": {
       "openai/gpt-oss-120b:free": "HIGH",
       "minimax/minimax-m2.5:free": "HIGH",
-      "nvidia/nemotron-3-super-120b-a12b:free": "HIGH",
-      "google/gemma-4-26b-a4b-it:free": "MEDIUM"
+      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
     },
     "2004-0659-IND": {
       "openai/gpt-oss-120b:free": "HIGH",
-      "google/gemma-4-31b-it:free": "HIGH",
-      "minimax/minimax-m2.5:free": "CRITICAL",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
+      "minimax/minimax-m2.5:free": "HIGH",
+      "nvidia/nemotron-3-super-120b-a12b:free": "HIGH"
     },
     "2004-0659-THA": {
-      "openai/gpt-oss-120b:free": "CRITICAL",
+      "openai/gpt-oss-120b:free": "HIGH",
+      "google/gemma-4-31b-it:free": "HIGH",
       "minimax/minimax-m2.5:free": "CRITICAL",
       "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
-      "google/gemma-4-26b-a4b-it:free": "HIGH"
+      "google/gemma-4-26b-a4b-it:free": "CRITICAL"
     },
     "2025-0734-USA": {
       "openai/gpt-oss-120b:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "LOW",
-      "google/gemma-4-26b-a4b-it:free": "LOW"
+      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
     },
     "2001-0742-CHN": {
       "openai/gpt-oss-120b:free": "MEDIUM",
+      "google/gemma-4-31b-it:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
       "nvidia/nemotron-3-super-120b-a12b:free": "LOW"
     },
     "2001-0321-CIV": {
       "openai/gpt-oss-120b:free": "LOW",
       "google/gemma-4-31b-it:free": "LOW",
-      "minimax/minimax-m2.5:free": "LOW",
-      "google/gemma-4-26b-a4b-it:free": "LOW"
+      "minimax/minimax-m2.5:free": "LOW"
     },
     "2000-0599-IND": {
       "openai/gpt-oss-120b:free": "MEDIUM",
+      "google/gemma-4-31b-it:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
       "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
     },
     "2001-0431-KEN": {
       "openai/gpt-oss-120b:free": "LOW",
+      "google/gemma-4-31b-it:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
-      "google/gemma-4-26b-a4b-it:free": "LOW"
+      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
     },
     "2004-0659-MDV": {
       "openai/gpt-oss-120b:free": "MEDIUM",
-      "google/gemma-4-31b-it:free": "HIGH",
       "minimax/minimax-m2.5:free": "HIGH",
-      "nvidia/nemotron-3-super-120b-a12b:free": "HIGH"
+      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
+      "google/gemma-4-26b-a4b-it:free": "HIGH"
     },
     "2000-0799-NGA": {
       "openai/gpt-oss-120b:free": "MEDIUM",
       "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
-      "google/gemma-4-26b-a4b-it:free": "LOW"
+      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
     },
     "2000-0005-CHN": {
       "openai/gpt-oss-120b:free": "LOW",
       "google/gemma-4-31b-it:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
+      "nvidia/nemotron-3-super-120b-a12b:free": "MEDIUM",
+      "google/gemma-4-26b-a4b-it:free": "LOW"
     },
     "2022-0669-ETH": {
-      "openai/gpt-oss-120b:free": "MEDIUM",
+      "openai/gpt-oss-120b:free": "HIGH",
       "google/gemma-4-31b-it:free": "LOW",
-      "minimax/minimax-m2.5:free": "HIGH",
-      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL"
+      "minimax/minimax-m2.5:free": "MEDIUM"
     },
     "2025-0477-USA": {
       "openai/gpt-oss-120b:free": "LOW",
       "minimax/minimax-m2.5:free": "LOW",
+      "nvidia/nemotron-3-super-120b-a12b:free": "CRITICAL",
       "google/gemma-4-26b-a4b-it:free": "LOW"
     }
   },

@@ -1,8 +1,8 @@
 {
   "device": "cuda",
-  "torch_version": "2.5.1+cu121",
-  "cuda_version": "12.1",
-  "platform": "Windows-10-10.0.26200-SP0",
+  "torch_version": "2.11.0+cu126",
+  "cuda_version": "12.6",
+  "platform": "Windows-11-10.0.26200-SP0",
   "jit_compile": {
     "ok": false,
     "message": "MSVC (cl.exe) not on PATH; install Visual Studio Build Tools"
@@ -11,13 +11,13 @@
     {
       "batch_size": 32,
       "n_actions": 280,
-      "pytorch_fallback_ms": 0.0311,
+      "pytorch_fallback_ms": 0.0869,
       "jit_cuda_ms": null,
       "jit_matches_pytorch": null,
-      "naive_python_ms": 37.845,
+      "naive_python_ms": 56.2621,
       "naive_matches_pytorch": true,
       "speedup_jit_over_fallback": null,
-      "speedup_fallback_over_naive": 1215.4
+      "speedup_fallback_over_naive": 647.51
     }
   ],
   "conclusion": "partial results"

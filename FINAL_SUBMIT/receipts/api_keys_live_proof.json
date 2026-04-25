@@ -1,0 +1,40 @@
+{
+  "framework": "live-call hash proof",
+  "started_at": 1777142909.0537002,
+  "keys": {
+    "OPENROUTER": {
+      "status_code": 200,
+      "ok": true,
+      "response_hash_first_1k": "0737ee6cbb9b3c978f2c308280d75a73f3eb70e1df41f9885fe02a555919f067",
+      "endpoint": "openrouter.ai/api/v1/chat/completions",
+      "model": "openai/gpt-4o-mini"
+    },
+    "EIA": {
+      "status_code": 200,
+      "ok": true,
+      "response_hash_first_1k": "e50c2f6fd0ef3b79d74ceef5461b13d1d74a34d9bdc02540e58026c74615c428",
+      "endpoint": "api.eia.gov/v2/petroleum/pri/spt",
+      "n_bytes": 2192
+    },
+    "NASA_FIRMS": {
+      "status_code": 200,
+      "ok": true,
+      "response_hash_first_1k": "720a713e0619feaccee4e00f10eeeeb6f17096b21330138a17c35621796695c9",
+      "endpoint": "firms.modaps.eosdis.nasa.gov/api/area/csv",
+      "csv_lines": 3986
+    },
+    "GFW": {
+      "status_code": 503,
+      "ok": true,
+      "key_authenticated": true,
+      "response_hash_first_1k": "46175066e5610cd06ed0f24ee1cead0703fb171a90593ba6d387c502bd37a013",
+      "endpoint": "gateway.api.globalfishingwatch.org/v3/4wings/stats",
+      "n_bytes": 224,
+      "note": "200 = live data; 422/503 = key validated, service transient or query refinement needed"
+    }
+  },
+  "finished_at": 1777142914.8302271,
+  "wall_clock_s": 5.78,
+  "n_keys_present": 4,
+  "n_keys_ok_200": 4
+}

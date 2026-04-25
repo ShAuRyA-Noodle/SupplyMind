@@ -20,7 +20,7 @@ tags:
 **OpenEnv-compliant supply-chain risk management.**
 **13 local SOTA foundation models + 18-model OpenRouter frontier panel.**
 **20-source real-data fan-out:** NewsAPI / GDELT / USGS / FRED / MarineTraffic / WHO / NOAA NDBC + Tides / NASA EONET + FIRMS / EIA / GFW / SEC EDGAR / CISA KEV / HackerNews / Wikipedia pageviews / World Bank / OFAC / GDELT-Conflict / GDELT-Humanitarian — verified live 2026-04-25, 391 events / fan-out / sub-90s.
-**272 passing tests** (274 collected).
+**275 passing tests** (277 collected; 2 live tests skipped unless API keys are present).
 **1500-event auto-cooked crisis library v2** from real EMDAT (16,812 disasters 2000-2026, deterministic-rule severity from real death/damage/affected counts), mxbai-embed-large 1024-dim FAISS HNSW.
 **4-method Platinum counterfactual** (paired-bootstrap MC + synthetic-control donor weighting + BSTS-lite ARIMA + SCM do-calculus proxy) cross-method consensus, calibrated against **6 published economic-impact anchors** (Suez 2021 $9.6B/day · Tohoku 2011 $235B · Katrina 2005 $200B · Fukushima 2011 $187B · COVID-chip 2020-23 $500B+ · Texas freeze 2021 $130B). Method-B Tohoku replication: $276B point vs published $235B, **within 18%, inside CI95**.
 **RAP-XC novel 9th leaderboard agent** (Retrieval-Augmented Policy with Crisis-Conditioned Cross-Attention) — 3.14M params, FAISS retrieval over 1500-event library + 25-judge prior distillation, expected +15-35% relative on hard_cascading_crisis.
@@ -32,7 +32,7 @@ tags:
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-compliant-blue)](https://github.com/meta-llama/open-env)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-274%20passing-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-275%20passing-brightgreen)](tests/)
 [![Real Data](https://img.shields.io/badge/real%20data-261K%20points-orange)](rl/data/)
 [![Release](https://img.shields.io/badge/release-v3.0--arcadia-purple)](https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/tag/v3.0-arcadia)
 

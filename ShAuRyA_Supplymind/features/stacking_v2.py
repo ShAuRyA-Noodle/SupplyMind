@@ -163,7 +163,7 @@ def _base_learners(seed: int):
             n_estimators=200, max_depth=6, learning_rate=0.08,
             subsample=0.9, colsample_bytree=0.9, tree_method="hist",
             random_state=seed, verbosity=0, use_label_encoder=False,
-            eval_metric="logloss", n_jobs=-1,
+            eval_metric="logloss", n_jobs=1,
         )
     except ImportError:
         logger.warning("xgboost not installed; skipping")
@@ -174,7 +174,7 @@ def _base_learners(seed: int):
         learners["lightgbm"] = lambda: LGBMClassifier(
             n_estimators=200, max_depth=-1, num_leaves=63, learning_rate=0.08,
             subsample=0.9, colsample_bytree=0.9, random_state=seed,
-            verbosity=-1, n_jobs=-1,
+            verbosity=-1, n_jobs=1,
         )
     except ImportError:
         logger.warning("lightgbm not installed; skipping")
@@ -184,7 +184,7 @@ def _base_learners(seed: int):
         from catboost import CatBoostClassifier
         learners["catboost"] = lambda: CatBoostClassifier(
             iterations=200, depth=6, learning_rate=0.08,
-            random_state=seed, verbose=False, thread_count=-1,
+            random_state=seed, verbose=False, thread_count=1,
         )
     except ImportError:
         logger.warning("catboost not installed; skipping")
@@ -192,7 +192,7 @@ def _base_learners(seed: int):
     # Sklearn RandomForest
     learners["random_forest"] = lambda: RandomForestClassifier(
         n_estimators=200, max_depth=None, min_samples_leaf=2,
-        random_state=seed, n_jobs=-1,
+        random_state=seed, n_jobs=1,
     )
 
     # Sklearn LogisticRegression on scaled features (non-tree family, decorrelates)
@@ -201,7 +201,7 @@ def _base_learners(seed: int):
     class _ScaledLR:
         def __init__(self):
             self.pipe = Pipeline([("scaler", StandardScaler()),
-                                  ("lr", LogisticRegression(max_iter=500, C=1.0, random_state=seed, n_jobs=-1))])
+                                  ("lr", LogisticRegression(max_iter=500, C=1.0, random_state=seed, n_jobs=1))])
 
         def fit(self, X, y):
             self.pipe.fit(X, y)

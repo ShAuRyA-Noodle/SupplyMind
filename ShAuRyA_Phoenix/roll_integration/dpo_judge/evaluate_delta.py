@@ -40,12 +40,34 @@ def _bootstrap(x: np.ndarray, n: int = 1000, seed: int = 12345):
 def _load_scenarios():
     if not R4_GT.exists():
         raise FileNotFoundError(f"ground truth not found: {R4_GT}")
-    blob = json.loads(R4_GT.read_text())
-    if "per_scenario" in blob:
-        return [{"id": s.get("id", f"sc_{i}"),
-                 "text": s.get("scenario_text", s.get("summary", "")),
-                 "gt": s.get("ground_truth", s.get("gt_risk_level"))}
-                for i, s in enumerate(blob["per_scenario"])]
+    blob = json.loads(R4_GT.read_text(encoding="utf-8"))
+    per = blob.get("per_scenario")
+    if isinstance(per, dict):
+        rows = []
+        for sid, entry in per.items():
+            if not isinstance(entry, dict):
+                continue
+            text = (
+                entry.get("scenario_text")
+                or entry.get("summary")
+                or f"Assess the supply-chain impact of the following event: {sid.replace('_', ' ')}"
+            )
+            rows.append({
+                "id": sid,
+                "text": text,
+                "gt": entry.get("ground_truth", entry.get("gt_risk_level")),
+            })
+        return rows
+    if isinstance(per, list):
+        return [
+            {
+                "id": s.get("id", f"sc_{i}"),
+                "text": s.get("scenario_text", s.get("summary", "")),
+                "gt": s.get("ground_truth", s.get("gt_risk_level")),
+            }
+            for i, s in enumerate(per)
+            if isinstance(s, dict)
+        ]
     return []
 
 

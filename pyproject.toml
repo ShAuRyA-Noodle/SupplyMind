@@ -65,6 +65,7 @@ build-backend = "setuptools.build_meta"
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+addopts = ["--import-mode=importlib"]
 
 [tool.setuptools.packages.find]
 include = ["server*", "models*", "client*", "baseline*", "rl*", "dashboard*", "benchmark*"]

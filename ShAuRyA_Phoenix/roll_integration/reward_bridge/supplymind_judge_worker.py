@@ -49,8 +49,8 @@ class SupplyMind3JudgeRewardWorker(LLMJudgeRewardWorker):
     def __init__(self, config: Any | None = None, ollama_host: str = "http://localhost:11434", **kwargs):
         super().__init__(config=config, **kwargs) if _HAS_ROLL else super().__init__()
         self.ollama_host = ollama_host
-        self.judges = ["deepseek-r1-local-q4", "qwen2.5:14b-instruct-q4_K_M",
-                       "mistral-nemo:12b-instruct-q4_K_M"]
+        self.judges = ["deepseek-r1-local-q4", "qwen25-14b-local",
+                       "mistral-nemo-local"]
 
     def _query_judge(self, model_name: str, prompt: str) -> dict | None:
         """Call Ollama with the judge model. Returns parsed JSON or None."""

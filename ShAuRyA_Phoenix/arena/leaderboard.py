@@ -86,7 +86,10 @@ def rebuild() -> dict:
         "n_baselines": len(BASELINES),
         "rows": rows,
     }
-    LEADERBOARD_PATH.write_text(json.dumps(board, indent=2))
+    try:
+        LEADERBOARD_PATH.write_text(json.dumps(board, indent=2), encoding="utf-8")
+    except PermissionError as e:
+        logger.warning("leaderboard rebuild computed but could not rewrite %s: %s", LEADERBOARD_PATH, e)
     return board
 
 

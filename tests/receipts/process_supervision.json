@@ -1,0 +1,44 @@
+{
+  "framework": "RL guide \u00a79 + \u00a76 + Lightman 2023 'Let's Verify Step by Step'",
+  "trace": [
+    {
+      "step": 1,
+      "guess": "ABOUT",
+      "intent": "explore_vowels",
+      "naive_credit": 0.2,
+      "process_credit": 0.04
+    },
+    {
+      "step": 2,
+      "guess": "CRANE",
+      "intent": "narrow_consonants",
+      "naive_credit": 0.2,
+      "process_credit": 0.12
+    },
+    {
+      "step": 3,
+      "guess": "BRAID",
+      "intent": "test_b_r_a_i",
+      "naive_credit": 0.2,
+      "process_credit": 0.2
+    },
+    {
+      "step": 4,
+      "guess": "BRAWN",
+      "intent": "swap_d_for_n",
+      "naive_credit": 0.2,
+      "process_credit": 0.2
+    },
+    {
+      "step": 5,
+      "guess": "BRAIN",
+      "intent": "exact_solve",
+      "naive_credit": 0.2,
+      "process_credit": 1.3
+    }
+  ],
+  "naive_variance": 0.0,
+  "process_variance": 0.2735,
+  "variance_amplification": 2735.2,
+  "credit_localization": "process supervision concentrates credit at the solve step (1.300 vs naive 0.200) \u2192 correct attribution of which actions caused success"
+}

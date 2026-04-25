@@ -116,7 +116,10 @@ def build_pairs(max_pairs: int = 64) -> list[Pair]:
     }
 
     Scenario text is pulled from the live crisis library by fuzzy matching
-    the key (which is a slugified event name like '2011_Tōhoku_earthquake').
+    the key (which is a slugified event name like '2011_Tohoku_earthquake').
+    If a full event body is absent, we render the committed scenario_id itself
+    into readable text. That fallback is deterministic provenance text from
+    the R4 cache key, not invented event content.
     """
     if not R4_GT_PATH.exists():
         raise FileNotFoundError(f"R4 ground-truth file missing: {R4_GT_PATH}")
@@ -181,6 +184,7 @@ def _scenario_text_for(scenario_id: str, live: dict) -> str:
         if ev.get("id", "").lower() in key_lower or ev.get("name", "").lower() in key_lower:
             return f"{ev['name']}. {ev.get('summary', '')}"
     # Fallback: use the slugified key itself as the prompt description.
+    # This is provenance-preserving ID text, not synthetic event evidence.
     clean = scenario_id.replace("_", " ")
     return f"Assess the supply-chain impact of the following event: {clean}"
 
