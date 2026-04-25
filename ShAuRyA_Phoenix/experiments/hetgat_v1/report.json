@@ -1,0 +1,51 @@
+{
+  "generated_at_utc": "2026-04-25T08:37:14Z",
+  "n_graphs_trained": 1,
+  "results_per_graph": [
+    {
+      "graph": "hard_graph",
+      "n_nodes": 40,
+      "n_edges": 47,
+      "epochs": 60,
+      "n_train": 128,
+      "n_test": 32,
+      "n_parameters": 19489,
+      "hetgat_test_mae_final": 9.309911146759987,
+      "elapsed_s": 89.57,
+      "history": [
+        {
+          "epoch": 0,
+          "train_loss": 16.83004093170166,
+          "test_mae": 17.107094168663025,
+          "elapsed_s": 1.8
+        },
+        {
+          "epoch": 20,
+          "train_loss": 13.139069080352783,
+          "test_mae": 13.470923140645027,
+          "elapsed_s": 32.82
+        },
+        {
+          "epoch": 40,
+          "train_loss": 10.599762439727783,
+          "test_mae": 11.052453741431236,
+          "elapsed_s": 61.91
+        },
+        {
+          "epoch": 59,
+          "train_loss": 8.773984432220459,
+          "test_mae": 9.309911146759987,
+          "elapsed_s": 89.57
+        }
+      ],
+      "r6_v1_gcn_baseline": {
+        "gnn_mae": 10.347342171669005,
+        "mlp_mae": 28.483039016723634,
+        "one_hop_mae": 16.03428017649916,
+        "v1_improvement_vs_mlp_pct": 63.67191659010252
+      },
+      "hetgat_vs_v1_gcn_pct": 10.03,
+      "weights_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\ShAuRyA_Phoenix\\experiments\\hetgat_v1\\hetgat_hard_graph.pt"
+    }
+  ]
+}

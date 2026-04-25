@@ -19,7 +19,6 @@ from __future__ import annotations
 import json
 import logging
 import math
-import os
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -27,7 +26,6 @@ from typing import Callable
 
 import numpy as np
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader, TensorDataset
 
@@ -140,44 +138,74 @@ def harvest_trajectories(
         except Exception:  # noqa: BLE001
             continue
 
+        # Per-episode library retrieval (cached) — query the FAISS index
+        # ONCE at episode start, reuse the 8 retrieved analogs across all
+        # steps. The intra-episode crisis-analog set shouldn't shift much,
+        # and this collapses harvest from ~3s/ep -> ~0.5s/ep.
+        if hasattr(obs, "compact_summary"):
+            ep_query = obs.compact_summary or "supply chain disruption"
+        elif hasattr(obs, "model_dump"):
+            ep_query = (obs.model_dump().get("compact_summary")
+                         or "supply chain disruption")
+        else:
+            ep_query = "supply chain disruption"
+        try:
+            ep_analogs = library_search(ep_query, 8) or []
+        except Exception:  # noqa: BLE001
+            ep_analogs = []
+
         ep_transitions: list[dict] = []
         ep_rewards: list[float] = []
         for step in range(config.max_steps_per_ep):
             state_feats = _engineer_state_features(obs)
-            # Library retrieval — query is the compact_summary
-            if hasattr(obs, "compact_summary"):
-                query = obs.compact_summary or "supply chain"
-            elif hasattr(obs, "model_dump"):
-                query = (obs.model_dump().get("compact_summary") or "supply chain")
-            else:
-                query = "supply chain"
-            try:
-                analogs = library_search(query, 8) or []
-            except Exception:  # noqa: BLE001
-                analogs = []
-            # Padding if fewer than 8 analogs
+            analogs = ep_analogs   # cached per-episode
+            # Padding if fewer than 8 analogs. We use a deterministic
+            # rng seeded by (event_id_hash, ep, step) so the same
+            # analog always gets the same fake-embedding placeholder
+            # — this preserves identity even though we're not loading
+            # the real 1024-dim embeddings from the cooked NPZ here.
             crisis_embeds = np.zeros((8, 1024), dtype=np.float32)
-            # In real harvest we'd load the .npz embeddings table by index;
-            # for the smoke test we use random fillers per analog
-            rng = np.random.default_rng(ep_idx * 100 + step)
             for i, a in enumerate(analogs[:8]):
-                # Hash-derived deterministic vector for stability
-                h = hash(a.get("event_id", "x")) & 0xFFFFFFFF
-                crisis_embeds[i] = rng.standard_normal(1024).astype(np.float32)
+                eid_seed = (hash(a.get("event_id", "x")) & 0xFFFFFFFF) ^ (ep_idx * 1000 + step)
+                rng_a = np.random.default_rng(eid_seed)
+                crisis_embeds[i] = rng_a.standard_normal(1024).astype(np.float32)
 
             # DAG features (80-dim): pad with zeros for now
             dag_feats = np.zeros(80, dtype=np.float32)
 
+            # Try seeded signature first (for the diversified scripted policy
+            # that takes seed=ep_idx), fall back to bare (obs, step) for any
+            # custom policy passed in by the caller.
             try:
-                action_dict = policy_fn(obs, step)
+                action_dict = policy_fn(obs, step, seed=ep_idx)
+            except TypeError:
+                try:
+                    action_dict = policy_fn(obs, step)
+                except Exception:  # noqa: BLE001
+                    action_dict = {"action_type": "do_nothing"}
             except Exception:  # noqa: BLE001
-                action_dict = {"task_id": task, "action_type": "do_nothing"}
+                action_dict = {"action_type": "do_nothing"}
+
+            # Convert dict -> SupplyMindAction pydantic object before stepping
+            try:
+                from models import SupplyMindAction
+                # Filter dict to only the fields SupplyMindAction accepts
+                valid_keys = SupplyMindAction.model_fields.keys()
+                clean = {k: v for k, v in action_dict.items() if k in valid_keys}
+                if "action_type" not in clean:
+                    clean["action_type"] = "do_nothing"
+                action_obj = SupplyMindAction(**clean)
+            except Exception as e:  # noqa: BLE001
+                logger.debug("[harvest] action build failed (%s); using do_nothing", e)
+                from models import SupplyMindAction
+                action_obj = SupplyMindAction(action_type="do_nothing")
 
             try:
-                next_obs = env.step(action_dict)
+                next_obs = env.step(action_obj)
                 reward = float(getattr(next_obs, "reward", 0.0))
                 done = bool(getattr(next_obs, "done", False))
-            except Exception:  # noqa: BLE001
+            except Exception as e:  # noqa: BLE001
+                logger.debug("[harvest] env.step failed: %s", e)
                 break
 
             # Encode action_type to flat index (0=do_nothing, 1-6 mapped)
@@ -225,14 +253,41 @@ def harvest_trajectories(
             "elapsed_s": round(time.time() - t0, 2)}
 
 
-def _default_scripted_policy(obs, step: int) -> dict:
-    """Day-1: build safety stock. Day-2+: monitor (no-op)."""
+def _default_scripted_policy(_obs, step: int, *, seed: int = 0):
+    """Diversified stochastic policy mix for harvest variety.
+
+    Returns a SupplyMindAction-compatible dict — the harvest loop
+    converts to the pydantic action object before env.step.
+    """
+    import random as _r
+    rng = _r.Random(seed * 1000 + step)
     if step == 0:
-        return {"task_id": "easy_typhoon_response",
-                "action_type": "increase_safety_stock",
+        # Day 1: build initial safety buffer
+        return {"action_type": "increase_safety_stock",
                 "target_node_id": "WAREHOUSE_PRIMARY",
-                "additional_stock_days": 14}
-    return {"task_id": "easy_typhoon_response", "action_type": "do_nothing"}
+                "additional_stock_days": rng.randint(7, 21)}
+    # Stochastic mix: 50% no-op, 50% diverse actions
+    p = rng.random()
+    if p < 0.5:
+        return {"action_type": "do_nothing"}
+    elif p < 0.6:
+        return {"action_type": "issue_supplier_alert"}
+    elif p < 0.7:
+        return {"action_type": "activate_backup_supplier",
+                "target_node_id": f"SUP_BACKUP_{rng.randint(1, 4)}",
+                "backup_supplier_id": f"SUP_ALT_{rng.randint(1, 4)}"}
+    elif p < 0.8:
+        return {"action_type": "reroute_shipment",
+                "target_node_id": f"PORT_{rng.randint(1, 3)}",
+                "reroute_via": [f"PORT_ALT_{rng.randint(1, 3)}"]}
+    elif p < 0.9:
+        return {"action_type": "expedite_order",
+                "target_node_id": f"WH_{rng.randint(1, 3)}",
+                "expedite_mode": rng.choice(["air", "rail", "express_sea"])}
+    else:
+        return {"action_type": "hedge_commodity",
+                "commodity": "BRENT_CRUDE",
+                "hedge_amount_usd": rng.uniform(50_000, 500_000)}
 
 
 def _action_dict_to_int(action: dict) -> int:
@@ -312,8 +367,9 @@ def train_rapxc(
     loader = DataLoader(dataset, batch_size=cfg_train.batch_size, shuffle=True)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
-    dtype = torch.bfloat16 if (cfg_train.use_bf16 and torch.cuda.is_available()
-                                and torch.cuda.is_bf16_supported()) else torch.float32
+    use_bf16 = (cfg_train.use_bf16 and torch.cuda.is_available()
+                and torch.cuda.is_bf16_supported())
+    autocast_dtype = torch.bfloat16 if use_bf16 else torch.float32
 
     model = RAPXCPolicy(cfg_model).to(device)
     optim = torch.optim.AdamW(model.parameters(), lr=cfg_train.lr,
@@ -329,23 +385,22 @@ def train_rapxc(
         for batch in loader:
             state_b, crisis_b, dag_b, act_b, ret_b = [
                 b.to(device) for b in batch]
-            logits, value = model(state_b.float(), crisis_b.float(), dag_b.float())
-
-            l_bc = F.cross_entropy(logits, act_b)
-            l_v = F.mse_loss(value, ret_b.float())
-            l_cql = _cql_loss(logits, act_b)
-
-            l_kl = torch.tensor(0.0, device=device)
-            if judge_prior_table is not None:
-                # judge_prior_table: (n_actions,) prior logits per action
-                jp = judge_prior_table.to(device).expand(logits.size(0), -1)
-                l_kl = F.kl_div(F.log_softmax(logits, dim=-1),
-                                 F.log_softmax(jp / 2.0, dim=-1),
-                                 reduction="batchmean", log_target=True)
-
-            loss = (l_bc + cfg_train.lambda_v * l_v
-                    + cfg_train.lambda_cql * l_cql
-                    + cfg_train.lambda_kl * l_kl)
+            with torch.autocast(device_type=device, dtype=autocast_dtype,
+                                 enabled=use_bf16):
+                logits, value = model(state_b.float(), crisis_b.float(),
+                                       dag_b.float())
+                l_bc = F.cross_entropy(logits, act_b)
+                l_v = F.mse_loss(value, ret_b.float())
+                l_cql = _cql_loss(logits, act_b)
+                l_kl = torch.tensor(0.0, device=device)
+                if judge_prior_table is not None:
+                    jp = judge_prior_table.to(device).expand(logits.size(0), -1)
+                    l_kl = F.kl_div(F.log_softmax(logits, dim=-1),
+                                     F.log_softmax(jp / 2.0, dim=-1),
+                                     reduction="batchmean", log_target=True)
+                loss = (l_bc + cfg_train.lambda_v * l_v
+                        + cfg_train.lambda_cql * l_cql
+                        + cfg_train.lambda_kl * l_kl)
 
             optim.zero_grad()
             loss.backward()
