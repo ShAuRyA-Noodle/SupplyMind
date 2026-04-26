@@ -42,7 +42,7 @@
       "pre_event_brent_min": 46.73,
       "pre_event_brent_max": 75.92,
       "rel_err_anchor_vs_mean_pct": 17.89,
-      "elapsed_s": 2.119,
+      "elapsed_s": 1.376,
       "sha256_response_first_2k": "00fefe3a4edcc6f39a371498910954aa37e5f4cea263f6931f7827930e624a7c"
     },
     {
@@ -82,7 +82,7 @@
       "pre_event_brent_min": 71.03,
       "pre_event_brent_max": 97.1,
       "rel_err_anchor_vs_mean_pct": 7.2,
-      "elapsed_s": 0.719,
+      "elapsed_s": 1.032,
       "sha256_response_first_2k": "38a9a19572f2f7d22424bb506c6b064da72f5032ce0f057001ea0121094284b5"
     },
     {
@@ -122,7 +122,7 @@
       "pre_event_brent_min": 50.57,
       "pre_event_brent_max": 86.07,
       "rel_err_anchor_vs_mean_pct": 11.85,
-      "elapsed_s": 0.677,
+      "elapsed_s": 1.611,
       "sha256_response_first_2k": "a53132ff25f260bab288d5968182af1dbe72303f09bd1f512e71595a6553b61e"
     },
     {
@@ -162,7 +162,7 @@
       "pre_event_brent_min": 71.03,
       "pre_event_brent_max": 97.1,
       "rel_err_anchor_vs_mean_pct": 2.18,
-      "elapsed_s": 0.653,
+      "elapsed_s": 1.499,
       "sha256_response_first_2k": "809969d7998aaf301f250c4b26966dbf9be3a7fa0f0af2e7cbf9f8179ed29ea2"
     },
     {
@@ -202,7 +202,7 @@
       "pre_event_brent_min": 32.73,
       "pre_event_brent_max": 69.95,
       "rel_err_anchor_vs_mean_pct": 25.87,
-      "elapsed_s": 0.673,
+      "elapsed_s": 1.12,
       "sha256_response_first_2k": "be6585db6b21744fb9c0e8d218203d065fffa4bbd6be9026685a9413a2dafbc9"
     },
     {
@@ -242,7 +242,7 @@
       "pre_event_brent_min": 69.53,
       "pre_event_brent_max": 133.18,
       "rel_err_anchor_vs_mean_pct": 0.95,
-      "elapsed_s": 0.642,
+      "elapsed_s": 0.998,
       "sha256_response_first_2k": "af2da0b1ab6f43c197e5c488a847fd66549a141ff62cf5a9c74124a48f26b6ce"
     },
     {
@@ -282,7 +282,7 @@
       "pre_event_brent_min": 91.31,
       "pre_event_brent_max": 126.64,
       "rel_err_anchor_vs_mean_pct": 0.59,
-      "elapsed_s": 0.656,
+      "elapsed_s": 0.911,
       "sha256_response_first_2k": "0c482988ec96bd472945fa65bfaf3d6c8373a364ddfc3717c4f134893f6858ae"
     },
     {
@@ -322,14 +322,14 @@
       "pre_event_brent_min": 67.18,
       "pre_event_brent_max": 116.89,
       "rel_err_anchor_vs_mean_pct": 25.04,
-      "elapsed_s": 0.596,
+      "elapsed_s": 0.898,
       "sha256_response_first_2k": "8941a71ee43f214968bc628b5ada7ed0d526206b17d24f0e968c3b78d565a8fc"
     }
   ],
   "no_synthetic_substitution": true,
   "_block_id": "K1",
   "_block_name": "fred_brent_real",
-  "_block_elapsed_s": 7.2,
+  "_block_elapsed_s": 9.58,
   "_pass": 28,
-  "_generated_at_utc": "2026-04-26T02:36:34Z"
+  "_generated_at_utc": "2026-04-26T09:54:46Z"
 }

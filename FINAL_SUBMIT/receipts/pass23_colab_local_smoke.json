@@ -1,7 +1,7 @@
 {
   "name": "pass23_colab_local_smoke",
   "purpose": "Prove notebooks/08_HACKATHON_FOOLPROOF.ipynb runs end-to-end with real training and real numbers",
-  "wall_clock_s": 9.83,
+  "wall_clock_s": 17.09,
   "n_episodes": 1500,
   "n_grad_steps": 94,
   "tier_bumps": [
@@ -40,5 +40,5 @@
     "cohens_d": 3.890562695151114
   },
   "plot_saved_to": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\FINAL_SUBMIT\\plots\\colab_reproduction.png",
-  "_generated_at_utc": "2026-04-26T00:55:57Z"
+  "_generated_at_utc": "2026-04-26T09:52:30Z"
 }

@@ -1,14 +1,9 @@
 {
   "name": "K4_wandb_live_smoke",
-  "closes": "V8 W&B-style logs gap",
-  "wandb_version": "0.25.1",
-  "login_status": "OK (shauryapunj404 logged in via wandb.login)",
-  "init_status": "BLOCKED on Windows local",
-  "root_cause": "wandb 0.25.1 Settings model rejects x_disable_service field which other parts of wandb internally pass. Known compatibility issue with newer wandb on Windows where service-poll path is taken.",
-  "mitigation": "Run on Colab via notebook 11 cell K4 \u2014 works in Linux env without Windows ServicePoll path.",
-  "honest_disclosure": true,
-  "workaround_in_notebook_11": true,
-  "no_synthetic_substitution": true,
+  "error": "ServicePollForTokenError: Failed to read port info after 30.0 seconds.",
+  "_block_id": "K4",
+  "_block_name": "wandb_live_smoke",
+  "_block_elapsed_s": 34.29,
   "_pass": 28,
-  "_generated_at_utc": "2026-04-26T03:09:52Z"
+  "_generated_at_utc": "2026-04-26T09:55:29Z"
 }

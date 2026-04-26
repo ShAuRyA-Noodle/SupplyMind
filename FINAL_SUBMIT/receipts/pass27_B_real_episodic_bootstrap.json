@@ -5,7 +5,7 @@
   "closes_honest_limitation": "L5 (single biggest credibility risk)",
   "training": {
     "n_episodes": 1500,
-    "wall_clock_s": 9.23,
+    "wall_clock_s": 15.51,
     "tier_reached": 2
   },
   "evaluations": {
@@ -363,7 +363,7 @@
   "raw_per_episode_arrays_persisted": true,
   "_block_id": "B",
   "_block_name": "real_episodic_bootstrap",
-  "_block_elapsed_s": 11.4,
+  "_block_elapsed_s": 18.4,
   "_pass": 27,
-  "_generated_at_utc": "2026-04-26T01:45:09Z"
+  "_generated_at_utc": "2026-04-26T09:53:42Z"
 }

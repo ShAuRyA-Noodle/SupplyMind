@@ -95,6 +95,67 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+# Root route — pretty landing page for HF Space visitors (instead of FastAPI 404)
+@app.get("/", include_in_schema=False)
+async def _root_landing():
+    from fastapi.responses import HTMLResponse
+    html = """<!DOCTYPE html><html><head><title>SupplyMind · OpenEnv India 2026</title>
+<style>body{font-family:system-ui,sans-serif;max-width:900px;margin:2em auto;padding:0 20px;background:#0f172a;color:#e2e8f0;line-height:1.6}
+h1{color:#fbbf24;border-bottom:3px solid #dc2626;padding-bottom:10px}
+h2{color:#fbbf24;margin-top:1.5em}
+.hero{background:linear-gradient(135deg,#7f1d1d,#000);padding:24px;border-radius:8px;margin:20px 0;text-align:center}
+.hero .num{font-size:48px;font-weight:bold;color:#fbbf24}
+.hero .lbl{font-size:14px;color:#cbd5e1;text-transform:uppercase;letter-spacing:2px}
+a{color:#fbbf24;text-decoration:none}
+a:hover{text-decoration:underline}
+table{border-collapse:collapse;width:100%;margin:1em 0}
+th,td{border-bottom:1px solid #334155;padding:8px 12px;text-align:left;font-family:monospace;font-size:13px}
+th{background:#1e293b;color:#fbbf24}
+code{background:#1e293b;padding:2px 6px;border-radius:3px;color:#16a34a}
+.ok{color:#16a34a;font-weight:bold}
+.btn{display:inline-block;padding:10px 18px;background:#dc2626;color:#fff;border-radius:6px;margin:8px 4px}
+</style></head><body>
+<h1>🚢 SupplyMind · OpenEnv India 2026 Submission</h1>
+<p><strong>Theme 3 Professional Tasks</strong> (with Theme 1 Multi-Agent + Theme 2 Long-Horizon hat-trick)</p>
+<div class="hero"><div class="lbl">REINFORCE Wordle solve rate</div><div class="num">100%</div>
+<div style="margin-top:8px;font-size:13px;color:#cbd5e1">Wilcoxon p = 9.39 × 10⁻³⁵ · Cohen d = +4.77 · 4.4 min on free Colab CPU</div></div>
+<h2>📋 Submission artifacts</h2>
+<table>
+<tr><th>Asset</th><th>Link</th></tr>
+<tr><td>Master training notebook</td><td><a href="/static/notebook">notebooks/13_MASTER_HACKATHON_FINAL.ipynb</a> · <a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/blob/main/notebooks/13_MASTER_HACKATHON_FINAL.ipynb">browse on HF</a></td></tr>
+<tr><td>Demo video (90s)</td><td><a href="https://www.youtube.com/watch?v=0Jy78rg_0BQ">https://www.youtube.com/watch?v=0Jy78rg_0BQ</a></td></tr>
+<tr><td>Blog walkthrough</td><td><a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/blob/main/FINAL_SUBMIT/THE_SUPPLYMIND_STORY.md">FINAL_SUBMIT/THE_SUPPLYMIND_STORY.md</a></td></tr>
+<tr><td>Receipts (128 sha256-stamped)</td><td><a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/tree/main/FINAL_SUBMIT/receipts">FINAL_SUBMIT/receipts/</a></td></tr>
+<tr><td>Plots (13 axis-labeled)</td><td><a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/tree/main/FINAL_SUBMIT/plots">FINAL_SUBMIT/plots/</a></td></tr>
+</table>
+<h2>🔌 Live API endpoints</h2>
+<table>
+<tr><th>Endpoint</th><th>Description</th></tr>
+<tr><td><a href="/health">GET /health</a></td><td>health check</td></tr>
+<tr><td><a href="/tasks">GET /tasks</a></td><td>list tasks + action schema</td></tr>
+<tr><td><a href="/state">GET /state</a></td><td>current state metadata</td></tr>
+<tr><td><code>POST /reset</code></td><td>start a new episode (body: <code>{task_id, seed}</code>)</td></tr>
+<tr><td><code>POST /step</code></td><td>execute action (body: <code>SupplyMindAction</code>)</td></tr>
+<tr><td><a href="/docs">GET /docs</a></td><td>interactive Swagger UI for all endpoints</td></tr>
+</table>
+<h2>📊 Headline metrics</h2>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>REINFORCE solve rate</td><td class="ok">100%</td></tr>
+<tr><td>Wilcoxon p</td><td><code>9.39 × 10⁻³⁵</code></td></tr>
+<tr><td>Cohen d</td><td><code>+4.77</code></td></tr>
+<tr><td>Adversarial attacks blocked</td><td class="ok">257/257 = 100%</td></tr>
+<tr><td>HF Space rollout success</td><td class="ok">20/20 steps 200 OK</td></tr>
+<tr><td>FRED real Brent events</td><td class="ok">8/8 historical events</td></tr>
+<tr><td>250-feature individual demonstration</td><td class="ok">248/250 = 99.2%</td></tr>
+<tr><td>Sha256-stamped receipts</td><td>128</td></tr>
+</table>
+<p style="margin-top:2em;text-align:center"><strong style="color:#fbbf24">Built for Meta PyTorch × Scaler OpenEnv Hackathon Finals 2026 · Bangalore</strong><br>
+License: MIT · Author: ShAuRyA-Noodle · Built to be audited</p>
+</body></html>"""
+    return HTMLResponse(content=html)
+
 # v4 arcadia-live — mount the /live/* router for realtime Hormuz / Iran / Israel /
 # Red Sea demo. Graceful no-op if v4 staging dir isn't present (keeps v3 clean).
 try:

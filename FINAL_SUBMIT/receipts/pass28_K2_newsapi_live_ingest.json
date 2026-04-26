@@ -4,95 +4,95 @@
   "queries": [
     {
       "query": "Strait of Hormuz",
-      "totalResults": 18660,
+      "totalResults": 18667,
       "n_articles_returned": 10,
       "top_3_titles": [
-        "Iran war justified by Tehran's 'aggression' over decades, US legal adviser says",
-        "Report: Israel has killed 15 people in Lebanon since cease-fire began last week",
-        "US energy exports hit records amid Middle East supply chain disruptions"
+        "India, Australia at highest point of bilateral ties: Australian HC to India",
+        "Japan sheds pacifism as global order begins to fracture",
+        "Us-Israel vs Iran: How Middle East War Unfolded Step-By-Step"
       ],
       "top_3_publishedAt": [
-        "2026-04-25T02:35:12Z",
-        "2026-04-25T02:30:17Z",
-        "2026-04-25T02:20:03Z"
+        "2026-04-25T09:47:51Z",
+        "2026-04-25T09:30:57Z",
+        "2026-04-25T09:28:45Z"
       ],
       "top_3_sources": [
-        "The Times of India",
-        "Haaretz",
-        "Crypto Briefing"
+        "BusinessLine",
+        "Livemint",
+        "Sputnikglobe.com"
       ],
-      "elapsed_s": 0.608,
-      "sha256_response_first_2k": "f7a24ed7d0275e0203b57c8cea4047aad0237d18137dda905ae36d55ab42728e"
+      "elapsed_s": 0.898,
+      "sha256_response_first_2k": "16b4552daed2df9c8f2869d032b741054e31e4f03e33910dacc2671a41dc1f0a"
     },
     {
       "query": "Suez Canal",
       "totalResults": 279,
       "n_articles_returned": 10,
       "top_3_titles": [
+        "David McWilliams: Could the US go downhill for good following Trump\u2019s war on Iran?",
         "Indonesia Shuts Down Malacca Strait Toll Talk, Distancing From\u00a0Hormuz",
-        "Third US military aircraft carrier arrives in Middle East \u2014 sending strong message to Iran",
-        "Indonesia rejects Malacca Strait tolls amid global tensions"
+        "Third US military aircraft carrier arrives in Middle East \u2014 sending strong message to Iran"
       ],
       "top_3_publishedAt": [
+        "2026-04-25T05:00:00Z",
         "2026-04-24T22:17:14Z",
-        "2026-04-24T17:16:10Z",
-        "2026-04-24T14:41:00Z"
+        "2026-04-24T17:16:10Z"
       ],
       "top_3_sources": [
+        "The Irish Times",
         "WWD",
-        "New York Post",
-        "Antaranews.com"
+        "New York Post"
       ],
-      "elapsed_s": 0.526,
-      "sha256_response_first_2k": "2e078de6363a16ce8c7de65044c1dad883e7ceafae0bc6767bb758a7e9b22225"
+      "elapsed_s": 1.083,
+      "sha256_response_first_2k": "399d5d96e353d9e1e0841d925e50815f910525b6ef372153d7820183b1170b27"
     },
     {
       "query": "Red Sea Houthi",
       "totalResults": 315,
       "n_articles_returned": 8,
       "top_3_titles": [
+        "Germany news: Ships to head to Med for possible Hormuz role",
         "It\u2019s The One-Year Anniversary Of The Most Buried Foreign Policy Story Of 2025",
-        "Middle East Reconstruction Poses a Carbon Shock as Shipping Bears the Climate Bill",
-        "Third US military aircraft carrier arrives in Middle East \u2014 sending strong message to Iran"
+        "Middle East Reconstruction Poses a Carbon Shock as Shipping Bears the Climate Bill"
       ],
       "top_3_publishedAt": [
+        "2026-04-25T07:34:00Z",
         "2026-04-24T17:57:59Z",
-        "2026-04-24T17:20:52Z",
-        "2026-04-24T17:16:10Z"
+        "2026-04-24T17:20:52Z"
       ],
       "top_3_sources": [
+        "DW (English)",
         "The Daily Caller",
-        "gcaptain.com",
-        "New York Post"
+        "gcaptain.com"
       ],
-      "elapsed_s": 0.542,
-      "sha256_response_first_2k": "a04702d0cca338aa9f162397e287932b4e66b78df6eac3d9a54330306af3b634"
+      "elapsed_s": 0.866,
+      "sha256_response_first_2k": "7747768d9ef74cd9aa1f0860a414e884ea514d88bfabc912ae4fdb3b68dffaae"
     },
     {
       "query": "Iran sanctions oil",
-      "totalResults": 2120,
-      "n_articles_returned": 10,
+      "totalResults": 2126,
+      "n_articles_returned": 9,
       "top_3_titles": [
-        "US imposes sanctions on Chinese 'teapot' refinery for buying Iranian oil",
-        "US ends Iranian, Russian oil waivers, tightening sanctions",
-        "US indicated it would not ease Russian oil sanctions again, EU's Sefcovic says"
+        "US sanctions China\u2019s \u2018teapot\u2019 refinery for buying Iranian oil",
+        "Iran's foreign minister awaits U.S. delegation to Pakistan for peace talks",
+        "EU considers helping with Middle East energy infrastructure to bypass conflict zones"
       ],
       "top_3_publishedAt": [
-        "2026-04-25T01:36:00Z",
-        "2026-04-25T01:33:47Z",
-        "2026-04-25T01:05:20Z"
+        "2026-04-25T07:10:19Z",
+        "2026-04-25T06:35:21Z",
+        "2026-04-25T06:25:50Z"
       ],
       "top_3_sources": [
-        "CNA",
-        "Crypto Briefing",
-        "The Times of India"
+        "Al Jazeera English",
+        "NPR",
+        "Japan Today"
       ],
-      "elapsed_s": 0.504,
-      "sha256_response_first_2k": "5359cf57e7bba9a7578a3a74e0ab9b36273ffff458a3b4ab64d457c72d63542e"
+      "elapsed_s": 0.808,
+      "sha256_response_first_2k": "3ef467cda77c0b2e7840765dea9df6b525d72dffbe17370018456969ad9eef44"
     },
     {
       "query": "Taiwan strait shipping",
-      "totalResults": 128,
+      "totalResults": 127,
       "n_articles_returned": 10,
       "top_3_titles": [
         "Oil Gains on Iran Stalemate, Global Stocks Dip: Markets Wrap",
@@ -109,14 +109,14 @@
         "ABC News (AU)",
         "ABC News (AU)"
       ],
-      "elapsed_s": 0.518,
-      "sha256_response_first_2k": "8db04f12850de9b5afdc6e547073d8e641d5feaf661b6b8131cbd4e1d80bee1f"
+      "elapsed_s": 0.766,
+      "sha256_response_first_2k": "29454dea2cb600b1171efae20acd75e1d0508bc85739d9c11f6d21607d86865b"
     }
   ],
   "n_queries_successful": 5,
   "_block_id": "K2",
   "_block_name": "newsapi_live_ingest",
-  "_block_elapsed_s": 2.7,
+  "_block_elapsed_s": 4.42,
   "_pass": 28,
-  "_generated_at_utc": "2026-04-26T02:36:37Z"
+  "_generated_at_utc": "2026-04-26T09:54:50Z"
 }

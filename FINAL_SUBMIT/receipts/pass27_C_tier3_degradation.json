@@ -34,7 +34,7 @@
   "interpretation": "Action masking provides constraint propagation, so degradation is graceful but real. In-distribution pool 20 solves at ~100%; out-of-distribution pools degrade as policy must guess targets it wasn't trained on.",
   "_block_id": "C",
   "_block_name": "tier3_degradation_curve",
-  "_block_elapsed_s": 8.9,
+  "_block_elapsed_s": 14.51,
   "_pass": 27,
-  "_generated_at_utc": "2026-04-26T01:43:33Z"
+  "_generated_at_utc": "2026-04-26T09:53:56Z"
 }

@@ -6,7 +6,7 @@
       "endpoint": "datasets",
       "url": "https://www.ncdc.noaa.gov/cdo-web/api/v2/datasets",
       "status_code": 200,
-      "elapsed_s": 1.272,
+      "elapsed_s": 1.781,
       "n_results": 11,
       "sample_results": [
         {
@@ -40,7 +40,7 @@
       "endpoint": "locationcategories",
       "url": "https://www.ncdc.noaa.gov/cdo-web/api/v2/locationcategories",
       "status_code": 200,
-      "elapsed_s": 1.077,
+      "elapsed_s": 1.482,
       "n_results": 12,
       "sample_results": [
         {
@@ -62,7 +62,7 @@
       "endpoint": "datatypes",
       "url": "https://www.ncdc.noaa.gov/cdo-web/api/v2/datatypes?limit=10",
       "status_code": 200,
-      "elapsed_s": 0.908,
+      "elapsed_s": 1.236,
       "n_results": 10,
       "sample_results": [
         {
@@ -93,7 +93,7 @@
   "n_endpoints_200_OK": 3,
   "_block_id": "K3",
   "_block_name": "noaa_cdo_live",
-  "_block_elapsed_s": 3.26,
+  "_block_elapsed_s": 4.5,
   "_pass": 28,
-  "_generated_at_utc": "2026-04-26T02:36:40Z"
+  "_generated_at_utc": "2026-04-26T09:54:55Z"
 }

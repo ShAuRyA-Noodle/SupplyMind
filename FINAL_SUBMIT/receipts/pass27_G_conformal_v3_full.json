@@ -59,7 +59,7 @@
   "payload_size_bytes_target": ">5000 (vs old 710)",
   "_block_id": "G",
   "_block_name": "conformal_v3_full_payload",
-  "_block_elapsed_s": 0.0,
+  "_block_elapsed_s": 0.01,
   "_pass": 27,
-  "_generated_at_utc": "2026-04-26T01:43:43Z"
+  "_generated_at_utc": "2026-04-26T09:54:19Z"
 }

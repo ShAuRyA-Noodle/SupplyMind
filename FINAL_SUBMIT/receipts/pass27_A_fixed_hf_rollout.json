@@ -12,7 +12,7 @@
       "reward": 0.05,
       "cumulative_reward": 0.05,
       "done": false,
-      "elapsed_s": 1.12,
+      "elapsed_s": 1.601,
       "response_sha256_first_1k": "4d5093ab913ff57a8673a6ce10290fbb888e75cd61098f14f0584323ec08d616"
     },
     {
@@ -22,7 +22,7 @@
       "reward": 0.05,
       "cumulative_reward": 0.1,
       "done": false,
-      "elapsed_s": 1.118,
+      "elapsed_s": 1.505,
       "response_sha256_first_1k": "9c50aac5c5d1d27e19b0c42af52f52799a2ecb17cdd17b8a630cf5b995746d10"
     },
     {
@@ -32,7 +32,7 @@
       "reward": 0.0,
       "cumulative_reward": 0.1,
       "done": false,
-      "elapsed_s": 1.139,
+      "elapsed_s": 1.541,
       "response_sha256_first_1k": "611b4f77abc32e1df4bb153b1a6cd85bbc8cef108a5c8f31c49dd43216c38e1e"
     },
     {
@@ -42,7 +42,7 @@
       "reward": -0.005249999999999984,
       "cumulative_reward": 0.09475000000000003,
       "done": false,
-      "elapsed_s": 1.111,
+      "elapsed_s": 1.679,
       "response_sha256_first_1k": "d80a9806f8bf45bbd1a11ededd4baab1262fb8e50fea64142f051e0bad0658d9"
     },
     {
@@ -52,7 +52,7 @@
       "reward": 0.0,
       "cumulative_reward": 0.09475000000000003,
       "done": false,
-      "elapsed_s": 1.119,
+      "elapsed_s": 1.845,
       "response_sha256_first_1k": "f3139c984620d0d674eb83de61d03ef86b238548d5af377dd5d5d865bab38059"
     },
     {
@@ -62,7 +62,7 @@
       "reward": 0.08249999999999998,
       "cumulative_reward": 0.17725000000000002,
       "done": false,
-      "elapsed_s": 1.143,
+      "elapsed_s": 1.947,
       "response_sha256_first_1k": "9519f31bcf66c6962ef6b9036ca21d4cafc65855ab690fecd05c77b3f1f6ad0f"
     },
     {
@@ -72,7 +72,7 @@
       "reward": -0.38584999999999997,
       "cumulative_reward": -0.20859999999999995,
       "done": false,
-      "elapsed_s": 1.137,
+      "elapsed_s": 1.799,
       "response_sha256_first_1k": "365c4d81ec0d155c9754a137043b0d0533a6d8955e85a9ec574c074ee018be13"
     },
     {
@@ -82,7 +82,7 @@
       "reward": 0.04575,
       "cumulative_reward": -0.16284999999999994,
       "done": false,
-      "elapsed_s": 1.129,
+      "elapsed_s": 1.471,
       "response_sha256_first_1k": "006bf59c2a563d4340f8617d18877bee289d22f5ac155af35c03e02337208aaf"
     },
     {
@@ -92,7 +92,7 @@
       "reward": 0.04700000000000003,
       "cumulative_reward": -0.11584999999999991,
       "done": false,
-      "elapsed_s": 1.144,
+      "elapsed_s": 1.658,
       "response_sha256_first_1k": "d35f47a1411a8e6e70d448c671545c4ca5f498c9f01dd9049ffc71e57527d825"
     },
     {
@@ -102,7 +102,7 @@
       "reward": -0.0015000000000000221,
       "cumulative_reward": -0.11734999999999993,
       "done": false,
-      "elapsed_s": 1.15,
+      "elapsed_s": 1.992,
       "response_sha256_first_1k": "69d7682cde54f3b56d013e4e37edfbaf57ab369509f843a2281feec551e38291"
     },
     {
@@ -112,7 +112,7 @@
       "reward": 0.048500000000000015,
       "cumulative_reward": -0.06884999999999991,
       "done": false,
-      "elapsed_s": 1.15,
+      "elapsed_s": 1.692,
       "response_sha256_first_1k": "1bdb23d9e47032b34369cbba3e3f16eb2b03764ab8c6d3debe0c0fb6c966ac92"
     },
     {
@@ -122,7 +122,7 @@
       "reward": 0.345,
       "cumulative_reward": 0.27615000000000006,
       "done": false,
-      "elapsed_s": 1.124,
+      "elapsed_s": 1.946,
       "response_sha256_first_1k": "5b914b371840492b6785183823567ad5f229b6eacc28921c851de9fc68e8524f"
     },
     {
@@ -132,7 +132,7 @@
       "reward": 0.003500000000000017,
       "cumulative_reward": 0.27965000000000007,
       "done": false,
-      "elapsed_s": 1.14,
+      "elapsed_s": 1.864,
       "response_sha256_first_1k": "3d239f669b364bb00d0d865a18054924994474ad27834140370b9571837dc76d"
     },
     {
@@ -142,7 +142,7 @@
       "reward": 0.0013999999999999915,
       "cumulative_reward": 0.2810500000000001,
       "done": false,
-      "elapsed_s": 1.122,
+      "elapsed_s": 1.748,
       "response_sha256_first_1k": "50b86927d1123f7715d0920e8bbf7fdbfe9121c15cda38a99534081031dcc7b0"
     },
     {
@@ -152,7 +152,7 @@
       "reward": 0.07925000000000001,
       "cumulative_reward": 0.36030000000000006,
       "done": false,
-      "elapsed_s": 1.123,
+      "elapsed_s": 1.919,
       "response_sha256_first_1k": "39b507973cf28f4de14212da284d82b317528f978dacb1d86263723dc59da0f5"
     },
     {
@@ -162,7 +162,7 @@
       "reward": 0.049750000000000016,
       "cumulative_reward": 0.4100500000000001,
       "done": false,
-      "elapsed_s": 1.152,
+      "elapsed_s": 1.677,
       "response_sha256_first_1k": "8980bebf92830b855686a54c726eef409b4e428efe8b79edf5fe498fc46df898"
     },
     {
@@ -172,7 +172,7 @@
       "reward": -0.0005000000000000074,
       "cumulative_reward": 0.4095500000000001,
       "done": false,
-      "elapsed_s": 1.164,
+      "elapsed_s": 1.706,
       "response_sha256_first_1k": "71a1b64c6f807d068c1964944b95d028b4f0302c186d8dae086110c49c295312"
     },
     {
@@ -182,7 +182,7 @@
       "reward": -0.0010000000000000148,
       "cumulative_reward": 0.4085500000000001,
       "done": false,
-      "elapsed_s": 1.182,
+      "elapsed_s": 1.531,
       "response_sha256_first_1k": "4eb51c3ac73822007cf7250449101cafee5a62f1405e2028d1536cc7392a7c37"
     },
     {
@@ -192,7 +192,7 @@
       "reward": 0.0012500000000000011,
       "cumulative_reward": 0.40980000000000005,
       "done": false,
-      "elapsed_s": 1.132,
+      "elapsed_s": 1.654,
       "response_sha256_first_1k": "5ede1d1f0d117da2da363025e52570dbae0a852af6d1dbb9b498bf8d7fb9bf60"
     },
     {
@@ -202,14 +202,14 @@
       "reward": 0.0,
       "cumulative_reward": 0.40980000000000005,
       "done": true,
-      "elapsed_s": 1.115,
+      "elapsed_s": 1.747,
       "response_sha256_first_1k": "2cc80496e808cc6d043ed66cd166ccce7f2315d1d704738d797df17d48a5c608"
     }
   ],
   "errors": [],
   "reset": {
     "status_code": 200,
-    "elapsed_s": 1.218,
+    "elapsed_s": 2.443,
     "n_bytes": 4568,
     "response_sha256_first_1k": "5cd244396c3a8df33661f3dca7fbe7e7754def698e24265b7d665496f4a54b50"
   },
@@ -221,7 +221,7 @@
   "error_rate_pct": 0.0,
   "_block_id": "A",
   "_block_name": "fixed_hf_rollout",
-  "_block_elapsed_s": 24.05,
+  "_block_elapsed_s": 37.11,
   "_pass": 27,
-  "_generated_at_utc": "2026-04-26T01:43:11Z"
+  "_generated_at_utc": "2026-04-26T09:53:23Z"
 }

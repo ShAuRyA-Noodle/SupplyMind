@@ -6,31 +6,31 @@
       "id": "K1",
       "name": "fred_brent_real",
       "receipt": "pass28_K1_fred_brent_real.json",
-      "sha256_24": "8ecd80f08adbe91e80b17bed",
-      "elapsed_s": 7.2
+      "sha256_24": "e8af010c10dfb23b97c653a1",
+      "elapsed_s": 9.58
     },
     {
       "id": "K2",
       "name": "newsapi_live_ingest",
       "receipt": "pass28_K2_newsapi_live_ingest.json",
-      "sha256_24": "7e9dd81bd2d703a1df491cd8",
-      "elapsed_s": 2.7
+      "sha256_24": "f13257adcf2d53c6537406fa",
+      "elapsed_s": 4.42
     },
     {
       "id": "K3",
       "name": "noaa_cdo_live",
       "receipt": "pass28_K3_noaa_cdo_live.json",
-      "sha256_24": "f6f8b31d1434a9aab270f4f4",
-      "elapsed_s": 3.26
+      "sha256_24": "97a843036a347c1eb2f87071",
+      "elapsed_s": 4.5
     },
     {
       "id": "K4",
       "name": "wandb_live_smoke",
       "receipt": "pass28_K4_wandb_smoke.json",
-      "sha256_24": "831d1e4fec56827a5f231936",
-      "elapsed_s": 33.26
+      "sha256_24": "1f6e44947604d5547fe1ee82",
+      "elapsed_s": 34.29
     }
   ],
   "_pass": 28,
-  "_generated_at_utc": "2026-04-26T02:37:13Z"
+  "_generated_at_utc": "2026-04-26T09:55:29Z"
 }

@@ -15,6 +15,35 @@ tags:
   - ai-agents
 ---
 
+# 🏆 OpenEnv India 2026 Submission
+
+**📓 Master training notebook (run on free Colab T4 in ~30 min)**: [notebooks/13_MASTER_HACKATHON_FINAL.ipynb](notebooks/13_MASTER_HACKATHON_FINAL.ipynb)
+
+**🎬 90-second demo video**: https://www.youtube.com/watch?v=0Jy78rg_0BQ
+
+**📚 Blog (live-demo walkthrough)**: [FINAL_SUBMIT/blog.md](FINAL_SUBMIT/blog.md)
+
+**📜 128 sha256-stamped training receipts**: [browse FINAL_SUBMIT/receipts/](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/tree/main/FINAL_SUBMIT/receipts) · [GitHub mirror](https://github.com/ShAuRyA-Noodle/Sleep-Token/tree/main/FINAL_SUBMIT/receipts)
+
+**📊 13 axis-labeled reward + loss plots**: [browse FINAL_SUBMIT/plots/](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/tree/main/FINAL_SUBMIT/plots) · [GitHub mirror](https://github.com/ShAuRyA-Noodle/Sleep-Token/tree/main/FINAL_SUBMIT/plots)
+
+**🗺 250-feature use-case map**: [FINAL_SUBMIT/MASTER_FEATURE_USECASE_MAP_250.md](FINAL_SUBMIT/MASTER_FEATURE_USECASE_MAP_250.md) · audit matrix [FINAL_SUBMIT/FEATURE_AUDIT_TICK_MATRIX_250.md](FINAL_SUBMIT/FEATURE_AUDIT_TICK_MATRIX_250.md)
+
+### Headline metrics from canonical run
+- Wordle REINFORCE 100% solve rate
+- Wilcoxon paired one-sided greater p = **9.39 × 10⁻³⁵**
+- Cohen d = **+4.77** (very large)
+- Adversarial defense: **257/257 = 100% blocked**
+- HF Space rollout: 20/20 steps 200 OK · FRED real Brent: 8/8 historical events
+- Wallclock: **4.4 minutes on free Colab CPU** / 36 min on T4 full
+
+### Theme hat-trick
+- Theme 1 Multi-Agent: F2 Apple/Samsung/Toyota + K2-K6 sub-receipts
+- Theme 2 Long-Horizon: 60-step hard_cascading_crisis + GNN cascade + process supervision 2735× var amp
+- Theme 3 Professional (PRIMARY): 9 LIVE keyed APIs + 1500-event EMDAT corpus + 7-second Hormuz war-room demo
+
+---
+
 # SupplyMind v3.0-arcadia
 
 **OpenEnv-compliant supply-chain risk management.**
