@@ -45,7 +45,7 @@ ANALYST_MODELS: dict[str, tuple[str, Path]] = {
     "v4": ("supplymind-analyst:v4", Path(__file__).resolve().parent / "Modelfile.v4"),
     "v5": (
         "supplymind-analyst:v5",
-        _PROJECT_ROOT / "ShAuRyA_Supplymind" / "features" / "Modelfile.analyst_v5",
+        _PROJECT_ROOT / "versions/v4_arcadia_live" / "features" / "Modelfile.analyst_v5",
     ),
 }
 

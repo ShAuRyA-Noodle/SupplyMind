@@ -45,7 +45,7 @@ def run() -> dict:
     except ImportError:
         return {"ok": False, "error": "torch missing"}
 
-    from ShAuRyA_Phoenix.wordle_env.env import WORD_LIST, _score_guess
+    from versions.v5_phoenix.wordle_env.env import WORD_LIST, _score_guess
     from scripts.final_real_reinforce_wordle_v2 import (
         encode_state, compute_valid_mask,
     )

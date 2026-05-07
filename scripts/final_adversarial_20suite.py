@@ -49,7 +49,7 @@ REPO = Path(__file__).resolve().parents[1]
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
-from ShAuRyA_Phoenix.wordle_env.env import (  # noqa: E402
+from versions.v5_phoenix.wordle_env.env import (  # noqa: E402
     _score_guess, WORD_SET,
 )
 

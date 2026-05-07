@@ -22,11 +22,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from ShAuRyA_Phoenix.forecast_v2.ensemble_brent import ensemble_forecast  # noqa: E402
+from versions.v5_phoenix.forecast_v2.ensemble_brent import ensemble_forecast  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
-LIB = ROOT / "ShAuRyA_Supplymind" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
+LIB = ROOT / "versions/v4_arcadia_live" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
 RECEIPT = ROOT / "tests" / "receipts" / "ensemble_brent_validation.json"
 
 

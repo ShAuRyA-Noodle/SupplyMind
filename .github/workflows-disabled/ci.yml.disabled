@@ -89,7 +89,7 @@ jobs:
           # Import the GCN layer module directly (no sb3 needed)
           import importlib.util, pathlib
           spec = importlib.util.spec_from_file_location(
-              "r6_gnn", pathlib.Path("v3_arcadia/70_provider/r6_gnn.py"))
+              "r6_gnn", pathlib.Path("versions/v3_arcadia/70_provider/r6_gnn.py"))
           m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
           import torch
           layer = m.GCNLayer(8, 16)

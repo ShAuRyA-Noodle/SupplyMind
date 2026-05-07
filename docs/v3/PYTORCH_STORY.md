@@ -8,7 +8,7 @@ Everything below is **live code**, not slides. Paths point to real files.
 
 ## 1. Custom 3-layer Graph Convolutional Network — pure PyTorch, zero torch_geometric
 
-**Location**: `v3_arcadia/70_provider/r6_gnn.py`, `v3_arcadia/70_provider/r6_gnn_arrival_time.py`
+**Location**: `versions/v3_arcadia/70_provider/r6_gnn.py`, `versions/v3_arcadia/70_provider/r6_gnn_arrival_time.py`
 
 The most common shortcut in supply-chain GNN papers is `import torch_geometric`. We did not. The 3-layer GCN for disruption propagation and arrival-time prediction is implemented in ~50 lines of pure PyTorch message passing using `index_add_`.
 
@@ -41,7 +41,7 @@ class GCNLayer(nn.Module):
 
 ## 2. MaskablePPO over Discrete(280) — a clean PyTorch action-space wrapper
 
-**Location**: `v3_arcadia/50_gethsemane/train_rl_beast.py`
+**Location**: `versions/v3_arcadia/50_gethsemane/train_rl_beast.py`
 
 The SupplyMind env has action space `MultiDiscrete([7, 40])` (7 action types × 40 target nodes). Action masking via sb3-contrib's `MaskablePPO` expects a *flat* mask, while MultiDiscrete masks are *marginal per-dim*.
 
@@ -98,13 +98,13 @@ This is the kind of engineering you don't see in a leaderboard number but makes 
 
 ## 5. ONNX export pipeline — production-ready policy artifacts
 
-**Location**: `rl/export_onnx.py`, `v3_arcadia/50_gethsemane/export_v3_ppo_onnx.py`, `rl/checkpoints/supplymind_policy.onnx`
+**Location**: `rl/export_onnx.py`, `versions/v3_arcadia/50_gethsemane/export_v3_ppo_onnx.py`, `rl/checkpoints/supplymind_policy.onnx`
 
 Every MaskablePPO policy (3 tasks × 1 checkpoint) is exported to ONNX:
 - **0.97 MB** per task, runs on CPU or GPU via `onnxruntime`
 - **Max torch-vs-onnx numerical diff: 1.9e-6** (essentially identical)
 - Verified with `onnxruntime.InferenceSession`
-- Exposed via `v3_arcadia/90_damocles/app.py` `/rl/act` endpoint
+- Exposed via `versions/v3_arcadia/90_damocles/app.py` `/rl/act` endpoint
 
 Production path: `obs [408] → features extractor → MLP policy net → action_net → logits [280]`. Action masking applied as simple post-processing outside the ONNX graph.
 
@@ -143,7 +143,7 @@ This demonstrates **learned epistemic uncertainty** — when the agent says "I d
 
 ## 8. Split-conformal prediction intervals (R6 Aqua Regia v2)
 
-**Location**: `v3_arcadia/80_aqua_regia/r6_per_horizon_conformal.py`
+**Location**: `versions/v3_arcadia/80_aqua_regia/r6_per_horizon_conformal.py`
 
 Chronos-Bolt + ARIMA forecast intervals are wrapped in **per-horizon split-conformal** (Foygel Barber et al.; Lei et al.): a finite-sample-guarantee wrapper that re-calibrates to hit nominal coverage.
 
@@ -157,7 +157,7 @@ Why this matters for PyTorch: Chronos-Bolt is a PyTorch transformer. Stacking a 
 
 ## 9. Semantic Jaccard via mxbai-embed-large for inter-judge agreement
 
-**Location**: `v3_arcadia/30_dangerous/r4_v2_beast.py` `semantic_jaccard()`
+**Location**: `versions/v3_arcadia/30_dangerous/r4_v2_beast.py` `semantic_jaccard()`
 
 Pairwise string Jaccard on judge outputs was broken (always near 0 because LLMs phrase lists differently). Replaced with:
 - Embed each bullet with **mxbai-embed-large-v1** (1024-d)
@@ -170,7 +170,7 @@ This is a clean PyTorch-sentence-transformers composition that any researcher ca
 
 ## 10. DeepSeek-R1 two-pass extraction (CoT → structured JSON)
 
-**Location**: `v3_arcadia/30_dangerous/r4_v2_beast.py` `deepseek_free_single()` + `qwen_extract_single()`
+**Location**: `versions/v3_arcadia/30_dangerous/r4_v2_beast.py` `deepseek_free_single()` + `qwen_extract_single()`
 
 DeepSeek-R1's chain-of-thought interferes with `format=json` mode (mixes reasoning into the JSON). Solution: two-pass protocol.
 

@@ -119,4 +119,4 @@ The remaining seven subsidiaries collectively account for ~15% of impact.
 
 **Key insight**: highest *score* node (RIIL pipelines 0.916) has lowest *absolute* impact (₹35 Cr) because it is a small-revenue stub. Highest *absolute* impact (Jamnagar ₹12,194 Cr) has lower score (0.824) but the largest revenue base. **Score and absolute impact tell different stories — both matter.**
 
-Receipt: deterministic (no LLM in scoring). Numbers anchor to RIL FY24 Integrated Annual Report. Reproduce: `python ShAuRyA_Supplymind/scenarios/reliance_industries_exposure.py`.
+Receipt: deterministic (no LLM in scoring). Numbers anchor to RIL FY24 Integrated Annual Report. Reproduce: `python versions/v4_arcadia_live/scenarios/reliance_industries_exposure.py`.

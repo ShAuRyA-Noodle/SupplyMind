@@ -1,6 +1,6 @@
 {
   "generated_at_utc": "2026-04-25T14:47:57Z",
-  "method": "pytest --co -q across tests/, ShAuRyA_Phoenix/, ShAuRyA_Supplymind/tests/, rl/",
+  "method": "pytest --co -q across tests/, versions/v5_phoenix/, versions/v4_arcadia_live/tests/, rl/",
   "n_tests_collected_total": 261,
   "n_tests_in_tests_dir": 184,
   "breakdown": {

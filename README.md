@@ -67,7 +67,7 @@ tags:
 
 > *"Even in Arcadia, supply chains break. SupplyMind sees it coming."*
 
-![SupplyMind v3.0-arcadia hero result card](v3_arcadia/plots/hero_result_card.png)
+![SupplyMind v3.0-arcadia hero result card](versions/v3_arcadia/plots/hero_result_card.png)
 
 ---
 
@@ -83,8 +83,8 @@ tags:
 | 2 | Minimal training script using **Unsloth or HF TRL in Colab** | ✅ | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/06_trl_training_colab.ipynb) [`notebooks/06_trl_training_colab.ipynb`](notebooks/06_trl_training_colab.ipynb) — TRL `DPOTrainer` on 21 real preference pairs, Qwen-2.5-0.5B, runs in ~15 min on free T4, plots loss + implicit reward margins |
 | 3 | OpenEnv env hosted on HF Spaces | ✅ | [huggingface.co/spaces/Shaurya-Noodle/Supplymind](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) — live Docker deploy |
 | 4 | Mini-blog on HF or <2-min video | 📹 | Script ready at [demo/DEMO_VIDEO_SCRIPT.md](demo/DEMO_VIDEO_SCRIPT.md); record & link after onsite |
-| 5 | Observable reward improvement | ✅ | [v3_arcadia/plots/gethsemane/learning_curves.png](v3_arcadia/plots/gethsemane/learning_curves.png) · autoresearch +0.148 CI95 lift in [ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md](ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md) · A/B lift 0 % → 80 % in [ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json](ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json) |
-| 6 | Training loop connects to the live env (not a static dataset) | ✅ | [ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) — every reward comes via HTTP `POST /analyst/grade` on the running server. Dry-run log: correct=0.900, wrong=0.200, gap=0.700 |
+| 5 | Observable reward improvement | ✅ | [versions/v3_arcadia/plots/gethsemane/learning_curves.png](versions/v3_arcadia/plots/gethsemane/learning_curves.png) · autoresearch +0.148 CI95 lift in [versions/v4_arcadia_live/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md](versions/v4_arcadia_live/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md) · A/B lift 0 % → 80 % in [versions/v4_arcadia_live/features/R9_ANALYST_AB_V5.json](versions/v4_arcadia_live/features/R9_ANALYST_AB_V5.json) |
+| 6 | Training loop connects to the live env (not a static dataset) | ✅ | [versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) — every reward comes via HTTP `POST /analyst/grade` on the running server. Dry-run log: correct=0.900, wrong=0.200, gap=0.700 |
 | 7 | Client/server separation | ✅ | [client/supplymind_client.py](client/supplymind_client.py) — zero `from server` imports; verified live against HF Space (`health: True`, metadata matches) |
 | 8 | **RLVE adaptive curriculum** (FAQ §22-23, §35) | ✅ | `POST /analyst/next-scenario` picks training scenarios at the policy's zone of proximal development using REAL R4 3-judge-disagreement as difficulty oracle. Trainer flag `--adaptive` pre-computes an easy→hard curriculum from the endpoint. |
 | 9 | **Sealed holdout evaluator** (FAQ §44, §52) | ✅ | `GET /analyst/scenarios?split=holdout` returns 6 sealed scenarios never served to the trainer; `POST /analyst/holdout-eval` batch-scores the policy against them with `mean_reward / exact_match_rate / adjacent_or_exact_rate`. Trainer auto-excludes holdout from `--adaptive` sampler. |
@@ -94,16 +94,16 @@ tags:
 
 ### RL training stack — two-stage, both provably env-connected
 
-**Stage 0 — MaskablePPO policy training (history).** RL policy trained in-env on 3 supply-chain tasks: [v3_arcadia/plots/gethsemane/learning_curves.png](v3_arcadia/plots/gethsemane/learning_curves.png). Bootstrap CI95 non-overlapping vs random/greedy in [v3_arcadia/results/R6_EUCLIDIAN.json](v3_arcadia/results/R6_EUCLIDIAN.json).
+**Stage 0 — MaskablePPO policy training (history).** RL policy trained in-env on 3 supply-chain tasks: [versions/v3_arcadia/plots/gethsemane/learning_curves.png](versions/v3_arcadia/plots/gethsemane/learning_curves.png). Bootstrap CI95 non-overlapping vs random/greedy in [versions/v3_arcadia/results/R6_EUCLIDIAN.json](versions/v3_arcadia/results/R6_EUCLIDIAN.json).
 
 **Stage 1 — DPO warm-start (Colab, Unsloth + TRL).** [notebooks/06_trl_training_colab.ipynb](notebooks/06_trl_training_colab.ipynb) — **Unsloth `FastLanguageModel` (4-bit NF4)** + TRL `DPOTrainer` on 21 real preference pairs from the 3-judge LLM panel. Uses the exact stack the self-serve guide §10 names as the intended one (*"TRL for RL training algorithms, Unsloth to make RL training and inference more efficient, OpenEnv to standardize environment interaction"*). Runs in ≤10 min on free Colab T4 with Unsloth (vs ≤20 min vanilla). Falls back cleanly to vanilla `transformers` if Unsloth isn't available. Plots loss + chosen/rejected reward margins.
 
-**Stage 2 — GRPO against the live env (RLVR + multi-reward).** [ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) — TRL `GRPOTrainer` with **three independent reward functions** (guide §7: *"multiple independent reward functions"*, §15: *"monitor individual reward function columns"*). Each function is an `HTTP POST /analyst/grade` call whose breakdown is memoized per (scenario, completion) to keep the training loop one HTTP round-trip per completion. TRL logs `reward_match`, `reward_format`, `reward_length` as separate columns; `GRPOConfig.reward_weights = [0.7, 0.2, 0.1]` folds them into the optimization objective. Reward-hacking defenses (§8): `r_match` uses the sealed R4 ground truth; `r_format` requires valid JSON with both `risk_level` and `confidence`; `r_length` rejects degenerate short-circuit outputs (&lt; 30 tokens). Verified smoke: `match: correct=1.0, wrong=0.0`; `format: 1.0/1.0`; `length: 0/0` on the short smoke inputs (correctly discriminates below-threshold); total reward gap 0.7.
+**Stage 2 — GRPO against the live env (RLVR + multi-reward).** [versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) — TRL `GRPOTrainer` with **three independent reward functions** (guide §7: *"multiple independent reward functions"*, §15: *"monitor individual reward function columns"*). Each function is an `HTTP POST /analyst/grade` call whose breakdown is memoized per (scenario, completion) to keep the training loop one HTTP round-trip per completion. TRL logs `reward_match`, `reward_format`, `reward_length` as separate columns; `GRPOConfig.reward_weights = [0.7, 0.2, 0.1]` folds them into the optimization objective. Reward-hacking defenses (§8): `r_match` uses the sealed R4 ground truth; `r_format` requires valid JSON with both `risk_level` and `confidence`; `r_length` rejects degenerate short-circuit outputs (&lt; 30 tokens). Verified smoke: `match: correct=1.0, wrong=0.0`; `format: 1.0/1.0`; `length: 0/0` on the short smoke inputs (correctly discriminates below-threshold); total reward gap 0.7.
 
 **Env-connected dry-run proof** (reproducible):
 ```bash
 uvicorn server.app:app --host 0.0.0.0 --port 8000 &
-python -m ShAuRyA_Phoenix.roll_integration.dpo_judge.train_grpo_live_env \
+python -m versions.v5_phoenix.roll_integration.dpo_judge.train_grpo_live_env \
     --env-url http://localhost:8000 --dry-run
 # → smoke_reward_correct: 0.9, smoke_reward_wrong: 0.2, reward_gap: 0.7,
 #   reward_source: "live HTTP POST /analyst/grade",
@@ -112,7 +112,7 @@ python -m ShAuRyA_Phoenix.roll_integration.dpo_judge.train_grpo_live_env \
 
 ### Killer demo moment
 
-The live Hormuz pipeline ingested 3,911 real 2026 news articles on launch day and matched the **2026-04-18 Gulf-of-Oman cargo-ship seizure** to our pre-loaded crisis library at **0.99 similarity**. That is not a synthetic demo — it is the agent reading today's news and recognizing it as analogous to a historical disruption, in seconds. See [ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json](ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json) and [ShAuRyA_Supplymind/realtime/hormuz_endpoint.py](ShAuRyA_Supplymind/realtime/hormuz_endpoint.py).
+The live Hormuz pipeline ingested 3,911 real 2026 news articles on launch day and matched the **2026-04-18 Gulf-of-Oman cargo-ship seizure** to our pre-loaded crisis library at **0.99 similarity**. That is not a synthetic demo — it is the agent reading today's news and recognizing it as analogous to a historical disruption, in seconds. See [versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json](versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json) and [versions/v4_arcadia_live/realtime/hormuz_endpoint.py](versions/v4_arcadia_live/realtime/hormuz_endpoint.py).
 
 ---
 
@@ -168,7 +168,7 @@ Full results page: [`docs/v3/RESULTS.md`](docs/v3/RESULTS.md) — every number r
 | **Conformal** | Split-conformal with per-horizon q̂ | Empirical coverage within ±2pp of nominal |
 | **Production** | FastAPI + MCP JSON-RPC + WebSocket + Docker | 12 HTTP endpoints + 5 v3 endpoints (`/assess`, `/forecast`, `/rag`, `/rl/act`, `/health`) |
 
-Full phase log: [`v3_arcadia/95_arcadia/README.md`](v3_arcadia/95_arcadia/README.md) · Unified card: [`docs/v3/MODEL_CARD.md`](docs/v3/MODEL_CARD.md) · Hackathon demo plan: [`docs/v3/FINAL_DEMO.md`](docs/v3/FINAL_DEMO.md) · Audit matrix: [`docs/v4/AUDIT_PLAN.md`](docs/v4/AUDIT_PLAN.md).
+Full phase log: [`versions/v3_arcadia/95_arcadia/README.md`](versions/v3_arcadia/95_arcadia/README.md) · Unified card: [`docs/v3/MODEL_CARD.md`](docs/v3/MODEL_CARD.md) · Hackathon demo plan: [`docs/v3/FINAL_DEMO.md`](docs/v3/FINAL_DEMO.md) · Audit matrix: [`docs/v4/AUDIT_PLAN.md`](docs/v4/AUDIT_PLAN.md).
 
 ---
 

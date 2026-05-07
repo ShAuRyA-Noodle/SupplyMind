@@ -3,12 +3,12 @@ name: Benchmark regression guard
 on:
   pull_request:
     paths:
-      - 'v3_arcadia/results/**.json'
+      - 'versions/v3_arcadia/results/**.json'
       - 'scripts/check_benchmarks.py'
   push:
     branches: [main]
     paths:
-      - 'v3_arcadia/results/**.json'
+      - 'versions/v3_arcadia/results/**.json'
   workflow_dispatch:
 
 jobs:

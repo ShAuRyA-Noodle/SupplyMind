@@ -1,0 +1,17 @@
+FROM C:/Users/Dell/Desktop/Sleep-Token/versions/v3_arcadia/gguf_out/mistral-nemo-q4km.gguf
+
+TEMPLATE """{{- if .System }}[INST] {{ .System }}
+
+{{ end }}{{- range $i, $_ := .Messages }}
+{{- if eq .Role "user" }}[INST] {{ .Content }} [/INST]
+{{ else if eq .Role "assistant" }}{{ .Content }}</s>
+{{ end }}
+{{- end }}"""
+
+PARAMETER stop "[INST]"
+PARAMETER stop "[/INST]"
+PARAMETER stop "</s>"
+PARAMETER temperature 0.3
+PARAMETER top_p 0.9
+PARAMETER num_predict 2048
+PARAMETER num_ctx 32768

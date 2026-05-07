@@ -64,7 +64,7 @@ def cross_env_transfer() -> dict:
     pre_entropy_w = Categorical(logits=pre_logits_w).entropy().item()
 
     # 2. Quick training pass: REINFORCE 30 steps on Wordle subset
-    from ShAuRyA_Phoenix.wordle_env.env import WORD_LIST, _score_guess
+    from versions.v5_phoenix.wordle_env.env import WORD_LIST, _score_guess
     import random
     rng = random.Random(7)
     optim = torch.optim.Adam(policy.parameters(), lr=3e-3)
@@ -146,7 +146,7 @@ def cross_env_transfer() -> dict:
 def process_supervision() -> dict:
     """Demonstrate line-by-line / step-by-step credit assignment over a
     Wordle episode, vs. naive episode-level reward."""
-    from ShAuRyA_Phoenix.wordle_env.env import _score_guess
+    from versions.v5_phoenix.wordle_env.env import _score_guess
     target = "brain"
     trace = [
         # (guess, intent_label)
@@ -202,7 +202,7 @@ def ablation_matrix() -> dict:
     """Run 6 ablations on Wordle reward shaping.
     Each ablation runs 100 episodes with one component removed, measures
     mean episode return + solve rate."""
-    from ShAuRyA_Phoenix.wordle_env.env import _score_guess, WORD_LIST
+    from versions.v5_phoenix.wordle_env.env import _score_guess, WORD_LIST
     import random
 
     def trial(disable: str, n_eps: int = 100, seed: int = 0) -> dict:

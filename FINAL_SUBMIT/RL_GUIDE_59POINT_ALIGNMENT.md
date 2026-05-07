@@ -25,7 +25,7 @@ Each of the 59 hackathon-guide points → which file implements it → which rec
 **Receipt**: HF Space-ready manifest.
 
 ## §6. Easy first
-**File**: `ShAuRyA_Phoenix/wordle_env/rlve_curriculum.py` Tier-0
+**File**: `versions/v5_phoenix/wordle_env/rlve_curriculum.py` Tier-0
 **Receipt**: `rlve_curriculum_smoke.json` — 4 tier shifts.
 
 ## §7. Reward design carefully
@@ -81,7 +81,7 @@ Each of the 59 hackathon-guide points → which file implements it → which rec
 **Receipt**: `lora_unsloth_train.json`.
 
 ## §31–33. Dual verifier
-**File**: `ShAuRyA_Phoenix/wordle_env/dual_verifier.py`
+**File**: `versions/v5_phoenix/wordle_env/dual_verifier.py`
 **Receipt**: `dual_verifier_smoke.json` — BRAID FP caught.
 
 ## §34–37. Curriculum band 0.45–0.75

@@ -2,7 +2,7 @@
 
 Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). Each row links to a file or a JSON receipt that proves the claim.
 
-**Note:** receipts named `R*_*.json` are mirrored from `v3_arcadia/results/` to `FINAL_SUBMIT/receipts/`.
+**Note:** receipts named `R*_*.json` are mirrored from `versions/v3_arcadia/results/` to `FINAL_SUBMIT/receipts/`.
 
 ---
 
@@ -86,7 +86,7 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 |---|---|---|---|
 | 44 | Custom TFT 513K params on 3-target FRED | ✅ | `tft_real_metrics.json: params, test_mae_p50: {DCOILWTICO, PCOPPUSDM, PPICMM}` |
 | 45 | Custom TFT 90K params on real WTI MAE $7.83/bbl | ✅ | `tft_v2_metrics.json: params, test_mae_p50.DCOILWTICO` |
-| 46 | Chronos-Bolt 14-step quantile [0.1, 0.5, 0.9] | ✅ | `ShAuRyA_Phoenix/forecast_v2/ensemble_brent.py:53-71` (pass-10), `R3_TIMESFM_QUANTILE.json` |
+| 46 | Chronos-Bolt 14-step quantile [0.1, 0.5, 0.9] | ✅ | `versions/v5_phoenix/forecast_v2/ensemble_brent.py:53-71` (pass-10), `R3_TIMESFM_QUANTILE.json` |
 | 47 | TimesFM-2 + synthesized quantile via residual regression | ✅ | `forecast_v2/ensemble_brent.py:74-99`, `R3_TIMESFM_QUANTILE.json` |
 | 48 | Prophet weekly+yearly | ✅ | `R3_PAST_SELF.json` ensemble row (Prophet seasonality) |
 | 49 | ARIMA(5,1,0) classical baseline | ✅ | `R3_PAST_SELF.json` ensemble row |
@@ -98,7 +98,7 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 | 55 | 8 FRED targets (WTI, copper, EUR/USD, JPY/USD, CNY/USD, KOR/USD, EUR-USD, PPICMM) | ✅ | `tft_v2_metrics.json: targets` (7 targets confirmed in train_tft_real.py: DCOILWTICO/PCOPPUSDM/DEXTAUS/DEXKOUS/DEXJPUS/DEXUSEU/DEXCHUS); 8th = PPICMM in tft_real_metrics |
 | 56 | 3 horizons (7, 14, 28 days) | ⚠️ | `train_tft_real.py:39 HORIZON=14`; 7 and 28-day variants in `R3_PAST_SELF` rolling_backtest fields |
 | 57 | PICP@80/90/95% calibration | ✅ | `R3_PAST_SELF.json: per_target_horizon.picp_*` |
-| 58 | Per-horizon split-conformal (Foygel Barber 2022) | ✅ | `ShAuRyA_Phoenix/receipts_v2/R3_TimesFM_CP_WTI_dev95.receipt.yaml` |
+| 58 | Per-horizon split-conformal (Foygel Barber 2022) | ✅ | `versions/v5_phoenix/receipts_v2/R3_TimesFM_CP_WTI_dev95.receipt.yaml` |
 | 59 | TimesFM-CP residual quantile regression | ✅ | `R3_TIMESFM_QUANTILE.json` + `R3_TimesFM_CP_WTI_dev95.receipt.yaml` |
 | 60 | Heteroscedastic Ridge widths | ✅ | `R3_PAST_SELF.json: ridge_widths` |
 | 61 | 2,883 business days (2015-2026) | ✅ | `tft_v2_metrics.json: train_size`, `rl/data/fred_cache.json` |
@@ -114,7 +114,7 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 |---|---|---|---|
 | 63 | MC Dropout 50 forward passes | ✅ | `rl/uncertainty.py:1-50, n_passes=50`, `mc_dropout_v2.json` |
 | 64 | Epistemic σ correlates accuracy (Q1=99.76%, Q4=55.92%) | ✅ | `mc_dropout_v2.json: reliability_full[bins]` |
-| 65 | Conformal RL on Q-values (3 alpha 0.05/0.05/0.1) | ✅ | `ShAuRyA_Supplymind/features/conformal_rl.py:1-50` + `ShAuRyA_Phoenix/action_v2/conformal.py` |
+| 65 | Conformal RL on Q-values (3 alpha 0.05/0.05/0.1) | ✅ | `versions/v4_arcadia_live/features/conformal_rl.py:1-50` + `versions/v5_phoenix/action_v2/conformal.py` |
 | 66 | Confidence-damped projection | ✅ | `rl/uncertainty.py: confidence_damping` + `crisis_library.py: damp_on_weak_match` |
 | 67 | Beta-severity + Lognormal-duration MC | ✅ | `rl/surrogate/fast_monte_carlo.py: scenarios` |
 | 68 | Numba JIT MC hotloop (10-50× speedup) | ✅ | `rl/surrogate/fast_monte_carlo.py: @numba.jit` |
@@ -147,7 +147,7 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 | 86 | 26 BEIR Wikipedia subset | ✅ | `R5_BEIR_MANUAL.json` |
 | 87 | ChromaDB persistent at rl/rag/chroma_db/ | ✅ | dir present |
 | 88 | Ollama nomic-embed-text (768d) | ✅ | `rl/rag/indexer.py:29-30 EMBEDDING_MODEL=nomic-embed-text` |
-| 89 | mxbai-embed-large for crisis library | ✅ | `ShAuRyA_Supplymind/scenarios/library_v2_search.py` (pass-6) |
+| 89 | mxbai-embed-large for crisis library | ✅ | `versions/v4_arcadia_live/scenarios/library_v2_search.py` (pass-6) |
 | 90 | Corpus SHA-256 hash caching | ⚠️ | grep finds `corpus_hash` references in some scripts; not in indexer.py directly |
 | 91 | min_score=0.60 | ✅ | `rl/rag/indexer.py:31 MIN_SCORE=0.60` |
 | 92 | chunk_words=256, overlap=32, min=30 | ⚠️ | `indexer.py:32-33 chunk_words=300` (slightly different); overlap+min not in source |
@@ -207,8 +207,8 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 | 128 | 50 cached explanations | ✅ | cache implementation present |
 | 129 | 3-4s per explanation on RTX 4080 | ✅ | latency profiled |
 | 130 | Explainer stress test 50/50 pass | ✅ | `explainer_stress_v2.json: n_test=50, passed=50, pass_rate=1.0` (exact) |
-| 131 | GCN edge attention PNG heatmaps | ✅ | `ShAuRyA_Supplymind/features/gcn_attention_viz.py` |
-| 132 | Provenance 5-tier trust classifier (regulatory/academic/reference/industry/uncertain) | ✅ | `ShAuRyA_Supplymind/features/rag_provenance.py:39-49` (5 tiers) |
+| 131 | GCN edge attention PNG heatmaps | ✅ | `versions/v4_arcadia_live/features/gcn_attention_viz.py` |
+| 132 | Provenance 5-tier trust classifier (regulatory/academic/reference/industry/uncertain) | ✅ | `versions/v4_arcadia_live/features/rag_provenance.py:39-49` (5 tiers) |
 
 **Section I total: 13 ✅ + 1 ⚠️ = 14/14 = 100%**
 

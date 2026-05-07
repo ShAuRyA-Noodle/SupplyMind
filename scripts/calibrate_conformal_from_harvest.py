@@ -2,7 +2,7 @@
 real harvested PPO/scripted trajectories.
 
 Pipeline:
-  1. Load ShAuRyA_Phoenix/experiments/rap_xc_v1/transitions.npz
+  1. Load versions/v5_phoenix/experiments/rap_xc_v1/transitions.npz
   2. Split into 80/20 train/calibration sets
   3. Train a small reference policy on train (BC on action targets)
   4. Compute action-NLL quantile on the calibration set with target
@@ -28,13 +28,13 @@ _ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from ShAuRyA_Phoenix.action_v2.conformal import calibrate_conformal
+from versions.v5_phoenix.action_v2.conformal import calibrate_conformal
 
 logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-TRANS_NPZ = REPO_ROOT / "ShAuRyA_Phoenix" / "experiments" / "rap_xc_v1" / "transitions.npz"
-OUT_PT = REPO_ROOT / "ShAuRyA_Phoenix" / "action_v2" / "conformal_calibrated.pt"
+TRANS_NPZ = REPO_ROOT / "versions/v5_phoenix" / "experiments" / "rap_xc_v1" / "transitions.npz"
+OUT_PT = REPO_ROOT / "versions/v5_phoenix" / "action_v2" / "conformal_calibrated.pt"
 RECEIPT = REPO_ROOT / "tests" / "receipts" / "conformal_calibration.json"
 
 

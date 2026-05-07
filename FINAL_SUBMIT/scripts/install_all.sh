@@ -31,16 +31,16 @@ if command -v ollama >/dev/null 2>&1; then
   ollama pull mistral-nemo || true
   ollama pull deepseek-r1 || true
   # Custom analyst v5 — built from Modelfile in repo
-  if [ -f ShAuRyA_Supplymind/features/Modelfile.analyst_v5 ]; then
-    ollama create supplymind-analyst:v5 -f ShAuRyA_Supplymind/features/Modelfile.analyst_v5 || true
+  if [ -f versions/v4_arcadia_live/features/Modelfile.analyst_v5 ]; then
+    ollama create supplymind-analyst:v5 -f versions/v4_arcadia_live/features/Modelfile.analyst_v5 || true
   fi
 else
   echo "[i] Ollama not installed; skipping LLM model pulls. Install: https://ollama.com"
 fi
 
 echo "[6/6] Building FAISS index for crisis library v2..."
-if [ ! -f ShAuRyA_Supplymind/scenarios/crisis_library_v2.faiss ]; then
-  python -c "from ShAuRyA_Supplymind.scenarios.library_v2_search import singleton; singleton('warm-up', k=1)"
+if [ ! -f versions/v4_arcadia_live/scenarios/crisis_library_v2.faiss ]; then
+  python -c "from versions.v4_arcadia_live.scenarios.library_v2_search import singleton; singleton('warm-up', k=1)"
 fi
 
 echo ""

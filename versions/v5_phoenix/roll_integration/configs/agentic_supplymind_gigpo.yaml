@@ -1,0 +1,104 @@
+# ROLL agentic-RL config for SupplyMind-analyst-v5 (Phoenix)
+# Algorithm: GiGPO (step-wise; dense per-decision feedback)
+# Env: supplymind_crisis (registered via roll_integration/env/)
+# Reward: supplymind_3judge (our 3-judge panel, wired through reward_bridge/)
+#
+# Adapted from ROLL-main/examples/qwen3-vl-4b-agentic-gem/qwen3_agentic_gem.yaml
+# for single-GPU RTX 4080 (12GB) via HFStrategy + LoRA.
+
+hydra:
+  run:
+    dir: .
+
+exp_name: supplymind-agentic-gigpo-v5
+seed: 42
+num_gpus_per_node: 1
+max_steps: 100
+
+# Agentic RL algorithm
+algorithm: gigpo                   # step-wise; GRPO within step groups
+adv_estimator: gigpo
+pg_clip: 0.2
+value_clip: 0.5
+gamma: 0.99
+lambd: 0.95
+ent_coef: 0.01
+
+# Environment
+env_manager:
+  env_id: supplymind_crisis
+  tags: [supplymind, supply-chain, multi-task]
+  num_env_groups: 8                # 8 parallel scenarios per rollout
+  group_size: 1
+  max_traj_per_env: 50
+  format_penalty: -0.2
+  step_reward: true                # GiGPO needs per-step reward
+
+# Model
+pretrain: Qwen/Qwen2.5-3B-Instruct
+trust_remote_code: true
+
+# Policy
+actor_train:
+  model_args:
+    dtype: bf16
+    trust_remote_code: true
+    disable_gradient_checkpointing: false
+  strategy_args:
+    strategy_name: hf
+  training_args:
+    per_device_train_batch_size: 1
+    gradient_accumulation_steps: 8
+    learning_rate: 1.0e-5
+    warmup_ratio: 0.1
+    logging_steps: 1
+    bf16: true
+    gradient_checkpointing: true
+    optim: adamw_torch
+    lr_scheduler_type: cosine
+  lora_config:
+    r: 8
+    lora_alpha: 16
+    target_modules: [q_proj, k_proj, v_proj, o_proj, gate_proj, up_proj, down_proj]
+    task_type: CAUSAL_LM
+
+# Inference (rollout)
+actor_infer:
+  model_args:
+    dtype: bf16
+    trust_remote_code: true
+  strategy_args:
+    strategy_name: hf               # vLLM preferred but requires WSL2
+  generating_args:
+    do_sample: true
+    temperature: 0.7
+    top_p: 0.9
+    max_new_tokens: 512
+
+# Reward — use our 3-judge panel via the bridge
+reward:
+  backend: supplymind_3judge        # resolved via reward_bridge registration
+  ollama_host: http://localhost:11434
+  ground_truth_source: versions/v3_arcadia/results/R4_DANGEROUS_V2.json
+  normalization: group              # normalize within each prompt group
+
+# Tool use — our forecast/RAG/RL-policy endpoints are MCP tools
+tools:
+  - name: forecast
+    endpoint: http://localhost:8000/forecast
+    description: "Multi-horizon commodity price forecast (Chronos+TimesFM+ARIMA+Prophet ensemble)."
+  - name: rag
+    endpoint: http://localhost:8000/rag
+    description: "Retrieval over the 6,483-chunk SupplyMind corpus (mxbai P@1=0.962)."
+  - name: rl_act
+    endpoint: http://localhost:8000/rl/act
+    description: "Trained MaskablePPO policy for easy_typhoon_response."
+
+action_parser: Qwen3CoderActionParser
+
+# Tracking
+tracking:
+  report_to: [tensorboard]
+  logging_dir: versions/v5_phoenix/experiments/agentic_gigpo_v5/tb
+
+output_dir: versions/v5_phoenix/experiments/agentic_gigpo_v5

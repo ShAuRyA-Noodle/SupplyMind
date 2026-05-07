@@ -108,7 +108,7 @@ Response: 5 chunks from actual SEC 10-K filings + Wikipedia article on TSMC + Se
 
 ## SCENE 6 — RL SIGN-FLIP (2:00 – 2:30)
 
-**B-roll**: Show `v3_arcadia/plots/euclidian/r6_euclidian.png` — bar chart with error bars.
+**B-roll**: Show `versions/v3_arcadia/plots/euclidian/r6_euclidian.png` — bar chart with error bars.
 
 Zoom into medium and hard task bars:
 - medium: random -0.97, greedy **-1.81**, ppo_v3 **+2.78**
@@ -121,7 +121,7 @@ Zoom into medium and hard task bars:
 
 ## SCENE 7 — BENCHMARKS + TESTS (2:30 – 2:50)
 
-**B-roll**: Terminal, run `pytest tests/ -q` and show "173 passed in 1m47s". Then show `v3_arcadia/plots/dangerous/r4v2_ablation.png` and `v3_arcadia/plots/granite/r5_hard_redemption.png` in quick succession.
+**B-roll**: Terminal, run `pytest tests/ -q` and show "173 passed in 1m47s". Then show `versions/v3_arcadia/plots/dangerous/r4v2_ablation.png` and `versions/v3_arcadia/plots/granite/r5_hard_redemption.png` in quick succession.
 
 **Voice-over**:
 > "One hundred seventy-three tests passing. OpenEnv formal compliance test. Wilcoxon p less than 0.001 on every RL-versus-baseline comparison. Bootstrap 95 percent confidence intervals. Krippendorff alpha of 0.75 on the two-judge consensus. And a deterministic rubric agent as the human-baseline. Every negative finding is documented with a world-class follow-up fix."

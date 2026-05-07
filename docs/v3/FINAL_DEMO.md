@@ -12,14 +12,14 @@ This document is the **single source of truth** for everything a judge will see,
 |---|---|---|---|
 | OpenEnv compliance | 19 formal tests pass in 2s | **S** | `tests/test_openenv_compliance.py` (173 total tests) |
 | Real-data ML pipeline | 261,175 verified points, 8 sources, Wilcoxon p<0.001 | **S** | `docs/legacy/REPORT_REAL_DATA.md`, `rl/real_data_pipeline.py` |
-| Foundation model stack | 13 SOTA verified + integrated | **S** | `v3_arcadia/results/R1_VERIFIED.json` |
-| Tabular ML | 4-model stack + SHAP + fairness + calibration | **A+** | `v3_arcadia/results/R2_*.json` |
+| Foundation model stack | 13 SOTA verified + integrated | **S** | `versions/v3_arcadia/results/R1_VERIFIED.json` |
+| Tabular ML | 4-model stack + SHAP + fairness + calibration | **A+** | `versions/v3_arcadia/results/R2_*.json` |
 | Time-series | 4 forecasters + 20-fold backtest + **Bates-Granger stacking wins 9/21** + per-horizon conformal + **TimesFM-CP beats Chronos-native on WTI/EUR** | **S** | `R3_PAST_SELF.json`, `R3_STACKING_V2.json`, `R3_TIMESFM_QUANTILE.json`, `R6_AQUA_REGIA_V2.json` |
 | LLM risk panel | 3-judge + critic + ECE + **2-judge α=0.75** + rubric human-baseline | **S** | `R4_DANGEROUS_V2.json`, `R4_DANGEROUS_V2_ABLATION.json`, `R4_DANGEROUS_V2_HUMAN_BASELINE.json` |
 | RAG | 6,483 chunks × 8 pipelines + **hard-query redemption (+5pp lift)** + **BEIR out-of-domain nDCG@10 up to 0.971** | **S** | `R5_GRANITE.json`, `R5_GRANITE_HARD.json`, `R5_BEIR_MANUAL.json` |
 | RL stack | MaskablePPO + 8,100-ep benchmark + zero violations + **ONNX export 0.97MB** + **masking ablation +26.8%** | **S** | `R6_GETHSEMANE.json`, `R6_EUCLIDIAN.json`, `R6_GETHSEMANE_MASKING_ABLATION.json` |
 | GNN | Custom 3-layer GCN + **arrival-time regression (+48-64% vs MLP)** | **S** | `R6_PROVIDER.json`, `R6_PROVIDER_V2.json` |
-| Production API | FastAPI + MCP + WebSocket + 3 Dockerfiles + compose | **A+** | `server/app.py`, `v3_arcadia/90_damocles/app.py`, `Dockerfile.damocles` |
+| Production API | FastAPI + MCP + WebSocket + 3 Dockerfiles + compose | **A+** | `server/app.py`, `versions/v3_arcadia/90_damocles/app.py`, `Dockerfile.damocles` |
 | Tests | **173 passing** in ~2 min | **S** | `pytest tests/ -q` |
 | Docs | 150+ MD files, unified card, PyTorch story, BENCHMARKS_VS_PUBLIC | **S** | `README.md`, `docs/v3/MODEL_CARD.md`, `docs/v3/PYTORCH_STORY.md`, `docs/v3/BENCHMARKS_VS_PUBLIC.md`, `docs/v3/FINAL_DEMO.md`, `docs/v4/AUDIT_PLAN.md` |
 | CI/CD | GitHub Actions + OpenEnv compliance + v3 smoke | **A+** | `.github/workflows/ci.yml` |
@@ -51,7 +51,7 @@ Every artifact must be navigable from the HF Space landing page.
 | K3 | v3 not visible on HF Space | ❌ HF deploy is v2 | §6 deploys v3 adapter |
 | K4 | Top-level README leads with v2 | ✅ FIXED in this commit | README rewrite |
 | K5 | Two narratives (v2 + v3) confuse | ✅ unified in README + docs/v3/MODEL_CARD.md | this commit |
-| K6 | Two dashboards (dashboard/ + v3_arcadia/85_infinite_baths/) | ✅ merged into one | §4 |
+| K6 | Two dashboards (dashboard/ + versions/v3_arcadia/85_infinite_baths/) | ✅ merged into one | §4 |
 | K7 | Empty docs/v3/MODEL_CARD.md | ✅ FIXED — unified v3 card | this commit |
 | K8 | Clutter in repo root | ✅ moved to `scripts/legacy/` | this commit |
 | K9 | No formal paper/PDF | ⚠️ replaced by `docs/v3/MODEL_CARD.md` + `docs/v3/BENCHMARKS_VS_PUBLIC.md` | §7 |
@@ -65,7 +65,7 @@ Every artifact must be navigable from the HF Space landing page.
 | K17 | R6 Aqua Regia under-coverage | ✅ per-horizon-step conformal hits nominal | §3 |
 | K18 | R6 Provider easy task too trivial (F1=1.0) | ✅ harder 3-hop BFS task shows real GNN lift | §3 |
 | K19 | CI doesn't run v3 benchmarks | ✅ added v3 smoke to `.github/workflows/ci.yml` | §4 |
-| K20 | No ONNX export for v3 policy | ✅ exported to `v3_arcadia/checkpoints/gethsemane/ppo_*.onnx` | §4 |
+| K20 | No ONNX export for v3 policy | ✅ exported to `versions/v3_arcadia/checkpoints/gethsemane/ppo_*.onnx` | §4 |
 
 ---
 
@@ -79,7 +79,7 @@ Every artifact must be navigable from the HF Space landing page.
 ### F2. R4 add human-baseline comparison
 **Gap**: Judges can't tell if 69.2% majority-vote accuracy is good or bad.
 
-**Fix**: Provide a **deterministic rubric agent** (`v3_arcadia/30_dangerous/rubric_agent.py`) that an external supply-chain analyst could follow. Its accuracy = human baseline ceiling. Compare panel vs rubric agent → quantified lift.
+**Fix**: Provide a **deterministic rubric agent** (`versions/v3_arcadia/30_dangerous/rubric_agent.py`) that an external supply-chain analyst could follow. Its accuracy = human baseline ceiling. Compare panel vs rubric agent → quantified lift.
 
 ### F3. R5 "reranker hurts" → "reranker shines on hard queries"
 **Original**: On 53 precise queries, bi-encoder wins. Reranker adds -3.7pp.
@@ -138,7 +138,7 @@ Every artifact must be navigable from the HF Space landing page.
   - Pip-version files (`0.1.0`, `0.43.0`, `1.11.0`, `4.36.0`)
   - `vessel_orchestrator.py`, `wait_and_run_orchestrator.sh`
   - `retry_qs.py`, `train_phase_*.py` (24 files, historical)
-- Dashboard unified: `v3_arcadia/85_infinite_baths/dashboard.py` is the canonical one. Old `dashboard/app.py` deprecated with a shim redirecting to v3.
+- Dashboard unified: `versions/v3_arcadia/85_infinite_baths/dashboard.py` is the canonical one. Old `dashboard/app.py` deprecated with a shim redirecting to v3.
 - `FAILURE_TABLE.md` cleaned: only unresolved items retained, resolved ones moved to appendix.
 - `MODEL_CARD_V2.md` and `MODEL_CARD_REAL.md` archived in `docs/legacy/` (kept for provenance).
 - CI updated: `.github/workflows/ci.yml` adds `R5` and `R6_AQUA_REGIA` smoke tests.
@@ -209,7 +209,7 @@ huggingface.co/spaces/Shaurya-Noodle/Supplymind/
 ├── openenv.yaml               # unchanged
 ├── models.py                  # unchanged
 ├── server/                    # unchanged (OpenEnv backbone)
-├── v3_arcadia/                # include results + plots, EXCLUDE large embeddings
+├── versions/v3_arcadia/                # include results + plots, EXCLUDE large embeddings
 │   ├── results/*.json         # all 13 result files
 │   ├── plots/**/*.png         # ~25 plots
 │   ├── 30_dangerous/*.py      # scripts
@@ -239,7 +239,7 @@ huggingface.co/spaces/Shaurya-Noodle/Supplymind/
 
 - `models/` (159 GB of GGUF/safetensors)
 - `rl/checkpoints/` (353 MB of pre-v3 checkpoints)
-- `v3_arcadia/checkpoints/granite/*.npy` (embedding caches, regeneratable)
+- `versions/v3_arcadia/checkpoints/granite/*.npy` (embedding caches, regeneratable)
 - `external_data/sec_10k/*.html` (75 MB of filings, in `.gitignore`)
 - `.venv/`, `__pycache__/`, `.pytest_cache/`, `catboost_info/`
 
@@ -267,8 +267,8 @@ curl -X POST https://shaurya-noodle-supplymind.hf.space/baseline
 
 Hackathon is titled "Meta **PyTorch** OpenEnv". PyTorch-specific wins to surface:
 
-1. **Custom 3-layer GCN in pure PyTorch, no torch_geometric** — `v3_arcadia/70_provider/r6_gnn.py`. Shows understanding of `index_add_` message passing, attention, multi-head aggregation.
-2. **MaskablePPO Discrete(280) flatten wrapper** — `v3_arcadia/50_gethsemane/train_rl_beast.py`. Non-trivial action-space engineering.
+1. **Custom 3-layer GCN in pure PyTorch, no torch_geometric** — `versions/v3_arcadia/70_provider/r6_gnn.py`. Shows understanding of `index_add_` message passing, attention, multi-head aggregation.
+2. **MaskablePPO Discrete(280) flatten wrapper** — `versions/v3_arcadia/50_gethsemane/train_rl_beast.py`. Non-trivial action-space engineering.
 3. **CUDA-Host pinned-memory engineering on Windows** — documented in project_hardware memory + `FAILURE_TABLE.md`. Required reboot + Q4_K_M quantization to run 13 models on 12 GB VRAM + 15.7 GB system RAM.
 4. **ONNX export pipeline** — `rl/export_onnx.py` + `rl/checkpoints/supplymind_policy.onnx`. Production-ready.
 5. **TFT pure-torch forecaster** — `rl/forecasting/tft.py`, 513,534 params, MAE $7.83 on WTI.

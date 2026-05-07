@@ -240,7 +240,7 @@
     "n_paired": 100,
     "claim": "RAP-XC beats MaskablePPO-v3 on hard_cascading_crisis (CI95 [+0.198, +0.257], p=1.58e-30)"
   },
-  "method": "paired bootstrap (1000 resamples) on per-episode reward arrays reconstructed from recorded sufficient stats (n, mean, std, min, max) per (task, agent) cell. Source files: v3_arcadia/results/R6_EUCLIDIAN.json (900 eps/cell, MaskablePPO-v3 + scripted_baseline), R6_ALGO_COMPARISON.json (50 eps/cell, RecurrentPPO + A2C, easy task only), and rap_xc_v1 eval pass (100 eps/task). Reconstruction draws truncated-normal samples in [min, max] then linearly rescales to recorded mean/std exactly. Pairing is by quantile rank (sorted-aligned) since eval seeds were not co-recorded.",
+  "method": "paired bootstrap (1000 resamples) on per-episode reward arrays reconstructed from recorded sufficient stats (n, mean, std, min, max) per (task, agent) cell. Source files: versions/v3_arcadia/results/R6_EUCLIDIAN.json (900 eps/cell, MaskablePPO-v3 + scripted_baseline), R6_ALGO_COMPARISON.json (50 eps/cell, RecurrentPPO + A2C, easy task only), and rap_xc_v1 eval pass (100 eps/task). Reconstruction draws truncated-normal samples in [min, max] then linearly rescales to recorded mean/std exactly. Pairing is by quantile rank (sorted-aligned) since eval seeds were not co-recorded.",
   "n_resamples": 1000,
   "no_data_cells": [
     "easy_typhoon_response/dqn",
@@ -261,8 +261,8 @@
     "hard_cascading_crisis/decision_transformer"
   ],
   "source_files": [
-    "v3_arcadia/results/R6_EUCLIDIAN.json",
-    "v3_arcadia/results/R6_ALGO_COMPARISON.json",
-    "ShAuRyA_Phoenix/experiments/arena/leaderboard.json"
+    "versions/v3_arcadia/results/R6_EUCLIDIAN.json",
+    "versions/v3_arcadia/results/R6_ALGO_COMPARISON.json",
+    "versions/v5_phoenix/experiments/arena/leaderboard.json"
   ]
 }

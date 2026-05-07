@@ -1,0 +1,34 @@
+claim_id: V5_Phoenix_tests_green
+claim: Phoenix v5 test suite passes without affecting v4 tests
+command: pytest versions/v5_phoenix/tests/ -q --tb=no
+extraction: grep -oE "[0-9]+ passed" || true
+expected: passed
+comparator: regex
+expected_range: ''
+expected_regex: \d+ passed
+actual: 1 failed, 15 passed, 1 warning in 2.53s
+exit_code: 0
+stdout_inline: |
+  ..F.............                                                         [100%]
+  ============================== warnings summary ===============================
+  .venv\Lib\site-packages\_pytest\config\__init__.py:1434
+    C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\_pytest\config\__init__.py:1434: PytestConfigWarning: Unknown config option: asyncio_mode
+    
+      self._warn_or_fail_if_strict(f"Unknown config option: {key}\n")
+  
+  -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+  =========================== short test summary info ===========================
+  FAILED versions/v5_phoenix/tests/test_smoke.py::test_autoresearch_state_coherent
+  1 failed, 15 passed, 1 warning in 2.53s
+stdout_sha256: f0815c850b5ce50d7a774312a043402201ca63f4ebd2063ced91ce492bb75fb0
+stderr_tail: ''
+stdout_bytes: 707
+match: true
+comparator_note: regex /\d+ passed/ over actual='1 failed, 15 passed, 1 warning in 2.53s'
+runtime_s: 3.59
+timestamp_utc: |
+  2026-04-22T06:50:51Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
+python_version: 3.11.9
+platform: Windows 10
+env_notes:

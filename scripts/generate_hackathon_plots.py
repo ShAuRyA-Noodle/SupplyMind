@@ -49,7 +49,7 @@ C_CYAN, C_VIOLET, C_GREEN, C_AMBER, C_RED = "#22d3ee", "#a78bfa", "#34d399", "#f
 # 1. RAP-XC reward curve (BC loss over training)
 # ---------------------------------------------------------------------------
 def plot_reward_curve():
-    pt = torch.load(ROOT / "ShAuRyA_Phoenix" / "experiments" / "rap_xc_v1" / "rapxc.pt",
+    pt = torch.load(ROOT / "versions/v5_phoenix" / "experiments" / "rap_xc_v1" / "rapxc.pt",
                      map_location="cpu", weights_only=False)
     hist = pt.get("history") or []
     steps = [h["step"] for h in hist]
@@ -82,7 +82,7 @@ def plot_reward_curve():
 # 2. Loss components (BC, V, CQL, KL)
 # ---------------------------------------------------------------------------
 def plot_loss_components():
-    pt = torch.load(ROOT / "ShAuRyA_Phoenix" / "experiments" / "rap_xc_v1" / "rapxc.pt",
+    pt = torch.load(ROOT / "versions/v5_phoenix" / "experiments" / "rap_xc_v1" / "rapxc.pt",
                      map_location="cpu", weights_only=False)
     hist = pt.get("history") or []
     steps = [h["step"] for h in hist]

@@ -23,11 +23,11 @@
 ## Static datasets
 | Name | Size | Description | Path |
 |------|------|-------------|------|
-| EMDAT crisis library v2 | ~1500 events | historical disaster impact records | `ShAuRyA_Supplymind/scenarios/` |
-| Hand-curated 8 events | 8 events | Iran/Israel/Hormuz/Red-Sea/Suez/Taiwan/Thailand/Tohoku | `ShAuRyA_Supplymind/realtime/crisis_library.py` |
+| EMDAT crisis library v2 | ~1500 events | historical disaster impact records | `versions/v4_arcadia_live/scenarios/` |
+| Hand-curated 8 events | 8 events | Iran/Israel/Hormuz/Red-Sea/Suez/Taiwan/Thailand/Tohoku | `versions/v4_arcadia_live/realtime/crisis_library.py` |
 | WTI crude time-series | 2,818 windows | DCOILWTICO from FRED | TFT training |
 | Real company nodes | 40 nodes | TSMC/Samsung/Toyota etc with real coords | `data/companies_real.json` |
-| Wordle dictionary | 102 words | 5-letter common words (tier-0 baseline) | `ShAuRyA_Phoenix/wordle_env/env.py` |
+| Wordle dictionary | 102 words | 5-letter common words (tier-0 baseline) | `versions/v5_phoenix/wordle_env/env.py` |
 | Wordle tier 1+ | +200/+150/+80 words | RLVE expansion tiers | `rlve_curriculum.py` |
 | RAG corpus | 6,483 chunks | wiki_crisis 564 + sec_10k 5790 + policy 129 | `R5_GRANITE.json` |
 | Conformal calibration NLLs | 5,696 (v2) / 16,000 (v3) | nonconformity scores | `conformal_*.json` |

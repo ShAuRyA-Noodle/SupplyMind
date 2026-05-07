@@ -69,7 +69,7 @@ Tested on 32k held-out training rows of real harvested transitions. The split-co
 
 ## 4. RAP-XC training on real harvest
 
-`ShAuRyA_Phoenix/rap_xc/train.py` → `ShAuRyA_Phoenix/experiments/rap_xc_v1/rapxc.pt`
+`versions/v5_phoenix/rap_xc/train.py` → `versions/v5_phoenix/experiments/rap_xc_v1/rapxc.pt`
 
 | Metric | Result |
 |---|---|
@@ -83,7 +83,7 @@ Tested on 32k held-out training rows of real harvested transitions. The split-co
 
 ## 5. HetTemporalGAT vs v1 GCN cascade
 
-`ShAuRyA_Phoenix/gnn_v2/train_hetgat.py` → `ShAuRyA_Phoenix/experiments/hetgat_v1/report.json`
+`versions/v5_phoenix/gnn_v2/train_hetgat.py` → `versions/v5_phoenix/experiments/hetgat_v1/report.json`
 
 Task: arrival-time regression on R6 cascade graphs (real semiconductor supply-chain).
 
@@ -111,7 +111,7 @@ Strong cross-corpus stability — same panel produces near-identical α on indep
 
 ## 7. Tohoku 2011 Platinum counterfactual replication
 
-`ShAuRyA_Phoenix/counterfactual_v2/platinum.py` synthetic-control method on real Tohoku 2011 economic data.
+`versions/v5_phoenix/counterfactual_v2/platinum.py` synthetic-control method on real Tohoku 2011 economic data.
 
 | Metric | Value |
 |---|---|

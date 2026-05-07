@@ -182,7 +182,7 @@ def main() -> None:
         "judges_frontier": sorted(judges_frontier),
         "reward_scale": "ordinal 4-tier: LOW=0, MEDIUM=1, HIGH=2, CRITICAL=3",
         "distance_metric": "squared-difference",
-        "ground_truth_source": "v3_arcadia/results/R4_DANGEROUS_V2.json per_scenario.*.ground_truth",
+        "ground_truth_source": "versions/v3_arcadia/results/R4_DANGEROUS_V2.json per_scenario.*.ground_truth",
         "frontier_judge_source": "OpenRouter chat/completions (cached in .openrouter_cache/)",
         "inference_type": "live_http_multi_provider_panel",
     }

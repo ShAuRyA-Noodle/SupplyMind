@@ -1,7 +1,7 @@
 """Export every non-LLM SupplyMind model to ONNX.
 
 Produces a single self-contained inference bundle in
-`v3_arcadia/checkpoints/onnx_bundle/` that runs without PyTorch, without
+`versions/v3_arcadia/checkpoints/onnx_bundle/` that runs without PyTorch, without
 Python-level SentenceTransformer, without torch_geometric. Pure
 onnxruntime-cpu is enough to score every non-LLM layer of the stack.
 
@@ -11,8 +11,8 @@ Exports (in this order, skipping unavailable sources):
   3. Ridge stacker (classification)
   4. TFT v1 (single-target WTI price regressor)
 
-Output: v3_arcadia/checkpoints/onnx_bundle/{ppo_*.onnx, gcn_arrival.onnx, ridge_stacker.onnx, tft_v1.onnx}
-        v3_arcadia/results/ONNX_BUNDLE_MANIFEST.json
+Output: versions/v3_arcadia/checkpoints/onnx_bundle/{ppo_*.onnx, gcn_arrival.onnx, ridge_stacker.onnx, tft_v1.onnx}
+        versions/v3_arcadia/results/ONNX_BUNDLE_MANIFEST.json
 """
 from __future__ import annotations
 
@@ -56,7 +56,7 @@ def copy_ppo_onnx():
                 "size_kb": int(d.stat().st_size / 1024),
                 "input_shape": [1, 408],
                 "output_shape": [1, 280],
-                "source": "v3_arcadia/50_gethsemane/export_v3_ppo_onnx.py",
+                "source": "versions/v3_arcadia/50_gethsemane/export_v3_ppo_onnx.py",
             })
     log.info(f"  {count}/3 PPO ONNX included")
 
@@ -104,7 +104,7 @@ def export_gcn_arrival():
         "size_kb": int(out_p.stat().st_size / 1024),
         "input_shape": ["[N, 4]", "[N, N]"],
         "output_shape": ["[N]"],
-        "source": "v3_arcadia/70_provider/r6_gnn_arrival_time.py",
+        "source": "versions/v3_arcadia/70_provider/r6_gnn_arrival_time.py",
     })
     log.info(f"  exported {out_p.name}")
 
@@ -136,7 +136,7 @@ def export_ridge_stacker():
         "size_kb": int(out_p.stat().st_size / 1024),
         "input_shape": ["[B, 4]"],
         "output_shape": ["[B]"],
-        "source": "v3_arcadia/10_caramel/train_caramel.py",
+        "source": "versions/v3_arcadia/10_caramel/train_caramel.py",
     })
     log.info(f"  exported {out_p.name}")
 

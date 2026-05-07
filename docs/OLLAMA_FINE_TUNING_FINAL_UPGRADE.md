@@ -20,11 +20,11 @@ separate because it depends on the local Ollama daemon and GPU.
 | `supplymind-analyst:v2` | `rl/lora/Modelfile.v2` | Adds executive Markdown structure, richer Tohoku/Suez/chip-shortage/DataCo knowledge, and stricter evidence/counterfactual/precedent sections. |
 | `supplymind-analyst:v3` | `rl/lora/Modelfile.v3` | Expands action costs, SLA, Red Sea, Panama, Ukraine/neon, WGI, and 10-shot explanation coverage. |
 | `supplymind-analyst:v4` | `rl/lora/Modelfile.v4` | Switches to strict JSON for Phase 4/R3-style LLM block use. |
-| `supplymind-analyst:v5` | `ShAuRyA_Supplymind/features/Modelfile.analyst_v5` | Final calibrated JSON judge with 8 hard-negative few-shots and explicit LOW/MEDIUM/HIGH/CRITICAL rules. |
-| `qwen25-14b-local` | `v3_arcadia/00_emergence/qwen25-14b.Modelfile` | Offline Qwen judge wrapper. |
-| `qwen25-coder-local` | `v3_arcadia/00_emergence/qwen25-coder-14b.Modelfile` | JSON/code-specialist wrapper. |
-| `mistral-nemo-local` | `v3_arcadia/00_emergence/mistral-nemo.Modelfile` | Long-context 128K judge wrapper. |
-| `deepseek-r1-local-q4` | `v3_arcadia/00_emergence/deepseek-r1.Modelfile` | Quantized DeepSeek-R1 devil's-advocate judge. |
+| `supplymind-analyst:v5` | `versions/v4_arcadia_live/features/Modelfile.analyst_v5` | Final calibrated JSON judge with 8 hard-negative few-shots and explicit LOW/MEDIUM/HIGH/CRITICAL rules. |
+| `qwen25-14b-local` | `versions/v3_arcadia/00_emergence/qwen25-14b.Modelfile` | Offline Qwen judge wrapper. |
+| `qwen25-coder-local` | `versions/v3_arcadia/00_emergence/qwen25-coder-14b.Modelfile` | JSON/code-specialist wrapper. |
+| `mistral-nemo-local` | `versions/v3_arcadia/00_emergence/mistral-nemo.Modelfile` | Long-context 128K judge wrapper. |
+| `deepseek-r1-local-q4` | `versions/v3_arcadia/00_emergence/deepseek-r1.Modelfile` | Quantized DeepSeek-R1 devil's-advocate judge. |
 
 Creation tooling:
 
@@ -66,7 +66,7 @@ Command:
 
 ## A.4 Phoenix DPO + GRPO
 
-Phoenix v5 keeps DPO/GRPO in `ShAuRyA_Phoenix/roll_integration/dpo_judge/`:
+Phoenix v5 keeps DPO/GRPO in `versions/v5_phoenix/roll_integration/dpo_judge/`:
 
 - `prepare_preference_data.py`: builds 21 chosen/rejected pairs from R4 ground truth and local judge outputs.
 - `data/preference_pairs.jsonl`: committed 21-pair dataset.
@@ -95,9 +95,9 @@ path.
 
 Evidence:
 
-- `v3_arcadia/results/R1_VERIFIED.json`: records Q4_K_M formats, 3.3x compression rationale, <2 percent quality-loss claim source note, and BGE safetensors rationale.
-- `v3_arcadia/00_emergence/convert_bge_to_safetensors.py`: converts BGE-M3 `pytorch_model.bin` to `model.safetensors` to avoid unsafe `torch.load` behavior under CVE-2025-32434 constraints.
-- `v3_arcadia/40_granite/r5_rag_beast.py`: unloads Ollama and clears CUDA memory around RAG phases to prevent VRAM thrash.
+- `versions/v3_arcadia/results/R1_VERIFIED.json`: records Q4_K_M formats, 3.3x compression rationale, <2 percent quality-loss claim source note, and BGE safetensors rationale.
+- `versions/v3_arcadia/00_emergence/convert_bge_to_safetensors.py`: converts BGE-M3 `pytorch_model.bin` to `model.safetensors` to avoid unsafe `torch.load` behavior under CVE-2025-32434 constraints.
+- `versions/v3_arcadia/40_granite/r5_rag_beast.py`: unloads Ollama and clears CUDA memory around RAG phases to prevent VRAM thrash.
 - `rl/lora/create_ollama_model.py`: enforces one loaded Ollama model during creation.
 
 Live checks to run on the GPU machine:
@@ -106,7 +106,7 @@ Live checks to run on the GPU machine:
 ollama list
 python scripts/verify_ollama_finetuning_stack.py
 python -m rl.lora.create_ollama_model --version v5 --test
-python -m ShAuRyA_Phoenix.roll_integration.dpo_judge.train_grpo_live_env --env-url http://localhost:8000 --dry-run
+python -m versions.v5_phoenix.roll_integration.dpo_judge.train_grpo_live_env --env-url http://localhost:8000 --dry-run
 ```
 
 No synthetic substitution is introduced by this upgrade. The verifier checks

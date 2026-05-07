@@ -1,0 +1,22 @@
+claim_id: V4_Tests_Total
+claim: v3 core (173) + v4 new (76) = 249 total tests pass
+command: pytest tests/ versions/v4_arcadia_live/tests/ -q --tb=no
+extraction: grep -oE "[0-9]+ passed" || true
+expected: 249
+comparator: regex
+expected_range: ''
+expected_regex: (2[45][0-9]) passed
+actual: <pending-first-run>
+exit_code: -1
+stdout_inline: ''
+stdout_sha256: ''
+stderr_tail: ''
+stdout_bytes: 0
+match: false
+comparator_note: ''
+runtime_s: 0.0
+timestamp_utc: <pending-first-run>
+hardware: <pending-first-run>
+python_version: ''
+platform: ''
+env_notes:

@@ -90,7 +90,7 @@
 
 Plus 4 base wrappers: `qwen25-14b-local`, `qwen25-coder-local`, `mistral-nemo-local`, `deepseek-r1-local-q4`.
 
-5 Modelfiles committed at `rl/lora/Modelfile`, `Modelfile.v2-v4`, `ShAuRyA_Supplymind/features/Modelfile.analyst_v5`.
+5 Modelfiles committed at `rl/lora/Modelfile`, `Modelfile.v2-v4`, `versions/v4_arcadia_live/features/Modelfile.analyst_v5`.
 
 ### 4. LoRA fine-tuning track
 
@@ -100,7 +100,7 @@ Qwen-2.5-1.5B → PEFT/LoRA → 4-bit NF4 (bitsandbytes) → TRL → 225 instruc
 
 Qwen-2.5-3B-Instruct base. 21 preference pairs from R4 ground truth at `dpo_judge/data/preference_pairs.jsonl`. DPO sigmoid loss, β=0.1, LoRA r=8 / α=16, hf strategy (single-GPU 12GB), per_device_train_batch_size=1, gradient_accumulation_steps=4, lr=5e-5, save_adapter_only.
 
-5 trainers in `ShAuRyA_Phoenix/roll_integration/dpo_judge/`:
+5 trainers in `versions/v5_phoenix/roll_integration/dpo_judge/`:
 - `train_dpo_trl.py` — TRL standalone (ROLL-free fallback)
 - `train_dpo_roll.py` — ROLL-integrated
 - `train_grpo_env.py` — GRPO multi-turn
@@ -178,7 +178,7 @@ dag_feats (80-d) ──→ DAGEncoder
 
 ### 14. Live data layer (20 sources)
 
-`ShAuRyA_Supplymind/realtime/orchestrator_v2.py` fans out to 20 sources via ThreadPoolExecutor with per-source timeouts and graceful failure:
+`versions/v4_arcadia_live/realtime/orchestrator_v2.py` fans out to 20 sources via ThreadPoolExecutor with per-source timeouts and graceful failure:
 
 NewsAPI · GDELT · GDELT-Conflict · GDELT-Humanitarian · USGS earthquakes · NOAA NDBC buoys · NOAA Tides · NASA EONET · NASA FIRMS fires · EIA Brent · EIA WTI · EIA natgas · MarineTraffic AIS · Global Fishing Watch · World Bank commodities · WHO DON · SEC EDGAR · CISA KEV · OFAC sanctions · Wikipedia pageviews · HN tech ticker
 

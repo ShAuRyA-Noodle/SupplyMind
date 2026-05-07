@@ -1,0 +1,22 @@
+claim_id: V4_Live_Brent_202604
+claim: FRED Brent polling returns a live April-2026 value parseable as USD/bbl
+command: python -m versions.v4_arcadia_live.realtime.sources.fred_brent --latest-only
+extraction: python -c "import sys; out=sys.stdin.read(); import re; m=re.search(r\"(\\d+\\.\\d+)\", out); print(m.group(1) if m else \"\")"
+expected: 60
+comparator: in_range
+expected_range: [60, 250]
+expected_regex: ''
+actual: <pending-first-run>
+exit_code: -1
+stdout_inline: ''
+stdout_sha256: ''
+stderr_tail: ''
+stdout_bytes: 0
+match: false
+comparator_note: ''
+runtime_s: 0.0
+timestamp_utc: <pending-first-run>
+hardware: <pending-first-run>
+python_version: ''
+platform: ''
+env_notes:

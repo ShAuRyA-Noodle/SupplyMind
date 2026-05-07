@@ -45,7 +45,7 @@
 - **hard_cascading_crisis** — 40 nodes, 60 days, $15M budget, cascading
 
 ## Wordle Companion Environment
-- **Class**: `ShAuRyA_Phoenix.wordle_env.env`
+- **Class**: `versions.v5_phoenix.wordle_env.env`
 - **Type**: Canonical RLVR mini-env
 - **Action space**: `Discrete(102)` (102-word baseline) or restricted by curriculum tier
 - **State**: 188-dim (rich encoding per `final_real_reinforce_wordle_v2.py`)

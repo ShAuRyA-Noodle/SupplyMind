@@ -62,8 +62,8 @@ FRONTIER_JUDGES = [
 RISK_ORDER = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
 INV_ORDER = {v: k for k, v in RISK_ORDER.items()}
 
-IRAN_PATH = ROOT / "ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json"
-V2_PATH = ROOT / "ShAuRyA_Supplymind/scenarios/crisis_library_v2.json"
+IRAN_PATH = ROOT / "versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json"
+V2_PATH = ROOT / "versions/v4_arcadia_live/scenarios/crisis_library_v2.json"
 RECEIPT_PATH = ROOT / "tests/receipts/ollama_v5_vs_frontier.json"
 
 SYSTEM_PROMPT = (

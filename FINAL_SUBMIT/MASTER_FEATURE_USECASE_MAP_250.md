@@ -18,22 +18,22 @@ Sections A through BB + RL/RLVR/RLVE knowledge alignment.
 | A7 | 30-step episode horizon | `server/supply_environment.py` | bounded RL episode | reset config |
 | A8 | $5M-$15M budget tasks | `data/disruptions.json` | sparse-reward shaping | task manifest |
 | A9 | Real-world coordinates (TSMC, Samsung) | `data/companies_real.json` | Theme #3 Professional Tasks | n_real_nodes=40 |
-| A10 | 8 v1 events crisis library | `ShAuRyA_Supplymind/realtime/crisis_library.py` | RAG analog retrieval | 8 events indexed |
-| A11 | Wordle RLVR mini-env | `ShAuRyA_Phoenix/wordle_env/env.py` | canonical hackathon flow | `wordle_real_reinforce_curve.json` |
-| A12 | RLVE adaptive curriculum | `ShAuRyA_Phoenix/wordle_env/rlve_curriculum.py` | §22-23 Procaccia-style | `rlve_curriculum_smoke.json` (4 tier shifts) |
+| A10 | 8 v1 events crisis library | `versions/v4_arcadia_live/realtime/crisis_library.py` | RAG analog retrieval | 8 events indexed |
+| A11 | Wordle RLVR mini-env | `versions/v5_phoenix/wordle_env/env.py` | canonical hackathon flow | `wordle_real_reinforce_curve.json` |
+| A12 | RLVE adaptive curriculum | `versions/v5_phoenix/wordle_env/rlve_curriculum.py` | §22-23 Procaccia-style | `rlve_curriculum_smoke.json` (4 tier shifts) |
 
 ## B. REWARD ENGINEERING — 14 features
 | # | Feature | File | Use case | Receipt |
 |---|---------|------|----------|---------|
 | B1 | 7-component shaped reward | `server/engine/rewards.py` | RL guide §7 multi-component | rewards module |
-| B2 | Format gate | `ShAuRyA_Phoenix/wordle_env/env.py` | reject malformed actions | adv-20 attacks 1-9 blocked |
-| B3 | Dictionary gate | `ShAuRyA_Phoenix/wordle_env/env.py` | reject non-dict words | adv-20 attack #10 blocked |
-| B4 | Timeout penalty | `ShAuRyA_Phoenix/wordle_env/env.py` | RL guide §15 timeout monitor | -0.2 if 6 guesses fail |
-| B5 | Solve bonus + step-count bonus | `ShAuRyA_Phoenix/wordle_env/env.py` | richer signal | ablation_matrix.json |
+| B2 | Format gate | `versions/v5_phoenix/wordle_env/env.py` | reject malformed actions | adv-20 attacks 1-9 blocked |
+| B3 | Dictionary gate | `versions/v5_phoenix/wordle_env/env.py` | reject non-dict words | adv-20 attack #10 blocked |
+| B4 | Timeout penalty | `versions/v5_phoenix/wordle_env/env.py` | RL guide §15 timeout monitor | -0.2 if 6 guesses fail |
+| B5 | Solve bonus + step-count bonus | `versions/v5_phoenix/wordle_env/env.py` | richer signal | ablation_matrix.json |
 | B6 | Green credit | env.py | per-letter success | ablation: -0.459 if removed |
 | B7 | Yellow credit | env.py | partial info credit | ablation: small drop if removed |
 | B8 | Process supervision (line-level) | `scripts/final_validation_bundle.py:process_supervision` | RL guide §9 Lightman 2023 | `process_supervision.json` (var amp 2735×) |
-| B9 | Dual-verifier composite | `ShAuRyA_Phoenix/wordle_env/dual_verifier.py` | rule × (0.5 + 0.5×model) | `dual_verifier_smoke.json` |
+| B9 | Dual-verifier composite | `versions/v5_phoenix/wordle_env/dual_verifier.py` | rule × (0.5 + 0.5×model) | `dual_verifier_smoke.json` |
 | B10 | Disagreement alarm | `dual_verifier.py:DISAGREEMENT_THRESHOLD` | §43 anti-hacking monitoring | rolling alarm 0.30 |
 | B11 | Ablation receipts (5 components) | `final_validation_bundle.py` | leave-one-out analysis | `ablation_matrix.json` |
 | B12 | Variance reduction baseline | `final_real_reinforce_wordle.py` | Williams 1992 REINFORCE | running_baseline EMA |
@@ -98,8 +98,8 @@ Receipt: `adversarial_20_attack_gauntlet.json` (sha 082a3c57…)
 ## G. RAG / RETRIEVAL — 8 features
 | # | Feature | File | Use case | Receipt |
 |---|---------|------|----------|---------|
-| G1 | FAISS index | `ShAuRyA_Supplymind/realtime/store.py` | top-K retrieval | store.query_recent |
-| G2 | BGE-rerank | `ShAuRyA_Supplymind/realtime/rerank.py` | quality boost | falls back gracefully on Win |
+| G1 | FAISS index | `versions/v4_arcadia_live/realtime/store.py` | top-K retrieval | store.query_recent |
+| G2 | BGE-rerank | `versions/v4_arcadia_live/realtime/rerank.py` | quality boost | falls back gracefully on Win |
 | G3 | Crisis library 8 events | `realtime/crisis_library.py` | analog retrieval | RAG against Iran/Hormuz/Suez |
 | G4 | NewsAPI live ingest | `realtime/news_ingest.py` | recent events | event store |
 | G5 | GDELT integration | `realtime/gdelt.py` | global events | event store |

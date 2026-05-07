@@ -48,7 +48,7 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 |---|---|---|---|
 | 21 | NSGA2 via pymoo | ✅ | `rl/pareto/*` (pymoo import) |
 | 22 | 3 objectives (cost, resilience_loss, carbon) | ✅ | `pareto_results.json: objective_names` exact |
-| 23 | Carbon factors per IMO/EPA/ICAO | ✅ | `ShAuRyA_Supplymind/features/pareto_carbon.py` constants |
+| 23 | Carbon factors per IMO/EPA/ICAO | ✅ | `versions/v4_arcadia_live/features/pareto_carbon.py` constants |
 | 24 | Air 0.82 / Sea 0.013 / Sea express 0.026 / Rail 0.028 / Road 0.096 kg CO2/tonne-km | ✅ | constants in source |
 | 25 | 20 mitigation plans tested | ⚠️ | `pareto_results.json: n_policies=5` (smaller run); 20-plan run may be older or in `pareto_frontier_v2.json` |
 | 26 | 11 Pareto-frontier plans (55%) | ⚠️ | current receipts 2/5 and 3/5; 11/20 from older run |
@@ -73,11 +73,11 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 | 36 | GPU MC: 1 state → 100K with noise linspace(0.01-0.3) | ✅ | `rl/surrogate/gpu_monte_carlo.py` |
 | 37 | 80ms for 100K scenarios | ✅ | profiled in module |
 | 38 | p5/p50/p95/p99/cvar_10 outputs | ✅ | gpu_monte_carlo.py |
-| 39 | Counterfactual digital twin (100 rollouts MC) | ✅ | `ShAuRyA_Phoenix/counterfactual_twin/twin.py` |
+| 39 | Counterfactual digital twin (100 rollouts MC) | ✅ | `versions/v5_phoenix/counterfactual_twin/twin.py` |
 | 40 | REVENUE_AT_RISK_USD: easy $200M / med $320M / hard $400M | ✅ | constants in twin.py |
 | 41 | Severity multiplier 0.5 + 1.0 × clamp(severity, 0, 1) | ✅ | twin.py formula |
 | 42 | TwinReport dataclass (median, p95, savings, CI95, savings_pct) | ✅ | twin.py |
-| 43 | Receipt: $178.68M saved (48%) at sev=0.85, brent=$123, n=30 | ✅ | `ShAuRyA_Phoenix/receipts_v2/V5_Twin_savings_gt_zero.receipt.yaml` |
+| 43 | Receipt: $178.68M saved (48%) at sev=0.85, brent=$123, n=30 | ✅ | `versions/v5_phoenix/receipts_v2/V5_Twin_savings_gt_zero.receipt.yaml` |
 
 **M: 13/13 = 100%**
 
@@ -87,7 +87,7 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 
 | # | Bullet | Status | Evidence |
 |---|---|---|---|
-| 44 | NewsAPI (5 keyword queries, 7-day, 100 req/day) | ✅ | `ShAuRyA_Supplymind/realtime/sources/newsapi.py` |
+| 44 | NewsAPI (5 keyword queries, 7-day, 100 req/day) | ✅ | `versions/v4_arcadia_live/realtime/sources/newsapi.py` |
 | 45 | GDELT 2.0 Doc API (15-min refresh, tone severity) | ✅ | `sources/gdelt.py` |
 | 46 | USGS M4.5+ in last 24h, 6 region boxes | ✅ | `sources/usgs.py` |
 | 47 | FRED Brent DCOILBRENTEU daily spot | ✅ | `sources/fred_brent.py` |
@@ -96,7 +96,7 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 | 50 | FRED severity max(\|DoD\|/5%, \|WoW\|/10%) capped 1.0 | ✅ | `fred_brent.py: compute_severity` |
 | 51 | GDELT tone-derived severity | ✅ | `gdelt.py: tone_to_severity` |
 | 52 | USGS magnitude-based severity | ✅ | `usgs.py: magnitude_to_severity` |
-| 53 | SQLite events.db with full schema | ✅ | `ShAuRyA_Supplymind/realtime/store.py: DB_PATH` |
+| 53 | SQLite events.db with full schema | ✅ | `versions/v4_arcadia_live/realtime/store.py: DB_PATH` |
 | 54 | 4 indices (source+hash, ts, region, type) | ✅ | `store.py: CREATE INDEX` × 4 |
 | 55 | SHA-256 dedup hash 16 chars | ✅ | `store.py: hashlib.sha256(...).hexdigest()[:16]` |
 | 56 | 24-hour dedup window | ✅ | `store.py: DEDUP_WINDOW_S = 86400` |
@@ -112,7 +112,7 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 
 | # | Bullet | Status | Evidence |
 |---|---|---|---|
-| 60 | 8 hand-curated real events (2022-2026) | ✅ | `ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json: 8 events` exact |
+| 60 | 8 hand-curated real events (2022-2026) | ✅ | `versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json: 8 events` exact |
 | 61 | 3-4 citations per event (Reuters/BBC/CNBC/FRED/IDF/DoD/UNCTAD/Lloyd's) | ✅ | each event.citations[] in JSON has 3-4 entries with publisher field |
 | 62 | Curation policy ≥3 citations | ✅ | grep `citations` in v1 library |
 | 63 | mxbai embedding mode | ✅ | `realtime/crisis_library.py` SentenceTransformer |
@@ -172,7 +172,7 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 | 110 | CatBoost (1500 iters, depth 8, GPU) | ✅ | DataCo training receipt |
 | 111 | TabPFN-v2 classifier (zero-shot) | ✅ | `tabpfn_verify.json + tabpfn_risk_judge.py` |
 | 112 | TabPFN-v2 regressor | ✅ | wired in pass-10 ensemble |
-| 113 | TabPFN bagging | ✅ | `v3_arcadia/10_caramel/r2_tabpfn_bagging.py` + `R2_BENEFIT_FIX.json` |
+| 113 | TabPFN bagging | ✅ | `versions/v3_arcadia/10_caramel/r2_tabpfn_bagging.py` + `R2_BENEFIT_FIX.json` |
 | 114 | Stacking with Ridge meta-learner | ✅ | `R3_STACKING_V2.json` |
 | 115 | 5-fold CV | ✅ | rolling-fold in stacking |
 | 116 | OOF predictions | ✅ | `R3_STACKING_V2.json: oof_predictions` |
@@ -194,7 +194,7 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 
 | # | Bullet | Status | Evidence |
 |---|---|---|---|
-| 126 | Political risk GBR R²=0.994, MAE=0.0095 on 214 countries | ✅ | `ShAuRyA_Supplymind/features/political_risk.py + receipts/F12_*.json` |
+| 126 | Political risk GBR R²=0.994, MAE=0.0095 on 214 countries | ✅ | `versions/v4_arcadia_live/features/political_risk.py + receipts/F12_*.json` |
 | 127 | Political risk LSTM | ✅ | alternate model in same module |
 | 128 | Dependency MLP acc=97.45% on 144K | ✅ | `features/dependency_mlp.py + F11_*.json` |
 | 129 | Financial impact Ridge R²=0.736, MAE=$26.04 | ✅ | `features/financial_ridge.py + F8_*.json` |
@@ -241,7 +241,7 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 | 152 | R6_MaskingAblation_easy_lift = 26.768% | ✅ | `R6_GETHSEMANE_MASKING_ABLATION.json` |
 | 153 | R6_GCN_easy_MAE_vs_MLP = 48.025% | ✅ | `R6_PROVIDER_V2.json: easy.improvement_vs_mlp_pct = 48.025` exact |
 | 154 | R6_AquaRegia_WTI_dev95 = 0.0238 | ✅ | `R6_AQUA_REGIA_V2.json` |
-| 155 | R3_TimesFM_CP_WTI_dev95 = 0.050 | ✅ | `ShAuRyA_Phoenix/receipts_v2/R3_TimesFM_CP_WTI_dev95.receipt.yaml` |
+| 155 | R3_TimesFM_CP_WTI_dev95 = 0.050 | ✅ | `versions/v5_phoenix/receipts_v2/R3_TimesFM_CP_WTI_dev95.receipt.yaml` |
 | 156 | V4_SPOF_V2_F1 = 1.0 | ✅ | F23 receipt |
 | 157 | V4_STACKING_V2_lift_vs_WV = 0.0045 | ✅ | `R3_STACKING_V2.json` |
 | 158 | V4_Live_Brent_202604 = $123.28 | ✅ | live FRED fetch on 2026-04-21 |
@@ -253,15 +253,15 @@ Bullet-by-bullet status across J/K/L/M/N/O/P/Q/R/S/T (~200 bullets). Same legend
 | 164 | V5_Arena_baseline_leaderboard = 6 baselines | ✅ | `R6_ALGO_COMPARISON.json` per_algorithm has 4 + 2 implicit = 6 |
 | 165 | V5_Twin_savings_gt_zero = $178,684,200 | ✅ | twin receipt |
 | 166 | V5_DPO_JUDGE_preference_pairs_built = 21 | ✅ | `dpo_judge/data/preference_pairs.jsonl: 21 lines` exact |
-| 167 | V5_Skill_pack_shipped = 4 files | ✅ | `ShAuRyA_Phoenix/supplymind_skills/*` 4+ skills |
+| 167 | V5_Skill_pack_shipped = 4 files | ✅ | `versions/v5_phoenix/supplymind_skills/*` 4+ skills |
 | 168 | V5_Phoenix_tests_green = 15 passed | ✅ | phoenix smoke = 15 |
-| 169 | SHA-256 stdout tracking | ✅ | `ShAuRyA_Phoenix/receipts_v2/framework.py` |
+| 169 | SHA-256 stdout tracking | ✅ | `versions/v5_phoenix/receipts_v2/framework.py` |
 | 170 | Hardware capture (CUDA detection) | ✅ | framework.py |
 | 171 | Runtime tracking | ✅ | framework.py |
 | 172 | 5 comparators (==, >=, <=, in_range, regex) | ✅ | framework.py |
-| 173 | Tamper-evident SHA-256 + INDEX.json + INDEX.md auto-generated | ✅ | `ShAuRyA_Phoenix/receipts_v2/INDEX.{json,md}` |
+| 173 | Tamper-evident SHA-256 + INDEX.json + INDEX.md auto-generated | ✅ | `versions/v5_phoenix/receipts_v2/INDEX.{json,md}` |
 | 174 | Tiny YAML parser (no PyYAML dep) | ✅ | framework.py |
-| 175 | 271-line framework.py | ✅ | `wc -l ShAuRyA_Phoenix/receipts_v2/framework.py` |
+| 175 | 271-line framework.py | ✅ | `wc -l versions/v5_phoenix/receipts_v2/framework.py` |
 
 **T: 28/28 = 100%**
 

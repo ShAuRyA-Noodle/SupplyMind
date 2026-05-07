@@ -1,0 +1,79 @@
+# ROLL DPO config for SupplyMind-judge-v5 (Phoenix)
+# Adapted from ROLL-main/examples/dpo_examples/qwen2.5-3B_dpo_megatron.yaml
+# for single-GPU RTX 4080 Laptop (12GB) via HFStrategy + LoRA.
+#
+# Compatible with: ROLL v0.2.1 (Apr 2026) + trl 0.9.6
+
+hydra:
+  run:
+    dir: .
+
+exp_name: supplymind-dpo-qwen25-3b-v5
+seed: 42
+num_gpus_per_node: 1
+max_steps: 120
+ppo_epochs: 1
+
+# DPO-specific
+dpo_beta: 0.1                      # KL constraint strength
+dpo_loss_type: sigmoid             # standard DPO
+reference_free: false
+
+# Model
+pretrain: Qwen/Qwen2.5-3B-Instruct
+trust_remote_code: true
+
+# Data — from prepare_preference_data.py
+data:
+  train_path: versions/v5_phoenix/roll_integration/dpo_judge/data/preference_pairs.jsonl
+  max_length: 2048
+  max_prompt_length: 1024
+
+# Training
+actor_train:
+  model_args:
+    dtype: bf16
+    trust_remote_code: true
+    disable_gradient_checkpointing: false
+  strategy_args:
+    strategy_name: hf          # NOT megatron; 12GB can't host TP/PP
+  training_args:
+    per_device_train_batch_size: 1
+    gradient_accumulation_steps: 4
+    learning_rate: 5.0e-5
+    warmup_ratio: 0.1
+    logging_steps: 1
+    save_steps: 20
+    bf16: true
+    gradient_checkpointing: true
+    optim: adamw_torch
+    lr_scheduler_type: cosine
+  lora_config:
+    r: 8
+    lora_alpha: 16
+    lora_dropout: 0.0
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - gate_proj
+      - up_proj
+      - down_proj
+    bias: none
+    task_type: CAUSAL_LM
+
+# Reference model (frozen copy)
+ref_model:
+  model_args:
+    dtype: bf16
+    trust_remote_code: true
+
+# Checkpoint
+output_dir: versions/v5_phoenix/experiments/dpo_judge_v1
+save_adapter_only: true           # LoRA ~20MB vs full ~6GB
+
+# Tracking
+tracking:
+  report_to: [tensorboard]
+  logging_dir: versions/v5_phoenix/experiments/dpo_judge_v1/tb

@@ -4,9 +4,9 @@ bootstrap_leaderboard.py — paired-bootstrap CI95 leaderboard for SupplyMind RL
 Compares 9 agents across 3 difficulty tiers, anchored on RAP-XC vs MaskablePPO-v3.
 
 Source data (recorded, real evaluation runs):
-  - v3_arcadia/results/R6_EUCLIDIAN.json     (random / greedy / ppo_v3 / 900 eps × 3 tasks)
-  - v3_arcadia/results/R6_ALGO_COMPARISON.json (MaskablePPO/PPO/A2C/RecurrentPPO, easy task, 50 eps)
-  - ShAuRyA_Phoenix/experiments/arena/leaderboard.json (rolled-up summary stats)
+  - versions/v3_arcadia/results/R6_EUCLIDIAN.json     (random / greedy / ppo_v3 / 900 eps × 3 tasks)
+  - versions/v3_arcadia/results/R6_ALGO_COMPARISON.json (MaskablePPO/PPO/A2C/RecurrentPPO, easy task, 50 eps)
+  - versions/v5_phoenix/experiments/arena/leaderboard.json (rolled-up summary stats)
 
 Per-episode raw arrays were not persisted to disk by the original eval runs; only
 sufficient statistics (n, mean, std, min, max) were recorded. We reconstruct
@@ -42,7 +42,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 EUCLIDIAN = ROOT / "v3_arcadia" / "results" / "R6_EUCLIDIAN.json"
 ALGO_COMP = ROOT / "v3_arcadia" / "results" / "R6_ALGO_COMPARISON.json"
-LB_JSON = ROOT / "ShAuRyA_Phoenix" / "experiments" / "arena" / "leaderboard.json"
+LB_JSON = ROOT / "versions/v5_phoenix" / "experiments" / "arena" / "leaderboard.json"
 OUT_PATH = ROOT / "tests" / "receipts" / "bootstrap_leaderboard.json"
 
 # ---------------------------------------------------------------------------- #
@@ -179,7 +179,7 @@ def assemble_recorded_stats() -> Dict[str, Dict[str, Optional[Dict[str, float]]]
     # cascading-crisis tasks via FAISS retrieval + judge-prior bias. Recorded
     # eval numbers (3.14M-param model, 1500-ep harvest, evaluated 100 eps/task)
     # were captured during the rap_xc_v1 evaluation pass in pass-7. Source:
-    # ShAuRyA_Phoenix/experiments/rap_xc_v1/transitions.npz (40k steps, 1500
+    # versions/v5_phoenix/experiments/rap_xc_v1/transitions.npz (40k steps, 1500
     # eps) for harvest; per-task eval rewards were not persisted as raw
     # arrays — only summary stats below (consistent with v3_arcadia recording
     # convention).
@@ -380,7 +380,7 @@ def main() -> None:
             "paired bootstrap (1000 resamples) on per-episode reward arrays "
             "reconstructed from recorded sufficient stats (n, mean, std, min, "
             "max) per (task, agent) cell. Source files: "
-            "v3_arcadia/results/R6_EUCLIDIAN.json (900 eps/cell, MaskablePPO-v3 "
+            "versions/v3_arcadia/results/R6_EUCLIDIAN.json (900 eps/cell, MaskablePPO-v3 "
             "+ scripted_baseline), R6_ALGO_COMPARISON.json (50 eps/cell, "
             "RecurrentPPO + A2C, easy task only), and rap_xc_v1 eval pass "
             "(100 eps/task). Reconstruction draws truncated-normal samples in "

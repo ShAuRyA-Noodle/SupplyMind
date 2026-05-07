@@ -30,9 +30,9 @@ logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 EMDAT_XLSX = REPO_ROOT / "external_data" / "emdat" / "emdat_public_2000_2026.xlsx"
-OUT_JSON = REPO_ROOT / "ShAuRyA_Supplymind" / "scenarios" / "crisis_library_v2.json"
-OUT_FAISS = REPO_ROOT / "ShAuRyA_Supplymind" / "scenarios" / "crisis_library_v2.faiss"
-OUT_NPZ = REPO_ROOT / "ShAuRyA_Supplymind" / "scenarios" / "crisis_library_v2_emb.npz"
+OUT_JSON = REPO_ROOT / "versions/v4_arcadia_live" / "scenarios" / "crisis_library_v2.json"
+OUT_FAISS = REPO_ROOT / "versions/v4_arcadia_live" / "scenarios" / "crisis_library_v2.faiss"
+OUT_NPZ = REPO_ROOT / "versions/v4_arcadia_live" / "scenarios" / "crisis_library_v2_emb.npz"
 
 
 def severity_tier(deaths: float, damage_usd: float, affected: float) -> str:

@@ -47,7 +47,7 @@ def inferential_stats() -> dict:
     import torch
     import torch.nn as nn
     from torch.distributions import Categorical
-    from ShAuRyA_Phoenix.wordle_env.env import WORD_LIST, _score_guess
+    from versions.v5_phoenix.wordle_env.env import WORD_LIST, _score_guess
     from scripts.final_real_reinforce_wordle_v2 import (
         encode_state, compute_valid_mask, run_v2,
     )
@@ -202,7 +202,7 @@ def tier3_generalization() -> dict:
     import torch
     import torch.nn as nn
     from torch.distributions import Categorical
-    from ShAuRyA_Phoenix.wordle_env.env import WORD_LIST, _score_guess
+    from versions.v5_phoenix.wordle_env.env import WORD_LIST, _score_guess
     from scripts.final_real_reinforce_wordle_v2 import (
         encode_state, compute_valid_mask, run_v2, _rollout_policy,
     )
@@ -281,7 +281,7 @@ def conformal_tight_v3() -> dict:
     """Larger calib set → push deviation closer to 0."""
     import torch
     import torch.nn as nn
-    from ShAuRyA_Phoenix.wordle_env.env import WORD_LIST, _score_guess
+    from versions.v5_phoenix.wordle_env.env import WORD_LIST, _score_guess
     from scripts.final_real_reinforce_wordle_v2 import (
         encode_state, compute_valid_mask,
     )
@@ -547,7 +547,7 @@ def chained_live_demo() -> dict:
     # Stage E: REINFORCE policy quick eval
     t0 = time.time()
     try:
-        from ShAuRyA_Phoenix.wordle_env.env import WORD_LIST, _score_guess
+        from versions.v5_phoenix.wordle_env.env import WORD_LIST, _score_guess
         from scripts.final_real_reinforce_wordle_v2 import (
             encode_state, compute_valid_mask, run_v2,
         )

@@ -1,0 +1,28 @@
+claim_id: V5_Skill_pack_shipped
+claim: supplymind-skills pack contains 3 SKILL.md files + plugin.json
+command: ls versions/v5_phoenix/supplymind_skills/*/SKILL.md versions/v5_phoenix/supplymind_skills/plugin.json
+extraction: ls versions/v5_phoenix/supplymind_skills/*/SKILL.md versions/v5_phoenix/supplymind_skills/plugin.json | wc -l
+expected: 4
+comparator: >=
+expected_range: ''
+expected_regex: ''
+actual: 4
+exit_code: 0
+stdout_inline: |
+  versions/v5_phoenix/supplymind_skills/autoresearch-experiment/SKILL.md
+  versions/v5_phoenix/supplymind_skills/benchmark-runner/SKILL.md
+  versions/v5_phoenix/supplymind_skills/live-demo-orchestrator/SKILL.md
+  versions/v5_phoenix/supplymind_skills/plugin.json
+  4
+stdout_sha256: 6e8c1644d834dfcce96104d8cbcfde61c7eacb0ee9dbd365f60184594c627456
+stderr_tail: ''
+stdout_bytes: 241
+match: true
+comparator_note: actual=4.0 >= expected=4.0
+runtime_s: 0.04
+timestamp_utc: |
+  2026-04-22T06:50:50Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
+python_version: 3.11.9
+platform: Windows 10
+env_notes:

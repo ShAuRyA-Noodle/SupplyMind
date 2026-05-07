@@ -4,7 +4,7 @@
 
 **Release**: v3.0-arcadia | **Date**: 2026-04-18 | **License**: MIT | **Status**: OpenEnv-compliant, production-ready
 
-This card covers **every model, every benchmark, every honest finding** across the SupplyMind codebase — the v1 simulated baseline, the v2 real-data retrain, and the v3 SOTA-stack rebuild. For raw results, see `v3_arcadia/results/`. For v2 history, see `docs/legacy/MODEL_CARD_V2.md`.
+This card covers **every model, every benchmark, every honest finding** across the SupplyMind codebase — the v1 simulated baseline, the v2 real-data retrain, and the v3 SOTA-stack rebuild. For raw results, see `versions/v3_arcadia/results/`. For v2 history, see `docs/legacy/MODEL_CARD_V2.md`.
 
 **Companion docs**: [`docs/v3/BENCHMARKS_VS_PUBLIC.md`](docs/v3/BENCHMARKS_VS_PUBLIC.md) · [`docs/core/EXTERNAL_CREDIBILITY.md`](docs/core/EXTERNAL_CREDIBILITY.md) · [`docs/v3/PYTORCH_STORY.md`](docs/v3/PYTORCH_STORY.md) · [`FAILURE_TABLE.md`](FAILURE_TABLE.md) · [`docs/v4/AUDIT_PLAN.md`](docs/v4/AUDIT_PLAN.md) · [`docs/v3/FINAL_DEMO.md`](docs/v3/FINAL_DEMO.md) · [`docs/v3/DEPLOY_HF_SPACE.md`](docs/v3/DEPLOY_HF_SPACE.md) · [`demo/DEMO_TRANSCRIPT.md`](demo/DEMO_TRANSCRIPT.md) · [`challenges/R4_RUBRIC_CHALLENGE.md`](challenges/R4_RUBRIC_CHALLENGE.md).
 
@@ -135,7 +135,7 @@ The 3-judge panel delivers **69.2% ground-truth accuracy** with **full Cohen κ 
 
 The stack also publishes: confidence calibration (ECE), structured vulnerabilities + mitigations lists, semantic Jaccard scoring across judges, and per-judge latency profiles.
 
-See `v3_arcadia/plots/dangerous/r4v2_ablation.png` for the visual comparison.
+See `versions/v3_arcadia/plots/dangerous/r4v2_ablation.png` for the visual comparison.
 
 ### W2 — R5 RAG: regime-aware precision + reranker
 
@@ -199,7 +199,7 @@ Every embedder **substantially exceeds its NFCorpus public-leaderboard number** 
 
 ### W8 — R6 MaskablePPO: +26.8% reward, structural zero invalid actions
 
-Isolated ablation (same PPO, same 100k steps, same obs space, same hyperparameters — one MaskablePPO, one plain PPO): masking delivers **+26.8% reward on easy**, **+15.1% on hard**, and **structurally eliminates invalid actions (13.6/ep → 0) on every task tested**. In-range with Huang et al. 2020 ("+10–30% typical" at this scale). Published as `R6_GETHSEMANE_MASKING_ABLATION.json` + `R6_GETHSEMANE_MASKING_ABLATION_ALLTASKS.json`. Plot: `v3_arcadia/plots/gethsemane/r6_masking_ablation.png`.
+Isolated ablation (same PPO, same 100k steps, same obs space, same hyperparameters — one MaskablePPO, one plain PPO): masking delivers **+26.8% reward on easy**, **+15.1% on hard**, and **structurally eliminates invalid actions (13.6/ep → 0) on every task tested**. In-range with Huang et al. 2020 ("+10–30% typical" at this scale). Published as `R6_GETHSEMANE_MASKING_ABLATION.json` + `R6_GETHSEMANE_MASKING_ABLATION_ALLTASKS.json`. Plot: `versions/v3_arcadia/plots/gethsemane/r6_masking_ablation.png`.
 
 The structural invalid-action elimination is the true product feature — in a production system, invalid actions are not just reward-suboptimal, they are unsafe. MaskablePPO eliminates them categorically.
 
@@ -226,7 +226,7 @@ TimesFM-2 ships only point forecasts; Chronos-Bolt ships native quantiles but cl
 | JPY-USD | 0.146 | 0.207 |
 | EUR-USD | **0.032** | 0.214 |
 
-TimesFM-CP delivers **sub-0.05 deviation from nominal** on WTI and EUR-USD — the tightest prediction intervals in the public FRED literature at this horizon. Plot: `v3_arcadia/plots/past_self/r3_timesfm_quantile.png`. Textbook realisation of the Foygel Barber 2022 distribution-free coverage guarantee.
+TimesFM-CP delivers **sub-0.05 deviation from nominal** on WTI and EUR-USD — the tightest prediction intervals in the public FRED literature at this horizon. Plot: `versions/v3_arcadia/plots/past_self/r3_timesfm_quantile.png`. Textbook realisation of the Foygel Barber 2022 distribution-free coverage guarantee.
 
 ### W10 — Real-world integration contract
 
@@ -257,7 +257,7 @@ SupplyMind ships with an OpenEnv-compliant FastAPI + MCP JSON-RPC + WebSocket se
 - **Real-data exposure**: DataCo customer IDs are already anonymized by dataset publisher.
 - **Model biases**: Risk-panel LLMs trained on internet text; may reflect Western-centric supply chain perspectives. Documented in per-judge results.
 - **Hardware locality**: All inference local. No customer data sent to external APIs.
-- **Reproducibility**: `pytest tests/ ShAuRyA_Supplymind/tests/ ShAuRyA_Phoenix/tests/ -q` → 272 passing, 2 skipped, 274 collected (2026-04-24); deterministic (5×-run zero variance on scoring).
+- **Reproducibility**: `pytest tests/ versions/v4_arcadia_live/tests/ versions/v5_phoenix/tests/ -q` → 272 passing, 2 skipped, 274 collected (2026-04-24); deterministic (5×-run zero variance on scoring).
 - **Limitations**:
   - Supply-chain graphs are static — acceptable for historical backtest, limiting for live deployment
   - RL env uses pre-scripted disruptions for reproducibility — exploratory live disruption ingestion in v4
@@ -282,8 +282,8 @@ curl -X POST http://localhost:8000/reset?task_id=easy_typhoon_response
 ```bash
 pip install -r requirements-rl.txt
 ollama serve  # separate terminal
-python -u v3_arcadia/30_dangerous/r4_v2_beast.py
-python -u v3_arcadia/40_granite/r5_rag_beast.py
+python -u versions/v3_arcadia/30_dangerous/r4_v2_beast.py
+python -u versions/v3_arcadia/40_granite/r5_rag_beast.py
 ```
 
 ### Dependencies
@@ -313,4 +313,4 @@ python -u v3_arcadia/40_granite/r5_rag_beast.py
 
 ---
 
-*This card was written on 2026-04-18. Commit-by-commit phase log in `v3_arcadia/95_arcadia/README.md`.*
+*This card was written on 2026-04-18. Commit-by-commit phase log in `versions/v3_arcadia/95_arcadia/README.md`.*

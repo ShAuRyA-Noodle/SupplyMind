@@ -37,7 +37,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from ShAuRyA_Phoenix.wordle_env.env import WORD_LIST, _score_guess  # noqa: E402
+from versions.v5_phoenix.wordle_env.env import WORD_LIST, _score_guess  # noqa: E402
 
 
 # ---------------------------------------------------------------------------

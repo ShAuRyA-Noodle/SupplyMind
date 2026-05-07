@@ -48,12 +48,12 @@ ALLOW_PATTERNS = [
     'FINAL_SUBMIT/CITATIONS.bib',
     'FINAL_SUBMIT/REPRODUCE_ONE_BASH.sh',
     # Wordle env (small)
-    'ShAuRyA_Phoenix/wordle_env/**',
-    'ShAuRyA_Phoenix/__init__.py',
+    'versions/v5_phoenix/wordle_env/**',
+    'versions/v5_phoenix/__init__.py',
     # Crisis library code (skip large embeddings)
-    'ShAuRyA_Supplymind/realtime/*.py',
-    'ShAuRyA_Supplymind/__init__.py',
-    'ShAuRyA_Supplymind/scenarios/*.json',
+    'versions/v4_arcadia_live/realtime/*.py',
+    'versions/v4_arcadia_live/__init__.py',
+    'versions/v4_arcadia_live/scenarios/*.json',
     # Scripts (training scripts judges can rerun)
     'scripts/pass23_colab_local_smoke.py',
     'scripts/pass27_killshot.py',
@@ -86,7 +86,7 @@ IGNORE_PATTERNS = [
     'frontend/**', 'dashboard/**',
     # Old training data
     'rl/data/**', 'rl/checkpoints/**',
-    'v3_arcadia/checkpoints/**', 'v3_arcadia/logs/**',
+    'versions/v3_arcadia/checkpoints/**', 'versions/v3_arcadia/logs/**',
     'rl/analysis/trained/**',
     'external_data/**',
     'models/*.pth', 'models/*.pt', 'models/*.bin',

@@ -3,11 +3,11 @@ SupplyMind Grand Finale Dashboard — Streamlit (v2 analyst dashboard, DEPRECATE
 
 ⚠️  DEPRECATION NOTICE (v3.0-arcadia):
 This file is the v2-era analyst dashboard. The **canonical v3 dashboard** is
-at `v3_arcadia/85_infinite_baths/dashboard.py`, which aggregates every phase
+at `versions/v3_arcadia/85_infinite_baths/dashboard.py`, which aggregates every phase
 JSON (R1–R6) in one place.
 
 To use the current dashboard:
-    streamlit run v3_arcadia/85_infinite_baths/dashboard.py
+    streamlit run versions/v3_arcadia/85_infinite_baths/dashboard.py
 
 This file is kept for reference and v2 reproducibility only.
 

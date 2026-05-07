@@ -15,7 +15,7 @@ The env is already multi-turn-ready on the policy-trajectory side:
 | `Environment.reset → step → step → ... → grade` loop | ✅ shipped | `server/openenv_adapter.py` `OpenEnvSupplyMind.step(action)` builds `_episode_history` across turns |
 | `TrajectoryRubric.compute_step_rewards()` | ✅ shipped | `server/openenv_adapter.py:61-66`. Returns per-step reward contributions from the final trajectory score |
 | `EpisodeGrader` with full trajectory scoring | ✅ shipped | `server/graders/grader.py` — breakdown dict with per-step audit |
-| MaskablePPO policy training inside the env loop | ✅ shipped | `v3_arcadia/` R6 Gethsemane + autoresearch (+0.148 CI95 lift over baseline) |
+| MaskablePPO policy training inside the env loop | ✅ shipped | `versions/v3_arcadia/` R6 Gethsemane + autoresearch (+0.148 CI95 lift over baseline) |
 
 What is **not** wired today:
 - The **LLM-analyst GRPO path** (`train_grpo_live_env.py`) calls `/analyst/grade` once per assessment — one rollout, one reward.
@@ -66,7 +66,7 @@ TRL's `GRPOTrainer` v0.12 does not support custom multi-turn rollouts directly (
 
 **Path A — Custom rollout wrapper.** Subclass `GRPOTrainer` and override `_generate_and_score_completions` to run a multi-turn loop against the env. ~200 lines of code. Risk: depends on TRL internals that change across versions.
 
-**Path B — ROLL integration.** `ShAuRyA_Phoenix/roll_integration/` already pulls in Alibaba's ROLL framework which has native multi-turn GRPO (gigpo_multi_turn.yaml exists in our repo). Wire the analyst task to a ROLL env + ROLL agentic runner. More moving parts but built-for-purpose.
+**Path B — ROLL integration.** `versions/v5_phoenix/roll_integration/` already pulls in Alibaba's ROLL framework which has native multi-turn GRPO (gigpo_multi_turn.yaml exists in our repo). Wire the analyst task to a ROLL env + ROLL agentic runner. More moving parts but built-for-purpose.
 
 Path B is the preferred direction post-hackathon; Path A is a shorter bridge if we want to stay on vanilla TRL.
 

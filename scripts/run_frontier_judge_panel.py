@@ -3,7 +3,7 @@
 Runs up to 12 frontier OpenRouter models against the 26 real R4 crisis
 scenarios. Each model produces a structured risk assessment (LOW / MEDIUM /
 HIGH / CRITICAL + confidence + rationale). Results are committed as
-`v3_arcadia/results/R4_FRONTIER_PANEL_V2.json` with per-model / per-scenario
+`versions/v3_arcadia/results/R4_FRONTIER_PANEL_V2.json` with per-model / per-scenario
 verdicts + the expanded cross-frontier panel agreement statistics.
 
 Combines with the 3 existing local judges (DeepSeek-R1 Q4, Qwen-2.5-14B,
@@ -233,7 +233,7 @@ async def run_panel(
             majority_correct / max(1, len(scenarios)), 4),
         "per_scenario": per_scenario,
         "source": "https://openrouter.ai/api/v1/chat/completions",
-        "ground_truth_source": "v3_arcadia/results/R4_DANGEROUS_V2.json",
+        "ground_truth_source": "versions/v3_arcadia/results/R4_DANGEROUS_V2.json",
         "inference_type": "live_http_multi_provider_panel",
     }
 

@@ -8,7 +8,7 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 
 | # | Bullet | Status | Evidence |
 |---|---|---|---|
-| 1 | Karpathy-pattern overnight loop | ✅ | `ShAuRyA_Phoenix/autoresearch_fixed/orchestrator.py` |
+| 1 | Karpathy-pattern overnight loop | ✅ | `versions/v5_phoenix/autoresearch_fixed/orchestrator.py` |
 | 2 | LLM hypothesis generation (Qwen-14B local or Claude) | ✅ | `hypothesis_engine.py` |
 | 3 | Mutable `candidate_train.py` with safe-to-modify markers | ✅ | `autoresearch_fixed/candidate_train.py` |
 | 4 | Frozen `program.md` (immutable) | ✅ | `autoresearch_fixed/program.md` |
@@ -42,11 +42,11 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 
 | # | Bullet | Status | Evidence |
 |---|---|---|---|
-| 26 | Counterfactual digital twin 100 rollouts MC | ✅ | `ShAuRyA_Phoenix/counterfactual_twin/twin.py` |
+| 26 | Counterfactual digital twin 100 rollouts MC | ✅ | `versions/v5_phoenix/counterfactual_twin/twin.py` |
 | 27 | Arena leaderboard 6 baselines pre-seeded | ✅ | `arena/leaderboard.json: n_baselines=6` exact |
 | 28 | MaskablePPO #1 mean=2.209 CI95=[2.178,2.239] | ✅ | `arena/leaderboard.json: rows[0] = MaskablePPO-v3 (ours), overall_reward_mean=2.209, overall_ci95=[2.178,2.239]` EXACT |
 | 29 | runner.py with TaskResult + ArenaResult dataclasses | ✅ | `arena/runner.py` |
-| 30 | 3 Claude Code skills (benchmark-runner, autoresearch-experiment, live-demo-orchestrator) | ✅ | `ShAuRyA_Phoenix/supplymind_skills/` 3 dirs |
+| 30 | 3 Claude Code skills (benchmark-runner, autoresearch-experiment, live-demo-orchestrator) | ✅ | `versions/v5_phoenix/supplymind_skills/` 3 dirs |
 | 31 | plugin.json v1.0.0 manifest | ✅ | `supplymind_skills/plugin.json` |
 | 32 | Replay cache 8 events frozen | ✅ | `realtime_v5/replay_cache_latest.json: n_events=8` exact |
 | 33 | replay_cache_latest.json + timestamped snapshot | ✅ | dir contains both |
@@ -56,7 +56,7 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 | 37 | DPO 21 pairs Qwen-2.5-3B LoRA r=8 | ✅ | `dpo_judge/data/preference_pairs.jsonl` 21 lines |
 | 38 | TRL fallback for ROLL fragility | ✅ | `dpo_judge/train_dpo_trl.py` |
 | 39 | Two upstream PRs ready (Meta OpenEnv + Alibaba ROLL) | ✅ | `docs/PHOENIX_PUSH_REPORT.md` |
-| 40 | build_pr_branch.sh | ✅ | `ShAuRyA_Phoenix/build_pr_branch.sh` |
+| 40 | build_pr_branch.sh | ✅ | `versions/v5_phoenix/build_pr_branch.sh` |
 | 41 | Phoenix isolation (v3+v4 untouched) + copy-before-edit + .venv-roll/ | ✅ | docs note |
 | 42 | phoenix_app.py mounts /arena /twin /replay + /phoenix/status | ✅ | `phoenix_app.py` + server/app.py mount |
 
@@ -182,24 +182,24 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 | 127 | FINAL_AUDIT_REPORT.md | ✅ | docs/ |
 | 128 | MULTI_TURN_GRPO_ROADMAP.md | ✅ | docs/ |
 | 129 | LIVE_DEMO_HORMUZ.md | ✅ | demo/ or root |
-| 130 | PREPRINT.md | ✅ | ShAuRyA_Supplymind/docs/ |
-| 131 | PREPRINT_V5.md | ✅ | ShAuRyA_Phoenix/docs/ |
+| 130 | PREPRINT.md | ✅ | versions/v4_arcadia_live/docs/ |
+| 131 | PREPRINT_V5.md | ✅ | versions/v5_phoenix/docs/ |
 | 132 | PITCH_DECK.md | ✅ | demo/ |
-| 133 | PITCH_DECK_V5.md | ✅ | ShAuRyA_Phoenix/docs/ |
+| 133 | PITCH_DECK_V5.md | ✅ | versions/v5_phoenix/docs/ |
 | 134 | DEMO_VIDEO_SCRIPT.md | ✅ | demo/ |
-| 135 | DEMO_VIDEO_SCRIPT_V5.md | ✅ | ShAuRyA_Phoenix/docs/ |
-| 136 | JUDGES_V5.md | ✅ | ShAuRyA_Phoenix/docs/ |
+| 135 | DEMO_VIDEO_SCRIPT_V5.md | ✅ | versions/v5_phoenix/docs/ |
+| 136 | JUDGES_V5.md | ✅ | versions/v5_phoenix/docs/ |
 | 137 | CHECKLIST.md | ✅ | demo/ |
 | 138 | LANDING_PAGE.md | ✅ | demo/ |
 | 139 | EXTERNAL_OUTREACH.md | ✅ | demo/ |
 | 140 | SECRETS_ROTATION.md | ✅ | docs/ |
-| 141 | PHOENIX_PLAN_V5.md | ✅ | ShAuRyA_Supplymind/docs/ |
-| 142 | PHOENIX_COMPLETION_AUDIT.md | ✅ | ShAuRyA_Phoenix/docs/ |
-| 143 | PHOENIX_PUSH_REPORT.md | ✅ | ShAuRyA_Phoenix/docs/ |
+| 141 | PHOENIX_PLAN_V5.md | ✅ | versions/v4_arcadia_live/docs/ |
+| 142 | PHOENIX_COMPLETION_AUDIT.md | ✅ | versions/v5_phoenix/docs/ |
+| 143 | PHOENIX_PUSH_REPORT.md | ✅ | versions/v5_phoenix/docs/ |
 | 144 | HF_DEPLOY_V4.md | ✅ | docs/ |
 | 145 | R4_RUBRIC_CHALLENGE.md | ✅ | challenges/ |
 | 146 | FAILURE_TABLE.md | ✅ | repo root |
-| 147 | 12 Sleep Token album-track stages (00_emergence → 95_arcadia) | ✅ | `v3_arcadia/` 12 dirs verified exact |
+| 147 | 12 Sleep Token album-track stages (00_emergence → 95_arcadia) | ✅ | `versions/v3_arcadia/` 12 dirs verified exact |
 | 148 | Notebook 01_environment_quickstart | ✅ | `notebooks/01_environment_quickstart.ipynb` |
 | 149 | Notebook 02_training_your_own_agent | ✅ | `notebooks/02_*.ipynb` |
 | 150 | Notebook 03_reproducing_benchmarks | ✅ | same |
@@ -216,16 +216,16 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 
 | # | Bullet | Status | Evidence |
 |---|---|---|---|
-| 155 | Hero result card 10-number 2×5 grid | ✅ | `make_hero_card.py` + `v3_arcadia/plots/hero_*.png` |
+| 155 | Hero result card 10-number 2×5 grid | ✅ | `make_hero_card.py` + `versions/v3_arcadia/plots/hero_*.png` |
 | 156 | make_hero_card.py | ✅ | repo |
-| 157 | Caramel reliability calibration curves | ✅ | `v3_arcadia/plots/r2_caramel_*` |
-| 158 | R4 dangerous 7 plots | ✅ | `v3_arcadia/plots/r4_dangerous_*.png` |
-| 159 | R5 granite 5 plots | ✅ | `v3_arcadia/plots/r5_granite_*.png` |
-| 160 | R6 gethsemane 3 plots | ✅ | `v3_arcadia/plots/r6_gethsemane_*.png` |
-| 161 | R3 past-self 2 plots | ✅ | `v3_arcadia/plots/r3_past_self_*.png` |
-| 162 | R6 provider network graph | ✅ | `v3_arcadia/plots/r6_provider_graph.png` |
-| 163 | R6 euclidian bootstrap CI bands | ✅ | `v3_arcadia/plots/r6_euclidian_*.png` |
-| 164 | R6 aqua-regia coverage plot | ✅ | `v3_arcadia/plots/r6_aqua_regia_coverage.png` |
+| 157 | Caramel reliability calibration curves | ✅ | `versions/v3_arcadia/plots/r2_caramel_*` |
+| 158 | R4 dangerous 7 plots | ✅ | `versions/v3_arcadia/plots/r4_dangerous_*.png` |
+| 159 | R5 granite 5 plots | ✅ | `versions/v3_arcadia/plots/r5_granite_*.png` |
+| 160 | R6 gethsemane 3 plots | ✅ | `versions/v3_arcadia/plots/r6_gethsemane_*.png` |
+| 161 | R3 past-self 2 plots | ✅ | `versions/v3_arcadia/plots/r3_past_self_*.png` |
+| 162 | R6 provider network graph | ✅ | `versions/v3_arcadia/plots/r6_provider_graph.png` |
+| 163 | R6 euclidian bootstrap CI bands | ✅ | `versions/v3_arcadia/plots/r6_euclidian_*.png` |
+| 164 | R6 aqua-regia coverage plot | ✅ | `versions/v3_arcadia/plots/r6_aqua_regia_coverage.png` |
 | 165 | GCN attention heatmaps 3 graphs | ✅ | `rl/gnn/attention.py` outputs PNG |
 | 166 | Streamlit dashboard 12 panels | ✅ | `dashboard/streamlit_app.py` |
 | 167 | Pareto 3D scatter Plotly | ✅ | `rl/pareto/visualize.py` |
@@ -246,7 +246,7 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 | 173 | Two-pass DeepSeek extraction (free CoT → Qwen JSON parse) | ✅ | `R4_DANGEROUS_V2.json: extractor field` 100% parse rate |
 | 174 | Phoenix isolation guarantee 3 layers | ✅ | `PHOENIX_COMPLETION_AUDIT.md` |
 | 175 | Copy-before-edit discipline | ✅ | `PHOENIX_PUSH_REPORT.md` |
-| 176 | Tiny YAML parser (no PyYAML) | ✅ | `ShAuRyA_Phoenix/receipts_v2/framework.py` |
+| 176 | Tiny YAML parser (no PyYAML) | ✅ | `versions/v5_phoenix/receipts_v2/framework.py` |
 | 177 | _corpus_hash SHA-256 embedding cache invalidation | ✅ | `crisis_library.py: corpus_hash` |
 | 178 | Token-bucket OpenRouter limiter | ✅ | `openrouter_client.py: per_minute=18` |
 | 179 | .openrouter_cache/ API caching | ✅ | dir exists |
@@ -301,7 +301,7 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 | 6 baselines pre-seeded | `n_baselines=6` ✅ EXACT |
 | Replay cache 8 events | `replay_cache_latest.json: n_events=8` ✅ EXACT |
 | Phoenix INDEX 20 receipts | `INDEX.json: list[20]` ✅ EXACT |
-| 12 Sleep Token stages | `v3_arcadia/` 12 dirs ✅ EXACT |
+| 12 Sleep Token stages | `versions/v3_arcadia/` 12 dirs ✅ EXACT |
 | 125 .md docs | `find *.md` 125 ✅ |
 | 4 ONNX <5e-5 | onnx_roundtrip ✅ |
 | Token-bucket 18 req/min, 950 req/day | `openrouter_client.py` ✅ EXACT |

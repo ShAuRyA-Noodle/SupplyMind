@@ -25,9 +25,9 @@ Status legend:
 | A7 | 30-step horizon | `server/supply_environment.py` | reset config | ✅ |
 | A8 | $5–15M budget tasks | `data/disruptions.json` | task manifest | ✅ |
 | A9 | TSMC/Samsung coords | `data/companies_real.json` | n_real_nodes=40 | ✅ |
-| A10 | 8-event crisis library v1 | `ShAuRyA_Supplymind/realtime/crisis_library.py` | 8 events indexed | ✅ |
-| A11 | Wordle RLVR mini-env | `ShAuRyA_Phoenix/wordle_env/env.py` | `wordle_real_reinforce_v2_curve.json` | ✅ |
-| A12 | RLVE adaptive curriculum | `ShAuRyA_Phoenix/wordle_env/rlve_curriculum.py` | `rlve_curriculum_smoke.json` | ✅ |
+| A10 | 8-event crisis library v1 | `versions/v4_arcadia_live/realtime/crisis_library.py` | 8 events indexed | ✅ |
+| A11 | Wordle RLVR mini-env | `versions/v5_phoenix/wordle_env/env.py` | `wordle_real_reinforce_v2_curve.json` | ✅ |
+| A12 | RLVE adaptive curriculum | `versions/v5_phoenix/wordle_env/rlve_curriculum.py` | `rlve_curriculum_smoke.json` | ✅ |
 
 ## B · Reward engineering (14) — 14/14 ✅
 

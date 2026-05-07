@@ -1,0 +1,22 @@
+claim_id: V4_SPOF_V2_F1
+claim: SPOF detector v2 F1 on 3 real supply-chain graphs equals 1.000
+command: python -m versions.v4_arcadia_live.features.spof_v2 --eval-all --out /tmp/spof.json
+extraction: python -c "import json; print(json.load(open(r\"/tmp/spof.json\")).get(\"overall_f1\"))"
+expected: 1.0
+comparator: ==
+expected_range: ''
+expected_regex: ''
+actual: <pending-first-run>
+exit_code: -1
+stdout_inline: ''
+stdout_sha256: ''
+stderr_tail: ''
+stdout_bytes: 0
+match: false
+comparator_note: ''
+runtime_s: 0.0
+timestamp_utc: <pending-first-run>
+hardware: <pending-first-run>
+python_version: ''
+platform: ''
+env_notes:

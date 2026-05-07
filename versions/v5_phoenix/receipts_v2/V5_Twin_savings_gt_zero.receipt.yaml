@@ -1,0 +1,61 @@
+claim_id: V5_Twin_savings_gt_zero
+claim: Counterfactual Twin on severity=0.85 yields positive median $ saved vs no-action
+command: python -m versions.v5_phoenix.counterfactual_twin.twin --severity 0.85 --brent 123 --rollouts 30 --out /tmp/twin.json
+extraction: python -c "import json; print(json.load(open(r\"/tmp/twin.json\")).get(\"savings_vs_no_action_usd\"))"
+expected: 0
+comparator: >=
+expected_range: ''
+expected_regex: ''
+actual: [twin] wrote \tmp\twin.json
+exit_code: -9
+stdout_inline: |
+  {
+    "task_id": "hard_cascading_crisis",
+    "severity": 0.85,
+    "brent_usd": 123.0,
+    "policy_names": [
+      "trained_maskable_ppo",
+      "no_action",
+      "greedy"
+    ],
+    "median_loss_usd": {
+      "trained": 187380000,
+      "no_action": 366768000,
+      "greedy": 366768000
+    },
+    "p95_loss_usd": {
+      "trained": 209625300,
+      "no_action": 385919100,
+      "greedy": 385919100
+    },
+    "savings_vs_no_action_usd": 178684200,
+    "savings_ci95_usd": [
+      177740955,
+      179521965
+    ],
+    "savings_pct": 48.0,
+    "n_rollouts": 30,
+    "generated_at": "2026-04-22T20:37:23Z"
+  }
+  [twin] wrote \tmp\twin.json
+stdout_sha256: 5f8a20cb33124ae8b5b9d91b9307bc105de430bda78b8b118dc5a883667377cb
+stderr_tail: |
+  Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+  Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+  Users of this version of Gym should be able to simply replace 'import gym' with 'import gymnasium as gym' in the vast majority of cases.
+  See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+  C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\stable_baselines3\common\save_util.py:449: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+    th_object = th.load(file_content, map_location=device)
+  
+  [receipt] command timed out after 600s
+stdout_bytes: 587
+match: false
+comparator_note: |
+  string cmp: '[twin] wrote \\tmp\\twin.json' == '0'
+runtime_s: 48761.59
+timestamp_utc: |
+  2026-04-22T07:04:40Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
+python_version: 3.11.9
+platform: Windows 10
+env_notes:

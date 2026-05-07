@@ -14,11 +14,11 @@ echo "Repo: $(pwd)"
 echo
 
 echo "[1/8] Wordle env + RLVE curriculum smoke ..."
-python -m ShAuRyA_Phoenix.wordle_env.rlve_curriculum
+python -m versions.v5_phoenix.wordle_env.rlve_curriculum
 
 echo
 echo "[2/8] Dual verifier smoke ..."
-python -m ShAuRyA_Phoenix.wordle_env.dual_verifier
+python -m versions.v5_phoenix.wordle_env.dual_verifier
 
 echo
 echo "[3/8] OpenEnv MCP compliance ..."
@@ -38,7 +38,7 @@ python scripts/final_validation_bundle.py
 
 echo
 echo "[7/8] Wordle GRPO baseline (heuristic policy receipt) ..."
-python -m ShAuRyA_Phoenix.wordle_env.train_grpo --steps 50 || true
+python -m versions.v5_phoenix.wordle_env.train_grpo --steps 50 || true
 
 echo
 echo "[8/8] Receipt index ..."

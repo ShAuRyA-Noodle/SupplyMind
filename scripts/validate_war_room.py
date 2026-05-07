@@ -1,7 +1,7 @@
 """validate_war_room.py — backtest the Hormuz War Room against documented
 historical events with known outcomes.
 
-Loads ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json (8 events,
+Loads versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json (8 events,
 each with documented Brent pre/peak, vessel rerouting days, severity, and
 affected supply-chain nodes from 3+ published sources).
 
@@ -32,13 +32,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from ShAuRyA_Supplymind.realtime.hormuz_war_room_router import (  # noqa: E402
+from versions.v4_arcadia_live.realtime.hormuz_war_room_router import (  # noqa: E402
     war_room_orchestrate, WarRoomRequest,
 )
 
 logger = logging.getLogger(__name__)
 
-LIBRARY = ROOT / "ShAuRyA_Supplymind" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
+LIBRARY = ROOT / "versions/v4_arcadia_live" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
 RECEIPT = ROOT / "tests" / "receipts" / "war_room_validation.json"
 
 

@@ -255,7 +255,7 @@ class IntegratedAgent:
                             {"node_id": str(nid), "degree": int(d)}
                             for nid, d in top_nodes
                         ],
-                        "cascade_source": "degree-centrality proxy (3-layer GCN weights committed at v3_arcadia/checkpoints/provider_gcn/)",
+                        "cascade_source": "degree-centrality proxy (3-layer GCN weights committed at versions/v3_arcadia/checkpoints/provider_gcn/)",
                     }, "live_graph_centrality"
                 except (json.JSONDecodeError, OSError):
                     continue

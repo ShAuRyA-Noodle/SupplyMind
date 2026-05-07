@@ -29,7 +29,7 @@
   "alpha": 0.1,
   "expected_coverage_1_minus_alpha": 0.9,
   "elapsed_s": 2.56,
-  "weights_path": "ShAuRyA_Phoenix\\action_v2\\conformal_calibrated.pt",
-  "transitions_source": "ShAuRyA_Phoenix\\experiments\\rap_xc_v1\\transitions.npz",
+  "weights_path": "versions/v5_phoenix/\action_v2\\conformal_calibrated.pt",
+  "transitions_source": "versions/v5_phoenix/\experiments\\rap_xc_v1\\transitions.npz",
   "method": "split_conformal_NLL_on_real_harvested_trajectories"
 }

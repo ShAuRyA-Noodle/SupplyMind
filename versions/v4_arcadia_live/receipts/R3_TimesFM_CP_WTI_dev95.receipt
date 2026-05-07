@@ -1,0 +1,14 @@
+{
+  "number_id": "R3_TimesFM_CP_WTI_dev95",
+  "description": "TimesFM-CP WTI deviation from 95% nominal",
+  "value": "0.04999999999999993",
+  "command": "python -c \"import json; d=json.load(open('versions/v3_arcadia/results/R3_TIMESFM_QUANTILE.json'));print(d['targets']['DCOILWTICO']['timesfm_conf=0.95']['dev_from_nominal'])\"",
+  "expected_output": "0.04999999999999993",
+  "data_files_hashes": {
+    "versions/v3_arcadia/results/R3_TIMESFM_QUANTILE.json": "ad5b7e56b7a8d707"
+  },
+  "git_sha": "a0738ad89aa2",
+  "generated_at": "2026-04-21T21:43:38Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

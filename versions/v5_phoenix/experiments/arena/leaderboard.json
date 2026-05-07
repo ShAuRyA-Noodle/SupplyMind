@@ -1,0 +1,79 @@
+{
+  "generated_at": "2026-04-25T20:12:43Z",
+  "n_submissions": 0,
+  "n_baselines": 6,
+  "rows": [
+    {
+      "policy_name": "MaskablePPO-v3 (ours)",
+      "submitted_at": "2026-04-18T00:00:00Z",
+      "overall_reward_mean": 2.209,
+      "overall_ci95": [
+        2.178,
+        2.239
+      ],
+      "total_violations": 0,
+      "source": "versions/v3_arcadia/results/R6_EUCLIDIAN.json (3 tasks x 900 eps)",
+      "rank": 1
+    },
+    {
+      "policy_name": "RecurrentPPO-v3",
+      "submitted_at": "2026-04-18T00:00:00Z",
+      "overall_reward_mean": 1.081,
+      "overall_ci95": [
+        0.98,
+        1.18
+      ],
+      "total_violations": 14.9,
+      "source": "versions/v3_arcadia/results/R6_ALGO_COMPARISON.json (easy only)",
+      "rank": 2
+    },
+    {
+      "policy_name": "PPO-v3 (no masking)",
+      "submitted_at": "2026-04-18T00:00:00Z",
+      "overall_reward_mean": 0.947,
+      "overall_ci95": [
+        0.89,
+        1.01
+      ],
+      "total_violations": 13.6,
+      "source": "R6 masking ablation baseline",
+      "rank": 3
+    },
+    {
+      "policy_name": "A2C-v3",
+      "submitted_at": "2026-04-18T00:00:00Z",
+      "overall_reward_mean": 0.874,
+      "overall_ci95": [
+        0.81,
+        0.94
+      ],
+      "total_violations": 13.9,
+      "source": "R6 algo comparison",
+      "rank": 4
+    },
+    {
+      "policy_name": "Random (baseline)",
+      "submitted_at": "2026-04-18T00:00:00Z",
+      "overall_reward_mean": -0.511,
+      "overall_ci95": [
+        -0.55,
+        -0.47
+      ],
+      "total_violations": 0,
+      "source": "R6 Euclidian baseline",
+      "rank": 5
+    },
+    {
+      "policy_name": "Greedy (baseline)",
+      "submitted_at": "2026-04-18T00:00:00Z",
+      "overall_reward_mean": -0.749,
+      "overall_ci95": [
+        -0.76,
+        -0.74
+      ],
+      "total_violations": 0,
+      "source": "R6 Euclidian baseline",
+      "rank": 6
+    }
+  ]
+}

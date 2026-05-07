@@ -61,36 +61,35 @@ models/
 sota-bundle/
 external_data/
 catboost_info/
-v3_arcadia/tools/
-v3_arcadia/gguf_out/
+versions/v3_arcadia/tools/
+versions/v3_arcadia/gguf_out/
 
 # Auto-generated embedding caches + SB3 best/ dirs
-v3_arcadia/checkpoints/granite/corpus_emb_*.npy
-v3_arcadia/checkpoints/gethsemane/best_*/
+versions/v3_arcadia/checkpoints/granite/corpus_emb_*.npy
+versions/v3_arcadia/checkpoints/gethsemane/best_*/
 
-# Third-party source checkouts (not our code)
-ROLL-main/
-superpowers-main/
+# Third-party source checkouts (not our code) — vendored under vendor/
+vendor/
 
 # Phoenix v5 auto-generated state (keep source code, exclude heavy + auto-gen)
-ShAuRyA_Phoenix/.venv-roll/
-ShAuRyA_Phoenix/.venv/
-ShAuRyA_Phoenix/experiments/dpo_judge_v1/checkpoints/
-ShAuRyA_Phoenix/experiments/dpo_judge_v1/adapter/
-ShAuRyA_Phoenix/roll_integration/dpo_judge/adapter/
-ShAuRyA_Phoenix/**/__pycache__/
-ShAuRyA_Phoenix/**/*.pyc
-ShAuRyA_Phoenix/**/*.log
-ShAuRyA_Phoenix/receipts_v2/*.stdout
+versions/v5_phoenix/.venv-roll/
+versions/v5_phoenix/.venv/
+versions/v5_phoenix/experiments/dpo_judge_v1/checkpoints/
+versions/v5_phoenix/experiments/dpo_judge_v1/adapter/
+versions/v5_phoenix/roll_integration/dpo_judge/adapter/
+versions/v5_phoenix/**/__pycache__/
+versions/v5_phoenix/**/*.pyc
+versions/v5_phoenix/**/*.log
+versions/v5_phoenix/receipts_v2/*.stdout
 
 # v4 arcadia-live auto-generated state
-ShAuRyA_Supplymind/realtime/events.db
-ShAuRyA_Supplymind/realtime/events.db-journal
-ShAuRyA_Supplymind/realtime/library_embeddings.pkl
-ShAuRyA_Supplymind/realtime/vessel_snapshot_hormuz.json
-ShAuRyA_Supplymind/autoresearch/experiments/
-ShAuRyA_Supplymind/autoresearch/stop_autoresearch.flag
-ShAuRyA_Supplymind/autoresearch/candidate_train.py.bak
+versions/v4_arcadia_live/realtime/events.db
+versions/v4_arcadia_live/realtime/events.db-journal
+versions/v4_arcadia_live/realtime/library_embeddings.pkl
+versions/v4_arcadia_live/realtime/vessel_snapshot_hormuz.json
+versions/v4_arcadia_live/autoresearch/experiments/
+versions/v4_arcadia_live/autoresearch/stop_autoresearch.flag
+versions/v4_arcadia_live/autoresearch/candidate_train.py.bak
 # Lab notebook, rejected log, and state.json ARE committed — they document
 # real autoresearch execution history (provenance for judges).
 
@@ -101,9 +100,9 @@ ShAuRyA_Supplymind/autoresearch/candidate_train.py.bak
 lora_stdout.log
 
 # Pass 8 — large harvest data (regenerable via train.py harvest_trajectories)
-ShAuRyA_Phoenix/experiments/rap_xc_v1/transitions.npz
-ShAuRyA_Phoenix/experiments/rap_xc_v1/transitions_synth.npz
-ShAuRyA_Phoenix/experiments/rap_xc_v1/smoke*.npz
-ShAuRyA_Phoenix/experiments/rap_xc_v1/rapxc_synth.pt
-ShAuRyA_Phoenix/experiments/rap_xc_v1/*.log
+versions/v5_phoenix/experiments/rap_xc_v1/transitions.npz
+versions/v5_phoenix/experiments/rap_xc_v1/transitions_synth.npz
+versions/v5_phoenix/experiments/rap_xc_v1/smoke*.npz
+versions/v5_phoenix/experiments/rap_xc_v1/rapxc_synth.pt
+versions/v5_phoenix/experiments/rap_xc_v1/*.log
 tests/receipts/*.log

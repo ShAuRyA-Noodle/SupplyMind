@@ -1,5 +1,5 @@
 # SupplyMind v3.0-arcadia — Damocles API (FastAPI)
-# Deploys v3_arcadia/90_damocles/app.py with /assess, /forecast, /rag, /rl/act, /health
+# Deploys versions/v3_arcadia/90_damocles/app.py with /assess, /forecast, /rag, /rl/act, /health
 #
 # Build:  docker build -f Dockerfile.damocles -t supplymind-damocles:v3.0-arcadia .
 # Run:    docker run -p 8765:8765 supplymind-damocles:v3.0-arcadia
@@ -18,10 +18,10 @@ COPY requirements-damocles.txt .
 RUN pip install --no-cache-dir -r requirements-damocles.txt
 
 # App code
-COPY v3_arcadia/90_damocles/ /app/v3_arcadia/90_damocles/
-COPY v3_arcadia/checkpoints/granite/corpus_chunks.pkl /app/v3_arcadia/checkpoints/granite/
+COPY versions/v3_arcadia/90_damocles/ /app/versions/v3_arcadia/90_damocles/
+COPY versions/v3_arcadia/checkpoints/granite/corpus_chunks.pkl /app/versions/v3_arcadia/checkpoints/granite/
 # Embeddings loaded lazily from cached .npy (mounted at runtime or fetched via env)
-COPY v3_arcadia/checkpoints/gethsemane/ppo_easy_typhoon_response.onnx /app/v3_arcadia/checkpoints/gethsemane/
+COPY versions/v3_arcadia/checkpoints/gethsemane/ppo_easy_typhoon_response.onnx /app/versions/v3_arcadia/checkpoints/gethsemane/
 COPY models/mxbai-embed-large/ /app/models/mxbai-embed-large/
 
 # Healthcheck

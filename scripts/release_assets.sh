@@ -52,9 +52,9 @@ gh release create "$TAG" \
 - `FAILURE_TABLE.md` — every v1/v2 failure with v3 resolution link
 
 ## Artifacts attached
-- All plots from `v3_arcadia/plots/**`
-- All JSON results from `v3_arcadia/results/**`
-- ONNX policies from `v3_arcadia/checkpoints/gethsemane/*.onnx`
+- All plots from `versions/v3_arcadia/plots/**`
+- All JSON results from `versions/v3_arcadia/results/**`
+- ONNX policies from `versions/v3_arcadia/checkpoints/gethsemane/*.onnx`
 - Pitch deck (markdown + rendered PDF if built)
 
 ## Links
@@ -69,22 +69,22 @@ NOTES
 echo "→ Uploading assets..."
 
 # Plots
-for f in v3_arcadia/plots/**/*.png; do
+for f in versions/v3_arcadia/plots/**/*.png; do
   [ -f "$f" ] && gh release upload "$TAG" "$f" --repo "$REPO" --clobber || true
 done
 
 # JSON results
-for f in v3_arcadia/results/*.json; do
+for f in versions/v3_arcadia/results/*.json; do
   [ -f "$f" ] && gh release upload "$TAG" "$f" --repo "$REPO" --clobber || true
 done
 
 # Markdown reports
-for f in v3_arcadia/results/*REPORT*.md; do
+for f in versions/v3_arcadia/results/*REPORT*.md; do
   [ -f "$f" ] && gh release upload "$TAG" "$f" --repo "$REPO" --clobber || true
 done
 
 # ONNX policies
-for f in v3_arcadia/checkpoints/gethsemane/*.onnx; do
+for f in versions/v3_arcadia/checkpoints/gethsemane/*.onnx; do
   [ -f "$f" ] && gh release upload "$TAG" "$f" --repo "$REPO" --clobber || true
 done
 

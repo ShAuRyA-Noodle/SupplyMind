@@ -12,7 +12,7 @@
         2.239
       ],
       "total_violations": 0,
-      "source": "v3_arcadia/results/R6_EUCLIDIAN.json (3 tasks x 900 eps)",
+      "source": "versions/v3_arcadia/results/R6_EUCLIDIAN.json (3 tasks x 900 eps)",
       "rank": 1
     },
     {
@@ -24,7 +24,7 @@
         1.18
       ],
       "total_violations": 14.9,
-      "source": "v3_arcadia/results/R6_ALGO_COMPARISON.json (easy only)",
+      "source": "versions/v3_arcadia/results/R6_ALGO_COMPARISON.json (easy only)",
       "rank": 2
     },
     {

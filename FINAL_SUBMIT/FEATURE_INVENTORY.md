@@ -8,9 +8,9 @@ Verification: every bullet point in the project plan mapped to file:line.
 
 | Component | Previous | Now wired in |
 |---|---|---|
-| Chronos-Bolt-base | PARTIAL (verify only) | `ShAuRyA_Phoenix/forecast_v2/ensemble_brent.py:53-71` |
-| TimesFM-2 | PARTIAL (verify only) | `ShAuRyA_Phoenix/forecast_v2/ensemble_brent.py:74-99` |
-| TabPFN-v2 regressor | PARTIAL (verify only) | `ShAuRyA_Phoenix/forecast_v2/ensemble_brent.py:101-145` |
+| Chronos-Bolt-base | PARTIAL (verify only) | `versions/v5_phoenix/forecast_v2/ensemble_brent.py:53-71` |
+| TimesFM-2 | PARTIAL (verify only) | `versions/v5_phoenix/forecast_v2/ensemble_brent.py:74-99` |
+| TabPFN-v2 regressor | PARTIAL (verify only) | `versions/v5_phoenix/forecast_v2/ensemble_brent.py:101-145` |
 
 Closed Brent backtest gap from 6/8 to **8/8 within ±30%** (median rel err 3.3%).
 See `tests/receipts/ensemble_brent_validation.json`.
@@ -22,12 +22,12 @@ See `tests/receipts/ensemble_brent_validation.json`.
 | Bullet | Status | Path(s) | Note |
 |---|---|---|---|
 | supplymind-analyst:v1 | MISSING | — | only v2-v5 retained; v1 superseded |
-| supplymind-analyst:v2-v5 | PRESENT | `rl/lora/Modelfile.v2:1-20`, `Modelfile.v3:1-20`, `Modelfile.v4:1-20`, `ShAuRyA_Supplymind/features/Modelfile.analyst_v5:1-20` | 4 versions |
-| qwen25-14b-local Modelfile | PRESENT | `v3_arcadia/00_emergence/qwen25-14b.Modelfile:1-19` | Q4_K_M |
-| qwen25-coder-local Modelfile | PRESENT | `v3_arcadia/00_emergence/qwen25-coder-14b.Modelfile:1-19` | JSON-mode |
-| mistral-nemo-local Modelfile | PRESENT | `v3_arcadia/00_emergence/mistral-nemo.Modelfile:1-18` | num_ctx 32768 |
+| supplymind-analyst:v2-v5 | PRESENT | `rl/lora/Modelfile.v2:1-20`, `Modelfile.v3:1-20`, `Modelfile.v4:1-20`, `versions/v4_arcadia_live/features/Modelfile.analyst_v5:1-20` | 4 versions |
+| qwen25-14b-local Modelfile | PRESENT | `versions/v3_arcadia/00_emergence/qwen25-14b.Modelfile:1-19` | Q4_K_M |
+| qwen25-coder-local Modelfile | PRESENT | `versions/v3_arcadia/00_emergence/qwen25-coder-14b.Modelfile:1-19` | JSON-mode |
+| mistral-nemo-local Modelfile | PRESENT | `versions/v3_arcadia/00_emergence/mistral-nemo.Modelfile:1-18` | num_ctx 32768 |
 | deepseek-r1-local-q4 Modelfile | PRESENT | `docs/OLLAMA_FINE_TUNING_FINAL_UPGRADE.md` | Q4_K_M reference |
-| 5 Modelfile files (rl/lora/*) | PRESENT | `rl/lora/Modelfile, .v2, .v3, .v4` + `ShAuRyA_Supplymind/features/Modelfile.analyst_v5` | All 5 present |
+| 5 Modelfile files (rl/lora/*) | PRESENT | `rl/lora/Modelfile, .v2, .v3, .v4` + `versions/v4_arcadia_live/features/Modelfile.analyst_v5` | All 5 present |
 
 ## A.2 Modelfile Crafting
 
@@ -54,7 +54,7 @@ See `tests/receipts/ensemble_brent_validation.json`.
 
 | Bullet | Status | Path(s) | Note |
 |---|---|---|---|
-| `dpo_judge/*` directory | PRESENT | `ShAuRyA_Phoenix/roll_integration/dpo_judge/` | 6 files |
+| `dpo_judge/*` directory | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/` | 6 files |
 | `prepare_preference_data.py` | PRESENT | `dpo_judge/prepare_preference_data.py:1-50+` | DPO pair builder |
 | `train_dpo_trl.py` | PRESENT | `dpo_judge/train_dpo_trl.py:1-50+` | TRL trainer |
 | `train_dpo_roll.py` | PRESENT | `dpo_judge/train_dpo_roll.py:1-30+` | ROLL-integrated |
@@ -81,7 +81,7 @@ See `tests/receipts/ensemble_brent_validation.json`.
 |---|---|---|---|
 | Q4_K_M references | PRESENT | `mistral-nemo.Modelfile:1`, `qwen25-14b.Modelfile:1`, `qwen25-coder-14b.Modelfile:1` | all 3 specify q4km |
 | `OLLAMA_MAX_LOADED_MODELS=1` | PRESENT | `docs/OLLAMA_FINE_TUNING_FINAL_UPGRADE.md` | VRAM discipline |
-| `convert_bge_to_safetensors.py` | PRESENT | `v3_arcadia/00_emergence/convert_bge_to_safetensors.py:1-45` | CVE-2025-32434 workaround |
+| `convert_bge_to_safetensors.py` | PRESENT | `versions/v3_arcadia/00_emergence/convert_bge_to_safetensors.py:1-45` | CVE-2025-32434 workaround |
 | 2GB safetensors output | PRESENT | `models/bge-m3/model.safetensors` | 2.2GB verified |
 
 ## B. 13 Foundation Models
@@ -106,14 +106,14 @@ See `tests/receipts/ensemble_brent_validation.json`.
 
 | Script | Status | Path |
 |---|---|---|
-| `verify_qwen14b.py` | PRESENT | `v3_arcadia/00_emergence/verify_qwen14b.py` |
-| `verify_mistral_nemo.py` | PRESENT | `v3_arcadia/00_emergence/verify_mistral_nemo.py` |
-| `verify_qwen_coder.py` | PRESENT | `v3_arcadia/00_emergence/verify_qwen_coder.py` |
-| `verify_qwen_vl.py` | PRESENT | `v3_arcadia/00_emergence/verify_qwen_vl.py` |
-| `verify_tabpfn.py` | PRESENT | `v3_arcadia/00_emergence/verify_tabpfn.py` |
-| `verify_timesfm.py` | PRESENT | `v3_arcadia/00_emergence/verify_timesfm.py` |
-| `verify_embedders_chronos.py` | PRESENT | `v3_arcadia/00_emergence/verify_embedders_chronos.py` |
-| `r1_qwen_vl_downstream.py` | PRESENT | `v3_arcadia/00_emergence/r1_qwen_vl_downstream.py` |
+| `verify_qwen14b.py` | PRESENT | `versions/v3_arcadia/00_emergence/verify_qwen14b.py` |
+| `verify_mistral_nemo.py` | PRESENT | `versions/v3_arcadia/00_emergence/verify_mistral_nemo.py` |
+| `verify_qwen_coder.py` | PRESENT | `versions/v3_arcadia/00_emergence/verify_qwen_coder.py` |
+| `verify_qwen_vl.py` | PRESENT | `versions/v3_arcadia/00_emergence/verify_qwen_vl.py` |
+| `verify_tabpfn.py` | PRESENT | `versions/v3_arcadia/00_emergence/verify_tabpfn.py` |
+| `verify_timesfm.py` | PRESENT | `versions/v3_arcadia/00_emergence/verify_timesfm.py` |
+| `verify_embedders_chronos.py` | PRESENT | `versions/v3_arcadia/00_emergence/verify_embedders_chronos.py` |
+| `r1_qwen_vl_downstream.py` | PRESENT | `versions/v3_arcadia/00_emergence/r1_qwen_vl_downstream.py` |
 
 ## C.1 Game-Engine Tasks & Action Space
 
@@ -203,19 +203,19 @@ See `tests/receipts/ensemble_brent_validation.json`.
 
 | Component | Path | Purpose |
 |---|---|---|
-| Hormuz War Room orchestrator | `ShAuRyA_Supplymind/realtime/hormuz_war_room_router.py` | `/demo/hormuz-war-room` POST + UI route |
-| India 7-sector exposure | `ShAuRyA_Supplymind/scenarios/india_industry_exposure.py` | 7 cited sectors + deterministic scorer |
-| Gulf 7-sector exposure | `ShAuRyA_Supplymind/scenarios/gulf_industry_exposure.py` | 7 cited sectors + bypass-credit scorer |
-| Hormuz chokepoint graph | `ShAuRyA_Supplymind/scenarios/hormuz_chokepoint_graph.py` | 14 nodes + 18 edges + 5 IEA facts |
-| OpenRouter 6-judge cross-check | `ShAuRyA_Supplymind/realtime/openrouter_war_room_panel.py` | gpt-oss-120b, gemma, glm, minimax, nemotron, gemma-26b |
+| Hormuz War Room orchestrator | `versions/v4_arcadia_live/realtime/hormuz_war_room_router.py` | `/demo/hormuz-war-room` POST + UI route |
+| India 7-sector exposure | `versions/v4_arcadia_live/scenarios/india_industry_exposure.py` | 7 cited sectors + deterministic scorer |
+| Gulf 7-sector exposure | `versions/v4_arcadia_live/scenarios/gulf_industry_exposure.py` | 7 cited sectors + bypass-credit scorer |
+| Hormuz chokepoint graph | `versions/v4_arcadia_live/scenarios/hormuz_chokepoint_graph.py` | 14 nodes + 18 edges + 5 IEA facts |
+| OpenRouter 6-judge cross-check | `versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py` | gpt-oss-120b, gemma, glm, minimax, nemotron, gemma-26b |
 | War-Room dashboard HTML | `server/static/hormuz_war_room.html` | dark-mode 6-panel UI |
 | War-Room validation harness | `scripts/validate_war_room.py` | 8-event historical backtest |
-| Ensemble Brent forecaster | `ShAuRyA_Phoenix/forecast_v2/ensemble_brent.py` | Chronos+TimesFM+TabPFN, 8/8 ±30% |
+| Ensemble Brent forecaster | `versions/v5_phoenix/forecast_v2/ensemble_brent.py` | Chronos+TimesFM+TabPFN, 8/8 ±30% |
 | Ensemble Brent validator | `scripts/validate_ensemble_brent.py` | 8-event closed-form backtest |
 | Master demo HTML | `server/static/master.html` | 9-card live integration page |
-| RAP-XC weights | `ShAuRyA_Phoenix/experiments/rap_xc_v1/rapxc.pt` | 3.14M params, BC 5.62→0.23 |
-| Conformal weights | `ShAuRyA_Phoenix/action_v2/conformal_calibrated.pt` | α=0.1, coverage 0.9001 |
-| HetGAT report | `ShAuRyA_Phoenix/experiments/hetgat_v1/report.json` | +7.77/+12.15/+10.03% |
+| RAP-XC weights | `versions/v5_phoenix/experiments/rap_xc_v1/rapxc.pt` | 3.14M params, BC 5.62→0.23 |
+| Conformal weights | `versions/v5_phoenix/action_v2/conformal_calibrated.pt` | α=0.1, coverage 0.9001 |
+| HetGAT report | `versions/v5_phoenix/experiments/hetgat_v1/report.json` | +7.77/+12.15/+10.03% |
 
 ## API Keys (every key reaches a UI element)
 

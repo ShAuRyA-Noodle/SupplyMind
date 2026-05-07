@@ -69,7 +69,7 @@ Global Fishing Watch — vessel positions feed into Hormuz/Red Sea route-disrupt
 Compatibility with PEFT 0.19 + Unsloth current pin. `requirements.txt` locks the stack.
 
 ### 23. "Reward function code?"
-`server/engine/rewards.py` (SupplyMind 7-component) + `ShAuRyA_Phoenix/wordle_env/env.py` (Wordle 6-component). Both verifiable.
+`server/engine/rewards.py` (SupplyMind 7-component) + `versions/v5_phoenix/wordle_env/env.py` (Wordle 6-component). Both verifiable.
 
 ### 24. "Forecasting baselines?"
 TFT (513,534 steps), TFT-v2, BigTFT (90,602), TimesFM zero-shot, Granite, Stacking-v3, Brent ensemble. NOAA 60.07% accuracy. Receipts each.

@@ -206,7 +206,7 @@ You confirmed you restarted HF Space. You want a phoenix rebuild covering all pr
 |---|---|---|
 | 3-min demo video | Record per FINAL_DEMO §5 | `demo/supplymind_v3_demo.mp4` |
 | Deploy Streamlit dashboard | Push to Streamlit Cloud | Link in README |
-| Deploy FastAPI backend | HF Space runs `server/app.py` + `v3_arcadia/90_damocles/app.py` | HF Space |
+| Deploy FastAPI backend | HF Space runs `server/app.py` + `versions/v3_arcadia/90_damocles/app.py` | HF Space |
 | One-page pitch PDF | Pandoc Markdown → PDF | `demo/SupplyMind_pitch.pdf` |
 | Reframe negative findings | Per Directive 3 | Done in per-phase tasks |
 

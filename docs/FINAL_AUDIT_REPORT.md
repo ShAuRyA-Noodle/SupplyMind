@@ -26,7 +26,7 @@ These are items the third-party audit flagged as CRITICAL and were actually real
 |---|---|---|---|
 | TG-1 | Krippendorff α claim 0.750 contradicts R4 JSON 0.2097 (ordinal) | README now shows 5 rows: mean_conf (0.750), α_local (0.210), **α_frontier-only (0.567)**, α_combined 15-judge (0.358), majority-vote accuracy (0.577 local / 0.231 frontier / 0.308 combined). All computed from real live-panel data by `scripts/compute_panel_agreement.py`, receipt at [tests/receipts/frontier_panel_alpha.json](../tests/receipts/frontier_panel_alpha.json). Finding: **12 frontier models across 7 labs strongly agree with each other (α=0.57) but diverge from the R4 ground truth's local-panel calibration** — a legitimate cross-provider-calibration result, not a bug. | `1567c53` + `<5g>` |
 | TG-2 | Adversarial A4 over-length attack ties honest (both 0.9) | `r_length` now returns **-0.5** for n_tokens > 400, dropping A4 to ≤0.85 while honest stays at 1.0. All 8 adversarial tests pass. Receipt: [tests/receipts/adversarial_reward_audit.json](../tests/receipts/adversarial_reward_audit.json). | `369b121` |
-| TG-3 | Test count drift: 173 / 249+ / 250 across 5 docs | One authoritative number run: **272 passing, 2 skipped, 274 collected** (2026-04-24). Unified across README/JUDGES/MODEL_CARD. Added missing `ShAuRyA_Supplymind/tests/__init__.py` that caused the drift. | `369b121` |
+| TG-3 | Test count drift: 173 / 249+ / 250 across 5 docs | One authoritative number run: **272 passing, 2 skipped, 274 collected** (2026-04-24). Unified across README/JUDGES/MODEL_CARD. Added missing `versions/v4_arcadia_live/tests/__init__.py` that caused the drift. | `369b121` |
 | TG-4 | `test_smoke.py:88` accepted `exit_code in (0, 1)` | Tightened to `exit_code == 0` + explicit `r.match` assert. All 16 Phoenix smokes still green. | `369b121` |
 | TG-5 | `lora_stdout.log` in repo root | Deleted + gitignored. | `369b121` |
 | TG-6 | F14 CUDA kernel silently `ok=false` | VERIFIED: already honestly qualified across JUDGES ("PyTorch fallback benchmark") + PYTORCH_STORY ("compilation deferred on Windows") + RELEASE_NOTES_V4. Audit item was false. | (pre-existing honest) |
@@ -142,9 +142,9 @@ Every number above is backed by a committed file judges can diff:
 - Adversarial audit: `tests/receipts/adversarial_reward_audit.json`
 - Krippendorff α: `tests/receipts/frontier_panel_alpha.json`
 - OpenRouter liveness: `tests/receipts/openrouter_liveness.json`
-- Panel v2 (partial, live): `v3_arcadia/results/R4_FRONTIER_PANEL_V2.json` (*writes on completion*)
-- A/B bench: `ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json`
-- RL bootstrap CI95: `v3_arcadia/results/R6_EUCLIDIAN.json`
-- Autoresearch lab: `ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md`
+- Panel v2 (partial, live): `versions/v3_arcadia/results/R4_FRONTIER_PANEL_V2.json` (*writes on completion*)
+- A/B bench: `versions/v4_arcadia_live/features/R9_ANALYST_AB_V5.json`
+- RL bootstrap CI95: `versions/v3_arcadia/results/R6_EUCLIDIAN.json`
+- Autoresearch lab: `versions/v4_arcadia_live/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md`
 
 *"No synthetic data in the reward path. Every committed number is reproducible. Every claim diff-able. The project either is, or isn't — and now it is."*

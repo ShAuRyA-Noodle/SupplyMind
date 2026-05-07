@@ -24,7 +24,7 @@ def test_ollama_finetuning_stack_verifier_passes() -> None:
 
 
 def test_v5_modelfile_requires_calibrated_strict_json() -> None:
-    text = (ROOT / "ShAuRyA_Supplymind/features/Modelfile.analyst_v5").read_text(
+    text = (ROOT / "versions/v4_arcadia_live/features/Modelfile.analyst_v5").read_text(
         encoding="utf-8"
     )
     assert "Not every news headline is CRITICAL" in text
@@ -34,7 +34,7 @@ def test_v5_modelfile_requires_calibrated_strict_json() -> None:
 
 
 def test_dpo_preference_pairs_are_real_r4_derived() -> None:
-    path = ROOT / "ShAuRyA_Phoenix/roll_integration/dpo_judge/data/preference_pairs.jsonl"
+    path = ROOT / "versions/v5_phoenix/roll_integration/dpo_judge/data/preference_pairs.jsonl"
     rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
     assert len(rows) == 21
     for row in rows:

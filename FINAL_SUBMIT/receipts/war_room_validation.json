@@ -1,6 +1,6 @@
 {
   "generated_at_utc": "2026-04-25T13:08:21Z",
-  "library_path": "ShAuRyA_Supplymind\\scenarios\\iran_israel_hormuz_2024_2026.json",
+  "library_path": "versions/v4_arcadia_live/\scenarios\\iran_israel_hormuz_2024_2026.json",
   "n_events_tested": 8,
   "n_events_no_fatal": 8,
   "aggregate_accuracy": {

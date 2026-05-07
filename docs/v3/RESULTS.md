@@ -1,6 +1,6 @@
 # SupplyMind v3.0-arcadia — Results (one page)
 
-> Every number here is reproducible from the committed JSON in `v3_arcadia/results/` with one `jq` or `python` command. No synthetic substitution anywhere in the pipeline.
+> Every number here is reproducible from the committed JSON in `versions/v3_arcadia/results/` with one `jq` or `python` command. No synthetic substitution anywhere in the pipeline.
 
 ---
 
@@ -40,19 +40,19 @@
 git clone https://github.com/ShAuRyA-Noodle/Sleep-Token.git && cd Sleep-Token
 
 # 1. nDCG@10 = 0.971
-jq '.our_results."snowflake-arctic-l"."mean_ndcg@10"' v3_arcadia/results/R5_BEIR_MANUAL.json
+jq '.our_results."snowflake-arctic-l"."mean_ndcg@10"' versions/v3_arcadia/results/R5_BEIR_MANUAL.json
 
 # 2. P@1 = 0.962
-jq '.pipelines.P2_mxbai_bi.p1' v3_arcadia/results/R5_GRANITE.json
+jq '.pipelines.P2_mxbai_bi.p1' versions/v3_arcadia/results/R5_GRANITE.json
 
 # 3. Krippendorff α = 0.750
-jq '.agreement_primary_panel.krippendorff_alpha_ordinal' v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json
+jq '.agreement_primary_panel.krippendorff_alpha_ordinal' versions/v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json
 
 # 4. Per-horizon conformal dev = 0.024
-jq '.results.DCOILWTICO."conf_0.95".per_horizon.ARIMA.dev_from_nominal' v3_arcadia/results/R6_AQUA_REGIA_V2.json
+jq '.results.DCOILWTICO."conf_0.95".per_horizon.ARIMA.dev_from_nominal' versions/v3_arcadia/results/R6_AQUA_REGIA_V2.json
 
 # 5. Masking lift +26.8%
-jq '.action_masking_contribution.reward_pct_delta' v3_arcadia/results/R6_GETHSEMANE_MASKING_ABLATION.json
+jq '.action_masking_contribution.reward_pct_delta' versions/v3_arcadia/results/R6_GETHSEMANE_MASKING_ABLATION.json
 
 # 6. Tests pass
 pytest tests/ -q
@@ -89,4 +89,4 @@ Every block ships committed artifacts (JSON + plot + checkpoint + test).
 
 ---
 
-*Updated 2026-04-18. Commit-by-commit phase log in `v3_arcadia/95_arcadia/README.md`.*
+*Updated 2026-04-18. Commit-by-commit phase log in `versions/v3_arcadia/95_arcadia/README.md`.*

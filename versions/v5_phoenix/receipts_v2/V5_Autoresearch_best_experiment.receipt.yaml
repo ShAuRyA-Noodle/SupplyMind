@@ -1,0 +1,32 @@
+claim_id: V5_Autoresearch_best_experiment
+claim: Autoresearch loop accepted s3_curriculum_learning as final best (CI95 lower >= 0.55)
+command: python -m versions.v5_phoenix.autoresearch_fixed.rebuild_state
+extraction: python -c "import json; s=json.load(open(r\"versions/v5_phoenix/autoresearch_fixed/state.json\")); print(s[\"best\"][\"experiment_name\"] if s[\"best\"] else \"\")"
+expected: s3_curriculum_learning
+comparator: ==
+expected_range: ''
+expected_regex: ''
+actual: s3_curriculum_learning
+exit_code: 0
+stdout_inline: |
+  [rebuild] wrote C:\Users\Dell\Desktop\Sleep-Token\versions/v5_phoenix/autoresearch_fixed\state.json
+  [rebuild] best: s3_curriculum_learning
+    - s1_bigger_network: status=accepted mean=0.5841 ci95_lower=0.4035
+    - s2_higher_entropy: status=accepted mean=0.6066 ci95_lower=0.4548
+    - s3_curriculum_learning: status=accepted mean=0.646 ci95_lower=0.5515
+    - s4_recurrent_ppo: status=rejected mean=0.301 ci95_lower=0.2583
+    - s5_action_diversity_bonus: status=rejected mean=0.6574 ci95_lower=0.5528
+  s3_curriculum_learning
+stdout_sha256: 24205c2d6a34b422b12cf031c57040cd43ee763d2d3c92f9d4f5fd08c9be4d48
+stderr_tail: ''
+stdout_bytes: 513
+match: true
+comparator_note: |
+  string cmp: 's3_curriculum_learning' == 's3_curriculum_learning'
+runtime_s: 0.37
+timestamp_utc: |
+  2026-04-22T06:51:49Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
+python_version: 3.11.9
+platform: Windows 10
+env_notes:

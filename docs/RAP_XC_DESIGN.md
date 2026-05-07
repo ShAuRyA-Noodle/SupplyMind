@@ -129,13 +129,13 @@ Each ablation = 70 min. Total ablation budget: ~6 hours.
 
 | Component | Status | File |
 |---|---|---|
-| Model architecture | ✅ shipped | `ShAuRyA_Phoenix/rap_xc/model.py` |
-| Training loop | ✅ shipped | `ShAuRyA_Phoenix/rap_xc/train.py` |
+| Model architecture | ✅ shipped | `versions/v5_phoenix/rap_xc/model.py` |
+| Training loop | ✅ shipped | `versions/v5_phoenix/rap_xc/train.py` |
 | Synthetic smoke test | ✅ verified (3.14M params, 0.6s/2 epochs/512 transitions) | `train.py:smoke_train_synthetic()` |
 | MaskablePPO trajectory harvest | 🟡 wired to env, ready to run | `train.py:harvest_trajectories()` |
 | FAISS retrieval cache | 🟡 stub (uses random embeddings in smoke) | `train.py:harvest_trajectories()` (TODO: load real .npz embeddings table) |
 | Judge prior distillation | 🟡 stub (`judge_prior_table=None` in smoke) | TODO: separate script |
-| Real training run | ⏳ deferred (~70 min) | run with `python -m ShAuRyA_Phoenix.rap_xc.train` |
+| Real training run | ⏳ deferred (~70 min) | run with `python -m versions.v5_phoenix.rap_xc.train` |
 | Leaderboard eval | ⏳ deferred | TODO: bridge to arena/runner.py |
 
 Real run can be done overnight or on the onsite HF compute. The infrastructure ships now; the receipt commits when the run completes.

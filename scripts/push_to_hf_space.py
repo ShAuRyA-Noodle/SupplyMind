@@ -10,7 +10,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-HF_TOKEN = os.environ.get('HF_TOKEN') or ''  # SCRUBBED — set HF_TOKEN env var
+HF_TOKEN = os.environ.get('HF_TOKEN') or ''  # SCRUBBED ï¿½ set HF_TOKEN env var
 REPO_ID = 'Shaurya-Noodle/Supplymind'
 
 if not HF_TOKEN:
@@ -45,8 +45,8 @@ IGNORE = [
     'rl/data/*.npz', 'rl/data/*.csv',
     'rl/checkpoints/**',
     'rl/analysis/trained/v3/**',  # 17-41MB pkl files
-    'v3_arcadia/checkpoints/**',  # large model checkpoints
-    'v3_arcadia/logs/**',
+    'versions/v3_arcadia/checkpoints/**',  # large model checkpoints
+    'versions/v3_arcadia/logs/**',
     'plots/v3/**.npy',
     'external_data/**',
     'models/*.pth', 'models/*.pt', 'models/*.bin',

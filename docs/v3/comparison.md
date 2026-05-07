@@ -92,4 +92,4 @@ SupplyMind answers all three at production grade.
 
 ---
 
-*This comparison is SupplyMind's explicit positioning statement. Every claim is backed by a committed JSON in `v3_arcadia/results/` and a test in `tests/`.*
+*This comparison is SupplyMind's explicit positioning statement. Every claim is backed by a committed JSON in `versions/v3_arcadia/results/` and a test in `tests/`.*

@@ -260,7 +260,7 @@ python scripts/generate_hackathon_plots.py             # all 7 plots
 ## 4.5 · RLVE adaptive curriculum + RLVR dual-verifier (per RL guide §22-23 + §31-33)
 
 ### RLVE adaptive curriculum controller
-File: [`ShAuRyA_Phoenix/wordle_env/rlve_curriculum.py`](../ShAuRyA_Phoenix/wordle_env/rlve_curriculum.py)
+File: [`versions/v5_phoenix/wordle_env/rlve_curriculum.py`](../versions/v5_phoenix/wordle_env/rlve_curriculum.py)
 
 Per RL guide §22-23 (procedural verifiable environments — beyond static RLVR):
 - **Tier 0** = 100 most-common 5-letter words (baseline)
@@ -274,7 +274,7 @@ Per RL guide §22-23 (procedural verifiable environments — beyond static RLVR)
 Smoke (200 episodes, synthetic policy): 4 tier shifts captured. Receipt: [`rlve_curriculum_smoke.json`](receipts/rlve_curriculum_smoke.json).
 
 ### RLVR dual-verifier framework
-File: [`ShAuRyA_Phoenix/wordle_env/dual_verifier.py`](../ShAuRyA_Phoenix/wordle_env/dual_verifier.py)
+File: [`versions/v5_phoenix/wordle_env/dual_verifier.py`](../versions/v5_phoenix/wordle_env/dual_verifier.py)
 
 Per RL guide §31-33 (rule-based verifiers brittle, model-based exploitable):
 - **Rule layer**: word ∈ dict, format valid, exact green/yellow scoring

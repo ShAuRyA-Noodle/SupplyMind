@@ -139,7 +139,7 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
     def tool_sm_query_recent_events(self, hours: int = 24, limit: int = 10) -> dict:
         """Last N hours of ingested live events (NewsAPI/GDELT/USGS/FRED/etc.)."""
         try:
-            from ShAuRyA_Supplymind.realtime import store
+            from versions.v4_arcadia_live.realtime import store
             import time
             rows = store.query_recent(since_unix=time.time() - hours * 3600,
                                         limit=limit)
@@ -150,7 +150,7 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
     def tool_sm_query_crisis_library(self, text: str, k: int = 3) -> dict:
         """RAG against 8 hand-curated Iran/Israel/Hormuz/Red-Sea events."""
         try:
-            from ShAuRyA_Supplymind.realtime.crisis_library import find_analogs
+            from versions.v4_arcadia_live.realtime.crisis_library import find_analogs
             analogs = find_analogs(text, k=k)
             return {
                 "ok": True, "n_results": len(analogs),

@@ -64,7 +64,7 @@ curl -X POST "https://shaurya-noodle-supplymind.hf.space/reset?task_id=easy_typh
 ### 2. Trigger the workflow
 The workflow at `.github/workflows/deploy-hf-space.yml` is already committed. Trigger options:
 
-- **Auto**: any push to `main` that touches server/, models.py, openenv.yaml, v3_arcadia/, or top-level MD files will trigger deploy.
+- **Auto**: any push to `main` that touches server/, models.py, openenv.yaml, versions/v3_arcadia/, or top-level MD files will trigger deploy.
 - **Manual**: GitHub repo → **Actions** tab → "Deploy to HuggingFace Space" → **Run workflow** → `main` branch → Run.
 
 ### 3. Watch it run
@@ -76,7 +76,7 @@ Takes ~3 min for git push + ~8 min for HF Docker rebuild.
 
 The full repo minus large blobs. The `.gitignore` already excludes:
 - `models/` (159 GB of GGUF/safetensors — HF Space would refuse anyway)
-- `v3_arcadia/checkpoints/granite/corpus_emb_*.npy` (regeneratable)
+- `versions/v3_arcadia/checkpoints/granite/corpus_emb_*.npy` (regeneratable)
 
 The Space runs the `Dockerfile` (multi-stage build for `server.app:app` on port 8000). Judges visiting the Space get:
 - `/health` — smoke check

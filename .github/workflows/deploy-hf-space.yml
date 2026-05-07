@@ -13,7 +13,7 @@ on:
       - 'server/**'
       - 'models.py'
       - 'openenv.yaml'
-      - 'v3_arcadia/**'
+      - 'versions/v3_arcadia/**'
       - 'README.md'
       - 'docs/**'
       - 'Dockerfile*'
@@ -73,7 +73,7 @@ jobs:
                   "external_data/**",
                   "rl/checkpoints/**",
                   "rl/data/dataco.csv",
-                  "v3_arcadia/logs/**",
+                  "versions/v3_arcadia/logs/**",
                   "plots/v3/**.npy",
               ],
           )

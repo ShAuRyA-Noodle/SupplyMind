@@ -71,7 +71,7 @@ Study each branch:
 - **[client/supplymind_client.py](../client/supplymind_client.py)** — the *separate* client. Zero `from server` imports. Judges call this against local or HF Space.
 
 ### 2b. Env-connected training (this is the critical differentiator)
-- **[ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](../ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py)** — the GRPO trainer that pulls rewards via HTTP `POST /analyst/grade`. Every reward comes over the wire from the running env server. Not a static dataset.
+- **[versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](../versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py)** — the GRPO trainer that pulls rewards via HTTP `POST /analyst/grade`. Every reward comes over the wire from the running env server. Not a static dataset.
 - **[scripts/run_frontier_judge_panel.py](../scripts/run_frontier_judge_panel.py)** — runs a 12-judge frontier panel against 26 real R4 crisis scenarios. Every call cached per (model, scenario) to `.openrouter_cache/` so re-runs don't re-spend.
 
 ### 2c. The IntegratedAgent (closes the "5 museums" critique)
@@ -142,7 +142,7 @@ curl -X POST http://127.0.0.1:8000/analyst/next-scenario \
 
 ### 3f. The full test suite
 ```bash
-pytest tests/ ShAuRyA_Supplymind/tests/ ShAuRyA_Phoenix/tests/ -q
+pytest tests/ versions/v4_arcadia_live/tests/ versions/v5_phoenix/tests/ -q
 # Should show: 272 passing, 2 skipped in ~3 minutes
 ```
 
@@ -154,17 +154,17 @@ Sorted by judge-visibility:
 
 | File | What it proves |
 |---|---|
-| `v3_arcadia/results/R4_DANGEROUS_V2.json` | 3-judge LLM panel on 26 real 2024-2026 crisis scenarios. Per-judge verdicts, Krippendorff α ordinal, cohen κ. **The source of truth for ground-truth labels.** |
-| `v3_arcadia/results/R4_FRONTIER_PANEL_V2.json` | 12-model frontier judge panel (pass 5g). Cross-provider cross-lab ordinal agreement. |
-| `v3_arcadia/results/R6_EUCLIDIAN.json` | MaskablePPO bootstrap CI95 vs random / greedy on 3 supply-chain tasks. Non-overlapping intervals. |
-| `v3_arcadia/results/R6_AQUA_REGIA_V2.json` | Per-horizon conformal prediction coverage stats on 5 FRED targets. |
-| `v3_arcadia/plots/gethsemane/learning_curves.png` | The RL training curve. |
-| `ShAuRyA_Supplymind/features/R9_ANALYST_AB_V5.json` | supplymind-analyst:v5 vs base Qwen2.5-14B on 10 rubric-labeled scenarios. **80% exact vs 0%.** |
+| `versions/v3_arcadia/results/R4_DANGEROUS_V2.json` | 3-judge LLM panel on 26 real 2024-2026 crisis scenarios. Per-judge verdicts, Krippendorff α ordinal, cohen κ. **The source of truth for ground-truth labels.** |
+| `versions/v3_arcadia/results/R4_FRONTIER_PANEL_V2.json` | 12-model frontier judge panel (pass 5g). Cross-provider cross-lab ordinal agreement. |
+| `versions/v3_arcadia/results/R6_EUCLIDIAN.json` | MaskablePPO bootstrap CI95 vs random / greedy on 3 supply-chain tasks. Non-overlapping intervals. |
+| `versions/v3_arcadia/results/R6_AQUA_REGIA_V2.json` | Per-horizon conformal prediction coverage stats on 5 FRED targets. |
+| `versions/v3_arcadia/plots/gethsemane/learning_curves.png` | The RL training curve. |
+| `versions/v4_arcadia_live/features/R9_ANALYST_AB_V5.json` | supplymind-analyst:v5 vs base Qwen2.5-14B on 10 rubric-labeled scenarios. **80% exact vs 0%.** |
 | `tests/receipts/adversarial_reward_audit.json` | 6-attack reward-hacking audit, all rejected. |
 | `tests/receipts/frontier_panel_alpha.json` | Real Krippendorff α recomputed on the committed panel cache. |
 | `tests/receipts/openrouter_liveness.json` | Per-model cold-probe liveness timestamped 2026-04-24. |
-| `ShAuRyA_Supplymind/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md` | Karpathy-style autoresearch history: 5 seed experiments, 3 accepted, +0.148 CI95 lift over baseline. |
-| `ShAuRyA_Supplymind/scenarios/iran_israel_hormuz_2024_2026.json` | 8 real 2024-2026 events, 26 citations. The crisis library. |
+| `versions/v4_arcadia_live/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md` | Karpathy-style autoresearch history: 5 seed experiments, 3 accepted, +0.148 CI95 lift over baseline. |
+| `versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json` | 8 real 2024-2026 events, 26 citations. The crisis library. |
 
 ---
 
@@ -248,7 +248,7 @@ These edit points are well-factored:
 
 ```bash
 # Test everything
-pytest tests/ ShAuRyA_Supplymind/tests/ ShAuRyA_Phoenix/tests/ -q
+pytest tests/ versions/v4_arcadia_live/tests/ versions/v5_phoenix/tests/ -q
 
 # Test just the adversarial reward audit
 pytest tests/test_reward_hacking_adversarial.py -v

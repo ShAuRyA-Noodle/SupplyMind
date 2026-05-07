@@ -159,7 +159,7 @@ License: MIT · Author: ShAuRyA-Noodle · Built to be audited</p>
 # v4 arcadia-live — mount the /live/* router for realtime Hormuz / Iran / Israel /
 # Red Sea demo. Graceful no-op if v4 staging dir isn't present (keeps v3 clean).
 try:
-    from ShAuRyA_Supplymind.realtime.hormuz_endpoint import router as _hormuz_router
+    from versions.v4_arcadia_live.realtime.hormuz_endpoint import router as _hormuz_router
     if _hormuz_router is not None:
         app.include_router(_hormuz_router, prefix="/live", tags=["live (v4)"])
         logger.info("mounted /live router (v4 arcadia-live)")
@@ -169,7 +169,7 @@ except Exception as _e:  # noqa: BLE001
 # v8 — Hormuz War Room demo (additive, isolated). Mounts at app root so routes
 # live at /demo/hormuz-war-room and /demo/hormuz-war-room/ui. Graceful no-op.
 try:
-    from ShAuRyA_Supplymind.realtime.hormuz_war_room_router import router as _war_room_router
+    from versions.v4_arcadia_live.realtime.hormuz_war_room_router import router as _war_room_router
     if _war_room_router is not None:
         app.include_router(_war_room_router, tags=["war-room (v8)"])
         logger.info("mounted Hormuz War Room router (v8)")
@@ -178,7 +178,7 @@ except Exception as _e:  # noqa: BLE001
 
 # v11 — Qwen-VL port-imagery card. Mounts /demo/port-imagery POST. Graceful no-op.
 try:
-    from ShAuRyA_Supplymind.realtime.port_imagery_router import router as _port_imagery_router
+    from versions.v4_arcadia_live.realtime.port_imagery_router import router as _port_imagery_router
     if _port_imagery_router is not None:
         app.include_router(_port_imagery_router, tags=["port-imagery (v11)"])
         logger.info("mounted port-imagery router (v11)")
@@ -187,7 +187,7 @@ except Exception as _e:  # noqa: BLE001
 
 # v15 — Wordle RLVR canonical demo (Meta OpenEnv x Scaler hackathon-guide bridge).
 try:
-    from ShAuRyA_Phoenix.wordle_env.router import router as _wordle_router
+    from versions.v5_phoenix.wordle_env.router import router as _wordle_router
     if _wordle_router is not None:
         app.include_router(_wordle_router, tags=["wordle (v15)"])
         logger.info("mounted Wordle RLVR router (v15)")
@@ -234,9 +234,9 @@ def _mount_phoenix(prefix: str, module_path: str, tag: str) -> None:
         logger.info("mounted %s degraded-health stub", prefix)
 
 
-_mount_phoenix("/arena", "ShAuRyA_Phoenix.arena.router", "arena (v5)")
-_mount_phoenix("/twin", "ShAuRyA_Phoenix.counterfactual_twin.router", "twin (v5)")
-_mount_phoenix("/replay", "ShAuRyA_Phoenix.realtime_v5.replay_adapter", "replay (v5)")
+_mount_phoenix("/arena", "versions.v5_phoenix.arena.router", "arena (v5)")
+_mount_phoenix("/twin", "versions.v5_phoenix.counterfactual_twin.router", "twin (v5)")
+_mount_phoenix("/replay", "versions.v5_phoenix.realtime_v5.replay_adapter", "replay (v5)")
 
 
 # /phoenix/status — introspection endpoint
@@ -719,7 +719,7 @@ async def predict(request: PredictRequest):
 # This endpoint is the "environment" in env-connected RL training: the
 # policy (an LLM) generates a risk assessment, POSTs it here, and receives
 # a reward computed against the committed R4 3-judge ground-truth cache.
-# See ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py
+# See versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py
 # for the TRL GRPOTrainer that uses this endpoint as its reward oracle.
 #
 # Reward design (three independent signals, anti-hacking per hackathon
@@ -839,7 +839,7 @@ async def analyst_grade(req: AnalystGradeRequest) -> AnalystGradeResponse:
         },
         predicted_risk=pred or "MISSING",
         ground_truth_risk=gt,
-        scenario_source="v3_arcadia/results/R4_DANGEROUS_V2.json",
+        scenario_source="versions/v3_arcadia/results/R4_DANGEROUS_V2.json",
     )
 
 
@@ -903,7 +903,7 @@ async def analyst_scenarios(split: str = "all") -> dict:
         "scenario_ids": [s["scenario_id"] for s in scenarios],  # back-compat
         "scenarios": scenarios,
         "difficulty_source": "real R4 3-judge disagreement fraction",
-        "source": "v3_arcadia/results/R4_DANGEROUS_V2.json",
+        "source": "versions/v3_arcadia/results/R4_DANGEROUS_V2.json",
         "hint": "POST /analyst/next-scenario with your policy's recent_reward_mean for RLVE adaptive curriculum",
     }
 
@@ -933,7 +933,7 @@ class NextScenarioResponse(BaseModel):
     n_candidates: int
     split: str = "train"
     inference_type: str = "rlve_adaptive_sampling_from_real_r4"
-    source: str = "v3_arcadia/results/R4_DANGEROUS_V2.json"
+    source: str = "versions/v3_arcadia/results/R4_DANGEROUS_V2.json"
 
 
 class HoldoutEvalItem(BaseModel):
@@ -958,7 +958,7 @@ class HoldoutEvalResponse(BaseModel):
     per_item: list[dict]
     split: str = "holdout"
     inference_type: str = "live_rubric_vs_r4_ground_truth"
-    source: str = "v3_arcadia/results/R4_DANGEROUS_V2.json"
+    source: str = "versions/v3_arcadia/results/R4_DANGEROUS_V2.json"
 
 
 @app.post("/analyst/next-scenario",
@@ -1117,7 +1117,7 @@ async def demo_recent_disaster(req: RecentDisasterRequest) -> dict:
     1500-event EMDAT library v2, runs the 4-method Platinum counterfactual,
     and returns a structured action plan.
     """
-    from ShAuRyA_Supplymind.realtime.demo_orchestrator import run_demo
+    from versions.v4_arcadia_live.realtime.demo_orchestrator import run_demo
     return run_demo(
         fan_out_timeout_s=req.fan_out_timeout_s,
         library_top_k=req.library_top_k,
@@ -1144,7 +1144,7 @@ async def library_v2_search(req: LibrarySearchRequest) -> dict:
     no hand-set tiers.
     """
     try:
-        from ShAuRyA_Supplymind.scenarios.library_v2_search import search
+        from versions.v4_arcadia_live.scenarios.library_v2_search import search
         matches = search(req.query, top_k=req.top_k)
         return {
             "query": req.query, "n_matches": len(matches),
@@ -1186,7 +1186,7 @@ async def counterfactual_platinum(req: PlatinumRequest) -> dict:
     No magic constants. No 80% cap. Every assumption surfaced in `extra`.
     Paper-anchor calibration list included.
     """
-    from ShAuRyA_Phoenix.counterfactual_v2.platinum import estimate_savings
+    from versions.v5_phoenix.counterfactual_v2.platinum import estimate_savings
     return estimate_savings(
         target_event_id=req.target_event_id,
         task_id=req.task_id,
@@ -1216,7 +1216,7 @@ async def live_intel_fan_out(timeout_s: float = 45.0,
     No synthetic substitution. Each source independent — failures don't
     block successes. Per-source counts surfaced in `summary.n_events_per_source`.
     """
-    from ShAuRyA_Supplymind.realtime.orchestrator_v2 import fan_out_all
+    from versions.v4_arcadia_live.realtime.orchestrator_v2 import fan_out_all
     result = fan_out_all(timeout_s=timeout_s, parallel=parallel)
     return FanOutResponse(**result)
 
@@ -1261,7 +1261,7 @@ async def agent_decide(req: AgentDecideRequest) -> dict:
 # /analyst/panel-consensus — frontier 9-judge panel verdict
 # ============================================================
 #
-# Replays the committed Frontier Panel v2 results (v3_arcadia/results/
+# Replays the committed Frontier Panel v2 results (versions/v3_arcadia/results/
 # R4_FRONTIER_PANEL_V2.json + local R4) for a given scenario. Two modes:
 #   - GET  /analyst/panel-consensus/{scenario_id}            — snapshot dict
 #   - GET  /analyst/panel-consensus/{scenario_id}/stream     — SSE, one
@@ -1346,8 +1346,8 @@ async def analyst_panel_consensus(scenario_id: str) -> dict:
         "verdicts": verdicts,
         "inference_type": "committed_panel_replay",
         "sources": {
-            "local": "v3_arcadia/results/R4_DANGEROUS_V2.json",
-            "frontier": "v3_arcadia/results/R4_FRONTIER_PANEL_V2.json",
+            "local": "versions/v3_arcadia/results/R4_DANGEROUS_V2.json",
+            "frontier": "versions/v3_arcadia/results/R4_FRONTIER_PANEL_V2.json",
         },
     }
 
@@ -1540,7 +1540,7 @@ async def v3_end_to_end(request: E2ERequest):
             # committed (RELEASE_V4_TAG recorded $123.28/bbl on 2026-04-22).
             # If a live FRED cache is present we read it; otherwise anchor to
             # the release-committed value so the endpoint is still honest.
-            _fred_cache = (Path(__file__).parent.parent / "ShAuRyA_Supplymind"
+            _fred_cache = (Path(__file__).parent.parent / "versions/v4_arcadia_live"
                            / "realtime" / "fred_brent_latest.json")
             anchor_source = "release_v4_tag_snapshot_2026-04-22"
             base_price = 123.28  # FRED DCOILBRENTEU last committed observation

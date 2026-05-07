@@ -1,0 +1,14 @@
+{
+  "number_id": "R4_2JUDGE_Krippendorff_alpha",
+  "description": "2-judge panel Krippendorff ordinal alpha on 26 crisis scenarios",
+  "value": "0.7499056959637873",
+  "command": "python -c \"import json; print(json.load(open(r'versions/v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json'))['agreement_primary_panel']['krippendorff_alpha_ordinal'])\"",
+  "expected_output": "0.7499056959637873",
+  "data_files_hashes": {
+    "versions/v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json": "f8adadde04dd931f"
+  },
+  "git_sha": "a0738ad89aa2",
+  "generated_at": "2026-04-21T21:43:38Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

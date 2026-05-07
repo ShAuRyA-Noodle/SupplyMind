@@ -25,36 +25,36 @@ Expected: all 12 claims pass, 173 tests pass.
 python rl/real_data_pipeline.py
 
 # R1 — verify foundation models
-python v3_arcadia/00_emergence/r1_verify_foundations.py
+python versions/v3_arcadia/00_emergence/r1_verify_foundations.py
 
 # R2 — tabular
-python v3_arcadia/10_caramel/train_caramel.py
-python v3_arcadia/10_caramel/shap_fairness_calibration.py
+python versions/v3_arcadia/10_caramel/train_caramel.py
+python versions/v3_arcadia/10_caramel/shap_fairness_calibration.py
 
 # R3 — forecasting
-python v3_arcadia/20_past_self/r3_past_self.py
-python v3_arcadia/20_past_self/r3_constrained_stacking.py
-python v3_arcadia/20_past_self/r3_timesfm_residual_quantile.py
-python v3_arcadia/20_past_self/r3_bigtft_integration.py
+python versions/v3_arcadia/20_past_self/r3_past_self.py
+python versions/v3_arcadia/20_past_self/r3_constrained_stacking.py
+python versions/v3_arcadia/20_past_self/r3_timesfm_residual_quantile.py
+python versions/v3_arcadia/20_past_self/r3_bigtft_integration.py
 
 # R4 — LLM risk panel (requires Ollama with DeepSeek, Qwen-14B, Mistral-Nemo, Qwen-Coder)
-python v3_arcadia/30_dangerous/r4_dangerous_v2.py
-python v3_arcadia/30_dangerous/r4_ablation_and_baseline.py
-python v3_arcadia/30_dangerous/r4_live_scenario.py
+python versions/v3_arcadia/30_dangerous/r4_dangerous_v2.py
+python versions/v3_arcadia/30_dangerous/r4_ablation_and_baseline.py
+python versions/v3_arcadia/30_dangerous/r4_live_scenario.py
 
 # R5 — RAG
-python v3_arcadia/40_granite/r5_granite.py
-python v3_arcadia/40_granite/r5_hard_queries.py
-python v3_arcadia/40_granite/r5_manual_beir.py
+python versions/v3_arcadia/40_granite/r5_granite.py
+python versions/v3_arcadia/40_granite/r5_hard_queries.py
+python versions/v3_arcadia/40_granite/r5_manual_beir.py
 
 # R6 — RL + GNN + conformal
-python v3_arcadia/50_gethsemane/r6_gethsemane.py
-python v3_arcadia/50_gethsemane/r6_unmasked_ablation.py
-python v3_arcadia/50_gethsemane/r6_unmasked_ablation_alltasks.py
-python v3_arcadia/50_gethsemane/export_v3_ppo_onnx.py
-python v3_arcadia/60_euclidian/r6_euclidian.py
-python v3_arcadia/70_provider/r6_gnn_arrival_time.py
-python v3_arcadia/80_aqua_regia/r6_per_horizon_conformal.py
+python versions/v3_arcadia/50_gethsemane/r6_gethsemane.py
+python versions/v3_arcadia/50_gethsemane/r6_unmasked_ablation.py
+python versions/v3_arcadia/50_gethsemane/r6_unmasked_ablation_alltasks.py
+python versions/v3_arcadia/50_gethsemane/export_v3_ppo_onnx.py
+python versions/v3_arcadia/60_euclidian/r6_euclidian.py
+python versions/v3_arcadia/70_provider/r6_gnn_arrival_time.py
+python versions/v3_arcadia/80_aqua_regia/r6_per_horizon_conformal.py
 ```
 
 ---

@@ -65,7 +65,7 @@ def run_checks() -> list[Check]:
         "v2": "rl/lora/Modelfile.v2",
         "v3": "rl/lora/Modelfile.v3",
         "v4": "rl/lora/Modelfile.v4",
-        "v5": "ShAuRyA_Supplymind/features/Modelfile.analyst_v5",
+        "v5": "versions/v4_arcadia_live/features/Modelfile.analyst_v5",
     }
     for version, path in modelfiles.items():
         checks.append(Check(f"A.1.modelfile.{version}", _exists(path), path))
@@ -83,7 +83,7 @@ def run_checks() -> list[Check]:
     checks.append(Check(
         "A.1.v5.hard_negatives_and_calibration",
         _contains(
-            "ShAuRyA_Supplymind/features/Modelfile.analyst_v5",
+            "versions/v4_arcadia_live/features/Modelfile.analyst_v5",
             "CALIBRATION RULES",
             "Not every news headline is CRITICAL",
             "LOW|MEDIUM|HIGH|CRITICAL",
@@ -93,12 +93,12 @@ def run_checks() -> list[Check]:
     ))
     checks.append(Check(
         "A.2.temperature_control",
-        _param("ShAuRyA_Supplymind/features/Modelfile.analyst_v5", "temperature") in {"0.15", "0.1"},
+        _param("versions/v4_arcadia_live/features/Modelfile.analyst_v5", "temperature") in {"0.15", "0.1"},
         "v5 deterministic temperature is low",
     ))
     checks.append(Check(
         "A.2.context_window",
-        int(_param("ShAuRyA_Supplymind/features/Modelfile.analyst_v5", "num_ctx") or "0") >= 16384,
+        int(_param("versions/v4_arcadia_live/features/Modelfile.analyst_v5", "num_ctx") or "0") >= 16384,
         "v5 num_ctx >= 16K; v4/v3 provide 8K+ context",
     ))
     checks.append(Check(
@@ -108,10 +108,10 @@ def run_checks() -> list[Check]:
     ))
 
     wrappers = {
-        "qwen25-14b-local": "v3_arcadia/00_emergence/qwen25-14b.Modelfile",
-        "qwen25-coder-local": "v3_arcadia/00_emergence/qwen25-coder-14b.Modelfile",
-        "mistral-nemo-local": "v3_arcadia/00_emergence/mistral-nemo.Modelfile",
-        "deepseek-r1-local-q4": "v3_arcadia/00_emergence/deepseek-r1.Modelfile",
+        "qwen25-14b-local": "versions/v3_arcadia/00_emergence/qwen25-14b.Modelfile",
+        "qwen25-coder-local": "versions/v3_arcadia/00_emergence/qwen25-coder-14b.Modelfile",
+        "mistral-nemo-local": "versions/v3_arcadia/00_emergence/mistral-nemo.Modelfile",
+        "deepseek-r1-local-q4": "versions/v3_arcadia/00_emergence/deepseek-r1.Modelfile",
     }
     for name, path in wrappers.items():
         checks.append(Check(f"A.1.wrapper.{name}", _exists(path), path))
@@ -141,13 +141,13 @@ def run_checks() -> list[Check]:
     # A.4: Phoenix DPO fine-tuning.
     checks.append(Check(
         "A.4.preference_pairs_21",
-        _jsonl_count("ShAuRyA_Phoenix/roll_integration/dpo_judge/data/preference_pairs.jsonl") == 21,
+        _jsonl_count("versions/v5_phoenix/roll_integration/dpo_judge/data/preference_pairs.jsonl") == 21,
         "DPO preference dataset has 21 real R4-derived chosen/rejected pairs",
     ))
     checks.append(Check(
         "A.4.dpo_trl_config",
         _contains(
-            "ShAuRyA_Phoenix/roll_integration/dpo_judge/train_dpo_trl.py",
+            "versions/v5_phoenix/roll_integration/dpo_judge/train_dpo_trl.py",
             "Qwen/Qwen2.5-3B-Instruct",
             "DPOTrainer",
             "beta",
@@ -159,51 +159,51 @@ def run_checks() -> list[Check]:
     checks.append(Check(
         "A.4.dpo_roll_and_grpo",
         all(_exists(p) for p in [
-            "ShAuRyA_Phoenix/roll_integration/dpo_judge/train_dpo_roll.py",
-            "ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_env.py",
-            "ShAuRyA_Phoenix/roll_integration/dpo_judge/train_grpo_live_env.py",
-            "ShAuRyA_Phoenix/roll_integration/dpo_judge/evaluate_delta.py",
+            "versions/v5_phoenix/roll_integration/dpo_judge/train_dpo_roll.py",
+            "versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_env.py",
+            "versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py",
+            "versions/v5_phoenix/roll_integration/dpo_judge/evaluate_delta.py",
         ]),
         "ROLL DPO, standalone GRPO, live-env GRPO, and delta evaluator exist",
     ))
     checks.append(Check(
         "A.4.evaluate_delta_current_r4_shape",
-        _contains("ShAuRyA_Phoenix/roll_integration/dpo_judge/evaluate_delta.py", "per.items()", "sid.replace"),
+        _contains("versions/v5_phoenix/roll_integration/dpo_judge/evaluate_delta.py", "per.items()", "sid.replace"),
         "evaluate_delta reads current dict-shaped R4 per_scenario cache",
     ))
 
     # A.5: ROLL integration.
     checks.append(Check(
         "A.5.roll_env_importable_without_roll",
-        _contains("ShAuRyA_Phoenix/roll_integration/env/supplymind_roll_env.py", "SupplyMindRollEnv", "supports_step_reward", "register_env", "except Exception"),
+        _contains("versions/v5_phoenix/roll_integration/env/supplymind_roll_env.py", "SupplyMindRollEnv", "supports_step_reward", "register_env", "except Exception"),
         "SupplyMindRollEnv has step rewards and guarded ROLL registration",
     ))
     checks.append(Check(
         "A.5.reward_worker",
-        _contains("ShAuRyA_Phoenix/roll_integration/reward_bridge/supplymind_judge_worker.py", "SupplyMind3JudgeRewardWorker", "deepseek-r1-local-q4", "qwen25-14b-local", "mistral-nemo-local"),
+        _contains("versions/v5_phoenix/roll_integration/reward_bridge/supplymind_judge_worker.py", "SupplyMind3JudgeRewardWorker", "deepseek-r1-local-q4", "qwen25-14b-local", "mistral-nemo-local"),
         "ROLL reward worker wraps the 3 local judge models",
     ))
     checks.append(Check(
         "A.5.roll_configs",
-        _contains("ShAuRyA_Phoenix/roll_integration/configs/dpo_qwen25_3b_supplymind.yaml", "strategy_name: hf", "dpo_beta: 0.1", "save_adapter_only: true")
-        and _contains("ShAuRyA_Phoenix/roll_integration/configs/agentic_supplymind_gigpo.yaml", "algorithm: gigpo", "forecast", "rag", "rl_act", "step_reward: true"),
+        _contains("versions/v5_phoenix/roll_integration/configs/dpo_qwen25_3b_supplymind.yaml", "strategy_name: hf", "dpo_beta: 0.1", "save_adapter_only: true")
+        and _contains("versions/v5_phoenix/roll_integration/configs/agentic_supplymind_gigpo.yaml", "algorithm: gigpo", "forecast", "rag", "rl_act", "step_reward: true"),
         "ROLL configs cover HF DPO, adapter-only save, GiGPO, step rewards, and 3 tools",
     ))
 
     # A.6: Quantization and memory engineering.
     checks.append(Check(
         "A.6.quantization_receipts",
-        _contains("v3_arcadia/results/R1_VERIFIED.json", "Q4_K_M", "3.3x", "CVE-2025-32434", "safetensors"),
+        _contains("versions/v3_arcadia/results/R1_VERIFIED.json", "Q4_K_M", "3.3x", "CVE-2025-32434", "safetensors"),
         "R1 verification records Q4_K_M compression and BGE safetensors rationale",
     ))
     checks.append(Check(
         "A.6.bge_safetensors_converter",
-        _contains("v3_arcadia/00_emergence/convert_bge_to_safetensors.py", "save_file", "weights_only", "model.safetensors"),
+        _contains("versions/v3_arcadia/00_emergence/convert_bge_to_safetensors.py", "save_file", "weights_only", "model.safetensors"),
         "BGE-M3 converter writes safetensors and bypasses torch.load restriction",
     ))
     checks.append(Check(
         "A.6.vram_discipline",
-        _contains("v3_arcadia/40_granite/r5_rag_beast.py", "unload_ollama", "VRAM", "torch.cuda.empty_cache")
+        _contains("versions/v3_arcadia/40_granite/r5_rag_beast.py", "unload_ollama", "VRAM", "torch.cuda.empty_cache")
         and _contains("rl/lora/create_ollama_model.py", "OLLAMA_MAX_LOADED_MODELS"),
         "RAG/OLLAMA path documents unload and single-model VRAM discipline",
     ))

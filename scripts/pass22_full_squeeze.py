@@ -50,7 +50,7 @@ def _write(name: str, payload: dict) -> tuple[Path, str]:
 def u12_multi_agent_subreceipts() -> dict:
     """Decompose F2 multi-agent into 5 sub-features and emit standalone receipts.
 
-    Source: ShAuRyA_Phoenix consolidated F2 receipt + rl/multi_agent/competitive.py
+    Source: versions/v5_phoenix consolidated F2 receipt + rl/multi_agent/competitive.py
     """
     parent_path = RECEIPTS / "F2_multi_agent_apple_samsung_toyota.json"
     parent = json.loads(parent_path.read_text())

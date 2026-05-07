@@ -1,0 +1,14 @@
+{
+  "number_id": "V4_Autoresearch_Best_CI95",
+  "description": "Best CI95-lower accepted by autoresearch orchestrator (bootstrap 1000)",
+  "value": "0.5514",
+  "command": "python -c \"import json; d=json.load(open('versions/v4_arcadia_live/autoresearch/state.json'));print(d['best']['metric']['ci95_lower']) if d.get('best') else print('none')\"",
+  "expected_output": "0.5514",
+  "data_files_hashes": {
+    "versions/v4_arcadia_live/autoresearch/state.json": "e940010fa2a60a0b"
+  },
+  "git_sha": "a0738ad89aa2",
+  "generated_at": "2026-04-21T21:43:38Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

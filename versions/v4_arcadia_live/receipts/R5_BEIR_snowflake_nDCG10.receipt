@@ -1,0 +1,14 @@
+{
+  "number_id": "R5_BEIR_snowflake_nDCG10",
+  "description": "BEIR out-of-domain nDCG@10 (Snowflake) on 26 Wiki crisis articles",
+  "value": "0.9709860394574094",
+  "command": "python -c \"import json; print(json.load(open(r'versions/v3_arcadia/results/R5_BEIR_MANUAL.json'))['our_results']['snowflake-arctic-l']['mean_ndcg@10'])\"",
+  "expected_output": "0.9709860394574094",
+  "data_files_hashes": {
+    "versions/v3_arcadia/results/R5_BEIR_MANUAL.json": "b504a57f23040d0d"
+  },
+  "git_sha": "a0738ad89aa2",
+  "generated_at": "2026-04-21T21:43:38Z",
+  "python_version": "3.11.9",
+  "platform": "Windows-10"
+}

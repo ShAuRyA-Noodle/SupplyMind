@@ -70,10 +70,10 @@ python scripts/bootstrap_leaderboard.py
 python scripts/ollama_v5_vs_frontier.py
 
 # 7. HetGAT all 3 graphs (~30 min on RTX 4080)
-python -m ShAuRyA_Phoenix.gnn_v2.train_hetgat --graph all --epochs 200
+python -m versions.v5_phoenix.gnn_v2.train_hetgat --graph all --epochs 200
 
 # 8. RAP-XC training on harvested transitions (~20 sec on RTX 4080)
-python -c "from ShAuRyA_Phoenix.rap_xc.train import train_rapxc; train_rapxc()"
+python -c "from versions.v5_phoenix.rap_xc.train import train_rapxc; train_rapxc()"
 ```
 
 All produce JSON receipts at `tests/receipts/*.json`.

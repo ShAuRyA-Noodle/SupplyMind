@@ -1,0 +1,18 @@
+{
+  "grader_scores": [
+    0.7844,
+    0.8822,
+    0.8807,
+    0.5918,
+    0.4594,
+    0.4594,
+    0.5852,
+    0.5853,
+    0.5855
+  ],
+  "wall_clock_s": 216.85,
+  "total_steps": 20000,
+  "architecture_summary": "MaskablePPO [128,128] curriculum easy->med->hard (40/30/30 split)",
+  "final_checkpoint": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v4_arcadia_live/\autoresearch\\experiments\\seed1001_candidate\\policy.zip",
+  "training_seed": 1001
+}

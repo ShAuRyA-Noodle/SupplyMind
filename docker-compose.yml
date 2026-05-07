@@ -46,8 +46,8 @@ services:
     environment:
       - DEMO_MODE=true
     volumes:
-      - ./v3_arcadia/checkpoints/granite:/app/v3_arcadia/checkpoints/granite:ro
-      - ./v3_arcadia/checkpoints/gethsemane:/app/v3_arcadia/checkpoints/gethsemane:ro
+      - ./versions/v3_arcadia/checkpoints/granite:/app/versions/v3_arcadia/checkpoints/granite:ro
+      - ./versions/v3_arcadia/checkpoints/gethsemane:/app/versions/v3_arcadia/checkpoints/gethsemane:ro
       - ./models/mxbai-embed-large:/app/models/mxbai-embed-large:ro
       - ./models/chronos-bolt-base:/app/models/chronos-bolt-base:ro
     healthcheck:
