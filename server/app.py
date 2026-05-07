@@ -123,7 +123,7 @@ code{background:#1e293b;padding:2px 6px;border-radius:3px;color:#16a34a}
 <h2>📋 Submission artifacts</h2>
 <table>
 <tr><th>Asset</th><th>Link</th></tr>
-<tr><td>Master training notebook</td><td><a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/blob/main/notebooks/13_MASTER_HACKATHON_FINAL.ipynb">notebooks/13_MASTER_HACKATHON_FINAL.ipynb</a> · <a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/resolve/main/notebooks/13_MASTER_HACKATHON_FINAL.ipynb">download raw .ipynb</a> · <a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/blob/main/notebooks/13_MASTER_HACKATHON_FINAL.ipynb">browse on HF</a></td></tr>
+<tr><td>Master training notebook</td><td><a href="https://colab.research.google.com/github/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/13_MASTER_HACKATHON_FINAL.ipynb">▶ Open in Colab</a> · <a href="https://github.com/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/13_MASTER_HACKATHON_FINAL.ipynb">browse on GitHub</a> · <a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/blob/main/notebooks/13_MASTER_HACKATHON_FINAL.ipynb">browse on HF</a> · <a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/resolve/main/notebooks/13_MASTER_HACKATHON_FINAL.ipynb">download .ipynb</a></td></tr>
 <tr><td>Demo video (90s)</td><td><a href="https://www.youtube.com/watch?v=0Jy78rg_0BQ">https://www.youtube.com/watch?v=0Jy78rg_0BQ</a></td></tr>
 <tr><td>Blog walkthrough</td><td><a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/blob/main/FINAL_SUBMIT/Blog.MD">FINAL_SUBMIT/Blog.MD</a></td></tr>
 <tr><td>Receipts (128 sha256-stamped)</td><td><a href="https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/tree/main/FINAL_SUBMIT/receipts">FINAL_SUBMIT/receipts/</a></td></tr>
