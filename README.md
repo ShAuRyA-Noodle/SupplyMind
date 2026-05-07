@@ -63,7 +63,7 @@ tags:
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-275%20passing-brightgreen)](tests/)
 [![Real Data](https://img.shields.io/badge/real%20data-261K%20points-orange)](rl/data/)
-[![Release](https://img.shields.io/badge/release-v3.0--arcadia-purple)](https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/tag/v3.0-arcadia)
+[![Release](https://img.shields.io/badge/release-v6.0--genesis-purple)](https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/tag/v6.0-genesis)
 
 > *"Even in Arcadia, supply chains break. SupplyMind sees it coming."*
 

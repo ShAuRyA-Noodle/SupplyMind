@@ -23,6 +23,7 @@ on:
       - 'scripts/**'
       - 'demo/**'
       - 'FINAL_SUBMIT/**'
+      - '.github/workflows/deploy-hf-space.yml'
   workflow_dispatch:
 
 jobs:
