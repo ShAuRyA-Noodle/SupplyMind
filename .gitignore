@@ -12,6 +12,11 @@ env/
 
 # Tooling state
 .claude/
+.agents/
+.source_cache/
+.tmp_pytest/
+.pytest_cache/
+wandb/
 
 # Stray pip version artifacts
 0.*/
