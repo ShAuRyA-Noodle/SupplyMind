@@ -42,77 +42,65 @@ jobs:
       - name: Install huggingface_hub
         run: pip install -U "huggingface_hub>=0.25"
 
-      - name: Upload to HF Space (skips _dump, .git, .github, large notebooks)
-        id: hf_upload
-        env:
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      - name: Write deploy script
         run: |
-          python - 2>&1 | tee /tmp/hf_deploy.log <<'PY'
+          cat > /tmp/hf_deploy.py <<'PY'
           import os, sys, traceback
           from huggingface_hub import HfApi
           token = os.environ.get("HF_TOKEN")
-          print(f"HF_TOKEN present: {bool(token)}, length: {len(token) if token else 0}")
+          print(f"HF_TOKEN present: {bool(token)}, length: {len(token) if token else 0}", flush=True)
           if not token:
               print("ERROR: HF_TOKEN is empty")
               sys.exit(1)
           try:
               api = HfApi(token=token)
               who = api.whoami()
-              print(f"Authenticated as: {who.get('name')}, role: {who.get('auth',{}).get('accessToken',{}).get('role')}")
+              print(f"Authenticated as: {who.get('name')}, role: {who.get('auth',{}).get('accessToken',{}).get('role')}", flush=True)
           except Exception as e:
-              print(f"AUTH FAIL: {type(e).__name__}: {e}")
+              print(f"AUTH FAIL: {type(e).__name__}: {e}", flush=True)
               traceback.print_exc()
               sys.exit(1)
           try:
               api.upload_folder(
-              folder_path=".",
-              repo_id="Shaurya-Noodle/Supplymind",
-              repo_type="space",
-              commit_message="Deploy v6.0-genesis from GitHub main",
-              ignore_patterns=[
-                  ".git/**",
-                  ".github/**",
-                  "_dump/**",
-                  "*.pyc",
-                  "__pycache__/**",
-                  ".pytest_cache/**",
-                  ".tmp_pytest/**",
-                  ".source_cache/**",
-                  ".openrouter_cache/**",
-                  ".agents/**",
-                  ".claude/**",
-                  ".venv/**",
-                  "venv/**",
-                  "wandb/**",
-                  "catboost_info/**",
-                  "notebooks/**",
-                  "models/**",
-                  "external_data/**",
-                  "vendor/**",
-                  "rl/checkpoints/**",
-                  "rl/data/dataco.csv",
-                  # v3 layer --heavy artifacts
-                  "versions/v3_arcadia/logs/**",
-                  "versions/v3_arcadia/checkpoints/**",
-                  "versions/v3_arcadia/gguf_out/**",
-                  "versions/v3_arcadia/tools/**",
-                  # v4 layer --runtime DB + caches
-                  "versions/v4_arcadia_live/realtime/events.db*",
-                  "versions/v4_arcadia_live/realtime/library_embeddings.pkl",
-                  "versions/v4_arcadia_live/autoresearch/experiments/**",
-                  # v5 layer --vendored venv + experiments
-                  "versions/v5_phoenix/.venv-roll/**",
-                  "versions/v5_phoenix/.venv/**",
-                  "versions/v5_phoenix/experiments/**",
-                  "plots/v3/**.npy",
-              ],
+                  folder_path=".",
+                  repo_id="Shaurya-Noodle/Supplymind",
+                  repo_type="space",
+                  commit_message="Deploy v6.0-genesis from GitHub main",
+                  ignore_patterns=[
+                      ".git/**", ".github/**", "_dump/**", "*.pyc",
+                      "__pycache__/**", ".pytest_cache/**", ".tmp_pytest/**",
+                      ".source_cache/**", ".openrouter_cache/**", ".agents/**",
+                      ".claude/**", ".venv/**", "venv/**", "wandb/**",
+                      "catboost_info/**", "notebooks/**", "models/**",
+                      "external_data/**", "vendor/**", "rl/checkpoints/**",
+                      "rl/data/dataco.csv",
+                      "versions/v3_arcadia/logs/**",
+                      "versions/v3_arcadia/checkpoints/**",
+                      "versions/v3_arcadia/gguf_out/**",
+                      "versions/v3_arcadia/tools/**",
+                      "versions/v4_arcadia_live/realtime/events.db*",
+                      "versions/v4_arcadia_live/realtime/library_embeddings.pkl",
+                      "versions/v4_arcadia_live/autoresearch/experiments/**",
+                      "versions/v5_phoenix/.venv-roll/**",
+                      "versions/v5_phoenix/.venv/**",
+                      "versions/v5_phoenix/experiments/**",
+                      "plots/v3/**.npy",
+                  ],
               )
-              print("HF Space upload complete.")
+              print("HF Space upload complete.", flush=True)
           except Exception as e:
-              print(f"UPLOAD FAIL: {type(e).__name__}: {e}")
+              print(f"UPLOAD FAIL: {type(e).__name__}: {e}", flush=True)
               traceback.print_exc()
               sys.exit(1)
           PY
+
+      - name: Run HF deploy
+        id: hf_upload
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          set -o pipefail
+          python /tmp/hf_deploy.py 2>&1 | tee /tmp/hf_deploy.log
 
       - name: Upload deploy log as artifact
         if: always()
