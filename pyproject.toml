@@ -54,6 +54,10 @@ rl = [
     "d3rlpy==2.3.0",
     "transformers>=4.36.0",
     "scipy>=1.11.0",
+    # Forecasting module imports `pytorch_lightning`. Pinning >=2.4.0 closes
+    # the path-traversal advisory chain; the residual DoS advisories have no
+    # patched version published yet (tracked, dismissed as "no fix yet").
+    "pytorch-lightning>=2.4.0",
     "fredapi>=0.5.0",
     "shap>=0.43.0",
     "mlflow>=2.10.0",
