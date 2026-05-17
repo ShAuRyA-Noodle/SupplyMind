@@ -16,7 +16,7 @@ torch>=2.2.0
 onnxruntime>=1.17
 
 # Forecast runtime (Chronos inference only, no training)
-chronos-forecasting>=1.1.0
+chronos-forecasting>=1.5.3
 
 # For /rag corpus loading
 pickle-mixin>=1.0.2
