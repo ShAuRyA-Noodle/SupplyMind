@@ -34,6 +34,19 @@ from models import SupplyMindAction
 from server.supply_environment import SupplyMindEnvironment
 
 
+_TASK_ID_RE = __import__("re").compile(r"^[A-Za-z0-9_-]{1,64}$")
+
+
+def _validated_task_id(raw: str | None) -> str:
+    """Reject any non-alphanumeric input so an attacker cannot reach disk paths
+    outside the bundled `checkpoints/` folder by passing ``../../etc/passwd``."""
+    candidate = (raw or "easy_typhoon_response").strip()
+    if not _TASK_ID_RE.match(candidate):
+        from fastapi import HTTPException
+        raise HTTPException(status_code=400, detail="invalid task_id")
+    return candidate
+
+
 class ResetRequest(BaseModel):
     """Optional body for POST /reset."""
     task_id: Optional[str] = "easy_typhoon_response"
@@ -219,15 +232,18 @@ def _mount_phoenix(prefix: str, module_path: str, tag: str) -> None:
         logger.warning("v5 %s full router not mounted (%s)\n%s", prefix, _e, tb_str)
         # Fallback: expose a /{prefix}/health stub so judges don't 404
         _stub = _APIRouter(tags=[f"{tag} (degraded)"])
-        _err_msg = f"{type(_e).__name__}: {_e}"
+        # Only return the exception *class name* (not the message or trace) so
+        # we don't leak filesystem paths, secrets, or stack frames through the
+        # public health probe.
+        _err_class = type(_e).__name__
 
         @_stub.get("/health")
-        def _degraded_health(_err: str = _err_msg) -> dict:
+        def _degraded_health(_err_class_name: str = _err_class) -> dict:
             return {
                 "ok": False,
                 "status": "degraded",
                 "reason": "module import failed on this deploy",
-                "detail": _err,
+                "error_class": _err_class_name,
                 "hint": "full functionality available locally via pip install -r requirements-rl.txt",
             }
         app.include_router(_stub, prefix=prefix)
@@ -1587,9 +1603,10 @@ async def v3_end_to_end(request: E2ERequest):
     # ---------------------------------------------------------------------
     try:
         import onnxruntime as _ort
-        onnx_path = Path(__file__).parent.parent / "v3_arcadia" / "checkpoints" / "onnx_bundle" / f"ppo_{request.task_id}.onnx"
+        _safe_task_id = _validated_task_id(request.task_id)
+        onnx_path = Path(__file__).parent.parent / "v3_arcadia" / "checkpoints" / "onnx_bundle" / f"ppo_{_safe_task_id}.onnx"
         if not onnx_path.exists():
-            onnx_path = Path(__file__).parent.parent / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{request.task_id}.onnx"
+            onnx_path = Path(__file__).parent.parent / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{_safe_task_id}.onnx"
         obs_source = "unknown"
         try:
             _env = SupplyMindEnvironment()
