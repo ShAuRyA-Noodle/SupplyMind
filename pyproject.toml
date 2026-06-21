@@ -30,7 +30,7 @@ dependencies = [
     # version of each, otherwise uv.lock pulls in the vulnerable line.
     "authlib>=1.6.12",
     "cryptography>=46.0.7",
-    "python-multipart>=0.0.27",
+    "python-multipart>=0.0.31",
     "urllib3>=2.7.0",
 ]
 
