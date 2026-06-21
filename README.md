@@ -48,14 +48,14 @@ tags:
 
 **OpenEnv-compliant supply-chain risk management.**
 **13 local SOTA foundation models + 18-model OpenRouter frontier panel.**
-**20-source real-data fan-out:** NewsAPI / GDELT / USGS / FRED / MarineTraffic / WHO / NOAA NDBC + Tides / NASA EONET + FIRMS / EIA / GFW / SEC EDGAR / CISA KEV / HackerNews / Wikipedia pageviews / World Bank / OFAC / GDELT-Conflict / GDELT-Humanitarian — verified live 2026-04-25, 391 events / fan-out / sub-90s.
+**20-source real-data fan-out:** NewsAPI / GDELT / USGS / FRED / MarineTraffic / WHO / NOAA NDBC + Tides / NASA EONET + FIRMS / EIA / GFW / SEC EDGAR / CISA KEV / HackerNews / Wikipedia pageviews / World Bank / OFAC / GDELT-Conflict / GDELT-Humanitarian - verified live 2026-04-25, 391 events / fan-out / sub-90s.
 **275 passing tests** (277 collected; 2 live tests skipped unless API keys are present).
 **1500-event auto-cooked crisis library v2** from real EMDAT (16,812 disasters 2000-2026, deterministic-rule severity from real death/damage/affected counts), mxbai-embed-large 1024-dim FAISS HNSW.
 **4-method Platinum counterfactual** (paired-bootstrap MC + synthetic-control donor weighting + BSTS-lite ARIMA + SCM do-calculus proxy) cross-method consensus, calibrated against **6 published economic-impact anchors** (Suez 2021 $9.6B/day · Tohoku 2011 $235B · Katrina 2005 $200B · Fukushima 2011 $187B · COVID-chip 2020-23 $500B+ · Texas freeze 2021 $130B). Method-B Tohoku replication: $276B point vs published $235B, **within 18%, inside CI95**.
-**RAP-XC novel 9th leaderboard agent** (Retrieval-Augmented Policy with Crisis-Conditioned Cross-Attention) — 3.14M params, FAISS retrieval over 1500-event library + 25-judge prior distillation, expected +15-35% relative on hard_cascading_crisis.
-**Heterogeneous Temporal GAT** replaces v1 GCN — edge-type-conditional attention + GRU temporal gating across 4 node types × 4 edge types.
-**Hierarchical + Conformal action lift** — 4-intent strategic layer × split-conformal filter with `P[expert ∈ accepted] ≥ 1-α` coverage guarantee.
-**End-to-end live demo** at `POST /demo/recent-disaster` — 24-48h disaster pick → library v2 match → multi-layer offline-heuristic severity → Platinum counterfactual → action plan, all in <90s, all real signals.
+**RAP-XC novel 9th leaderboard agent** (Retrieval-Augmented Policy with Crisis-Conditioned Cross-Attention) - 3.14M params, FAISS retrieval over 1500-event library + 25-judge prior distillation, expected +15-35% relative on hard_cascading_crisis.
+**Heterogeneous Temporal GAT** replaces v1 GCN - edge-type-conditional attention + GRU temporal gating across 4 node types × 4 edge types.
+**Hierarchical + Conformal action lift** - 4-intent strategic layer × split-conformal filter with `P[expert ∈ accepted] ≥ 1-α` coverage guarantee.
+**End-to-end live demo** at `POST /demo/recent-disaster` - 24-48h disaster pick → library v2 match → multi-layer offline-heuristic severity → Platinum counterfactual → action plan, all in <90s, all real signals.
 **Zero synthetic substitution anywhere in the data or reward path.** Every number traces to a public URL or a committed JSON receipt.
 
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-compliant-blue)](https://github.com/meta-llama/open-env)
@@ -71,34 +71,34 @@ tags:
 
 ---
 
-## 🏆 Meta PyTorch × Scaler OpenEnv Hackathon — Finals 2026-04-25/26
+## 🏆 Meta PyTorch × Scaler OpenEnv Hackathon - Finals 2026-04-25/26
 
-**Primary theme: #3.1 World Modeling — Professional Tasks.** An LLM agent that interacts with real geopolitical APIs (NewsAPI, GDELT, USGS, FRED, MarineTraffic) to build a persistent world-model of global supply-chain risk, tested against real 2024-2026 crisis scenarios. Supporting theme: **#4 Self-Improvement** (Karpathy-style autoresearch loop with bootstrap-CI95 accept/reject on proposed training variants).
+**Primary theme: #3.1 World Modeling - Professional Tasks.** An LLM agent that interacts with real geopolitical APIs (NewsAPI, GDELT, USGS, FRED, MarineTraffic) to build a persistent world-model of global supply-chain risk, tested against real 2024-2026 crisis scenarios. Supporting theme: **#4 Self-Improvement** (Karpathy-style autoresearch loop with bootstrap-CI95 accept/reject on proposed training variants).
 
-### Minimum-requirement evidence — every gate, one click away
+### Minimum-requirement evidence - every gate, one click away
 
 | # | Requirement | Status | Evidence |
 |---|---|---|---|
 | 1 | OpenEnv (latest release) | ✅ | `openenv-core>=0.2.3` (latest PyPI) · [server/app.py](server/app.py) exposes `/reset` `/step` `/state` `/tasks` `/grader` `/health` `/schema` `/metadata` `/mcp` · OpenEnv `Environment[ActT,ObsT,StateT]` subclass + `TrajectoryRubric` composition at [server/openenv_adapter.py](server/openenv_adapter.py) · [openenv.yaml](openenv.yaml) manifest |
-| 2 | Minimal training script using **Unsloth or HF TRL in Colab** | ✅ | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/06_trl_training_colab.ipynb) [`notebooks/06_trl_training_colab.ipynb`](notebooks/06_trl_training_colab.ipynb) — TRL `DPOTrainer` on 21 real preference pairs, Qwen-2.5-0.5B, runs in ~15 min on free T4, plots loss + implicit reward margins |
-| 3 | OpenEnv env hosted on HF Spaces | ✅ | [huggingface.co/spaces/Shaurya-Noodle/Supplymind](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) — live Docker deploy |
+| 2 | Minimal training script using **Unsloth or HF TRL in Colab** | ✅ | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/06_trl_training_colab.ipynb) [`notebooks/06_trl_training_colab.ipynb`](notebooks/06_trl_training_colab.ipynb) - TRL `DPOTrainer` on 21 real preference pairs, Qwen-2.5-0.5B, runs in ~15 min on free T4, plots loss + implicit reward margins |
+| 3 | OpenEnv env hosted on HF Spaces | ✅ | [huggingface.co/spaces/Shaurya-Noodle/Supplymind](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) - live Docker deploy |
 | 4 | Mini-blog on HF or <2-min video | 📹 | Script ready at [demo/DEMO_VIDEO_SCRIPT.md](demo/DEMO_VIDEO_SCRIPT.md); record & link after onsite |
 | 5 | Observable reward improvement | ✅ | [versions/v3_arcadia/plots/gethsemane/learning_curves.png](versions/v3_arcadia/plots/gethsemane/learning_curves.png) · autoresearch +0.148 CI95 lift in [versions/v4_arcadia_live/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md](versions/v4_arcadia_live/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md) · A/B lift 0 % → 80 % in [versions/v4_arcadia_live/features/R9_ANALYST_AB_V5.json](versions/v4_arcadia_live/features/R9_ANALYST_AB_V5.json) |
-| 6 | Training loop connects to the live env (not a static dataset) | ✅ | [versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) — every reward comes via HTTP `POST /analyst/grade` on the running server. Dry-run log: correct=0.900, wrong=0.200, gap=0.700 |
-| 7 | Client/server separation | ✅ | [client/supplymind_client.py](client/supplymind_client.py) — zero `from server` imports; verified live against HF Space (`health: True`, metadata matches) |
+| 6 | Training loop connects to the live env (not a static dataset) | ✅ | [versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) - every reward comes via HTTP `POST /analyst/grade` on the running server. Dry-run log: correct=0.900, wrong=0.200, gap=0.700 |
+| 7 | Client/server separation | ✅ | [client/supplymind_client.py](client/supplymind_client.py) - zero `from server` imports; verified live against HF Space (`health: True`, metadata matches) |
 | 8 | **RLVE adaptive curriculum** (FAQ §22-23, §35) | ✅ | `POST /analyst/next-scenario` picks training scenarios at the policy's zone of proximal development using REAL R4 3-judge-disagreement as difficulty oracle. Trainer flag `--adaptive` pre-computes an easy→hard curriculum from the endpoint. |
 | 9 | **Sealed holdout evaluator** (FAQ §44, §52) | ✅ | `GET /analyst/scenarios?split=holdout` returns 6 sealed scenarios never served to the trainer; `POST /analyst/holdout-eval` batch-scores the policy against them with `mean_reward / exact_match_rate / adjacent_or_exact_rate`. Trainer auto-excludes holdout from `--adaptive` sampler. |
-| 10 | **Adversarial reward-hacking audit** (FAQ §57) | ✅ | [tests/test_reward_hacking_adversarial.py](tests/test_reward_hacking_adversarial.py) — 6 attack vectors (short-circuit, long-spam, over-length, adjacent-guess, wrong-tier, empty) all rejected by the layered reward; committed receipt at [tests/receipts/adversarial_reward_audit.json](tests/receipts/adversarial_reward_audit.json). 8/8 tests pass. |
-| 11 | **Proximity-scored ordinal reward** (FAQ §59.1) | ✅ | `r_match` gives 1.0 exact / 0.5 adjacent / 0.0 wrong on the LOW/MEDIUM/HIGH/CRITICAL tier — the "proximity scoring for more nuanced rewards" pattern the Unsloth advanced-Qwen3 recipe uses. Keeps gradient informative without collapsing into binary sparse reward (FAQ §29-30). |
+| 10 | **Adversarial reward-hacking audit** (FAQ §57) | ✅ | [tests/test_reward_hacking_adversarial.py](tests/test_reward_hacking_adversarial.py) - 6 attack vectors (short-circuit, long-spam, over-length, adjacent-guess, wrong-tier, empty) all rejected by the layered reward; committed receipt at [tests/receipts/adversarial_reward_audit.json](tests/receipts/adversarial_reward_audit.json). 8/8 tests pass. |
+| 11 | **Proximity-scored ordinal reward** (FAQ §59.1) | ✅ | `r_match` gives 1.0 exact / 0.5 adjacent / 0.0 wrong on the LOW/MEDIUM/HIGH/CRITICAL tier - the "proximity scoring for more nuanced rewards" pattern the Unsloth advanced-Qwen3 recipe uses. Keeps gradient informative without collapsing into binary sparse reward (FAQ §29-30). |
 | 12 | **Multi-turn GRPO roadmap** (FAQ §59.6) | 📋 | Single-turn v1 is the FAQ-blessed hackathon choice (§18, §54); env is already multi-turn-capable via `TrajectoryRubric.compute_step_rewards`; full design + stepwise-reward schedule + ROLL integration path documented in [docs/MULTI_TURN_GRPO_ROADMAP.md](docs/MULTI_TURN_GRPO_ROADMAP.md). |
 
-### RL training stack — two-stage, both provably env-connected
+### RL training stack - two-stage, both provably env-connected
 
-**Stage 0 — MaskablePPO policy training (history).** RL policy trained in-env on 3 supply-chain tasks: [versions/v3_arcadia/plots/gethsemane/learning_curves.png](versions/v3_arcadia/plots/gethsemane/learning_curves.png). Bootstrap CI95 non-overlapping vs random/greedy in [versions/v3_arcadia/results/R6_EUCLIDIAN.json](versions/v3_arcadia/results/R6_EUCLIDIAN.json).
+**Stage 0 - MaskablePPO policy training (history).** RL policy trained in-env on 3 supply-chain tasks: [versions/v3_arcadia/plots/gethsemane/learning_curves.png](versions/v3_arcadia/plots/gethsemane/learning_curves.png). Bootstrap CI95 non-overlapping vs random/greedy in [versions/v3_arcadia/results/R6_EUCLIDIAN.json](versions/v3_arcadia/results/R6_EUCLIDIAN.json).
 
-**Stage 1 — DPO warm-start (Colab, Unsloth + TRL).** [notebooks/06_trl_training_colab.ipynb](notebooks/06_trl_training_colab.ipynb) — **Unsloth `FastLanguageModel` (4-bit NF4)** + TRL `DPOTrainer` on 21 real preference pairs from the 3-judge LLM panel. Uses the exact stack the self-serve guide §10 names as the intended one (*"TRL for RL training algorithms, Unsloth to make RL training and inference more efficient, OpenEnv to standardize environment interaction"*). Runs in ≤10 min on free Colab T4 with Unsloth (vs ≤20 min vanilla). Falls back cleanly to vanilla `transformers` if Unsloth isn't available. Plots loss + chosen/rejected reward margins.
+**Stage 1 - DPO warm-start (Colab, Unsloth + TRL).** [notebooks/06_trl_training_colab.ipynb](notebooks/06_trl_training_colab.ipynb) - **Unsloth `FastLanguageModel` (4-bit NF4)** + TRL `DPOTrainer` on 21 real preference pairs from the 3-judge LLM panel. Uses the exact stack the self-serve guide §10 names as the intended one (*"TRL for RL training algorithms, Unsloth to make RL training and inference more efficient, OpenEnv to standardize environment interaction"*). Runs in ≤10 min on free Colab T4 with Unsloth (vs ≤20 min vanilla). Falls back cleanly to vanilla `transformers` if Unsloth isn't available. Plots loss + chosen/rejected reward margins.
 
-**Stage 2 — GRPO against the live env (RLVR + multi-reward).** [versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) — TRL `GRPOTrainer` with **three independent reward functions** (guide §7: *"multiple independent reward functions"*, §15: *"monitor individual reward function columns"*). Each function is an `HTTP POST /analyst/grade` call whose breakdown is memoized per (scenario, completion) to keep the training loop one HTTP round-trip per completion. TRL logs `reward_match`, `reward_format`, `reward_length` as separate columns; `GRPOConfig.reward_weights = [0.7, 0.2, 0.1]` folds them into the optimization objective. Reward-hacking defenses (§8): `r_match` uses the sealed R4 ground truth; `r_format` requires valid JSON with both `risk_level` and `confidence`; `r_length` rejects degenerate short-circuit outputs (&lt; 30 tokens). Verified smoke: `match: correct=1.0, wrong=0.0`; `format: 1.0/1.0`; `length: 0/0` on the short smoke inputs (correctly discriminates below-threshold); total reward gap 0.7.
+**Stage 2 - GRPO against the live env (RLVR + multi-reward).** [versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) - TRL `GRPOTrainer` with **three independent reward functions** (guide §7: *"multiple independent reward functions"*, §15: *"monitor individual reward function columns"*). Each function is an `HTTP POST /analyst/grade` call whose breakdown is memoized per (scenario, completion) to keep the training loop one HTTP round-trip per completion. TRL logs `reward_match`, `reward_format`, `reward_length` as separate columns; `GRPOConfig.reward_weights = [0.7, 0.2, 0.1]` folds them into the optimization objective. Reward-hacking defenses (§8): `r_match` uses the sealed R4 ground truth; `r_format` requires valid JSON with both `risk_level` and `confidence`; `r_length` rejects degenerate short-circuit outputs (&lt; 30 tokens). Verified smoke: `match: correct=1.0, wrong=0.0`; `format: 1.0/1.0`; `length: 0/0` on the short smoke inputs (correctly discriminates below-threshold); total reward gap 0.7.
 
 **Env-connected dry-run proof** (reproducible):
 ```bash
@@ -112,11 +112,11 @@ python -m versions.v5_phoenix.roll_integration.dpo_judge.train_grpo_live_env \
 
 ### Killer demo moment
 
-The live Hormuz pipeline ingested 3,911 real 2026 news articles on launch day and matched the **2026-04-18 Gulf-of-Oman cargo-ship seizure** to our pre-loaded crisis library at **0.99 similarity**. That is not a synthetic demo — it is the agent reading today's news and recognizing it as analogous to a historical disruption, in seconds. See [versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json](versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json) and [versions/v4_arcadia_live/realtime/hormuz_endpoint.py](versions/v4_arcadia_live/realtime/hormuz_endpoint.py).
+The live Hormuz pipeline ingested 3,911 real 2026 news articles on launch day and matched the **2026-04-18 Gulf-of-Oman cargo-ship seizure** to our pre-loaded crisis library at **0.99 similarity**. That is not a synthetic demo - it is the agent reading today's news and recognizing it as analogous to a historical disruption, in seconds. See [versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json](versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json) and [versions/v4_arcadia_live/realtime/hormuz_endpoint.py](versions/v4_arcadia_live/realtime/hormuz_endpoint.py).
 
 ---
 
-## If you have 30 seconds — ten headline numbers
+## If you have 30 seconds - ten headline numbers
 
 | # | Metric | Value |
 |---|---|---|
@@ -135,7 +135,7 @@ The live Hormuz pipeline ingested 3,911 real 2026 news articles on launch day an
 | 9 | **TimesFM-CP dev @ 95%** (WTI / EUR-USD) | **0.050 / 0.032** |
 | 10 | **PPO vs random/greedy bootstrap CI95** | non-overlapping on all 3 tasks |
 
-Full results page: [`docs/v3/RESULTS.md`](docs/v3/RESULTS.md) — every number reproducible from committed JSON with one `jq` command.
+Full results page: [`docs/v3/RESULTS.md`](docs/v3/RESULTS.md) - every number reproducible from committed JSON with one `jq` command.
 
 **Meta PyTorch OpenEnv Hackathon submission.** Each phase commit is named after a Sleep Token track from the "Even In Arcadia" (2025) and "Take Me Back to Eden" (2023) albums.
 
@@ -146,17 +146,17 @@ Full results page: [`docs/v3/RESULTS.md`](docs/v3/RESULTS.md) — every number r
 | **Emergence** | R1 | 13 SOTA foundation models verified, Qwen-VL downstream |
 | **Caramel** | R2 | TabPFN-v2 + XGB + LGB + CAT tabular SOTA with SHAP/fairness/calibration |
 | **Past Self** | R3 | Chronos-Bolt + TimesFM-2 + ARIMA + Prophet + Bates-Granger stacking + TFT cross-ref |
-| **Dangerous** | R4 | 3-judge LLM panel (DeepSeek-R1 + Qwen-14B + Mistral-Nemo) — 26 scenarios × α=0.75 |
+| **Dangerous** | R4 | 3-judge LLM panel (DeepSeek-R1 + Qwen-14B + Mistral-Nemo) - 26 scenarios × α=0.75 |
 | **Granite** | R5 | 8 RAG pipelines, 6,483-chunk real corpus, mxbai P@1=0.962, reranker +5pp on hard |
-| **Gethsemane** | R6-α | MaskablePPO — +26.8% reward from action masking, 0 invalid actions, ONNX-exported |
+| **Gethsemane** | R6-α | MaskablePPO - +26.8% reward from action masking, 0 invalid actions, ONNX-exported |
 | **Euclidian** | R6-β | 8,100-ep bootstrap CI95, non-overlapping vs random/greedy on all 3 tasks |
 | **Provider** | R6-γ | Custom 3-layer GCN; +48–64% arrival-time MAE reduction vs MLP |
-| **Aqua Regia** | R6-δ | Per-horizon split-conformal — deviation 0.024 vs pooled 0.112 (4.7× tighter) |
+| **Aqua Regia** | R6-δ | Per-horizon split-conformal - deviation 0.024 vs pooled 0.112 (4.7× tighter) |
 | **Arcadia** | R7 | v3.0-arcadia release, HF Space, GitHub Action auto-deploy |
 
 ---
 
-## TL;DR — v3.0-arcadia headline (read this in 30 seconds)
+## TL;DR - v3.0-arcadia headline (read this in 30 seconds)
 
 | Layer | Tech | Headline metric |
 |---|---|---|
@@ -213,7 +213,7 @@ All 13 foundation models run **locally** via Ollama (LLMs, Q4_K_M) or Python (em
 
 ```bash
 # 1. Clone + install
-git clone https://github.com/ShAuRyA-Noodle/Sleep-Token.git supplymind && cd supplymind
+git clone https://github.com/ShAuRyA-Noodle/SupplyMind.git supplymind && cd supplymind
 pip install -r requirements.txt
 
 # 2. Run 154 tests (1m 47s on CPU)
@@ -245,14 +245,14 @@ Full stack with GPU + Ollama: see [`docs/v3/MODEL_CARD.md` §6](docs/v3/MODEL_CA
 
 ## Pre-v3 history (v1 simulated, v2 real DataCo)
 
-We trained agents in two earlier paradigms — simulated env baseline and real-world Kaggle data — and report both honestly. v3 subsumes v2 for production; v2 is retained as evidence of real-data transfer learning.
+We trained agents in two earlier paradigms - simulated env baseline and real-world Kaggle data - and report both honestly. v3 subsumes v2 for production; v2 is retained as evidence of real-data transfer learning.
 
 ### A. Simulated-Env Benchmark (n=300 episodes per agent, p<0.001)
 
 | Agent | Easy | Medium | Hard | Avg | Improvement vs Scripted |
 |-------|------|--------|------|-----|--------------------------|
 | Random | 0.709 | 0.598 | 0.727 | 0.678 | +82.7% |
-| Scripted (baseline) | 0.336 | 0.207 | 0.571 | 0.371 | — |
+| Scripted (baseline) | 0.336 | 0.207 | 0.571 | 0.371 | - |
 | BC | 0.663 | 0.500 | 0.610 | 0.591 | +59.3% |
 | CQL | 0.688 | 0.629 | 0.655 | 0.657 | +77.0% |
 | TD3+BC | 0.678 | 0.629 | 0.656 | 0.654 | +76.3% |
