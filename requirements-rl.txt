@@ -6,9 +6,9 @@ torch>=2.1.0
 gymnasium==0.29.1
 
 # RL frameworks
-stable-baselines3==2.2.1
-sb3-contrib==2.2.1
-d3rlpy==2.3.0
+stable-baselines3==2.9.0
+sb3-contrib==2.9.0
+d3rlpy==2.8.1
 
 # Transformers (for Decision Transformer backbone)
 transformers>=4.36.0
@@ -34,12 +34,12 @@ wandb>=0.16.0
 ollama>=0.1.0
 
 # RAG
-chromadb==0.4.24
+chromadb==0.6.3
 sentence-transformers>=2.2.0
 PyPDF2>=3.0.0
 
 # Forecasting
-pytorch-forecasting==1.0.0
+pytorch-forecasting==1.7.0
 pytorch-lightning>=2.4.0
 
 # Optimization
