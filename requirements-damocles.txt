@@ -13,7 +13,7 @@ sentence-transformers>=2.7.0
 torch>=2.2.0
 
 # ONNX Runtime for PPO policy
-onnxruntime>=1.17
+onnxruntime>=1.27.0
 
 # Forecast runtime (Chronos inference only, no training)
 chronos-forecasting>=1.1.0
