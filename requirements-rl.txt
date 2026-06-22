@@ -48,4 +48,4 @@ optuna>=3.4.0
 
 # ONNX export
 onnx>=1.15.0
-onnxruntime>=1.16.0
+onnxruntime>=1.27.0
