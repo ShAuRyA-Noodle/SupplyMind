@@ -43,7 +43,7 @@ pytorch-forecasting==1.7.0
 pytorch-lightning>=2.4.0
 
 # Optimization
-pymoo>=0.6.0
+pymoo>=0.6.2
 optuna>=3.4.0
 
 # ONNX export
