@@ -39,7 +39,7 @@ sentence-transformers>=2.2.0
 PyPDF2>=3.0.0
 
 # Forecasting
-pytorch-forecasting==1.7.0
+pytorch-forecasting==1.8.0
 pytorch-lightning>=2.4.0
 
 # Optimization
