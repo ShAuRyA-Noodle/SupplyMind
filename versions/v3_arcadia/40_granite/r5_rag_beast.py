@@ -102,6 +102,70 @@ def pdf_to_text(path: Path) -> str:
         return ""
 
 
+def _fmt_wb_value(v) -> str:
+    """Format a World Bank observation value for readable retrieval text."""
+    try:
+        fv = float(v)
+    except (TypeError, ValueError):
+        return str(v)
+    if abs(fv) >= 1e6:
+        return f"{fv:,.0f}"
+    return f"{fv:,.3f}".rstrip("0").rstrip(".")
+
+
+def wb_json_to_docs(path: Path) -> list[tuple[str, str]]:
+    """Parse a World Bank Open Data API JSON file into per-country documents.
+
+    THE BUG THIS FIXES (R17): WB API responses are a top-level LIST
+    ``[metadata_dict, rows_list]`` — never a dict. The previous loader did
+    ``d.items() if isinstance(d, dict) else []`` which always hit the ``else``
+    branch, yielding ZERO World-Bank chunks in every RAG corpus ever built
+    (see the committed ``R5_GRANITE.json`` -> ``world_bank: 0``).
+
+    Each file holds ONE indicator (e.g. GDP) as a time series across a handful
+    of major economies. We emit one document per (indicator, country) so each
+    is independently retrievable, with ``doc_id = "{stem}__{iso3}"``.
+
+    Returns a list of ``(doc_id, text)`` tuples. Raises on malformed JSON
+    (fail loud — the silent ``except: pass`` was part of what hid the bug).
+    """
+    raw = json.loads(path.read_text(encoding="utf-8", errors="ignore"))
+    if not (isinstance(raw, list) and len(raw) == 2 and isinstance(raw[1], list)):
+        raise ValueError(
+            f"{path.name}: not a World Bank [meta, rows] response "
+            f"(got {type(raw).__name__}) — cannot ingest"
+        )
+    rows = raw[1]
+    # Group observations by country, keeping only non-null values.
+    by_country: dict[str, dict] = {}
+    for r in rows:
+        val = r.get("value")
+        if val is None:
+            continue
+        iso3 = r.get("countryiso3code") or (r.get("country") or {}).get("id") or "UNK"
+        entry = by_country.setdefault(iso3, {
+            "country": (r.get("country") or {}).get("value", iso3),
+            "indicator": (r.get("indicator") or {}).get("value", path.stem),
+            "indicator_id": (r.get("indicator") or {}).get("id", ""),
+            "obs": [],
+        })
+        entry["obs"].append((str(r.get("date")), val))
+
+    docs: list[tuple[str, str]] = []
+    for iso3, e in by_country.items():
+        obs = sorted(e["obs"], key=lambda x: x[0], reverse=True)  # most recent first
+        series = "; ".join(f"{yr}: {_fmt_wb_value(v)}" for yr, v in obs)
+        text = (
+            f"World Bank macroeconomic indicator. "
+            f"Indicator: {e['indicator']} ({e['indicator_id']}). "
+            f"Country: {e['country']} ({iso3}). "
+            f"Annual observations, most recent first: {series}. "
+            f"Source: World Bank Open Data API (data.worldbank.org)."
+        )
+        docs.append((f"{path.stem}__{iso3}", text))
+    return docs
+
+
 def load_corpus() -> list[dict]:
     chunks = []
     # Wikipedia crisis articles
@@ -125,17 +189,13 @@ def load_corpus() -> list[dict]:
             if txt:
                 chunks.extend(chunk_text(txt, "policy", f.stem))
     pol_n = len(chunks) - wiki_n - sec_n
-    # World Bank macro (JSON -> concatenated key-value text)
+    # World Bank macro (JSON [meta, rows] -> per-country indicator documents).
+    # R17 fix: the WB API returns a top-level list, not a dict; see wb_json_to_docs.
     wb_dir = EXT / "world_bank_macro"
     if wb_dir.exists():
-        for f in sorted(wb_dir.glob("*.json"))[:6]:
-            try:
-                d = json.loads(f.read_text(encoding="utf-8", errors="ignore"))
-                lines = [f"{k}: {v}" for k, v in (d.items() if isinstance(d, dict) else [])]
-                txt = f.stem + "\n" + "\n".join(lines[:200])
-                chunks.extend(chunk_text(txt, "world_bank", f.stem))
-            except Exception:
-                pass
+        for f in sorted(wb_dir.glob("*.json")):
+            for doc_id, txt in wb_json_to_docs(f):
+                chunks.extend(chunk_text(txt, "world_bank", doc_id))
     wb_n = len(chunks) - wiki_n - sec_n - pol_n
     log.info(f"Corpus: {len(chunks)} chunks (wiki={wiki_n}, sec={sec_n}, policy={pol_n}, wb={wb_n}) "
              f"from {len(set(c['doc_id'] for c in chunks))} docs")
