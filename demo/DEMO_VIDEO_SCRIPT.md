@@ -1,3 +1,25 @@
+> ## ⚠️ LEGACY — v3.0-arcadia script (pre-reorg). DO NOT follow verbatim.
+>
+> The endpoints in this script (`/assess`, `/forecast`, `/rag`, and the
+> `supplymind.hf.space/docs` URL) belonged to the retired v3 `90_damocles` app and **no longer
+> exist** on the current `server/app.py`. A judge following this script verbatim will hit 404s.
+> Verify the live route set with `GET /docs` on a running server. Current equivalents:
+>
+> | This script says | Current route on `server/app.py` |
+> |---|---|
+> | `POST /assess` (3-judge panel) | `GET /analyst/panel-consensus/{scenario_id}` (committed 9-judge replay) · `POST /agent/decide` (live 5-stage pipeline incl. judge panel) |
+> | `POST /forecast` | no standalone route — the forecast is a stage inside `POST /v3/e2e` and `POST /agent/decide` |
+> | `POST /rag` | `POST /library/v2/search` (EMDAT crisis library) · retrieval stage inside `POST /v3/e2e` |
+> | `https://supplymind.hf.space/docs` | `GET /docs` (Swagger) on the running server |
+>
+> **Current demo centerpiece:** `POST /demo/hormuz-war-room` with the interactive UI at
+> `GET /demo/hormuz-war-room/ui`, plus the system board at `GET /demo/master`. Also live today:
+> `POST /reset` · `POST /step` · `GET /state` · `POST /grader` · `POST /counterfactual/platinum` ·
+> `POST /live/intel-fan-out`. Re-shoot against these before publishing; the on-screen JSON below is
+> illustrative, not a captured response.
+>
+> ---
+
 # SupplyMind v3.0-arcadia — 3-minute demo video script
 
 **Target**: record with OBS Studio or Loom. Voice-over reads the script verbatim. Each scene has explicit B-roll instructions.

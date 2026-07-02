@@ -4,8 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SupplyMind · Hormuz War Room</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<!-- Assets vendored locally under server/static/vendor/ so the demo survives with no internet.
+     (Served-over-HTTP note: these resolve when the static dir is opened/served as a directory;
+      a StaticFiles mount for server/static is required for the FastAPI /demo/hormuz-war-room/ui route.) -->
+<link href="vendor/fonts/fonts.css" rel="stylesheet">
+<script src="vendor/tailwind.js"></script>
 <style>
   :root {
     --bg-0: #07090f;
@@ -68,6 +71,11 @@
   .stage-pill.run  { background: rgba(34,211,238,.10); color: var(--cyan);
                      border-color: rgba(34,211,238,.4);
                      animation: blink 1.2s ease-in-out infinite; }
+  /* pending = queued for this request (single honest loading state, no fake
+     per-stage animation); fail = stage ran but produced no output (amber). */
+  .stage-pill.pending { opacity: .45; }
+  .stage-pill.fail { background: rgba(251,191,36,.10); color: var(--amber);
+                     border-color: rgba(251,191,36,.4); }
   @keyframes blink { 50% { opacity: .55; } }
   table.dense th, table.dense td {
     border-bottom: 1px solid var(--bd); padding: 8px 10px; text-align: left;
@@ -704,10 +712,10 @@
 
   function setStage(name, state) {
     const el = document.querySelector(`.stage-pill[data-stage="${name}"]`);
-    if (el) { el.classList.remove("done","run");
+    if (el) { el.classList.remove("done","run","pending","fail");
               if (state) el.classList.add(state); }
   }
-  function resetStages() { $$(".stage-pill").forEach(e => e.classList.remove("done","run")); }
+  function resetStages() { $$(".stage-pill").forEach(e => e.classList.remove("done","run","pending","fail")); }
 
   // ---------- chokepoint map render ----------
   function renderMap(graph) {
@@ -1254,8 +1262,12 @@
       enable_specialist_judges: true,
       scenario_focus: $("#enable-reliance").checked ? "reliance_full_supplychain" : "default",
     };
+    // No fake choreography: this endpoint is a single blocking call with no
+    // per-stage timings, so we show ONE honest loading state (pills dimmed +
+    // "running…" button) and only mark each stage done/failed AFTER the real
+    // response, driven by whether that stage actually produced output.
     resetStages();
-    ["signals","analogs","judges","sectors","cf","receipt"].forEach(s=>setStage(s,"run"));
+    ["signals","analogs","judges","sectors","cf","receipt"].forEach(s=>setStage(s,"pending"));
     $("#run-btn").disabled = true;
     $("#run-btn").textContent = "running…";
     const t0 = performance.now();
@@ -1279,13 +1291,19 @@
     const elapsed = ((performance.now() - t0) / 1000).toFixed(2);
     $("#elapsed").textContent = elapsed;
 
-    // Stage flags
-    setStage("signals", "done");
-    setStage("analogs", "done");
-    setStage("judges",  "done");
-    setStage("sectors", "done");
-    setStage("cf",      "done");
-    setStage("receipt", "done");
+    // Stage flags — driven by the REAL response content, not blind success.
+    // A pill turns green only if that stage actually produced output; amber
+    // (fail) if the stage ran but returned nothing (e.g. no recent signals /
+    // no analog match / rubric-only judges).
+    const lp = resp.live_pipeline || {};
+    const nonEmpty = (v) => v && (Array.isArray(v) ? v.length > 0
+                        : (typeof v === "object" ? Object.keys(v).length > 0 : true));
+    setStage("signals", (lp.signals_used_count > 0) ? "done" : "fail");
+    setStage("analogs", nonEmpty(lp.analogs) ? "done" : "fail");
+    setStage("judges",  nonEmpty(lp.judges) ? "done" : "fail");
+    setStage("sectors", (nonEmpty(resp.india_impact_table) && nonEmpty(resp.gulf_impact_table)) ? "done" : "fail");
+    setStage("cf",      nonEmpty(lp.counterfactual) ? "done" : "fail");
+    setStage("receipt", (typeof resp.receipt_sha256 === "string" && resp.receipt_sha256.length > 0) ? "done" : "fail");
 
     // Headline
     $("#headline").classList.remove("hidden");
