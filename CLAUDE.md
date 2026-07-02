@@ -503,6 +503,22 @@ High-confidence shortlist meanwhile:
 6. Decision: Damocles service — fold into main server (default) or fix as separate container.
 7. Playwright MCP install approval (P2.3).
 
+## 12b. NORTH-STAR (owner directive 2026-07-02: no compromise, brutal honesty)
+
+The residual risk after de-faking is SPRAWL WITHOUT A SPINE: 250 features, no product. Rule for
+all rebuild waves:
+- **One product**: SupplyMind — supply-chain risk decision copilot for a corporate risk desk
+  (persona anchor: India risk officer watching Hormuz). One brand; version codenames are history.
+- **One golden path** (the 4-minute judge demo): live signal (GFW/NewsAPI/FRED) → calibrated
+  analyst verdict (strict JSON, Brier-scored) → decision (RL or scripted, whichever the benchmark
+  honestly favors) → counterfactual $ impact (real methods, R6) → war room renders it live.
+- Before Wave 5 (rebuild), write **PRODUCT_THESIS.md**: thesis, persona, golden-path script, and
+  a mapping of every REBUILD_BACKLOG item → core-spine / supporting / appendix / retire.
+  Rebuild priority follows that mapping, not the backlog's numbering.
+- **Narrative follows evidence**: the RL-vs-scripted story is decided by the P1.3 benchmark
+  results, never assumed. An honest "scripted wins, RL is our research frontier" is world-class;
+  a hedged overclaim is not.
+
 ## 13. STATUS LOG
 - 2026-07-02: 12-agent audit ran (9 done; ci-deploy/docs/final-submit + chief synthesis killed by
   Claude session limit, resets 08:00 IST). Gap-filled manually. Deep-research workflow also killed
