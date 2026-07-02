@@ -1,5 +1,0 @@
-agent,test_action_accuracy,test_action_type_accuracy,n_test
-BC_real,0.122,0.9233,27005
-CQL_real,0.1202,0.9255,27005
-TD3+BC_real,0.1129,0.9232,27005
-IQL_real,0.1209,0.9215,27005
