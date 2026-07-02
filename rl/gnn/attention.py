@@ -211,7 +211,8 @@ def get_attention_edges(
                 "Train and save a SupplyChainGAT, or pass a trained `model`."
             )
         model = SupplyChainGAT()
-        state = torch.load(str(GAT_CHECKPOINT), map_location="cpu", weights_only=False)
+        from rl.checkpoint_security import safe_load
+        state = safe_load(GAT_CHECKPOINT, map_location="cpu")
         model.load_state_dict(state["state_dict"] if isinstance(state, dict) and "state_dict" in state else state)
 
     model.eval()

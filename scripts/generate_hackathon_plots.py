@@ -52,7 +52,7 @@ C_CYAN, C_VIOLET, C_GREEN, C_AMBER, C_RED = "#22d3ee", "#a78bfa", "#34d399", "#f
 # ---------------------------------------------------------------------------
 def plot_reward_curve():
     pt = torch.load(ROOT / "versions/v5_phoenix" / "experiments" / "rap_xc_v1" / "rapxc.pt",
-                     map_location="cpu", weights_only=False)
+                     map_location="cpu", weights_only=True)
     hist = pt.get("history") or []
     steps = [h["step"] for h in hist]
     bc = [h["loss_bc"] for h in hist]
@@ -85,7 +85,7 @@ def plot_reward_curve():
 # ---------------------------------------------------------------------------
 def plot_loss_components():
     pt = torch.load(ROOT / "versions/v5_phoenix" / "experiments" / "rap_xc_v1" / "rapxc.pt",
-                     map_location="cpu", weights_only=False)
+                     map_location="cpu", weights_only=True)
     hist = pt.get("history") or []
     steps = [h["step"] for h in hist]
     fig, ax = plt.subplots(figsize=(8, 5))

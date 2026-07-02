@@ -39,7 +39,7 @@ def load_results() -> list[dict[str, Any]]:
     for f in CHECKPOINT_DIR.glob("autoresearch_*.pt"):
         import torch
         try:
-            ckpt = torch.load(str(f), map_location="cpu", weights_only=False)
+            ckpt = torch.load(str(f), map_location="cpu", weights_only=True)
             results.append({
                 "name": ckpt.get("experiment", f.stem),
                 "grade_avg": ckpt.get("grade_avg", 0),

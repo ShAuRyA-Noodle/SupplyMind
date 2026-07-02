@@ -51,7 +51,8 @@ def export_to_onnx(
         logger.warning("Checkpoint not found at %s. Creating from untrained model.", checkpoint_path)
         model = QRDQNNetwork(408, 280, 51)
     else:
-        ckpt = torch.load(str(checkpoint_path), map_location="cpu", weights_only=False)
+        from rl.checkpoint_security import safe_load
+        ckpt = safe_load(checkpoint_path, map_location="cpu")
         cfg = {k: v for k, v in ckpt["config"].items() if k in ("state_dim", "n_actions", "n_quantiles", "hidden_dim")}
         model = QRDQNNetwork(**cfg)
         model.load_state_dict(ckpt["state_dict"])

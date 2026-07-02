@@ -55,7 +55,7 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
     # Load BC checkpoint (no dropout) and copy weights to a dropout-wrapped version
-    ckpt = torch.load(CKPT, map_location=device)
+    ckpt = torch.load(CKPT, map_location=device, weights_only=True)
     state_dict = ckpt["state_dict"]
 
     # Build a dropout-enabled network of matching shape; BC has no dropout originally,

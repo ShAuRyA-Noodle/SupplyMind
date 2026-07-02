@@ -83,7 +83,8 @@ class EnsemblePolicy:
         # Load DT
         if Path(dt_path).exists():
             from rl.decision_transformer.model import DecisionTransformer
-            ckpt = torch.load(str(dt_path), map_location=self.device, weights_only=False)
+            from rl.checkpoint_security import safe_load
+            ckpt = safe_load(dt_path, map_location=self.device)
             cfg = ckpt["config"]
             self.dt_model = DecisionTransformer(**cfg).to(self.device)
             self.dt_model.load_state_dict(ckpt["state_dict"])
@@ -95,7 +96,8 @@ class EnsemblePolicy:
         # Load QR-DQN
         if Path(qrdqn_path).exists():
             from rl.distributional.qr_dqn import QRDQNNetwork
-            ckpt = torch.load(str(qrdqn_path), map_location=self.device, weights_only=False)
+            from rl.checkpoint_security import safe_load
+            ckpt = safe_load(qrdqn_path, map_location=self.device)
             cfg = {k: v for k, v in ckpt["config"].items() if k in ("state_dim", "n_actions", "n_quantiles", "hidden_dim")}
             self.qrdqn_model = QRDQNNetwork(**cfg).to(self.device)
             self.qrdqn_model.load_state_dict(ckpt["state_dict"])

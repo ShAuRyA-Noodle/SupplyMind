@@ -64,7 +64,8 @@ class SpecialistRouter:
                 ckpt_path = CHECKPOINT_DIR / ckpt_name
                 if ckpt_path.exists():
                     try:
-                        ckpt = torch.load(str(ckpt_path), map_location=self.device, weights_only=False)
+                        from rl.checkpoint_security import safe_load
+                        ckpt = safe_load(ckpt_path, map_location=self.device)
                         cfg = {k: v for k, v in ckpt["config"].items()
                                if k in ("state_dim", "n_actions", "n_quantiles", "hidden_dim")}
                         model = QRDQNNetwork(**cfg)

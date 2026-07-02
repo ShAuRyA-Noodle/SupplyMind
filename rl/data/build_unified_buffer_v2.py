@@ -363,8 +363,11 @@ def access_features(product_name, date_str, log_lookup):
 
 def load_learned_reward():
     try:
-        with open(FIN_MODEL, "rb") as f:
-            model_obj = pickle.load(f)
+        # sha256-gated unpickle: pickle.load is arbitrary code execution, so the
+        # fitted sklearn Ridge model is only unpickled after its hash matches the
+        # trusted manifest (rl.checkpoint_security). A tampered file fails loud.
+        from rl.checkpoint_security import safe_pickle_load
+        model_obj = safe_pickle_load(FIN_MODEL)
         return model_obj["model"]
     except Exception as e:
         log.warning(f"Could not load financial_impact model: {e}; using direct benefit field")

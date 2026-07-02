@@ -176,8 +176,13 @@ def main():
         if epoch % 2 == 0 or epoch == 1:
             log.info(f"  epoch {epoch:2d}: train={tr_loss:.4f} val={va_loss:.4f} best={best_val:.4f}")
 
-    # Test set MAE on P50
-    model.load_state_dict(torch.load(best_path)["state_dict"])
+    # Test set MAE on P50.
+    # weights_only=False is safe here: best_path was written by torch.save() a
+    # few lines above in THIS same process (trusted-local provenance, not a
+    # downloaded/remote artifact). The checkpoint embeds numpy mu/sd arrays that
+    # the weights_only=True unpickler rejects on torch 2.5.1 + numpy 2.x; the
+    # inference-time loader (rl/forecasting/tft.py) sha256-gates the shipped copy.
+    model.load_state_dict(torch.load(best_path, weights_only=False)["state_dict"])
     model.eval()
     with torch.no_grad():
         pred_te = model(torch.from_numpy(X_te).to(DEVICE)).cpu().numpy()

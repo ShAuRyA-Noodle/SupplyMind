@@ -34,7 +34,8 @@ def _cached_model(path, build):
     """Load + build a model once per checkpoint path; reuse across all steps."""
     key = str(path)
     if key not in _MODEL_CACHE:
-        ckpt = torch.load(key, map_location="cpu", weights_only=False)
+        from rl.checkpoint_security import safe_load
+        ckpt = safe_load(key, map_location="cpu")
         model = build(ckpt)
         model.eval()
         _MODEL_CACHE[key] = model

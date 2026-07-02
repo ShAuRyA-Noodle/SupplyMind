@@ -64,7 +64,7 @@ def main():
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     model = BCNetwork().to(device)
-    ckpt = torch.load(CKPT, map_location=device)
+    ckpt = torch.load(CKPT, map_location=device, weights_only=True)
     model.load_state_dict(ckpt["state_dict"])
     model.eval()
     log.info("BC real model loaded.")

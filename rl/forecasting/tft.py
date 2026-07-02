@@ -226,7 +226,8 @@ def predict_tft(
             f"Train one with: python -m rl.forecasting.train_tft_real"
         )
 
-    ckpt = torch.load(str(checkpoint_path), map_location="cpu", weights_only=False)
+    from rl.checkpoint_security import safe_load
+    ckpt = safe_load(checkpoint_path, map_location="cpu")
     required = {"state_dict", "mu", "sd", "y_mu", "y_sd", "quantiles", "horizon", "enc_len", "n_feats"}
     missing = required - set(ckpt)
     if missing:
