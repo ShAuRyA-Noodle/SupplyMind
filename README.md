@@ -68,7 +68,7 @@ tags:
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-compliant-blue)](https://github.com/meta-llama/open-env)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-176%20passing%20%2F%20184-yellow)](tests/)
+[![Tests](https://img.shields.io/badge/tests-184%20passing%20%2F%20184-brightgreen)](tests/)
 [![Real Data](https://img.shields.io/badge/real%20data-261K%20points-orange)](rl/data/)
 [![Release](https://img.shields.io/badge/release-v6.0--genesis-purple)](https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/tag/v6.0-genesis)
 
@@ -652,4 +652,4 @@ MIT
 | BC_v1 | 0.0875 | [0.084, 0.091] | 0.7045 | 0.1128 |
 | CQL_v1 | 0.0675 | [0.065, 0.070] | 0.7176 | 0.0964 |
 
-See `docs/v3/EXECUTIVE_SUMMARY.md` for the full report. *(The `_dump/FAILURE_TABLE.md` deferred-items lineage was moved during the `_dump/` cleanup — pointer pending; do not link until restored.)*
+See `docs/v3/EXECUTIVE_SUMMARY.md` for the full report. *(The `FAILURE_TABLE.md` deferred-items lineage was moved during the `_dump/` cleanup → now at `Sleep-Token-ARCHIVE/_dump/FAILURE_TABLE.md`; in-repo pointer `_dump/POINTER.md`.)*

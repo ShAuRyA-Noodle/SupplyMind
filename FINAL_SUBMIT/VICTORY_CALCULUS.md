@@ -73,7 +73,7 @@ Top 3 requires beating ~7 strong submissions on weighted criteria. Per-criterion
 | Component | Score basis | Out of 20 |
 |---|---|---|
 | Training reward curve | BC loss 5.624 → 0.233 (96% reduction) | 4 / 4 |
-| Quantitative before/after | RAP-XC vs MaskablePPO Wilcoxon p=[STRUCK], Cohen d=+2.73 | 5 / 5 |
+| Quantitative before/after | RAP-XC vs MaskablePPO Wilcoxon significance — **STRUCK** (fabricated; CLAIMS_LEDGER A1); valid re-run pending (P1.3) | — |
 | Statistical rigor | Bootstrap CI95, power analysis, Wilcoxon p=6.6e-35 (REINFORCE v2) | 4 / 4 |
 | Real episodic bootstrap | **CURRENT: reconstructed from sufficient stats. POST U1: real per-episode** | 2 / 4 (post-U1: 4/4) |
 | Ablations | 5-component reward leave-one-out matrix | 2 / 2 |

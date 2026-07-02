@@ -8,9 +8,9 @@ A brutal 12-agent internal audit on 2026-07-02 found that the engine core is gen
 but the **presentation/receipts layer contained fabricated and overstated claims**. We are
 removing them rather than hiding them. Judges should know, up front, what is being re-run:
 
-- **Fabricated statistics chain struck.** The "RAP-XC vs MaskablePPO Wilcoxon p=[STRUCK] /
-  Cohen d=+2.73" and "REINFORCE p=[STRUCK] / d=4.28" headlines came from `bootstrap_leaderboard.py`
-  / `wilcoxon_pairwise_leaderboard.py`, which **sorted two independently synthesized samples and
+- **Fabricated statistics chain struck.** The "RAP-XC vs MaskablePPO Wilcoxon p / Cohen's d" and
+  "REINFORCE p / d" headlines came from the bootstrap-CI and Wilcoxon-pairwise leaderboard
+  generator scripts, which **sorted two independently synthesized samples and
   called them "paired"** — a statistically meaningless test. Those p-values and the plots quoting
   them are struck and pending an honest re-run on real paired-by-seed episodes.
 - **Conformal coverage (0.9001) unverified.** The committed conformal receipts were computed on
@@ -61,7 +61,7 @@ The `impact_inr_cr_30d_band` and `impact_usd_m_30d_band` fields on each sector a
 ## 5. Bootstrap leaderboard "paired" test is invalid — STRUCK
 
 The v3_arcadia eval runs persisted only (n, mean, std, min, max) per (task, agent) — not raw
-per-episode arrays. `bootstrap_leaderboard.py` reconstructs arrays via truncated-normal draws,
+per-episode arrays. The bootstrap-CI leaderboard generator script reconstructs arrays via truncated-normal draws,
 then **sorts the two reconstructed samples and pairs them by quantile rank** before running the
 "paired" bootstrap / Wilcoxon. Sorting two independent samples and pairing them guarantees
 near-zero variance in the difference and manufactures significance — the resulting p-values

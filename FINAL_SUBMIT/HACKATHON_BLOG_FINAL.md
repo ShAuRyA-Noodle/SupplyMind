@@ -13,7 +13,7 @@
 
 - **Real RL training**: REINFORCE Wordle 8% → 100% solve in **9.8 seconds on CPU**, with **Wilcoxon p = [STRUCK]**, **Cohen's d = 4.28**, and bootstrap CI95 [+0.812, +0.928] strictly excluding zero — **raw per-episode arrays persisted on disk** for full audit replay.
 - **Real environment**: OpenEnv-compliant `MCPEnvironment` subclass with 4 standard methods (reset/step/state/close), 6 non-reserved MCP tools, valid `openenv.yaml`, **280 actions** (7 types × 40 nodes on hard tier), **64-dim engineered state**, **9 LIVE data feeds** (FRED + EIA + NASA FIRMS + GFW + NewsAPI + NOAA + WandB + HF + OpenRouter) and **15 verified-live total** (5 keyless added).
-- **Real defense**: **[STRUCK] adversarial attacks blocked = 100%** across 3 categories (19 reward-hack + 210 MCP fuzz + 40 prompt-injection), **conformal action filter at 0.9012 empirical coverage** vs 0.9000 target, **dual rule × model verifier** with disagreement alarm. **Every metric sha256-replayable across 128 receipts on disk.**
+- **Real defense**: **174/174 real executed adversarial attacks blocked** (nb13 §1 honest re-count; the earlier "269 across 3 categories" total was STRUCK — it counted non-crashing calls as safe and left injection payloads unexecuted, CLAIMS_LEDGER A3), **conformal action filter at 0.9012 empirical coverage** vs 0.9000 target (RERUN-PENDING, A5), **dual rule × model verifier** with disagreement alarm.
 
 ---
 
@@ -186,7 +186,7 @@ The hackathon canonical example is Wordle-style RL with verifiable rewards. Supp
 
 **Median guess count efficiency**: REINFORCE solves in a **median of 3 guesses** vs 4 for the masked baseline — a 25% efficiency gain at the same solve rate. As word-pool size scales out-of-distribution to 50 then 102 words ([`pass27_C_tier3_degradation.json`](receipts/pass27_C_tier3_degradation.json)), mean reward stays above 0.80 with monotonic graceful degradation, demonstrating the policy's learned representations transfer beyond the training distribution.
 
-For the canonical Unsloth + TRL GRPO stack, [`notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb`](../notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb) trains LLaMA-3.2-1B with GRPOTrainer for 100 steps on free Colab T4 in ~12 min. [`notebooks/10_PRO_COLAB_KILLSHOT.ipynb`](../notebooks/10_PRO_COLAB_KILLSHOT.ipynb) extends this to 200 steps on Pro Colab plus 4 additional GPU upgrades (DQN/QRDQN/TRPO baseline grid, RAP-XC v2 episodic harvest, Qwen-policy on Reasoning Gym, Unsloth Qwen3 safe-merge with `save_pretrained_merged(merged_16bit)` per Part 14 QLoRA warning).
+For the canonical Unsloth + TRL GRPO stack, [`notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb`](../notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb) trains LLaMA-3.2-1B with GRPOTrainer for 100 steps on free Colab T4 in ~12 min. [`notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb`](../notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb) extends this to 200 steps on Pro Colab plus 4 additional GPU upgrades (DQN/QRDQN/TRPO baseline grid, RAP-XC v2 episodic harvest, Qwen-policy on Reasoning Gym, Unsloth Qwen3 safe-merge with `save_pretrained_merged(merged_16bit)` per Part 14 QLoRA warning).
 
 ![Loss components](plots/loss_components.png)
 
@@ -219,9 +219,9 @@ Lightman et al. 2023 (*Let's Verify Step by Step*) proposed line-level credit fo
 
 The agent's action space is 280, but **only ~9 actions per state are accepted by the conformal filter at α = 0.10** with empirical coverage **0.9001** vs target **0.9000** (single-level) and best deviation **0.000125** at α=0.25 with 32K calibration samples (multi-level extension). The Mondrian decomposition (Vovk 2003) gives 6 conditional-coverage sub-groups, all conservative-valid. This is a **provable safety certificate per state**, not a heuristic. Receipts: [`conformal_calibration.json`](receipts/conformal_calibration.json), [`conformal_multilevel.json`](receipts/conformal_multilevel.json), [`pass28_E_conformal_32k.json`](receipts/pass28_E_conformal_32k.json).
 
-### ⭐ Star 5 — 269 adversarial attacks across 3 categories, 100% blocked, sha256-stamped
+### ⭐ Star 5 — adversarial defense: 174/174 real executed attacks blocked (STRUCK "269" overcount — CLAIMS_LEDGER A3)
 
-Reward hacking is the single biggest practical failure mode in RL. Most teams hand-test 5-10 attacks. We test **269 across 3 layers**: 19 reward-hack attacks per Skalse 2022 + Krakovna 2020 + Pan 2022 patterns, 210 MCP fuzz across 10 attack categories, 40 prompt-injection attacks targeting jndi / format-string / null-byte / unicode-bidi / comment-injection vectors. **All 269 returned safely. Zero uncaught exceptions.** No team in the OpenEnv hub history has shipped a 269-attack defense suite with this rigor.
+Reward hacking is the single biggest practical failure mode in RL. Most teams hand-test 5-10 attacks. The earlier "269 across 3 layers" claim was **STRUCK** — the gauntlet counted every non-crashing call as safe, added the 19 reward-hack attacks as a constant, and never passed the injection payloads to two tools (CLAIMS_LEDGER A3). The honest re-count is **174/174 real executed attacks** (nb13 §1): reward-hack (Skalse 2022 + Krakovna 2020 + Pan 2022 patterns), MCP fuzz, and prompt-injection layers — with the payloads actually delivered and each safe/unsafe decision checked per call.
 
 ### ⭐ Star 6 — 9 LIVE keyed APIs with sha256-stamped responses, including REAL FRED Brent for 8 historical disruption events
 
@@ -270,9 +270,9 @@ For the Suez 2021 case specifically — published anchor was Brent at **$64.41/b
 
 ---
 
-## 6 · The Defense: [STRUCK] Adversarial Attacks Blocked
+## 6 · The Defense: 174/174 real executed attacks blocked (STRUCK "269" overcount, A3)
 
-Reward hacking is the single biggest practical failure mode in RL. We tested **269 adversarial attacks across three layers**:
+Reward hacking is the single biggest practical failure mode in RL. The earlier "269 attacks across three layers" total was **STRUCK** (CLAIMS_LEDGER A3); the honest re-count is **174/174 real executed attacks** (nb13 §1). The defense layers below are real — only the inflated total was struck:
 
 | Layer | Attacks | Blocked | Defense mechanism |
 |---|---|---|---|
@@ -391,7 +391,7 @@ curl -sS -X POST https://shaurya-noodle-supplymind.hf.space/reset \
 | **Adversarial defense** | **[STRUCK] = 100%** blocked |
 | **MCP tool compliance** | 6 non-reserved tools, 0 collisions, all standard methods present |
 | **HF Space endpoint health** | 4 / 5 returning 200 OK; 5th is local-only by design |
-| **Statistical evidence** | Wilcoxon p ∈ {1.87e-34, [STRUCK], [STRUCK], 6.6e-35} across 4 distinct receipts. Cohen d ∈ {2.73, 3.89, 4.28, 5.13}. |
+| **Statistical evidence** | RAP-XC vs MaskablePPO significance **STRUCK** (fabricated; A1). REINFORCE/Wordle Wilcoxon p & Cohen's d **RERUN-PENDING** (notebooks unrun; A2). Valid paired-by-seed re-runs pending (P1.3). |
 | **Conformal coverage** | 0.9001 (production, real NLLs) / 0.9012 (extended, alpha=0.10) / best dev 0.000125 (32K calib) |
 | **License** | MIT, all 21 third-party deps verified MIT/Apache/BSD compatible ([`pass28_I_license_audit.json`](receipts/pass28_I_license_audit.json)) |
 
@@ -405,11 +405,11 @@ The hackathon guide is explicit: *"Pick a problem you find genuinely interesting
 |---|---|
 | Wordle / Sokoban / grid-world (toy domain) | Real supply chain with EMDAT-1500 RAG corpus, real industry-cited costs |
 | Single reward signal (0/1 binary) | 7-component shaped reward + dual rule × model verifier with disagreement alarm |
-| ~10-minute training story | Real REINFORCE 9.8s + GRPO LLaMA-1B 12 min + 9-agent leaderboard with bootstrap CI95 + Wilcoxon p < 10⁻¹⁸ |
+| ~10-minute training story | Real REINFORCE 9.8s + GRPO LLaMA-1B 12 min + 9-agent leaderboard (bootstrap CI95 + Wilcoxon significance **STRUCK** — fabricated, A1; valid re-run pending P1.3) |
 | 1 demo | 60-step live HF Space rollout + 6-stage chained Hormuz war-room demo + 6-judge LOCAL Ollama panel + interactive Gradio UI (planned) |
 | Slides + screenshots | 13 PNG plots from real data + 128 sha256 receipts + 261 tests |
 | "We use Unsloth" | Unsloth `save_pretrained_merged(merged_16bit)` safe-merge + post-merge inference test |
-| Untested OpenEnv compliance | 269 adversarial attacks + 14/14 + 210/210 + 40/40 MCP fuzz across 10 categories |
+| Untested OpenEnv compliance | 174/174 real executed adversarial attacks (STRUCK "269" overcount, A3) + MCP fuzz across 10 categories |
 | Honest fluff | 12 documented limitations honestly disclosed (3 closed, 4 honestly synthetic-tagged) |
 | One judge | 6-judge LOCAL Ollama 14B panel ρ=0.901 + 12-frontier OpenRouter (reserved) + 25-scenario alpha disclosure ladder |
 
@@ -420,7 +420,7 @@ The hackathon guide is explicit: *"Pick a problem you find genuinely interesting
 - 🚀 **Live HF Space**: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind
 - 📓 **Foolproof Colab CPU notebook**: [`notebooks/08_HACKATHON_FOOLPROOF.ipynb`](../notebooks/08_HACKATHON_FOOLPROOF.ipynb)
 - 🦙 **LLaMA + Unsloth + TRL GRPO Colab**: [`notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb`](../notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb)
-- 🚀 **Pro Colab killshot (5 GPU upgrades)**: [`notebooks/10_PRO_COLAB_KILLSHOT.ipynb`](../notebooks/10_PRO_COLAB_KILLSHOT.ipynb)
+- 🚀 **Pro Colab killshot (5 GPU upgrades)**: [`notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb`](../notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb)
 - 🎬 **90-second pitch video**: *(YouTube URL added at submit time via NotebookLM)*
 - 📜 **Master submission package**: [`FINAL_SUBMIT/SUBMISSION_PACKAGE_FINAL.md`](SUBMISSION_PACKAGE_FINAL.md)
 - 🎯 **Brutal honest answer to "guarantee 90%"**: [`FINAL_SUBMIT/BRUTAL_HONEST_FINAL_ANSWER.md`](BRUTAL_HONEST_FINAL_ANSWER.md)
@@ -429,7 +429,7 @@ The hackathon guide is explicit: *"Pick a problem you find genuinely interesting
 
 ## 13.5 · Why This Matters Beyond the Hackathon
 
-The hackathon ends in a few weeks. Supply-chain shocks do not. The same RL loop demonstrated here — verifiable rewards over partially-observable real-world state, with conformal action filters and process-supervised credit — generalizes immediately to: pharmaceutical supply chains during pandemic surges, semiconductor allocation during fab outages, energy-grid balancing under generation shocks, agricultural commodity routing under climate disruptions. **A reviewer reading this could write a research paper on training LLMs against real industry data with conformal safety guarantees and 269-attack adversarial defense — and they would not have to invent the environment, because it is already deployed and live.**
+The hackathon ends in a few weeks. Supply-chain shocks do not. The same RL loop demonstrated here — verifiable rewards over partially-observable real-world state, with conformal action filters and process-supervised credit — generalizes immediately to: pharmaceutical supply chains during pandemic surges, semiconductor allocation during fab outages, energy-grid balancing under generation shocks, agricultural commodity routing under climate disruptions. **A reviewer reading this could write a research paper on training LLMs against real industry data with conformal safety guarantees and a 174/174 real-executed-attack adversarial defense (STRUCK "269" overcount, A3) — and they would not have to invent the environment, because it is already deployed and live.**
 
 That is what "judges look for environments that push the frontier of what we can train LLMs to do" actually means in practice. Not another grid-world. A working frontier.
 
@@ -442,10 +442,10 @@ If you are an Indian conglomerate reading this — Reliance, Adani, Tata, Mahind
 Six guarantees, every one independently verifiable from the receipts on disk:
 
 - ✅ **100% of mandatory submission requirements satisfied** — OpenEnv compliance, working Colab notebook, real training evidence with axis-labeled plots, HF Space deployed and live, story-driven README, no big video files in repo
-- ✅ **100% of 269 adversarial attacks blocked** — across reward-hack, MCP fuzz, and prompt-injection layers, with sha256-stamped receipts
+- ✅ **174/174 real executed adversarial attacks blocked** — across reward-hack, MCP fuzz, and prompt-injection layers (STRUCK "269" overcount — CLAIMS_LEDGER A3)
 - ✅ **99.2% of 250 features individually demonstrated** — file path + receipt anchor for each, catalogued in a 600-line audit map
 - ✅ **100% sha256-replayability** of every metric in this blog — judge clones repo, runs four commands, gets identical outputs
-- ✅ **8 star features** (§5.5) that no other OpenEnv hub submission this cycle will ship — 6-judge LOCAL Ollama panel, 4-method causal counterfactual, 2735× process-supervision amplification, conformal Mondrian sub-groups, 269-attack defense, FRED-real Brent on 8 historical events, 3-environment cross-transfer, audit-grade infrastructure
+- ✅ **8 star features** (§5.5) that no other OpenEnv hub submission this cycle will ship — 6-judge LOCAL Ollama panel, 4-method causal counterfactual, 2735× process-supervision amplification, conformal Mondrian sub-groups, 174/174-attack defense (STRUCK "269" overcount, A3), FRED-real Brent on 8 historical events, 3-environment cross-transfer, audit-grade infrastructure
 - ✅ **1 real-world walkthrough** (§5.6) — Hormuz war-room demo that runs end-to-end in 7 seconds against live APIs the moment a judge clicks the HF Space URL
 
 This is what a winning OpenEnv supply-chain RL submission looks like in 2026: real environment, real training, real defense, real APIs, real audit trail. Every claim hashed, every receipt on disk, every metric replayable.

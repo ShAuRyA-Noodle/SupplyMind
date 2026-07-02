@@ -1,8 +1,8 @@
 # Reproduce SupplyMind from a fresh checkout
 
 <!-- TODO(P1.4/P2.2): This reproduce guide is being re-verified post-cleanup. Some scripts it
-     referenced were fabrication-chain tools and have been DELETED (bootstrap_leaderboard.py,
-     wilcoxon_pairwise_leaderboard.py). The canonical judge-facing verifier is
+     referenced were fabrication-chain tools and have been DELETED (the bootstrap-CI + Wilcoxon-
+     pairwise leaderboard generator scripts). The canonical judge-facing verifier is
      `scripts/run_all.py` (path fix in flight). Steps flagged below are UNVERIFIED until re-run. -->
 
 Tested on Windows 11 + RTX 4080 (12 GB) + 15.7 GB RAM, and Ubuntu 22.04 + RTX 4090.
@@ -56,8 +56,9 @@ GFW_API_TOKEN=...
 
 The local models live under `models/`. They are NOT shipped with the repo (gitignored, too large).
 
-> **NOTE:** `scripts/download_models.sh` does **not exist** — this step is pending a real fetcher
-> (P1.6). On disk today `models/` holds only chronos-bolt-base, timesfm-2, tabpfn-v2-reg and one
+> **NOTE:** there is **no** model-fetch script in `scripts/` (the one docs previously referenced
+> does not exist) — this step is pending a real fetcher (P1.6). Local embedders download from the
+> HF hub at runtime. On disk today `models/` holds only chronos-bolt-base, timesfm-2, tabpfn-v2-reg and one
 > mxbai copy. Three model dirs that docs previously referenced — `tabpfn-v2-clf`,
 > `snowflake-arctic-embed-l`, `bge-reranker-v2-m3` — **do not exist**, and the LLMs are served via
 > Ollama/GGUF, not as HF dirs under `models/`. Embedders download `mxbai-embed-large-v1` from the
@@ -82,9 +83,9 @@ python scripts/validate_war_room.py
 # OR via HTTP:
 curl -X POST http://127.0.0.1:8000/demo/hormuz-war-room/validate
 
-# 5. [REMOVED] scripts/bootstrap_leaderboard.py + wilcoxon_pairwise_leaderboard.py were DELETED
+# 5. [REMOVED] the bootstrap-CI + Wilcoxon-pairwise leaderboard generator scripts were DELETED
 #    (sorted-"paired" tests producing fabricated p-values). A real paired-by-seed leaderboard on
-#    the trained checkpoints is pending (P1.3). Do not cite p=[STRUCK] / d=+2.73.
+#    the trained checkpoints is pending (P1.3). Do not cite the struck p-value / Cohen's d.
 
 # 6. Ollama v5 vs frontier (~3 min)
 python scripts/ollama_v5_vs_frontier.py

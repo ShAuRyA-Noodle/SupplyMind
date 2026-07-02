@@ -7,7 +7,7 @@
 > *"Even in Arcadia, disruptions happen."*  
 > A retrieval-augmented RL agent for global supply-chain risk, evaluated against 8 documented historical events with 100% risk-band accuracy and 100% Brent ±30%, on an OpenEnv-compliant environment with 20 live data sources, 13 verified foundation models, 25 frontier judges, and split-conformal action safety with 0.9001 empirical coverage.
 
-[**🚀 HuggingFace Space**](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) · [**📓 Colab notebook**](../notebooks/07_HACKATHON_TRAINING.ipynb) · [**🎯 Master demo**](http://127.0.0.1:8000/demo/master) · [**🏛 War Room**](http://127.0.0.1:8000/demo/hormuz-war-room/ui) · [**🎮 Wordle RLVR companion**](http://127.0.0.1:8000/wordle/ui)
+[**🚀 HuggingFace Space**](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) · [**📓 Colab notebook**](../notebooks/archive/07_HACKATHON_TRAINING.ipynb) · [**🎯 Master demo**](http://127.0.0.1:8000/demo/master) · [**🏛 War Room**](http://127.0.0.1:8000/demo/hormuz-war-room/ui) · [**🎮 Wordle RLVR companion**](http://127.0.0.1:8000/wordle/ui)
 
 ---
 
@@ -75,7 +75,7 @@ Honest baseline = **0.86**, strictly > every attack. Receipt: [`adversarial_rewa
 
 ![Before/after](plots/before_after.png)
 
-> **RAP-XC beats MaskablePPO-v3 on hard_cascading_crisis · Wilcoxon p=[STRUCK], Cohen d=+2.73.** Bootstrap CI95 [+0.198, +0.257] strictly excludes zero.
+> **[STRUCK — CLAIMS_LEDGER A1]** The RAP-XC vs MaskablePPO-v3 Wilcoxon significance (p / Cohen's d) and bootstrap CI95 shown here were fabricated from sorted synthetic samples; the generator scripts were deleted. A valid paired-by-seed benchmark re-run is pending (P1.3) before any of these numbers may be cited.
 
 ### 3.4 9-agent leaderboard across 3 difficulty tiers
 
@@ -87,7 +87,7 @@ Honest baseline = **0.86**, strictly > every attack. Receipt: [`adversarial_rewa
 
 ![Wilcoxon](plots/wilcoxon_grid.png)
 
-> Most-significant pair: MaskablePPO vs scripted_baseline on medium · **p = 6.77e-149** (well below user-claimed 1e-50 threshold). All 13 / 16 pairs significant at p < 1e-10.
+> **[STRUCK — CLAIMS_LEDGER A1]** The "most-significant pair" (p=6.77e-149) and "13/16 pairs significant" summary came from the fabricated pairwise-leaderboard receipt (sorted synthetic samples; deleted). Valid paired-by-seed re-run pending (P1.3).
 
 ### 3.6 Conformal action filter (Vovk 2005) — multi-level + Mondrian
 
@@ -227,7 +227,7 @@ Reproduces in ~3 min via `python scripts/final_real_reinforce_wordle_v2.py --epi
 ## 4 · Reproducibility · run yourself
 
 ### Quick · Colab (free T4)
-[**Open notebook 07_HACKATHON_TRAINING.ipynb**](../notebooks/07_HACKATHON_TRAINING.ipynb)
+[**Open notebook 07_HACKATHON_TRAINING.ipynb**](../notebooks/archive/07_HACKATHON_TRAINING.ipynb)
 
 ```bash
 !pip install -q torch transformers accelerate peft trl bitsandbytes openenv-core
@@ -252,8 +252,9 @@ open http://127.0.0.1:8000/demo/master
 python scripts/calibrate_conformal_from_harvest.py    # 0.9001 coverage receipt
 python scripts/validate_war_room.py                    # 100/100/100/100/100% backtest
 python scripts/validate_ensemble_brent.py              # 8/8 within ±30%
-python scripts/bootstrap_leaderboard.py                # 9-agent CI95
-python scripts/wilcoxon_pairwise_leaderboard.py        # p=[STRUCK]
+# [STRUCK] the 9-agent bootstrap-CI + Wilcoxon-pairwise leaderboard scripts were DELETED
+#          (fabricated significance from sorted synthetic samples). Valid paired-by-seed
+#          leaderboard re-run pending (P1.3). See FINAL_SUBMIT/CLAIMS_LEDGER.md A1.
 python scripts/generate_hackathon_plots.py             # all 7 plots
 ```
 
@@ -339,8 +340,8 @@ Every claim above maps to a sha256-anchored receipt:
 
 | Claim | Receipt |
 |---|---|
-| RAP-XC vs MaskablePPO p=[STRUCK] | `wilcoxon_pairwise_leaderboard.json` |
-| Bootstrap CI95 leaderboard | `bootstrap_leaderboard.json` |
+| RAP-XC vs MaskablePPO significance | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) |
+| Bootstrap CI95 leaderboard | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) |
 | Conformal 0.9001 coverage | `conformal_calibration.json` |
 | Cross-corpus α 0.5436 | `cross_corpus_alpha.json` |
 | 12-frontier α=0.5669 | `frontier_panel_alpha.json` |
@@ -388,7 +389,7 @@ Every claim above maps to a sha256-anchored receipt:
 | Slides + screenshots | 7 PNG plots from real data + 50+ sha256 receipts |
 | "We use Unsloth" | Unsloth recipe + LoRA safe-merge verified + 5 trainer scripts |
 | Untested OpenEnv compliance | MCPEnvironment subclass + 6 non-reserved MCP tools + valid openenv.yaml |
-| Honest fluff | 8 honest negatives retained (`FAILURE_TABLE.md`) |
+| Honest fluff | 8 honest negatives retained (`_dump/POINTER.md` → `Sleep-Token-ARCHIVE/_dump/FAILURE_TABLE.md`) |
 | One judge | 25-judge ensemble · α-disclosure ladder 0.21 → 0.75 → 0.567 → 0.358 |
 
 ---
@@ -452,7 +453,7 @@ Every claim above maps to a sha256-anchored receipt:
 ## 12 · Links
 
 - **HF Space**: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind
-- **Colab notebook**: [`notebooks/07_HACKATHON_TRAINING.ipynb`](../notebooks/07_HACKATHON_TRAINING.ipynb)
+- **Colab notebook**: [`notebooks/archive/07_HACKATHON_TRAINING.ipynb`](../notebooks/archive/07_HACKATHON_TRAINING.ipynb)
 - **Master demo**: `/demo/master` (after running uvicorn)
 - **Hormuz War Room**: `/demo/hormuz-war-room/ui`
 - **Wordle RLVR companion**: `/wordle/ui`

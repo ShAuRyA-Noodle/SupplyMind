@@ -152,7 +152,7 @@ You confirmed you restarted HF Space. You want a phoenix rebuild covering all pr
 | `FAILURE_TABLE.md` | Old entries | Clean resolved entries to appendix |
 | `AUTORESEARCH_SUMMARY.md` | Basic | Keep |
 | 21 `benchmark/results/*.json` | Complete | Move deprecated to `benchmark/legacy/` |
-| 3 notebooks | Valid | Keep + add `04_v3_quickstart.ipynb` |
+| 3 notebooks | Valid | Keep + add `04_v3_quickstart.ipynb` (historical plan; shipped as `notebooks/archive/04_v3_quickstart_colab.ipynb`) |
 | `Dockerfile` + `Dockerfile.dashboard` + `docker-compose.yml` | Works | Keep + add `Dockerfile.damocles` for v3 API |
 | `pyproject.toml` + `uv.lock` | Works | Keep |
 | `dashboard/` (pre-v3) | Works but duplicate | Deprecate with shim → v3 Streamlit |
@@ -229,7 +229,7 @@ You confirmed you restarted HF Space. You want a phoenix rebuild covering all pr
 | Notion/GitBook landing | Link from HF + GitHub README |
 | Sleep Token theme in pitch | Opening slide + quote |
 | $1M-compute appendix | `docs/v3/BENCHMARKS_VS_PUBLIC.md` appendix |
-| Colab notebook | `notebooks/04_v3_colab.ipynb` |
+| Colab notebook | `notebooks/archive/04_v3_quickstart_colab.ipynb` (archived) |
 | Social media thread | Draft in `demo/social.md` |
 | External SC professional quote | Stretch goal |
 
@@ -317,7 +317,7 @@ You confirmed you restarted HF Space. You want a phoenix rebuild covering all pr
 ### Batch 11 — Demo assets (~4 hours)
 - Record 3-min video per FINAL_DEMO §5 script
 - Generate 5-slide pitch PDF (markdown → pandoc)
-- Create `notebooks/04_v3_colab.ipynb`
+- Create Colab notebook (historical plan; shipped as `notebooks/archive/04_v3_quickstart_colab.ipynb`)
 - Draft social thread in `demo/social.md`
 - Commit: **"Demo video + pitch deck + colab + social draft"**
 

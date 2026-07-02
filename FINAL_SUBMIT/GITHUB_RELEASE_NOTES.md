@@ -54,7 +54,7 @@ SupplyMind v4.0 — OpenEnv India 2026 Hackathon Finals submission
 
 - **Forecasting**: TFT 513,534 steps / Chronos+TimesFM+TabPFN ensemble (8/8 events within ±30%, median 3.32% rel error)
 
-- **Statistical proof**: Wilcoxon p=[STRUCK] RAP-XC vs MaskablePPO · Cohen's d +2.73 · paired bootstrap CI95 [+0.198, +0.257]
+- **Statistical proof (STRUCK — CLAIMS_LEDGER A1)**: the RAP-XC vs MaskablePPO Wilcoxon p / Cohen's d / bootstrap CI95 were fabricated from sorted synthetic samples; the generator scripts were deleted. Valid paired-by-seed re-run pending (P1.3).
 
 - **HuggingFace Space LIVE**: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind (stage RUNNING, 22 endpoints, /health 200 OK)
 

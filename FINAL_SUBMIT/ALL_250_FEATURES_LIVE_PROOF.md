@@ -75,7 +75,7 @@ C1 empty / C2 single-digit / C3 unicode-zero-width / C4 SQL-injection-string / C
 | D9 | Heuristic policy | ✅ replay cache |
 | D10 | Random policy | ✅ leaderboard |
 | D11 | REINFORCE on Wordle | ✅ `wordle_real_reinforce_v2_curve.json` |
-| D12 | Bootstrap CI95 leaderboard | ✅ `bootstrap_leaderboard.json` |
+| D12 | Bootstrap CI95 leaderboard | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) |
 | D13 | Ensemble Brent stack | ✅ `ensemble_brent_validation.json` |
 | D14 | Pareto frontier | ✅ `pareto_frontier_v2.json` |
 | D15 | DQN | ⚫ queued, `pass22_D15_D18_baseline_grid_queued.json` |
@@ -108,9 +108,9 @@ C1 empty / C2 single-digit / C3 unicode-zero-width / C4 SQL-injection-string / C
 | F1 | Conformal action filter | `conformal_calibration.json` (0.9001) |
 | F2 | MC-Dropout | `mc_dropout_v2.json` |
 | F3 | Calibration check (Kuleshov 2018) | `R2_SHAP_FAIRNESS_CALIBRATION.json` |
-| F4 | Wilcoxon signed-rank | `wilcoxon_pairwise_leaderboard.json` |
-| F5 | Bootstrap CI95 | `bootstrap_leaderboard.json` |
-| F6 | Cohen's d effect size | `wilcoxon_pairwise_leaderboard.json` |
+| F4 | Wilcoxon signed-rank | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) |
+| F5 | Bootstrap CI95 | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) |
+| F6 | Cohen's d effect size | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) |
 | F7 | Multi-arm Brent ensemble | `ensemble_brent_validation.json` |
 | F8 | Coverage stress test | `conformal_multilevel.json` |
 | F9 | Quantile regression | 🟢 `pass22_F9_quantile_regression.json` (cov=0.812 vs target 0.80) |
@@ -237,7 +237,7 @@ V1 FastAPI · V2 SSE · V3 master.html · V4 ONNX bundle · V5 Docker · V6 open
 
 ## W · Stats (5) — 5/5 ✅
 
-W1 Wilcoxon p ∈ {[STRUCK], 6.6e-35} · W2 Cohen d ∈ {2.73, 5.13} · W3 Bootstrap CI95 · W4 Conformal 0.9001 · W5 Cross-corpus α 0.358
+W1 Wilcoxon — RAP-XC vs MaskablePPO **STRUCK** (fabricated, A1); REINFORCE 6.6e-35 **RERUN-PENDING** (A2) · W2 Cohen d — **STRUCK** (A1) / REINFORCE 5.13 RERUN-PENDING (A2) · W3 Bootstrap CI95 **STRUCK** (A1) · W4 Conformal 0.9001 (RERUN-PENDING A5) · W5 Cross-corpus α 0.358
 
 ## X · Real data (10) — 10/10 ✅
 

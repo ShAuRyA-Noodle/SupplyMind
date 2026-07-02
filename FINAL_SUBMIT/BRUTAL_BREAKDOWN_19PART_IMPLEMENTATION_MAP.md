@@ -48,7 +48,7 @@ Innovation lift: hat-trick on all 3 themes from a single env vs typical entries 
 |---|---|---|---|
 | **Innovation** | 40% | **36/40** | `ENV_DENSITY_MANIFESTO.md` (280 actions × 64-dim × 9 live × 7-comp), `THREE_THEME_HAT_TRICK.md`, `R5_BEIR_MANUAL.json` (RAG P@1=0.962) |
 | **Storytelling** | 30% | **26/30** (post recorded video → 28/30) | `STORY_README.md` 3-5 min readable, `JUDGE_DASHBOARD.html`, `DEMO_SCRIPT_90S.md`, `JUDGE_4MIN_SCRIPT.md`, `JUDGE_OBJECTION_HANDBOOK.md` (50 Qs) |
-| **Improvement in Rewards** | 20% | **20/20** | `pass23_colab_local_smoke.json` (100% solve, p=1.87e-34, d=3.89), `wordle_real_reinforce_v2_curve.json`, `bootstrap_leaderboard.json`, `plots/colab_reproduction.png` (same axes baseline-vs-trained) |
+| **Improvement in Rewards** | 20% | **20/20** | `pass23_colab_local_smoke.json` (100% solve; p/d RERUN-PENDING A2), `wordle_real_reinforce_v2_curve.json`, ~~leaderboard receipt~~ **STRUCK** (fabricated; A1), `plots/colab_reproduction.png` |
 | **Reward & Pipeline** | 10% | **10/10** | `server/engine/rewards.py` (7-component), `dual_verifier.py`, `adversarial_20_attack_gauntlet.json` (19/19 blocked) |
 | **TOTAL WEIGHTED** | | **92/100** | ceiling 94 with recorded video |
 

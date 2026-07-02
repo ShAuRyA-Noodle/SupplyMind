@@ -63,7 +63,7 @@ Receipt: `adversarial_20_attack_gauntlet.json` (sha 082a3c57…)
 | D9 | Heuristic policy | `rl/heuristic_policy.py` | rule-based baseline | replay cache |
 | D10 | Random policy | `rl/random_policy.py` | sanity floor | leaderboard |
 | D11 | REINFORCE on Wordle | `scripts/final_real_reinforce_wordle.py` | minimal RL loop demo | `wordle_real_reinforce_curve.json` (190% improvement) |
-| D12 | Bootstrap CI95 leaderboard | `scripts/bootstrap_leaderboard.py` | non-parametric CIs | `bootstrap_leaderboard.json` |
+| D12 | Bootstrap CI95 leaderboard | ❌ STRUCK — script + receipt fabricated and deleted (CLAIMS_LEDGER A1) | — | — |
 | D13 | Ensemble Brent stack | `scripts/ensemble_brent.py` | optimal weight via Brent | `ensemble_brent_validation.json` |
 | D14 | Pareto frontier multi-obj | `rl/pareto_frontier_v2.py` | Pareto-optimal policies | `pareto_frontier_v2.json` |
 
@@ -89,9 +89,9 @@ Receipt: `adversarial_20_attack_gauntlet.json` (sha 082a3c57…)
 | F1 | Conformal action filter | `rl/conformal_filter.py` | Vovk 2005 dist-free coverage | `conformal_calibration.json` (0.9001 empirical) |
 | F2 | MC-Dropout | `forecasting/mc_dropout_v2.py` | epistemic uncertainty | `mc_dropout_v2.json` |
 | F3 | Calibration check | `forecasting/calibration.py` | Kuleshov 2018 | `R2_SHAP_FAIRNESS_CALIBRATION.json` |
-| F4 | Wilcoxon signed-rank | `tests/wilcoxon_pairwise.py` | non-param hypothesis test | p=[STRUCK] |
-| F5 | Bootstrap CI95 | `tests/bootstrap.py` | non-param CIs | `bootstrap_leaderboard.json` |
-| F6 | Cohen's d effect size | `tests/effect_size.py` | d=+2.73 | wilcoxon receipt |
+| F4 | Wilcoxon signed-rank | ❌ STRUCK — fabricated significance, script deleted (CLAIMS_LEDGER A1) | — | — |
+| F5 | Bootstrap CI95 | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) | — | — |
+| F6 | Cohen's d effect size | ❌ STRUCK — d value came from sorted synthetic samples (CLAIMS_LEDGER A1) | — | — |
 | F7 | Multi-arm Brent ensemble | `ensemble_brent.py` | weight optimization | `ensemble_brent_validation.json` |
 | F8 | Coverage stress test | `tests/conformal_coverage.py` | empirical α matches | conformal_coverage.png |
 | F9 | Quantile regression | `forecasting/quantile_reg.py` | distribution forecasts | tft_quantile receipts |
@@ -205,7 +205,7 @@ U1 phoenix_v5_receipts_INDEX.json (consolidated).
 V1 FastAPI server / V2 SSE event stream / V3 master.html dashboard / V4 ONNX bundle / V5 Docker container / V6 openenv.yaml / V7 HF Space ready / V8 wand-style logs.
 
 ## W. STATS — 5 features
-W1 Wilcoxon p=[STRUCK] / W2 Cohen d=+2.73 / W3 Bootstrap CI95 / W4 conformal 0.9001 coverage / W5 cross-corpus α=0.358.
+W1 Wilcoxon significance — **STRUCK** (fabricated; CLAIMS_LEDGER A1) / W2 Cohen d — **STRUCK** (fabricated; A1) / W3 Bootstrap CI95 — **STRUCK** (fabricated receipt deleted; A1) / W4 conformal 0.9001 coverage (RERUN-PENDING, A5) / W5 cross-corpus α=0.358.
 
 ## X. REAL DATA — many
 X1 TSMC coords / X2 Samsung coords / X3 Toyota / X4 NewsAPI / X5 GDELT / X6 USGS quakes / X7 EIA prices / X8 NASA FIRMS fires / X9 GFW vessels / X10 FRED macro.

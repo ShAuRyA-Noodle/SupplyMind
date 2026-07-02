@@ -51,7 +51,7 @@ The strategic insight: a real supply-chain disruption already involves multiple 
 |---|---|---|
 | 60-step horizon | `openenv.yaml: hard_cascading_crisis` | tightest budget $10M for 4 concurrent disruptions |
 | Cascading dependency graph | `gnn/world_model_v2.py` | HetGAT v1, F1=0.964 on hard tier |
-| Sparse end-of-episode signal | `bootstrap_leaderboard.json` | RAP-XC vs MaskablePPO Wilcoxon p=[STRUCK] |
+| Sparse end-of-episode signal | ❌ STRUCK — fabricated leaderboard receipt deleted (CLAIMS_LEDGER A1) | RAP-XC vs MaskablePPO significance STRUCK; re-run pending (P1.3) |
 | Recovery from early mistakes | `world_model_v2_rollout.json` | $178.68M saved (48% reduction) on 30-day F2 cascading crisis |
 | Curriculum (4-tier RLVE) | `rlve_curriculum_smoke.json` | tier-bumps tracked, target win-rate band 0.45-0.75 |
 | Process supervision (line-level credit) | `process_supervision.json` | variance amplification 2735× vs uniform-episode credit |

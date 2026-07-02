@@ -47,7 +47,7 @@ bash FINAL_SUBMIT/REPRODUCE_ONE_BASH.sh
 
 ## Links
 - HuggingFace Space: `Shaurya-Noodle/Supplymind`
-- Colab: `notebooks/07_HACKATHON_TRAINING.ipynb`
+- Colab: `notebooks/archive/07_HACKATHON_TRAINING.ipynb` (archived — superseded by `notebooks/13_MASTER_HACKATHON_FINAL.ipynb`)
 - Master dashboard: `http://127.0.0.1:8000/demo/master`
 - Hormuz War Room: `/demo/hormuz-war-room/ui`
 - Wordle companion: `/wordle/ui`

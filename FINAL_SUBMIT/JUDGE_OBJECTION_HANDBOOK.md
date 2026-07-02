@@ -56,7 +56,7 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 
 **Q10**. "Bootstrap leaderboard CI95 is suspiciously tight — was it real bootstrap?"
 **A**. Disclosed honestly in `HONEST_LIMITATIONS.md` §5 — v3_arcadia eval persisted sufficient stats (n, mean, std, min, max) per (task, agent), not raw episodic arrays. Bootstrap reconstructs via truncated-normal draws matching recorded mean/std. Receipt `method` field documents this transparently. **Pass-22 ships real episodic re-run** to eliminate this approximation (U1).
-**Receipt**: `bootstrap_leaderboard.json:method` + (post pass-22) `bootstrap_leaderboard_v2_real_episodic.json`.
+**Receipt**: ❌ STRUCK — the bootstrap-CI leaderboard receipt reconstructed arrays via truncated-normal draws (not real episodes) and was deleted; a valid episodic re-run is pending (P1.3). See CLAIMS_LEDGER A1.
 
 **Q11**. "What if the model just memorized the training pool?"
 **A**. Tier-3 OOD eval: trained on 20-word pool, evaluated on 50-word and 100-word pools with action masking. Solve rate 92.5% / 89% / (target ≥80% post-pass-22 fix). Cross-environment transfer — Wordle policy generalizes to SupplyMind state encoding (entropy drop ratio 1.30).
@@ -131,7 +131,7 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 **Receipt**: directory structure self-evident.
 
 **Q25**. "Reproducibility on a fresh machine?"
-**A**. 3-line reproduce: `git clone <repo>; pip install -r requirements.txt; bash FINAL_SUBMIT/REPRODUCE_ONE_BASH.sh`. Heavier paths in `REPRODUCE.md`. Colab notebook for free-tier T4 in `notebooks/07_HACKATHON_TRAINING.ipynb`. Honest caveats in `HONEST_LIMITATIONS.md` §11 about hardware-dependent receipts (Ollama, BGE rerank).
+**A**. 3-line reproduce: `git clone <repo>; pip install -r requirements.txt; bash FINAL_SUBMIT/REPRODUCE_ONE_BASH.sh`. Heavier paths in `REPRODUCE.md`. Colab notebook for free-tier T4 in `notebooks/archive/07_HACKATHON_TRAINING.ipynb`. Honest caveats in `HONEST_LIMITATIONS.md` §11 about hardware-dependent receipts (Ollama, BGE rerank).
 **Receipt**: `REPRODUCE_ONE_BASH.sh`.
 
 **Q26**. "Why solo and not team?"

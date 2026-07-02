@@ -102,7 +102,7 @@ Every other team will pitch a model. We pitch a system where every claim is sha2
 | "We use frontier LLMs" | "13 local + 12 frontier + Krippendorff α=0.567 cross-validated" |
 | "Trained on synthetic data" | "RAP-XC trained on 40,000 *real* harvested PPO transitions" |
 | "Action policy is calibrated" | "Split-conformal NLL filter, **empirical coverage 0.9001 vs 0.9 target**" |
-| "Beats baseline" | "Paired-bootstrap CI95 on 9-agent leaderboard, see `bootstrap_leaderboard.json`" |
+| "Beats baseline" | STRUCK — the paired-bootstrap CI95 leaderboard receipt was fabricated (synthetic samples) and deleted; valid re-run pending (P1.3, CLAIMS_LEDGER A1) |
 | "Causal" | "4 methods + 6 paper anchors + Tohoku replicated within 18%" |
 | "Live data" | "20 sources fan-out, graceful failure, AIS + sanctions + EMDAT included" |
 | "OpenEnv compliant" | "ROLL integration as bonus — `SupplyMindRollEnv` ships" |
@@ -110,9 +110,8 @@ Every other team will pitch a model. We pitch a system where every claim is sha2
 
 Hardware: **single 12 GB RTX 4080**. Q4_K_M quantization, 4-bit NF4 LoRA, bf16 RL, OLLAMA_MAX_LOADED_MODELS=1.
 
-**The bet (now confirmed):**
+**The bet (STRUCK — CLAIMS_LEDGER A1):**
 
-> **RAP-XC beats MaskablePPO-v3 on hard_cascading_crisis: mean Δ reward = +0.2276, CI95 [+0.198, +0.257], sign-test p < 1e-30.**
-> CI strictly excludes zero — non-overlapping intervals.
+> ~~RAP-XC beats MaskablePPO-v3 on hard_cascading_crisis: mean Δ reward = +0.2276, CI95 [+0.198, +0.257], sign-test p < 1e-30.~~
 
-That's an ICLR-workshop-tier sentence backed by `tests/receipts/bootstrap_leaderboard.json`.
+This claim was **STRUCK**: the CI95 / p-value came from a fabricated leaderboard receipt (two synthesized samples sorted and labelled "paired"); the generator scripts + receipt were deleted. A valid paired-by-seed benchmark re-run is pending (P1.3).

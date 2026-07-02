@@ -75,7 +75,7 @@ For the Meta OpenEnv × Scaler hackathon Bangalore finals.
 - Add 3 lower-third callouts when a metric flashes:
   - "100% risk-band — 8/8 documented events"
   - "0.9001 conformal coverage — Vovk 2005 split-conformal"
-  - "RAP-XC vs MaskablePPO-v3 · CI95 [+0.198, +0.257]"
+  - "RAP-XC vs MaskablePPO-v3 significance — STRUCK (fabricated; CLAIMS_LEDGER A1); re-run pending"
 - End-card link: `github.com/<your-handle>/SupplyMind` and `/demo/master` URL.
 
 ## Where the video goes

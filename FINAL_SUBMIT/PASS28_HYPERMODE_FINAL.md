@@ -19,7 +19,7 @@
 | 28.A | Local qwen2.5:14b scenario extractor | `pass28_A_local_scenario_extractor.json` | **60% field accuracy within 25%** (matches OpenRouter gpt-4o-mini at zero cost) |
 | 28.B | 6-judge LOCAL Ollama panel (qwen2.5:14b + 5 others, all 14B class) | `pass28_B_six_judge_panel.json` | (running with full 14B per user spec — no compromise) |
 | 28.C | Live HF Space hard tier 60-step rollout | `pass28_C_hard_tier_rollout.json` | (running) |
-| 28.D | Combined 269-attack gauntlet (19 reward + 210 MCP + 40 prompt-inject) | `pass28_D_combined_attack_gauntlet.json` | (running) |
+| 28.D | Combined attack gauntlet — **STRUCK** "269" overcount → honest 174/174 real executed (nb13 §1, A3) | `pass28_D_combined_attack_gauntlet.json` | (running) |
 | 28.E | Conformal 32K calibration (target dev <0.001) | `pass28_E_conformal_32k.json` | (running) |
 | 28.F | Process supervision per-step credit PNG | `pass28_F_process_super_plot.json` + `plots/process_supervision_step_credit.png` | (running) |
 | 28.G | Cross-env transfer matrix (Wordle ↔ Reasoning Gym ↔ SupplyMind) | `pass28_G_cross_env_transfer.json` | (running) |
@@ -39,9 +39,9 @@
 
 | Notebook | Closes | GPU | Wall-clock |
 |---|---|---|---|
-| `notebooks/10_PRO_COLAB_KILLSHOT.ipynb` | nb 09 cell-only + L5 + L6/D15-D17 + Part 14 QLoRA warning | T4 / A100 | ~25 min |
-| `notebooks/11_REAL_DATA_INGEST.ipynb` | K1-K7 real-data ingest (FRED+NewsAPI+NOAA+WandB+ACLED+Exa+HFHub) | CPU OK | ~5 min |
-| `notebooks/12_FRED_BRENT_REFIT.ipynb` | L9 + U29 (median rel err <2.5% target) | CPU OK | ~3 min |
+| `notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb` | nb 09 cell-only + L5 + L6/D15-D17 + Part 14 QLoRA warning | T4 / A100 | ~25 min |
+| `notebooks/archive/11_REAL_DATA_INGEST.ipynb` | K1-K7 real-data ingest (FRED+NewsAPI+NOAA+WandB+ACLED+Exa+HFHub) | CPU OK | ~5 min |
+| `notebooks/archive/12_FRED_BRENT_REFIT.ipynb` | L9 + U29 (median rel err <2.5% target) | CPU OK | ~3 min |
 
 ### 1.4 New documentation
 
@@ -74,7 +74,7 @@
 | Notebooks | 9 | **12** (+ nb 10 Pro Colab killshot, + nb 11 real-data ingest, + nb 12 FRED Brent refit) |
 | Live API keys verified | 5/9 | **9/9** (5 prior + FRED + NewsAPI + NOAA + WandB key validated) |
 | Live data sources | 14/20 | **17/20** (+FRED, +NewsAPI, +NOAA — all 200 OK) |
-| Adversarial defense | 19+210=229 | **19+210+40=269** total attacks blocked (Tier 1 28.D combined gauntlet) |
+| Adversarial defense | 19+210=229 | **STRUCK** overcount → honest **174/174 real executed attacks** (nb13 §1; CLAIMS_LEDGER A3) |
 | 250-feature individual demonstration | 245/250 = 98.0% | **[STRUCK] = 99.2%** (post Tier 1 completion) |
 
 ---
@@ -104,7 +104,7 @@ Section O (LLM judging) updated:
 2. K2 NewsAPI live closes G4 RAG ingest gap
 3. K3 NOAA live closes typhoon-response data gap
 4. 28.A local Ollama scenario extractor matches OpenRouter quality at zero cost (saves credit for final eval)
-5. 28.D extends adversarial defense from 229 → 269 attacks blocked
+5. 28.D adversarial defense — **STRUCK** (the "229 → 269-attack" 100%-gauntlet counted every non-crashing call as safe and added constants); honest re-count is **174/174 real executed attacks** (nb13 §1). See CLAIMS_LEDGER A3
 6. 28.B 6-judge LOCAL panel proves LLM-judging works without external dependencies (rate-limit-free)
 
 **Mathematical reality unchanged**: 90% top-1 win against 800 teams remains impossible. Ceiling on P(#1) is ~22%. Pass 28 pushes us toward that ceiling, not past it. We engineer for top-10 reliability (target 80-91% post-video).

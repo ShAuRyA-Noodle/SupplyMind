@@ -89,7 +89,7 @@ Score estimate: **26/30** (recorded video is the only gap).
 Anchors:
 - `wordle_real_reinforce_v2_curve.json` — REINFORCE v2 95.5–97% solve, Cohen d 5.13
 - `pass23_colab_local_smoke.json` — Colab notebook proof: 10% → 100% solve, Wilcoxon p=1.87e-34
-- `bootstrap_leaderboard.json` — RAP-XC vs MaskablePPO Wilcoxon p=[STRUCK]
+- ❌ STRUCK — the bootstrap-CI leaderboard receipt was fabricated + deleted (CLAIMS_LEDGER A1); RAP-XC vs MaskablePPO significance pending valid re-run (P1.3)
 - `v2_inferential_stats.json` — bootstrap CI95 [2.66, 3.96] on Cohen's d
 - `statistical_power_analysis.json` — minimum detectable d=0.28 at n=200, observed 18× larger
 - `plots/colab_reproduction.png` — same-axes baseline vs trained per Part 16 plot rules

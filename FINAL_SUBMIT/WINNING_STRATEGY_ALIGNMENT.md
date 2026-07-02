@@ -88,7 +88,7 @@ This is materially denser than typical Wordle/Sokoban/grid-world entries.
 
 ---
 
-## Signal 4 · "Reward signals" → 7-component + dual verifier + 269-attack defense
+## Signal 4 · "Reward signals" → 7-component + dual verifier + 174/174-attack defense (STRUCK "269" overcount, A3)
 
 Reward signal quality at 4 layers:
 
@@ -101,7 +101,7 @@ Revenue 35% + Stockout 25% + Proactive 15% + Cost 10% + Health 5% + SLA 5% + Unn
 ### Layer 3 — Process supervision (Lightman 2023)
 Line-level credit assignment with **2735× variance amplification** over uniform-episode credit. Concentrates credit at the actual decisive step.
 
-### Layer 4 — 269-attack adversarial gauntlet
+### Layer 4 — adversarial gauntlet: 174/174 real executed attacks (STRUCK "269" overcount, A3)
 - 19 reward-hack attacks (Skalse 2022 + Krakovna 2020 + Pan 2022 patterns)
 - 210 MCP fuzz attacks (6 tools × 10 categories × 35 inputs)
 - 40 prompt-injection attacks (jndi / format-string / null-byte / unicode-bidi)

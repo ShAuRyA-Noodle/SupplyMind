@@ -26,7 +26,7 @@ This document is the **single source of truth** for everything a judge will see,
 | Docs | 150+ MD files, unified card, PyTorch story, BENCHMARKS_VS_PUBLIC | **S** | `README.md`, `docs/v3/MODEL_CARD.md`, `docs/v3/PYTORCH_STORY.md`, `docs/v3/BENCHMARKS_VS_PUBLIC.md`, `docs/v3/FINAL_DEMO.md`, `docs/v4/AUDIT_PLAN.md` |
 | CI/CD | GitHub Actions + OpenEnv compliance + v3 smoke | **A+** | `.github/workflows/ci.yml` |
 | Deploy | HF Space push pending (Batch 10) | target **A+** | https://huggingface.co/spaces/Shaurya-Noodle/Supplymind |
-| Demo assets | 3-min video script + 5-slide pitch + Colab + DEMO_VIDEO_SCRIPT | **A** | `demo/PITCH_DECK.md`, `demo/DEMO_VIDEO_SCRIPT.md`, `notebooks/04_v3_quickstart_colab.ipynb` |
+| Demo assets | 3-min video script + 5-slide pitch + Colab + DEMO_VIDEO_SCRIPT | **A** | `demo/PITCH_DECK.md`, `demo/DEMO_VIDEO_SCRIPT.md`, `notebooks/archive/04_v3_quickstart_colab.ipynb` |
 
 ---
 

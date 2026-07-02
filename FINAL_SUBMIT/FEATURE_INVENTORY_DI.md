@@ -43,8 +43,8 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 | 22 | cudnn.benchmark=True | ✅ | `rl/train_ppo.py:39`, `rl/forecasting/train_tft_real.py:40` |
 | 23 | allow_tf32=True | ✅ | `rl/train_ppo.py:40`, `rl/uncertainty.py`, `rl/gnn/tgn.py` |
 | 24 | 5 seeds × 20 episodes evaluation | ✅ | `rl/leaderboard.py`, `rl/real_world_benchmark.py` |
-| 25 | Bootstrap CI95 per agent | ✅ | `tests/receipts/bootstrap_leaderboard.json` (pass-10) |
-| 26 | Wilcoxon p<1e-50 pairwise | 🆕 | `tests/receipts/wilcoxon_pairwise_leaderboard.json` (pass-12); RAP-XC vs MaskablePPO p=[STRUCK], MaskablePPO vs scripted p=6.77e-149 (well below 1e-50) |
+| 25 | Bootstrap CI95 per agent | ❌ | STRUCK — leaderboard receipt fabricated + deleted (CLAIMS_LEDGER A1); re-run pending (P1.3) |
+| 26 | Wilcoxon pairwise | ❌ | STRUCK — pairwise-leaderboard receipt fabricated (sorted synthetic samples) + deleted (CLAIMS_LEDGER A1); valid paired-by-seed re-run pending (P1.3) |
 
 ### D.3 · Specialist Router · 6 bullets
 
@@ -255,8 +255,8 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 
 | # | Artifact | Path |
 |---|---|---|
-| 1 | Wilcoxon pairwise leaderboard | `scripts/wilcoxon_pairwise_leaderboard.py` + `tests/receipts/wilcoxon_pairwise_leaderboard.json` |
-| 2 | RAP-XC vs MaskablePPO Wilcoxon p=[STRUCK] (Cohen d=+2.728) — all 3 tasks | receipt JSON |
-| 3 | Most significant pair: MaskablePPO vs scripted_baseline p=6.77e-149 (well below user's 1e-50 claim) | same |
+| 1 | Wilcoxon pairwise leaderboard | ❌ STRUCK — script + receipt fabricated (sorted synthetic samples) and deleted (CLAIMS_LEDGER A1) |
+| 2 | RAP-XC vs MaskablePPO Wilcoxon significance — **STRUCK** (fabricated; CLAIMS_LEDGER A1) | — |
+| 3 | "Most significant pair" p-value — **STRUCK** (same fabricated receipt; CLAIMS_LEDGER A1) | — |
 | 4 | 16 v3_arcadia receipts mirrored to `FINAL_SUBMIT/receipts/` | dir |
 | 5 | Cross-verified: ECE=0.0229 ✅, ONNX 4 errors ✅, Optuna value=0.376 ✅, 50/50 explainer ✅, P@1=0.962 mxbai win ✅, P@3 0.925→0.862 reranker hurt ✅, GNN MAE +48/+49/+64% ✅ | individual receipts |

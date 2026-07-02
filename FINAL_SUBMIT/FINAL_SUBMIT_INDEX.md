@@ -68,7 +68,7 @@ All 11 plots in [`plots/`](plots/), all axis-labeled, all committed to disk:
 | [loss_components.png](plots/loss_components.png) | 4-component loss decomposition (BC + CQL + V + KL) |
 | [before_after.png](plots/before_after.png) | RAP-XC vs MaskablePPO-v3 paired-bootstrap CI95 |
 | [algo_leaderboard.png](plots/algo_leaderboard.png) | 9-agent leaderboard across 3 difficulty tiers |
-| [wilcoxon_grid.png](plots/wilcoxon_grid.png) | Pairwise Wilcoxon, most-significant p=6.77e-149 |
+| ~~wilcoxon_grid.png~~ | **STRUCK** — the pairwise-Wilcoxon plot + p-value came from the fabricated leaderboard receipt (deleted; CLAIMS_LEDGER A1); regenerating from a valid paired-by-seed run (P1.3) |
 | [conformal_coverage.png](plots/conformal_coverage.png) | Vovk 2005 conformal 0.9001 vs target 0.9000 |
 | [conformal_multilevel.png](plots/conformal_multilevel.png) | 3 α-levels × 6 Mondrian sub-groups, best dev 0.0044 |
 | [brent_backtest.png](plots/brent_backtest.png) | 8/8 historical events ±30%, median 3.32% rel err |
@@ -102,7 +102,7 @@ Top-level receipts in `FINAL_SUBMIT/receipts/`:
 - pass22_api_freshness (B1 WTI fix)
 
 ### Pre-pass-22 (production)
-- bootstrap_leaderboard, conformal_calibration, war_room_validation, ensemble_brent_validation, F2_multi_agent_apple_samsung_toyota, R5_GRANITE, R5_BEIR_MANUAL, R6_PROVIDER_V2, hetgat_v1_report, mc_dropout_v2, pareto_frontier_v2, world_model_v2_rollout, autoresearch_state_s1_to_s5, replay_cache_latest, frontier_panel_alpha, cross_corpus_alpha, R4_DANGEROUS_V2_ABLATION, adversarial_20_attack_gauntlet, adversarial_reward_audit, ablation_matrix, process_supervision, statistical_power_analysis, tier3_generalization, conformal_multilevel, conformal_tight_v3, v2_inferential_stats, chained_live_demo, wordle_real_reinforce_v2_curve, dual_verifier_smoke, rlve_curriculum_smoke, cross_env_transfer, api_keys_live_proof, test_suite_grand_total, phoenix_v5_receipts_INDEX, plus dozens more
+- ~~bootstrap-CI leaderboard receipt~~ (STRUCK — fabricated + deleted; CLAIMS_LEDGER A1), conformal_calibration, war_room_validation, ensemble_brent_validation, F2_multi_agent_apple_samsung_toyota, R5_GRANITE, R5_BEIR_MANUAL, R6_PROVIDER_V2, hetgat_v1_report, mc_dropout_v2, pareto_frontier_v2, world_model_v2_rollout, autoresearch_state_s1_to_s5, replay_cache_latest, frontier_panel_alpha, cross_corpus_alpha, R4_DANGEROUS_V2_ABLATION, adversarial_20_attack_gauntlet, adversarial_reward_audit, ablation_matrix, process_supervision, statistical_power_analysis, tier3_generalization, conformal_multilevel, conformal_tight_v3, v2_inferential_stats, chained_live_demo, wordle_real_reinforce_v2_curve, dual_verifier_smoke, rlve_curriculum_smoke, cross_env_transfer, api_keys_live_proof, test_suite_grand_total, phoenix_v5_receipts_INDEX, plus dozens more
 
 ---
 

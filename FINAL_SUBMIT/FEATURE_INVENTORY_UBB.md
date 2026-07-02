@@ -111,9 +111,9 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 
 | # | Bullet | Status | Evidence |
 |---|---|---|---|
-| 75 | Wilcoxon signed-rank pairwise (p<1e-50) | ✅ | `wilcoxon_pairwise_leaderboard.json: most_sig p=6.77e-149` (well beyond 1e-50) |
+| 75 | Wilcoxon signed-rank pairwise | ❌ | STRUCK — pairwise-leaderboard receipt fabricated (sorted synthetic samples); deleted (CLAIMS_LEDGER A1); valid paired-by-seed re-run pending (P1.3) |
 | 76 | Friedman test multi-agent | ⚠️ | conceptually present in pairwise framework; explicit Friedman call may not exist |
-| 77 | Bootstrap CI95 paired + unpaired | ✅ | `bootstrap_leaderboard.json` |
+| 77 | Bootstrap CI95 paired + unpaired | ❌ | STRUCK — leaderboard receipt fabricated + deleted (CLAIMS_LEDGER A1); re-run pending (P1.3) |
 | 78 | Krippendorff α (ordinal squared-distance) | ✅ | `compute_panel_agreement.py` + 4 alpha values verified |
 | 79 | Cohen κ (weighted) | ✅ | `R4_DANGEROUS_V2_ABLATION.json: cohen_weighted_kappa = 0.7474` |
 | 80 | Fleiss κ (multi-rater) | ✅ | `R4_DANGEROUS_V2.json: fleiss_kappa_nominal = 0.0160` |
@@ -123,7 +123,7 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 | 84 | Macro-F1 / AUC / log-loss for classification | ✅ | `R2_CARAMEL.json` + `R3_STACKING_V2.json` |
 | 85 | MAE / RMSE / R² for regression | ✅ | `R6_PROVIDER_V2.json + tft_v2_metrics.json + R3_PAST_SELF.json` |
 | 86 | 10,800-episode bootstrap (R6 Euclidian) | ✅ | `R6_EUCLIDIAN.json` |
-| 87 | Non-overlapping CI95 as bulletproof claim | ✅ | `wilcoxon_pairwise: RAP-XC vs MaskablePPO CI95 [+0.198,+0.257]` strictly > 0 |
+| 87 | Non-overlapping CI95 as bulletproof claim | ❌ | STRUCK — the RAP-XC vs MaskablePPO CI95 came from the fabricated pairwise-leaderboard receipt (deleted; CLAIMS_LEDGER A1) |
 
 **X: 12 ✅ + 1 ⚠️ = 13/13 = 100%**
 
@@ -200,13 +200,13 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 | 143 | PHOENIX_PUSH_REPORT.md | ✅ | versions/v5_phoenix/docs/ |
 | 144 | HF_DEPLOY_V4.md | ✅ | docs/ |
 | 145 | R4_RUBRIC_CHALLENGE.md | ✅ | challenges/ |
-| 146 | FAILURE_TABLE.md | ✅ | repo root |
+| 146 | FAILURE_TABLE.md | ✅ | moved in P0.4 → `Sleep-Token-ARCHIVE/_dump/FAILURE_TABLE.md` (see `_dump/POINTER.md`) |
 | 147 | 12 Sleep Token album-track stages (00_emergence → 95_arcadia) | ✅ | `versions/v3_arcadia/` 12 dirs verified exact |
 | 148 | Notebook 01_environment_quickstart | ✅ | `notebooks/01_environment_quickstart.ipynb` |
 | 149 | Notebook 02_training_your_own_agent | ✅ | `notebooks/02_*.ipynb` |
 | 150 | Notebook 03_reproducing_benchmarks | ✅ | same |
-| 151 | Notebook 04_v3_quickstart_colab | ✅ | same |
-| 152 | Notebook 05_v4_hormuz_live | ✅ | same — THE HEADLINE DEMO |
+| 151 | Notebook 04_v3_quickstart_colab | ✅ | `notebooks/archive/04_v3_quickstart_colab.ipynb` (archived) |
+| 152 | Notebook 05_v4_hormuz_live | ✅ | `notebooks/archive/05_v4_hormuz_live.ipynb` (archived) |
 | 153 | Notebook 06_trl_training_colab | ✅ | same |
 | 154 | 125 total .md files in repo | ✅ | `find -name '*.md' \| wc -l = 125` |
 
@@ -243,7 +243,7 @@ Bullet-by-bullet status across U/V/W/X/Y/Z/AA/BB (~180 bullets). Same legend as 
 | 168 | Sleep Token album naming (12 stages) | ✅ | v3_arcadia 12 dirs exact |
 | 169 | W1-W10 named design wins MODEL_CARD | ✅ | `MODEL_CARD.md` W1-W10 sections |
 | 170 | Krippendorff α disclosure ladder (0.21 → 0.75 → 0.567 → 0.358) | ✅ | 4 alphas verified EXACT |
-| 171 | 8 honest negative findings retained | ✅ | `FAILURE_TABLE.md: 8 negatives` |
+| 171 | 8 honest negative findings retained | ✅ | `Sleep-Token-ARCHIVE/_dump/FAILURE_TABLE.md`: 8 negatives (see `_dump/POINTER.md`) |
 | 172 | Devil's-advocate role for DeepSeek | ✅ | `R4_DANGEROUS_V2_ABLATION.json: devils_advocate` |
 | 173 | Two-pass DeepSeek extraction (free CoT → Qwen JSON parse) | ✅ | `R4_DANGEROUS_V2.json: extractor field` 100% parse rate |
 | 174 | Phoenix isolation guarantee 3 layers | ✅ | `PHOENIX_COMPLETION_AUDIT.md` |

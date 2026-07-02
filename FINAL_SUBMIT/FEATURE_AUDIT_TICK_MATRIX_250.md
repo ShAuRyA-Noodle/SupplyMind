@@ -212,7 +212,7 @@ V1 FastAPI · V2 SSE · V3 master.html · V4 ONNX bundle · V5 Docker · V6 open
 
 ## W · STATS (5) — 5/5 ✅
 
-W1 Wilcoxon p=[STRUCK] + 6.6e-35 · W2 Cohen d +2.73 + 5.13 · W3 Bootstrap CI95 · W4 Conformal 0.9001 · W5 Cross-corpus α 0.358
+W1 Wilcoxon — RAP-XC vs MaskablePPO **STRUCK** (fabricated, A1); REINFORCE 6.6e-35 **RERUN-PENDING** (A2) · W2 Cohen d — **STRUCK** (A1) / REINFORCE 5.13 RERUN-PENDING (A2) · W3 Bootstrap CI95 **STRUCK** (A1) · W4 Conformal 0.9001 (RERUN-PENDING A5) · W5 Cross-corpus α 0.358
 
 ## X · REAL DATA (10) — 10/10 ✅
 

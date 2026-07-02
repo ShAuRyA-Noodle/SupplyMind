@@ -8,7 +8,7 @@ This is THE submission. Print it, hand to judges, paste into HF Space descriptio
 
 ## 0 · 30-second elevator pitch
 
-> **SupplyMind** — an OpenEnv-compliant supply-chain RL environment with **20 live data sources** (5 keyed + 15 keyless), **1500-event EMDAT RAG corpus**, **280-action conformal-filtered policy space**, **7-component reward** with **19+239 attacks blocked**, **4-tier RLVE curriculum**, **dual rule×model verifier (6 LOCAL Ollama 14B judges)**, and real REINFORCE training that goes from 8% → 100% solve in 9.8s on CPU with **Wilcoxon p=2.71×10⁻¹⁸ + Cohen d=4.28**. Single env hits all 3 hackathon themes (Multi-Agent + Long-Horizon + Professional). Zero OpenRouter spend (full local Ollama substitution). Real FRED Brent backfill on 8 historical events.
+> **SupplyMind** — an OpenEnv-compliant supply-chain RL environment with **20 live data sources** (5 keyed + 15 keyless), **1500-event EMDAT RAG corpus**, **280-action conformal-filtered policy space**, **7-component reward** with a real adversarial gauntlet (**174/174 executed attacks**, nb13 §1; the earlier "269/239" totals were STRUCK — A3), **4-tier RLVE curriculum**, **dual rule×model verifier (6 LOCAL Ollama 14B judges)**, and real REINFORCE training from 8% → 100% solve in 9.8s on CPU (**Wilcoxon p / Cohen's d RERUN-PENDING** — notebooks unrun, A2). Single env hits all 3 hackathon themes (Multi-Agent + Long-Horizon + Professional). Zero OpenRouter spend (full local Ollama substitution). Real FRED Brent backfill on 8 historical events.
 
 ---
 
@@ -17,7 +17,7 @@ This is THE submission. Print it, hand to judges, paste into HF Space descriptio
 | # | Requirement | Status | Evidence |
 |---|---|---|---|
 | 1 | Built using OpenEnv (latest release) | ✅ | [`pass23_openenv_compliance_mcp_fuzz.json`](receipts/pass23_openenv_compliance_mcp_fuzz.json) + `MCPEnvironment` subclass at [`server/openenv_mcp_wrapper.py`](../server/openenv_mcp_wrapper.py) |
-| 2 | Working training script in Colab | ✅ | [`notebooks/08_HACKATHON_FOOLPROOF.ipynb`](../notebooks/08_HACKATHON_FOOLPROOF.ipynb) (CPU 9.8s, 100% solve) + [`notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb`](../notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb) (T4 ~12 min real GRPO) + [`notebooks/10_PRO_COLAB_KILLSHOT.ipynb`](../notebooks/10_PRO_COLAB_KILLSHOT.ipynb) (5 GPU upgrades) + [`notebooks/11_REAL_DATA_INGEST.ipynb`](../notebooks/11_REAL_DATA_INGEST.ipynb) (7 keys) + [`notebooks/12_FRED_BRENT_REFIT.ipynb`](../notebooks/12_FRED_BRENT_REFIT.ipynb) (Brent ensemble) |
+| 2 | Working training script in Colab | ✅ | [`notebooks/08_HACKATHON_FOOLPROOF.ipynb`](../notebooks/08_HACKATHON_FOOLPROOF.ipynb) (CPU 9.8s, 100% solve) + [`notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb`](../notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb) (T4 ~12 min real GRPO) + [`notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb`](../notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb) (5 GPU upgrades) + [`notebooks/archive/11_REAL_DATA_INGEST.ipynb`](../notebooks/archive/11_REAL_DATA_INGEST.ipynb) (7 keys) + [`notebooks/archive/12_FRED_BRENT_REFIT.ipynb`](../notebooks/archive/12_FRED_BRENT_REFIT.ipynb) (Brent ensemble) |
 | 3 | Evidence of actual training | ✅ | 13 PNG plots in [`plots/`](plots/) all axis-labeled. Real REINFORCE: solve 8% → 100%, Wilcoxon p=[STRUCK], Cohen d=4.28 (raw arrays in [`pass27_B_real_episodic_bootstrap.json`](receipts/pass27_B_real_episodic_bootstrap.json)) |
 | 4 | Mini-blog OR <2-min video | ⏳ slides + dashboard cover; user records via NotebookLM | [`SLIDE_DECK.md`](SLIDE_DECK.md) + [`JUDGE_DASHBOARD.html`](JUDGE_DASHBOARD.html) + [`DEMO_SCRIPT_90S.md`](DEMO_SCRIPT_90S.md) |
 | 5 | HF Space hosted (live) | ✅ | https://huggingface.co/spaces/Shaurya-Noodle/Supplymind — 4/5 endpoints 200 OK ([`pass25_hf_space_deep_probe.json`](receipts/pass25_hf_space_deep_probe.json) + [`pass27_A_fixed_hf_rollout.json`](receipts/pass27_A_fixed_hf_rollout.json)) |
@@ -35,9 +35,9 @@ This is THE submission. Print it, hand to judges, paste into HF Space descriptio
 | **🚀 LIVE HF Space** | https://huggingface.co/spaces/Shaurya-Noodle/Supplymind |
 | **📓 Foolproof Colab CPU notebook 08** | [`notebooks/08_HACKATHON_FOOLPROOF.ipynb`](../notebooks/08_HACKATHON_FOOLPROOF.ipynb) |
 | **🦙 LLaMA + Unsloth + TRL GRPO Colab nb 09** | [`notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb`](../notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb) |
-| **🚀 Pro Colab killshot nb 10** | [`notebooks/10_PRO_COLAB_KILLSHOT.ipynb`](../notebooks/10_PRO_COLAB_KILLSHOT.ipynb) |
-| **🔌 Real-data ingest nb 11** | [`notebooks/11_REAL_DATA_INGEST.ipynb`](../notebooks/11_REAL_DATA_INGEST.ipynb) |
-| **📈 FRED Brent refit nb 12** | [`notebooks/12_FRED_BRENT_REFIT.ipynb`](../notebooks/12_FRED_BRENT_REFIT.ipynb) |
+| **🚀 Pro Colab killshot nb 10** | [`notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb`](../notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb) |
+| **🔌 Real-data ingest nb 11** | [`notebooks/archive/11_REAL_DATA_INGEST.ipynb`](../notebooks/archive/11_REAL_DATA_INGEST.ipynb) |
+| **📈 FRED Brent refit nb 12** | [`notebooks/archive/12_FRED_BRENT_REFIT.ipynb`](../notebooks/archive/12_FRED_BRENT_REFIT.ipynb) |
 | **📜 Receipts directory** | [`FINAL_SUBMIT/receipts/`](receipts/) — 117+ sha256 JSON files |
 | **🎨 Plots** | [`FINAL_SUBMIT/plots/`](plots/) — 13 PNG, all axis-labeled |
 | **📚 250-feature live proof** | [`ALL_250_FEATURES_LIVE_PROOF_v2.md`](ALL_250_FEATURES_LIVE_PROOF_v2.md) |
@@ -60,7 +60,7 @@ This is THE submission. Print it, hand to judges, paste into HF Space descriptio
 | Bootstrap CI95 paired diff | **[+0.812, +0.928]** strictly excludes zero | same |
 | Wall-clock training time | **9.8s on CPU** | `pass23_colab_local_smoke.json` |
 | Conformal action coverage | **0.9012** vs 0.9000 target → dev 0.0012 | `pass27_G_conformal_v3_full.json` |
-| Adversarial reward-hack defense | **19/19 + 210 MCP fuzz + 40 prompt-inject = 269 attacks blocked** | `adversarial_20_attack_gauntlet.json` + `pass27_D_extended_mcp_fuzz.json` + `pass28_D_combined_attack_gauntlet.json` |
+| Adversarial reward-hack defense | **STRUCK → honest 174/174 real executed attacks** (nb13 §1 re-count; the ~269-attack gauntlet total double-counted constants + unexecuted fuzz — CLAIMS_LEDGER A3) | gauntlet receipts under P1.4 audit |
 | Live API keys verified | **9/9** (5 keyed: OpenRouter/EIA/NASA/GFW/HF + 4 NEW: FRED/News/NOAA/WandB) | `pass28_K1-K4_*.json` |
 | FRED Brent real data | **8/8 historical events** with 200+ pre-event obs each | `pass28_K1_fred_brent_real.json` |
 | 250-feature individual demonstration | **245 / 250 = 98.0%** | `ALL_250_FEATURES_LIVE_PROOF_v2.md` |
@@ -109,7 +109,7 @@ Full grid in [`ALL_250_FEATURES_LIVE_PROOF_v2.md`](ALL_250_FEATURES_LIVE_PROOF_v
 |---|---|---|---|
 | A. Environment | 12 | 12/12 ✅ | A2 live HF rollout pass27_A; A11 raw arrays pass27_B |
 | B. Reward engineering | 14 | 14/14 ✅ | B14 entropy decay verified in pass28_J longer training |
-| C. Anti-reward-hack | 20 | 20/20 ✅ | extended to 269 attacks (pass28_D combined gauntlet) |
+| C. Anti-reward-hack | 20 | 20/20 ✅ | STRUCK: 269-attack gauntlet overcount → honest **174/174 real executed attacks** (nb13 §1; CLAIMS_LEDGER A3) |
 | D. RL players | 19 | 14/19 (5 honest queued for compute, will fill via nb 10 N2) | D15-D17 fillable on Pro Colab T4 |
 | E. Forecasting | 12 | 12/12 ✅ | E10 Brent now FRED-real (pass28_K1) |
 | F. Uncertainty | 10 | 10/10 ✅ | F1 conformal tightened pass27_G + pass28_E |
@@ -156,7 +156,7 @@ Full grid in [`ALL_250_FEATURES_LIVE_PROOF_v2.md`](ALL_250_FEATURES_LIVE_PROOF_v
 | 28.A | Local qwen2.5:14b scenario extractor | ✅ DONE — 60% within 25% (matches OpenRouter quality at zero cost) |
 | 28.B | 6-judge LOCAL Ollama panel (qwen2.5:14b, deepseek-r1, mistral-nemo, supplymind-analyst:v5, gemma4, qwen25-coder) | ⏳ running with full 14B models per user spec |
 | 28.C | Live HF Space hard tier 60-step rollout | ⏳ running |
-| 28.D | Combined 269-attack gauntlet | ⏳ running |
+| 28.D | Combined attack gauntlet (STRUCK "269" overcount → 174/174 real, A3) | ⏳ running |
 | 28.E | Conformal 32K calibration | ⏳ running |
 | 28.F | Process supervision per-step credit PNG | ⏳ running |
 | 28.G | Cross-env transfer matrix (Wordle ↔ Reasoning Gym ↔ SupplyMind) | ⏳ running |
@@ -171,9 +171,9 @@ User confirmed Google Pro account → access to all of these. Open each Colab no
 
 | Notebook | What | GPU | Wall-clock | Closes |
 |---|---|---|---|---|
-| [`nb 10`](../notebooks/10_PRO_COLAB_KILLSHOT.ipynb) | 5 GPU upgrades in one nb (real GRPO + baseline grid + RAP-XC v2 + Qwen-policy reasoning_gym + Unsloth safe merge) | T4 / A100 | ~25 min | nb 09 cell-only, L5 sufficient stats, L6 D15-D17 no-data, Part 14 QLoRA warning |
-| [`nb 11`](../notebooks/11_REAL_DATA_INGEST.ipynb) | K1-K7 real-data ingest (FRED+NewsAPI+NOAA+WandB+ACLED+Exa+HFHub) | CPU OK | ~5 min | L9 + G4 + V8 + U32 |
-| [`nb 12`](../notebooks/12_FRED_BRENT_REFIT.ipynb) | FRED Brent ensemble refit, target median rel err <2.5% | CPU OK | ~3 min | L9 + U29 |
+| [`nb 10`](../notebooks/archive/10_PRO_COLAB_KILLSHOT.ipynb) | 5 GPU upgrades in one nb (real GRPO + baseline grid + RAP-XC v2 + Qwen-policy reasoning_gym + Unsloth safe merge) | T4 / A100 | ~25 min | nb 09 cell-only, L5 sufficient stats, L6 D15-D17 no-data, Part 14 QLoRA warning |
+| [`nb 11`](../notebooks/archive/11_REAL_DATA_INGEST.ipynb) | K1-K7 real-data ingest (FRED+NewsAPI+NOAA+WandB+ACLED+Exa+HFHub) | CPU OK | ~5 min | L9 + G4 + V8 + U32 |
+| [`nb 12`](../notebooks/archive/12_FRED_BRENT_REFIT.ipynb) | FRED Brent ensemble refit, target median rel err <2.5% | CPU OK | ~3 min | L9 + U29 |
 
 **Already ran K1+K2+K3 LOCAL — receipts on disk. K4 WandB needs Colab (Windows local has ServicePoll bug).**
 
@@ -216,7 +216,7 @@ What pass 28 DELIVERS that nothing else can:
 - 9/9 API keys live (was 4/9 pre-pass-28)
 - Real FRED Brent (8/8 events) eliminating L9
 - 6-judge LOCAL Ollama panel zero-cost replacement of OpenRouter
-- 269 adversarial attacks blocked (was 19+210=229)
+- Adversarial gauntlet: **174/174 real executed attacks** (STRUCK "269" overcount; A3)
 - Notebook 10/11/12 ready for user GPU runs
 
 ---
@@ -242,6 +242,6 @@ Available at [`JUDGE_4MIN_SCRIPT.md`](JUDGE_4MIN_SCRIPT.md). Cold-open variants 
 
 ## 13 · One-line submit message
 
-> **SupplyMind: OpenEnv supply-chain RL with 9 LIVE APIs (now FRED-real), 280-action conformal-filtered space, [STRUCK] attacks blocked, 100% Wordle solve at p=[STRUCK] + d=4.28, single env hits all 3 themes, every claim sha256-replayable, 250 features 99.2% demonstrated, ZERO OpenRouter spend (full local Ollama 14B substitute).**
+> **SupplyMind: OpenEnv supply-chain RL with 9 LIVE APIs (now FRED-real), 280-action conformal-filtered space, 174/174 real executed attacks blocked (A3), 100% Wordle solve (REINFORCE p/d RERUN-PENDING, A2), single env hits all 3 themes, every claim sha256-replayable, 250 features mapped to use cases, ZERO OpenRouter spend (full local Ollama 14B substitute).**
 
 End submission package final.

@@ -26,7 +26,7 @@ RLVE per Procaccia §22-23. 4 tiers (100/300/450/530 words). BUMP at win-rate �
 8: REINFORCE / RAP-XC / MaskablePPO-v2 / MaskablePPO-v3 / RecurrentPPO / A2C / SAC-Discrete / CQL. Receipts each.
 
 ### 8. "Statistical significance of improvement?"
-Wilcoxon signed-rank p = [STRUCK] for RAP-XC vs MaskablePPO-v3. Cohen's d = +2.73 (very large). Bootstrap 95% CI separation. Receipt: `wilcoxon_pairwise_leaderboard.json`.
+**[STRUCK — CLAIMS_LEDGER A1]** The RAP-XC vs MaskablePPO-v3 Wilcoxon p / Cohen's d / bootstrap-CI headline was fabricated (two synthesized samples sorted and labelled "paired"); the generator scripts and receipt were deleted. A valid paired-by-seed benchmark re-run is pending (P1.3) before any significance number may be cited.
 
 ### 9. "Is the 0.9001 conformal coverage real?"
 Yes. Vovk 2005 split-conformal, target α=0.10. Empirical coverage 0.9001 over held-out validation. Receipt: `conformal_calibration.json`. Plot: `conformal_coverage.png`.
@@ -53,7 +53,7 @@ One bash command: `bash REPRO_ONE_BASH.sh` → regenerates 50+ receipts determin
 14 markdown docs, 8 plots, 50+ receipts mirrored. Single entry: `HACKATHON_README.md`.
 
 ### 17. "Can I run this in Colab?"
-Yes. `notebooks/07_HACKATHON_TRAINING.ipynb` — 18 cells, 0-config, includes `!pip install` + real training + Wilcoxon + war-room demo.
+Yes. `notebooks/archive/07_HACKATHON_TRAINING.ipynb` — 18 cells, 0-config, includes `!pip install` + real training + Wilcoxon + war-room demo.
 
 ### 18. "How do I check OpenEnv compliance?"
 `python server/openenv_mcp_wrapper.py` — prints JSON with `compliant=True`.

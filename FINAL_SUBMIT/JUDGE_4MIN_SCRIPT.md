@@ -39,9 +39,9 @@
 ---
 
 ## 2:30–3:10 — STATISTICAL VALIDATION
-> "Wilcoxon signed-rank, RAP-XC versus MaskablePPO-v3: p equals three point nine times ten to the minus eighteen. Cohen's d equals plus 2.73 — *very large* effect."
+> **[STRUCK — DO NOT READ · CLAIMS_LEDGER A1]** The RAP-XC vs MaskablePPO-v3 Wilcoxon p / Cohen's d line was fabricated from sorted synthetic samples and is removed from the script. Say instead: "A valid paired-by-seed benchmark re-run is in progress (P1.3) — we do not quote a p-value until it lands."
 
-*(Click wilcoxon_grid.png.)*
+*(The `wilcoxon_grid` plot is STRUCK — do not show it; regenerating from a valid run.)*
 
 > "Conformal coverage: 0.9001 empirical against 0.90 target. Vovk 2005, distribution-free guarantee. Cross-corpus α ladder 0.21 to 0.75 to 0.358."
 
@@ -55,7 +55,7 @@
 ---
 
 ## 3:40–4:00 — CLOSE
-> "OpenEnv compliant. Two environments, eight algorithms, fifty-plus sha-stamped receipts, twenty-attack defense, p equals 3.9 times ten to the minus eighteen. Two hundred fifty features mapped to use cases. One bash command reproduces it all."
+> "OpenEnv compliant. Two environments, eight algorithms, fifty-plus sha-stamped receipts, a real adversarial-defense gauntlet — 174 of 174 executed attacks. Two hundred fifty features mapped to use cases. One bash command reproduces it all." *(The fabricated Wilcoxon p-value was removed — CLAIMS_LEDGER A1; the honest gauntlet count is 174/174 per nb13 §1 — A3.)*
 
 > "Questions?"
 

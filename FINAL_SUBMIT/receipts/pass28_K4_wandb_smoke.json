@@ -1,9 +1,0 @@
-{
-  "name": "K4_wandb_live_smoke",
-  "error": "ServicePollForTokenError: Failed to read port info after 30.0 seconds.",
-  "_block_id": "K4",
-  "_block_name": "wandb_live_smoke",
-  "_block_elapsed_s": 34.29,
-  "_pass": 28,
-  "_generated_at_utc": "2026-04-26T09:55:29Z"
-}

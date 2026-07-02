@@ -166,7 +166,7 @@ See `scripts/ollama_v5_vs_frontier.py` (pass-10) for live comparison with 6 Open
 
 ## 9. 9-agent paired-bootstrap CI95 leaderboard — [STRUCK]
 
-> **[STRUCK]** `scripts/bootstrap_leaderboard.py` has been **deleted**. The audit found it
+> **[STRUCK]** The paired-bootstrap CI95 leaderboard generator script has been **deleted**. The audit found it
 > hardcoded the RAP-XC "recorded" eval stats, then reconstructed per-episode arrays from
 > sufficient stats and **sorted the two samples to pair them by quantile rank** — which
 > manufactures near-zero-variance differences and fabricated significance. Every number in the
@@ -183,10 +183,10 @@ See `scripts/ollama_v5_vs_frontier.py` (pass-10) for live comparison with 6 Open
 
 ## 10. Wilcoxon pairwise leaderboard (pass-12) — [STRUCK]
 
-> **[STRUCK]** `scripts/wilcoxon_pairwise_leaderboard.py` has been **deleted**. It ran the
+> **[STRUCK]** The Wilcoxon-pairwise leaderboard generator script has been **deleted**. It ran the
 > Wilcoxon signed-rank test on **sorted-aligned reconstructed samples** (same invalid pairing as
-> §9), so p-values like **[STRUCK]**, Cohen's d **+2.728**, and 6.77e-149 are statistically
-> meaningless. All struck. Any doc still quoting `p=[STRUCK]` / `d=+2.73` is stale — see
+> §9), so its p-values, Cohen's d, and the 6.77e-149 figure are statistically
+> meaningless. All struck. Any doc still quoting those numbers is stale — see
 > CLAIMS_LEDGER.md. Real pairwise tests pending on true same-seed episode pairs (P1.3).
 
 ## 11. RAG · 8-pipeline comparison (R5_GRANITE.json)

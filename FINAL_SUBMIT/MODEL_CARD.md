@@ -31,7 +31,7 @@
 
 ## Headline metrics (RAP-XC)
 - Hard task mean reward: **+2.83** (CI95 [+2.68, +2.96])
-- Wilcoxon vs MaskablePPO-v3: **p = [STRUCK]**, Cohen's d **+2.73**
+- Wilcoxon vs MaskablePPO-v3: **STRUCK** — fabricated significance (CLAIMS_LEDGER A1); valid paired-by-seed re-run pending (P1.3)
 - BC loss reduction: **96%** (5.624 → 0.233 in 17.77s on RTX 4080 bf16)
 
 ## Limitations

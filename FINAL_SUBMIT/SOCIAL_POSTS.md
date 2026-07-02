@@ -25,7 +25,7 @@ We built two RL environments:
 • SupplyMind (Theme #3 Professional Tasks) — 40 real company nodes, 280 actions, 20 live data sources
 
 Highlights:
-→ Cohen's d 5.133 (1.88× larger than RAP-XC's prior +2.73)
+→ Cohen's d 5.133 (REINFORCE; RERUN-PENDING, A2) — the RAP-XC "+2.73" comparison was STRUCK (fabricated; A1)
 → Wilcoxon p = [STRUCK] vs MaskablePPO-v3
 → 19/19 reward-hack attacks blocked (Skalse 2022 + Krakovna 2020 + Pan 2022 patterns)
 → Multi-level conformal coverage (Vovk 2005, Romano 2020)
