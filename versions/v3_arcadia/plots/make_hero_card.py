@@ -11,8 +11,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-PLOTS = ROOT / "v3_arcadia" / "plots"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots"
 PLOTS.mkdir(parents=True, exist_ok=True)
 
 

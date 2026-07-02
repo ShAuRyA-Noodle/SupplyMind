@@ -24,7 +24,7 @@ import requests
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 
 app = FastAPI(title="SupplyMind v3 Arcadia", version="3.0.0",
               description="Supply-chain risk management API — R4 judges + R3 forecasters + R5 RAG + R6 RL")
@@ -45,9 +45,9 @@ def _load_rag():
     import torch
     dev = "cuda" if torch.cuda.is_available() else "cpu"
     _STATE["embedder"] = SentenceTransformer(str(ROOT / "models" / "mxbai-embed-large"), device=dev)
-    with open(ROOT / "v3_arcadia" / "checkpoints" / "granite" / "corpus_chunks.pkl", "rb") as f:
+    with open(ROOT / "versions" / "v3_arcadia" / "checkpoints" / "granite" / "corpus_chunks.pkl", "rb") as f:
         _STATE["corpus_chunks"] = pickle.load(f)
-    _STATE["corpus_emb"] = np.load(ROOT / "v3_arcadia" / "checkpoints" / "granite" / "corpus_emb_mxbai.npy")
+    _STATE["corpus_emb"] = np.load(ROOT / "versions" / "v3_arcadia" / "checkpoints" / "granite" / "corpus_emb_mxbai.npy")
 
 
 def _load_rl():
@@ -55,7 +55,7 @@ def _load_rl():
         return
     from sb3_contrib import MaskablePPO
     # Use the easy-task model by default (most stable)
-    ckpt = ROOT / "v3_arcadia" / "checkpoints" / "gethsemane" / "ppo_easy_typhoon_response.zip"
+    ckpt = ROOT / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane" / "ppo_easy_typhoon_response.zip"
     if ckpt.exists():
         _STATE["rl_model"] = MaskablePPO.load(str(ckpt))
 

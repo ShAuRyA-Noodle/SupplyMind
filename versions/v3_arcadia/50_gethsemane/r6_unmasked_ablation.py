@@ -25,12 +25,12 @@ import torch
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-CKPT = ROOT / "v3_arcadia" / "checkpoints" / "gethsemane"
-RESULTS = ROOT / "v3_arcadia" / "results"
+CKPT = ROOT / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 
 TASK = "easy_typhoon_response"
 TIMESTEPS = 100_000

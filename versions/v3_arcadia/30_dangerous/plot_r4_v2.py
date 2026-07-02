@@ -8,9 +8,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-d = json.loads((ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json").read_text())
-PLOTS = ROOT / "v3_arcadia" / "plots" / "dangerous"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+d = json.loads((ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json").read_text())
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "dangerous"
 PLOTS.mkdir(parents=True, exist_ok=True)
 
 judges = d["judges"]
@@ -202,6 +202,6 @@ for s in scenarios:
     a_s = f"{a:.2f}" if isinstance(a, (int, float)) and not (isinstance(a, float) and np.isnan(a)) else "n/a"
     md.append(f"| {s} | {sc.get('ground_truth','?')} | {sc.get('risk_majority','?')} | {a_s} | {sc.get('escalation','?')} |")
 
-out_md = ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_REPORT.md"
+out_md = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_REPORT.md"
 out_md.write_text("\n".join(md), encoding="utf-8")
 print(f"saved {out_md}")

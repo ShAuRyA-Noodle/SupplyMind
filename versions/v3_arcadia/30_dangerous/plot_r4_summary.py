@@ -8,9 +8,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-d = json.loads((ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS.json").read_text())
-PLOTS = ROOT / "v3_arcadia" / "plots" / "dangerous"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+d = json.loads((ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS.json").read_text())
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "dangerous"
 PLOTS.mkdir(parents=True, exist_ok=True)
 
 judges = d["judges"]

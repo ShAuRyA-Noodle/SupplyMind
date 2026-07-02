@@ -21,14 +21,14 @@ import torch
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-CKPT = ROOT / "v3_arcadia" / "checkpoints" / "gethsemane"
-PLOTS = ROOT / "v3_arcadia" / "plots" / "euclidian"
+CKPT = ROOT / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane"
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "euclidian"
 PLOTS.mkdir(parents=True, exist_ok=True)
-RESULTS = ROOT / "v3_arcadia" / "results"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 
 TASKS = ["easy_typhoon_response", "medium_multi_front", "hard_cascading_crisis"]
 EPISODES_PER_CELL = 900

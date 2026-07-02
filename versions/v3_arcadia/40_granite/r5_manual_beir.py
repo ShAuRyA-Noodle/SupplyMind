@@ -31,9 +31,9 @@ import torch
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 MODELS = ROOT / "models"
-RESULTS = ROOT / "v3_arcadia" / "results"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 CRISES = ROOT / "external_data" / "wikipedia_crises"
 
 import os

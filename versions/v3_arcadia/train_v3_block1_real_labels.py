@@ -42,7 +42,7 @@ import pandas as pd
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 DATA = ROOT / "rl" / "data"
 OUT = ROOT / "rl" / "analysis" / "trained" / "v3"
 OUT.mkdir(parents=True, exist_ok=True)

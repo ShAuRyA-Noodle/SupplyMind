@@ -8,9 +8,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-d = json.loads((ROOT / "v3_arcadia" / "results" / "R5_GRANITE.json").read_text())
-PLOTS = ROOT / "v3_arcadia" / "plots" / "granite"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+d = json.loads((ROOT / "versions" / "v3_arcadia" / "results" / "R5_GRANITE.json").read_text())
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "granite"
 PLOTS.mkdir(parents=True, exist_ok=True)
 
 pipelines = list(d["pipelines"].keys())
@@ -143,6 +143,6 @@ md.append("| mxbai bi P@1 | 0.52 | **0.962** |")
 md.append("| mxbai+rerank P@1 | 0.54 | 0.925 |")
 md.append("| mxbai bi MRR | 0.537 | **0.978** |")
 
-out_md = ROOT / "v3_arcadia" / "results" / "R5_GRANITE_REPORT.md"
+out_md = ROOT / "versions" / "v3_arcadia" / "results" / "R5_GRANITE_REPORT.md"
 out_md.write_text("\n".join(md), encoding="utf-8")
 print(f"saved {out_md}")

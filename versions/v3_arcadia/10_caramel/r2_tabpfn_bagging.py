@@ -36,10 +36,10 @@ warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DATA = ROOT / "rl" / "data"
 MODELS = ROOT / "models"
-RESULTS = ROOT / "v3_arcadia" / "results"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 
 TABPFN_CLF = MODELS / "tabpfn-v2-clf" / "tabpfn-v2-classifier.ckpt"
 
@@ -47,7 +47,7 @@ SEED = 42
 N_BAGS_DEMO = 3          # demo: 3 bags. Full: 18.
 BAG_SIZE = 10_000
 
-sys.path.insert(0, str(ROOT / "v3_arcadia" / "10_caramel"))
+sys.path.insert(0, str(ROOT / "versions" / "v3_arcadia" / "10_caramel"))
 try:
     from train_caramel import build_features  # reuse feature engineering
 except Exception as e:

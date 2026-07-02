@@ -17,7 +17,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-R = ROOT / "v3_arcadia" / "results"
+R = ROOT / "versions" / "v3_arcadia" / "results"
 
 CHECKS = [
     # (label, file, path-list, floor or None, higher_is_better)
@@ -59,6 +59,8 @@ def nested(d, path):
 
 
 def main():
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     failures = []
     passes = []
     for label, fname, path, floor, hib in CHECKS:

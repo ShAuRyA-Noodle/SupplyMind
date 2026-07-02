@@ -22,8 +22,8 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-RESULTS = ROOT / "v3_arcadia" / "results"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 MODELS = ROOT / "models"
 VL_PATH = MODELS / "qwen25-vl-7b"
 

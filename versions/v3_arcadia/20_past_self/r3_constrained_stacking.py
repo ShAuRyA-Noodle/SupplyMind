@@ -38,9 +38,9 @@ from scipy.optimize import minimize
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-RESULTS = ROOT / "v3_arcadia" / "results"
-PLOTS = ROOT / "v3_arcadia" / "plots" / "past_self"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "past_self"
 PLOTS.mkdir(parents=True, exist_ok=True)
 
 TARGETS = ["DCOILWTICO", "PCOPPUSDM", "DEXTAUS", "DEXKOUS",

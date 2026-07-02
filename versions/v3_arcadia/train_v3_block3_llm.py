@@ -28,7 +28,7 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 MODELS = ROOT / "models"
 RESULTS = ROOT / "benchmark" / "results"
 RESULTS.mkdir(parents=True, exist_ok=True)

@@ -65,6 +65,32 @@ async def lifespan(_app: FastAPI):
     except Exception as e:
         logger.warning("Pre-warm failed (non-fatal): %s", e)
 
+    _v3 = Path(__file__).parent.parent / "versions" / "v3_arcadia"
+    critical_files = {
+        "R4_DANGEROUS_V2.json (analyst grade/scenarios/panel endpoints)":
+            _v3 / "results" / "R4_DANGEROUS_V2.json",
+        "R4_FRONTIER_PANEL_V2.json (frontier panel replay)":
+            _v3 / "results" / "R4_FRONTIER_PANEL_V2.json",
+        "R6_AQUA_REGIA_V2.json (conformal forecast band)":
+            _v3 / "results" / "R6_AQUA_REGIA_V2.json",
+        "corpus_chunks.pkl (RAG retrieval corpus)":
+            _v3 / "checkpoints" / "granite" / "corpus_chunks.pkl",
+    }
+    missing = {label: p for label, p in critical_files.items() if not p.exists()}
+    if missing:
+        logger.warning("=" * 72)
+        logger.warning(
+            "CRITICAL DATA FILES MISSING (%d/%d) -- dependent endpoints will "
+            "return 503/degraded:", len(missing), len(critical_files),
+        )
+        for label, p in missing.items():
+            logger.warning("  MISSING: %s -> %s", label, p)
+        logger.warning("=" * 72)
+    else:
+        logger.info(
+            "All %d critical data files present.", len(critical_files),
+        )
+
     yield
 
 
@@ -786,7 +812,7 @@ async def analyst_grade(req: AnalystGradeRequest) -> AnalystGradeResponse:
     tests/test_reward_hacking_adversarial.py with the committed receipt at
     tests/receipts/adversarial_reward_audit.json (FAQ §57).
     """
-    r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+    r4_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
     if not r4_path.exists():
         raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
     r4 = json.loads(r4_path.read_text(encoding="utf-8"))
@@ -877,7 +903,7 @@ async def analyst_scenarios(split: str = "all") -> dict:
     """
     if split not in ("all", "train", "holdout"):
         raise HTTPException(400, f"split must be one of all|train|holdout, got '{split}'")
-    r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+    r4_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
     if not r4_path.exists():
         raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
     r4 = json.loads(r4_path.read_text(encoding="utf-8"))
@@ -976,7 +1002,7 @@ async def analyst_next_scenario(req: NextScenarioRequest) -> NextScenarioRespons
 
     Uses only real R4 scenarios — no procedural generation, no synthetic text.
     """
-    r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+    r4_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
     if not r4_path.exists():
         raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
     r4 = json.loads(r4_path.read_text(encoding="utf-8"))
@@ -1058,7 +1084,7 @@ async def analyst_holdout_eval(req: HoldoutEvalRequest) -> HoldoutEvalResponse:
     against training scenarios are rejected. Holdout IDs are discoverable via
     `GET /analyst/scenarios?split=holdout`.
     """
-    r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+    r4_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
     if not r4_path.exists():
         raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
     r4 = json.loads(r4_path.read_text(encoding="utf-8"))
@@ -1279,8 +1305,8 @@ async def analyst_panel_consensus(scenario_id: str) -> dict:
     (frontier) so there's zero API dependency at demo time. Majority + ordinal
     agreement + Krippendorff-aligned ordinal distance are computed live.
     """
-    r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
-    fp_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
+    r4_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+    fp_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
     if not r4_path.exists():
         raise HTTPException(503, "R4_DANGEROUS_V2.json not available in this deploy")
     r4 = json.loads(r4_path.read_text(encoding="utf-8"))
@@ -1434,7 +1460,7 @@ async def v3_end_to_end(request: E2ERequest):
     retrieved_context: list[str] = []
     try:
         import pickle as _pk
-        cache = Path(__file__).parent.parent / "v3_arcadia" / "checkpoints" / "granite" / "corpus_chunks.pkl"
+        cache = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "checkpoints" / "granite" / "corpus_chunks.pkl"
         if cache.exists() and q:
             with open(cache, "rb") as _f:
                 _chunks = _pk.load(_f)
@@ -1478,7 +1504,7 @@ async def v3_end_to_end(request: E2ERequest):
     # hardcoded.
     # ---------------------------------------------------------------------
     try:
-        r4_path = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+        r4_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
         _kw = {
             "CRITICAL": ("closure", "shut down", "nuclear", "seiz", "war", "invasion",
                          "strait of hormuz", "global collapse", "full stop"),
@@ -1526,7 +1552,7 @@ async def v3_end_to_end(request: E2ERequest):
     forecast_point = None
     forecast_interval = None
     try:
-        r6aq = Path(__file__).parent.parent / "v3_arcadia" / "results" / "R6_AQUA_REGIA_V2.json"
+        r6aq = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R6_AQUA_REGIA_V2.json"
         if r6aq.exists():
             r6 = json.loads(r6aq.read_text(encoding="utf-8"))
             wti = r6.get("results", {}).get("DCOILWTICO", {}).get("arima", {})
@@ -1587,9 +1613,9 @@ async def v3_end_to_end(request: E2ERequest):
     # ---------------------------------------------------------------------
     try:
         import onnxruntime as _ort
-        onnx_path = Path(__file__).parent.parent / "v3_arcadia" / "checkpoints" / "onnx_bundle" / f"ppo_{request.task_id}.onnx"
+        onnx_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "checkpoints" / "onnx_bundle" / f"ppo_{request.task_id}.onnx"
         if not onnx_path.exists():
-            onnx_path = Path(__file__).parent.parent / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{request.task_id}.onnx"
+            onnx_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{request.task_id}.onnx"
         obs_source = "unknown"
         try:
             _env = SupplyMindEnvironment()

@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-R = ROOT / "v3_arcadia" / "results"
+R = ROOT / "versions" / "v3_arcadia" / "results"
 
 TOL = 0.02  # 2% relative
 
@@ -42,7 +42,8 @@ def main():
     for fname, path, floor in FLOORS:
         fp = R / fname
         if not fp.exists():
-            print(f"[SKIP] {fname} not present")
+            print(f"[FAIL] {fname} not present at {fp}")
+            failures.append(f"{fname} MISSING at {fp}")
             continue
         d = json.loads(fp.read_text())
         v = nested(d, path)

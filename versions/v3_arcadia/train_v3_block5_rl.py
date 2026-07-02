@@ -26,7 +26,7 @@ import numpy as np
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 CKPT = ROOT / "rl" / "checkpoints" / "v3"
 CKPT.mkdir(parents=True, exist_ok=True)
 FAILURE_TABLE = ROOT / "FAILURE_TABLE.md"

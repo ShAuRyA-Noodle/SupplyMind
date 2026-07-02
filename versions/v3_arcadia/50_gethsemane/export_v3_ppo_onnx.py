@@ -23,8 +23,8 @@ from torch import nn
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-CKPT = ROOT / "v3_arcadia" / "checkpoints" / "gethsemane"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+CKPT = ROOT / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane"
 
 OBS_DIM = 408
 N_ACTIONS = 280  # 7 action types × 40 target nodes, flattened
@@ -119,7 +119,7 @@ def main():
     from v3_arcadia.results import export_summary
     tasks = ["easy_typhoon_response", "medium_multi_front", "hard_cascading_crisis"]
     results = [export_task(t) for t in tasks]
-    out_path = ROOT / "v3_arcadia" / "results" / "R6_GETHSEMANE_ONNX_EXPORT.json"
+    out_path = ROOT / "versions" / "v3_arcadia" / "results" / "R6_GETHSEMANE_ONNX_EXPORT.json"
     out_path.write_text(json.dumps({"exports": results}, indent=2, default=str))
     log.info(f"\nSaved {out_path}")
 
@@ -127,6 +127,6 @@ def main():
 if __name__ == "__main__":
     tasks = ["easy_typhoon_response", "medium_multi_front", "hard_cascading_crisis"]
     results = [export_task(t) for t in tasks]
-    out_path = ROOT / "v3_arcadia" / "results" / "R6_GETHSEMANE_ONNX_EXPORT.json"
+    out_path = ROOT / "versions" / "v3_arcadia" / "results" / "R6_GETHSEMANE_ONNX_EXPORT.json"
     out_path.write_text(json.dumps({"exports": results}, indent=2, default=str))
     log.info(f"\nSaved {out_path}")

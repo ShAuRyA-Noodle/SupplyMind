@@ -29,10 +29,10 @@ import torch
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-CKPT = ROOT / "v3_arcadia" / "checkpoints" / "granite"
-RESULTS = ROOT / "v3_arcadia" / "results"
-PLOTS = ROOT / "v3_arcadia" / "plots" / "granite"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+CKPT = ROOT / "versions" / "v3_arcadia" / "checkpoints" / "granite"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "granite"
 MODELS = ROOT / "models"
 
 BGE_M3 = MODELS / "bge-m3"

@@ -8,10 +8,10 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-easy = json.loads((ROOT / "v3_arcadia" / "results" / "R5_GRANITE.json").read_text())
-hard = json.loads((ROOT / "v3_arcadia" / "results" / "R5_GRANITE_HARD.json").read_text())
-PLOTS = ROOT / "v3_arcadia" / "plots" / "granite"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+easy = json.loads((ROOT / "versions" / "v3_arcadia" / "results" / "R5_GRANITE.json").read_text())
+hard = json.loads((ROOT / "versions" / "v3_arcadia" / "results" / "R5_GRANITE_HARD.json").read_text())
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "granite"
 PLOTS.mkdir(parents=True, exist_ok=True)
 
 # Pairs: (bi, rerank)

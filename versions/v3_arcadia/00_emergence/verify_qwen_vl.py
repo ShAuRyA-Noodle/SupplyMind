@@ -9,9 +9,9 @@ from pathlib import Path
 
 import torch
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 MODELS = ROOT / "models" / "qwen25-vl-7b"
-OUT = ROOT / "v3_arcadia" / "results" / "qwen_vl_verify.json"
+OUT = ROOT / "versions" / "v3_arcadia" / "results" / "qwen_vl_verify.json"
 OUT.parent.mkdir(parents=True, exist_ok=True)
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"

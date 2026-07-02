@@ -8,9 +8,9 @@ from pathlib import Path
 import numpy as np
 import torch
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 MODELS = ROOT / "models"
-OUT_PATH = ROOT / "v3_arcadia" / "results" / "tabpfn_verify.json"
+OUT_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "tabpfn_verify.json"
 OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 result: dict = {"cuda_available": torch.cuda.is_available(),

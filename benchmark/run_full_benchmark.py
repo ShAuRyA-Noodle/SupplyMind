@@ -6,11 +6,14 @@ On: All 3 tasks x 5 seeds x 5 episodes
 Reports: Both cumulative_reward and grade_score (0-1 scale)
 """
 import sys, os, time, csv, logging, json
+from pathlib import Path
 import numpy as np
 import torch
 
-os.chdir("c:/Users/Dell/Desktop/Sleep-Token")
-sys.path.insert(0, ".")
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+CKPT = ROOT / "rl" / "checkpoints"
+RESULTS = ROOT / "benchmark" / "results"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("bench")
@@ -18,12 +21,24 @@ logger = logging.getLogger("bench")
 from rl.gym_env import SupplyMindGymnasiumEnv, ACTION_TYPES
 from server.supply_environment import SupplyMindEnvironment
 from scripted_agent import choose_action as scripted_choose
-from pathlib import Path
 
 TASKS = ["easy_typhoon_response", "medium_multi_front", "hard_cascading_crisis"]
 TASK_SHORT = {"easy_typhoon_response": "Easy", "medium_multi_front": "Medium", "hard_cascading_crisis": "Hard"}
 SEEDS = [42, 99, 7, 123, 256]
 N_EPS = 5
+
+_MODEL_CACHE: dict = {}
+
+
+def _cached_model(path, build):
+    """Load + build a model once per checkpoint path; reuse across all steps."""
+    key = str(path)
+    if key not in _MODEL_CACHE:
+        ckpt = torch.load(key, map_location="cpu", weights_only=False)
+        model = build(ckpt)
+        model.eval()
+        _MODEL_CACHE[key] = model
+    return _MODEL_CACHE[key]
 
 
 def eval_with_grade(agent_fn, task_id, seed):
@@ -121,51 +136,66 @@ def agent_scripted(obs, info, obs_core, step):
         target_idx = node_ids.index(sm_action.target_node_id)
     return action_type_idx * 40 + target_idx
 
-def agent_qrdqn(obs, info, obs_core, step):
+def _build_qrdqn(ckpt):
     from rl.distributional.qr_dqn import QRDQNNetwork
-    task_key = obs_core.info.get("task_id", "easy").split("_")[0] if hasattr(obs_core, "info") else "easy"
-    for suffix in [task_key, "easy"]:
-        p = Path(f"rl/checkpoints/qrdqn_best_{suffix}.pt")
-        if p.exists(): break
-    ckpt = torch.load(str(p), map_location="cpu", weights_only=False)
     cfg = {k: v for k, v in ckpt["config"].items() if k in ("state_dim", "n_actions", "n_quantiles", "hidden_dim")}
-    model = QRDQNNetwork(**cfg); model.load_state_dict(ckpt["state_dict"]); model.eval()
+    model = QRDQNNetwork(**cfg); model.load_state_dict(ckpt["state_dict"])
+    return model
+
+def agent_qrdqn(obs, info, obs_core, step):
+    task_key = obs_core.info.get("task_id", "easy").split("_")[0] if hasattr(obs_core, "info") else "easy"
+    p = CKPT / f"qrdqn_best_{task_key}.pt"
+    if not p.exists():
+        p = CKPT / "qrdqn_best_easy.pt"
+    model = _cached_model(p, _build_qrdqn)
     with torch.no_grad():
         st = torch.from_numpy(obs).float().unsqueeze(0)
         mask = torch.from_numpy(info["action_masks"]).bool().unsqueeze(0)
         return model.cvar_policy(st, alpha=0.1, action_mask=mask).item()
 
-def agent_bc(obs, info, obs_core, step):
+def _build_bc(ckpt):
     from rl.offline.baselines import BCNetwork
-    ckpt = torch.load("rl/checkpoints/bc_best.pt", map_location="cpu", weights_only=False)
-    model = BCNetwork(); model.load_state_dict(ckpt["state_dict"]); model.eval()
+    model = BCNetwork(); model.load_state_dict(ckpt["state_dict"])
+    return model
+
+def agent_bc(obs, info, obs_core, step):
+    model = _cached_model(CKPT / "bc_best.pt", _build_bc)
     with torch.no_grad():
         logits = model(torch.from_numpy(obs).float().unsqueeze(0))
         logits[0][~torch.from_numpy(info["action_masks"]).bool()] = float("-inf")
         return logits.argmax(dim=-1).item()
+
+def _build_iql(ckpt):
+    from rl.offline.baselines import BCNetwork
+    model = BCNetwork(); model.load_state_dict(ckpt["actor"])
+    return model
 
 def agent_iql(obs, info, obs_core, step):
-    from rl.offline.baselines import BCNetwork
-    ckpt = torch.load("rl/checkpoints/iql_best.pt", map_location="cpu", weights_only=False)
-    model = BCNetwork(); model.load_state_dict(ckpt["actor"]); model.eval()
+    model = _cached_model(CKPT / "iql_best.pt", _build_iql)
     with torch.no_grad():
         logits = model(torch.from_numpy(obs).float().unsqueeze(0))
         logits[0][~torch.from_numpy(info["action_masks"]).bool()] = float("-inf")
         return logits.argmax(dim=-1).item()
 
-def agent_cql(obs, info, obs_core, step):
+def _build_cql(ckpt):
     from rl.offline.baselines import CQLQNetwork
-    ckpt = torch.load("rl/checkpoints/cql_best.pt", map_location="cpu", weights_only=False)
-    model = CQLQNetwork(); model.load_state_dict(ckpt["state_dict"]); model.eval()
+    model = CQLQNetwork(); model.load_state_dict(ckpt["state_dict"])
+    return model
+
+def agent_cql(obs, info, obs_core, step):
+    model = _cached_model(CKPT / "cql_best.pt", _build_cql)
     with torch.no_grad():
         q = model.q_min(torch.from_numpy(obs).float().unsqueeze(0))
         q[0][~torch.from_numpy(info["action_masks"]).bool()] = float("-inf")
         return q.argmax(dim=-1).item()
 
-def agent_td3bc(obs, info, obs_core, step):
+def _build_td3bc(ckpt):
     from rl.offline.baselines import TD3Actor
-    ckpt = torch.load("rl/checkpoints/td3bc_best.pt", map_location="cpu", weights_only=False)
-    model = TD3Actor(); model.load_state_dict(ckpt["actor"]); model.eval()
+    model = TD3Actor(); model.load_state_dict(ckpt["actor"])
+    return model
+
+def agent_td3bc(obs, info, obs_core, step):
+    model = _cached_model(CKPT / "td3bc_best.pt", _build_td3bc)
     with torch.no_grad():
         logits = model(torch.from_numpy(obs).float().unsqueeze(0))
         logits[0][~torch.from_numpy(info["action_masks"]).bool()] = float("-inf")
@@ -211,14 +241,14 @@ for agent_name, agent_fn in AGENTS.items():
                         np.mean(grades), np.std(grades), len(rewards))
 
 # Save detailed results
-os.makedirs("benchmark/results", exist_ok=True)
-with open("benchmark/results/full_benchmark.csv", "w", newline="") as f:
+RESULTS.mkdir(parents=True, exist_ok=True)
+with open(RESULTS / "full_benchmark.csv", "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=["agent", "task", "task_id", "seed", "cumulative_reward", "grade_score"])
     w.writeheader()
     w.writerows(results)
 
 # Save summary
-with open("benchmark/results/full_benchmark_summary.csv", "w", newline="") as f:
+with open(RESULTS / "full_benchmark_summary.csv", "w", newline="") as f:
     w = csv.writer(f)
     w.writerow(["Agent", "Easy (grade)", "Medium (grade)", "Hard (grade)", "Avg (grade)", "Easy (reward)", "Medium (reward)", "Hard (reward)", "Avg (reward)"])
     for agent_name in AGENTS:

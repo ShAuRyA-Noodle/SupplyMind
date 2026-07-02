@@ -7,8 +7,8 @@ from pathlib import Path
 
 import ollama
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-OUT = ROOT / "v3_arcadia" / "results" / "mistral_nemo_verify.json"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+OUT = ROOT / "versions" / "v3_arcadia" / "results" / "mistral_nemo_verify.json"
 OUT.parent.mkdir(parents=True, exist_ok=True)
 
 MODEL = "mistral-nemo-local"

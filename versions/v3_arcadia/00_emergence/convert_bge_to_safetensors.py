@@ -11,7 +11,7 @@ from pathlib import Path
 import torch
 from safetensors.torch import save_file
 
-MODEL_DIR = Path(__file__).resolve().parent.parent.parent / "models" / "bge-m3"
+MODEL_DIR = Path(__file__).resolve().parent.parent.parent.parent / "models" / "bge-m3"
 
 
 def convert_bin(bin_path: Path, out_path: Path):

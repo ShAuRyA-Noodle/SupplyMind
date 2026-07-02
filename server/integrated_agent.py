@@ -46,10 +46,10 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-R4_PATH = REPO_ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
-FRONTIER_PATH = REPO_ROOT / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
-RAG_CORPUS = REPO_ROOT / "v3_arcadia" / "checkpoints" / "granite" / "corpus_chunks.pkl"
-R6_AQUA = REPO_ROOT / "v3_arcadia" / "results" / "R6_AQUA_REGIA_V2.json"
+R4_PATH = REPO_ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+FRONTIER_PATH = REPO_ROOT / "versions" / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
+RAG_CORPUS = REPO_ROOT / "versions" / "v3_arcadia" / "checkpoints" / "granite" / "corpus_chunks.pkl"
+R6_AQUA = REPO_ROOT / "versions" / "v3_arcadia" / "results" / "R6_AQUA_REGIA_V2.json"
 
 RISK_ORDER = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
 
@@ -135,8 +135,8 @@ class IntegratedAgent:
         try:
             import onnxruntime as ort
             paths = [
-                REPO_ROOT / "v3_arcadia" / "checkpoints" / "onnx_bundle" / f"ppo_{task_id}.onnx",
-                REPO_ROOT / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{task_id}.onnx",
+                REPO_ROOT / "versions" / "v3_arcadia" / "checkpoints" / "onnx_bundle" / f"ppo_{task_id}.onnx",
+                REPO_ROOT / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{task_id}.onnx",
             ]
             for p in paths:
                 if p.exists():

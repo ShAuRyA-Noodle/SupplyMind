@@ -14,8 +14,8 @@ import streamlit as st
 
 st.set_page_config(page_title="SupplyMind v3 Arcadia", layout="wide", page_icon="🛡")
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-RESULTS = ROOT / "v3_arcadia" / "results"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 
 st.title("SupplyMind v3 Arcadia — Executive Dashboard")
 st.caption("Meta PyTorch OpenEnv Hackathon submission. Full SOTA stack: 13 foundation models, 6 benchmarks, "

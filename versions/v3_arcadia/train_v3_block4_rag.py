@@ -35,7 +35,7 @@ import torch
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent.parent
 MODELS = ROOT / "models"
 DATA = ROOT / "rl" / "data"
 EXT = ROOT / "external_data"

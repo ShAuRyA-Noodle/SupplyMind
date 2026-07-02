@@ -36,10 +36,10 @@ import requests
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 CRISES = ROOT / "external_data" / "wikipedia_crises"
-RESULTS = ROOT / "v3_arcadia" / "results"
-PLOTS = ROOT / "v3_arcadia" / "plots" / "dangerous"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "dangerous"
 PLOTS.mkdir(parents=True, exist_ok=True)
 EMBEDDER_PATH = ROOT / "models" / "mxbai-embed-large"
 

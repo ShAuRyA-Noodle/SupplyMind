@@ -11,14 +11,14 @@ import pandas as pd
 
 warnings.filterwarnings("ignore")
 
-ROOT = Path(__file__).resolve().parent.parent.parent
-CKPT = ROOT / "v3_arcadia" / "checkpoints" / "caramel"
-PLOTS = ROOT / "v3_arcadia" / "plots" / "caramel"
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
+CKPT = ROOT / "versions" / "v3_arcadia" / "checkpoints" / "caramel"
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "caramel"
 PLOTS.mkdir(parents=True, exist_ok=True)
-RESULTS = ROOT / "v3_arcadia" / "results"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 
 import sys
-sys.path.insert(0, str(ROOT / "v3_arcadia" / "10_caramel"))
+sys.path.insert(0, str(ROOT / "versions" / "v3_arcadia" / "10_caramel"))
 from train_caramel import build_features, SEED
 
 from sklearn.model_selection import train_test_split

@@ -27,14 +27,14 @@ warnings.filterwarnings("ignore")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DATA = ROOT / "rl" / "data"
 MODELS = ROOT / "models"
-CKPT = ROOT / "v3_arcadia" / "checkpoints" / "aqua_regia"
+CKPT = ROOT / "versions" / "v3_arcadia" / "checkpoints" / "aqua_regia"
 CKPT.mkdir(parents=True, exist_ok=True)
-PLOTS = ROOT / "v3_arcadia" / "plots" / "aqua_regia"
+PLOTS = ROOT / "versions" / "v3_arcadia" / "plots" / "aqua_regia"
 PLOTS.mkdir(parents=True, exist_ok=True)
-RESULTS = ROOT / "v3_arcadia" / "results"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 SEED = 42

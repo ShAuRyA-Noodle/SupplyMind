@@ -7,7 +7,7 @@ from pathlib import Path
 
 import requests
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 OUT = ROOT / "external_data"
 OUT.mkdir(parents=True, exist_ok=True)
 

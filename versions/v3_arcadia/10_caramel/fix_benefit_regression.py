@@ -18,14 +18,14 @@ import torch
 
 warnings.filterwarnings("ignore")
 
-ROOT = Path(__file__).resolve().parent.parent.parent
+ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DATA = ROOT / "rl" / "data"
 MODELS = ROOT / "models"
-CKPT = ROOT / "v3_arcadia" / "checkpoints" / "caramel"
-RESULTS = ROOT / "v3_arcadia" / "results"
+CKPT = ROOT / "versions" / "v3_arcadia" / "checkpoints" / "caramel"
+RESULTS = ROOT / "versions" / "v3_arcadia" / "results"
 
 import sys
-sys.path.insert(0, str(ROOT / "v3_arcadia" / "10_caramel"))
+sys.path.insert(0, str(ROOT / "versions" / "v3_arcadia" / "10_caramel"))
 from train_caramel import build_features, bootstrap_ci, SEED, TABPFN_REG
 
 from sklearn.model_selection import train_test_split
