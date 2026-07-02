@@ -179,18 +179,25 @@ def _timesfm_forecast(history: np.ndarray, horizon: int) -> dict | None:
 
 def _tabpfn_delta_forecast(
     history: np.ndarray, severity: float, duration_days: int, region: str,
+    exclude_event_id: str | None = None,
 ) -> dict | None:
     """TabPFN regression on (severity, log_brent, region_id, duration, recent_vol)
     returning a single delta-Brent at horizon. We broadcast it to horizon + add
-    decay weight so it tapers."""
+    decay weight so it tapers.
+
+    ``exclude_event_id`` implements leave-one-out for honest backtesting: the
+    event being forecast is dropped from the TabPFN training set so it cannot
+    memorise its own documented (pre, peak) pair (no label leakage).
+    """
     reg = _load_tabpfn_reg()
     if reg is None:
         return None
     try:
-        # Build a small synthetic train set anchored to the 8 documented
-        # historical events (real ground truth) in the catalog.
-        train_X, train_y = _build_event_anchored_trainset()
-        if train_X is None or train_X.shape[0] < 8:
+        # Build a small train set anchored to the documented historical events
+        # (real ground truth). In backtest mode the current event is excluded.
+        train_X, train_y = _build_event_anchored_trainset(
+            exclude_event_id=exclude_event_id)
+        if train_X is None or train_X.shape[0] < 4:
             return None
         reg.fit(train_X, train_y)
 
@@ -231,9 +238,12 @@ def _tabpfn_delta_forecast(
 # Train set anchored to 8 documented historical events
 # ---------------------------------------------------------------------------
 
-def _build_event_anchored_trainset():
+def _build_event_anchored_trainset(exclude_event_id: str | None = None):
     """Return X (n,5) and y (n,) trained on the documented Iran/Israel/Hormuz
-    crisis library — REAL events, not synthetic."""
+    crisis library — REAL events, not synthetic.
+
+    If ``exclude_event_id`` is given, that event is omitted (leave-one-out for
+    backtests so a held-out event never trains on itself)."""
     import json
     LIB = REPO_ROOT / "supplymind" / "warroom" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
     if not LIB.exists():
@@ -242,6 +252,8 @@ def _build_event_anchored_trainset():
     rows: list[list[float]] = []
     targets: list[float] = []
     for ev in events:
+        if exclude_event_id is not None and ev.get("id") == exclude_event_id:
+            continue
         oi = ev.get("oil_impact_usd_bbl") or {}
         pre = oi.get("pre")
         peak = oi.get("peak", oi.get("peak_2024"))
@@ -275,8 +287,12 @@ def ensemble_forecast(
     severity: float = 0.5,
     duration_days: int = 30,
     region: str = "hormuz",
+    exclude_event_id: str | None = None,
 ) -> dict:
-    """Run all 3 models and return weighted-ensemble p10/p50/p90."""
+    """Run all 3 models and return weighted-ensemble p10/p50/p90.
+
+    ``exclude_event_id`` is forwarded to the TabPFN head so a leave-one-out
+    backtest never lets an event train on its own documented outcome."""
     t0 = time.time()
     if not isinstance(history, np.ndarray):
         history = np.asarray(history, dtype=np.float32)
@@ -292,7 +308,8 @@ def ensemble_forecast(
     timesfm_out = _timesfm_forecast(history, horizon)
     if timesfm_out is not None:
         per_model["timesfm"] = timesfm_out
-    tabpfn_out = _tabpfn_delta_forecast(history, severity, horizon, region)
+    tabpfn_out = _tabpfn_delta_forecast(history, severity, horizon, region,
+                                        exclude_event_id=exclude_event_id)
     if tabpfn_out is not None:
         per_model["tabpfn"] = tabpfn_out
 
@@ -386,7 +403,10 @@ if __name__ == "__main__":
     import json as _json
     logging.basicConfig(level=logging.INFO, format="%(message)s")
 
-    # Synthetic 200-day history with recent vol-shock
+    # SMOKE TEST ONLY — synthetic sinusoid input to exercise model loading.
+    # This is NOT a backtest and produces NO receipt. The real walk-forward
+    # backtest on actual FRED Brent lives in scripts/validate_ensemble_brent.py.
+    print("[ensemble_brent] SMOKE TEST on synthetic input (not a backtest)\n")
     rng = np.random.default_rng(0)
     base = 80.0 + 8.0 * np.sin(np.linspace(0, 6.28, 200))
     noise = rng.standard_normal(200) * 1.2

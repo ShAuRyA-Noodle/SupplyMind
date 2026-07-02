@@ -1,0 +1,444 @@
+{
+  "generated_at_utc": "2026-07-02T22:57:51Z",
+  "git_sha": "a50d87569c9a117ad3aa79ab8032068bcb0a77d2",
+  "library_path": "supplymind/warroom/scenarios/iran_israel_hormuz_2024_2026.json",
+  "brent_series": "DCOILBRENTEU",
+  "brent_provenance": {
+    "source": "external_data/fred_brent_daily.csv (FRED DCOILBRENTEU, real daily observations)",
+    "resolution": "local_csv",
+    "csv_sha256": "0e88d6dd07f200f5d60df8ea00cdf2a1c47acf7419e128c801a373f21b28d017",
+    "n_observations": 9922,
+    "date_range": [
+      "1987-05-20",
+      "2026-06-29"
+    ],
+    "header": [
+      "observation_date",
+      "DCOILBRENTEU"
+    ]
+  },
+  "forecast_horizon_days": 30,
+  "context_window_days": 200,
+  "within_band_pct": 10.0,
+  "ensemble_models": [
+    "chronos-bolt-base",
+    "timesfm-2",
+    "tabpfn-v2-reg"
+  ],
+  "n_events_tested": 8,
+  "n_events_valid": 8,
+  "n_events_skipped": 0,
+  "aggregate_metrics_vs_realized": {
+    "ensemble": {
+      "n_events": 8,
+      "mean_mape_pct": 7.118,
+      "median_mape_pct": 6.421,
+      "mean_within_10pct": 0.717
+    },
+    "chronos": {
+      "n_events": 8,
+      "mean_mape_pct": 7.301,
+      "median_mape_pct": 7.551,
+      "mean_within_10pct": 0.742
+    },
+    "timesfm": {
+      "n_events": 8,
+      "mean_mape_pct": 7.214,
+      "median_mape_pct": 6.114,
+      "mean_within_10pct": 0.775
+    },
+    "tabpfn": {
+      "n_events": 8,
+      "mean_mape_pct": 8.395,
+      "median_mape_pct": 8.069,
+      "mean_within_10pct": 0.621
+    }
+  },
+  "per_event_results": [
+    {
+      "event_id": "iran_true_promise_1_2024_04",
+      "event_date": "2024-04-13",
+      "severity": 0.8,
+      "region": "iran_israel",
+      "n_context_obs": 200,
+      "context_last_date": "2024-04-12",
+      "context_last_price": 93.12,
+      "eval_horizon_days": 30,
+      "actual_window": [
+        "2024-04-15",
+        "2024-05-28"
+      ],
+      "realized_prices_first3": [
+        90.84,
+        91.29,
+        89.54
+      ],
+      "realized_peak": 91.29,
+      "ensemble_pred_peak": 95.477,
+      "peak_rel_err_pct": 4.586,
+      "metrics_vs_realized": {
+        "ensemble": {
+          "mape_pct": 11.321,
+          "within_10pct": 0.4
+        },
+        "chronos": {
+          "mape_pct": 12.3,
+          "within_10pct": 0.4
+        },
+        "timesfm": {
+          "mape_pct": 6.465,
+          "within_10pct": 0.767
+        },
+        "tabpfn": {
+          "mape_pct": 14.524,
+          "within_10pct": 0.167
+        }
+      },
+      "method_weights": {
+        "chronos": 0.3029,
+        "timesfm": 0.3029,
+        "tabpfn": 0.3942
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 33.71
+    },
+    {
+      "event_id": "iran_true_promise_2_2024_10",
+      "event_date": "2024-10-01",
+      "severity": 0.9,
+      "region": "iran_israel",
+      "n_context_obs": 200,
+      "context_last_date": "2024-10-01",
+      "context_last_price": 75.3,
+      "eval_horizon_days": 30,
+      "actual_window": [
+        "2024-10-02",
+        "2024-11-12"
+      ],
+      "realized_prices_first3": [
+        74.86,
+        77.57,
+        79.32
+      ],
+      "realized_peak": 81.74,
+      "ensemble_pred_peak": 75.947,
+      "peak_rel_err_pct": 7.087,
+      "metrics_vs_realized": {
+        "ensemble": {
+          "mape_pct": 2.994,
+          "within_10pct": 1.0
+        },
+        "chronos": {
+          "mape_pct": 2.987,
+          "within_10pct": 1.0
+        },
+        "timesfm": {
+          "mape_pct": 3.935,
+          "within_10pct": 0.9
+        },
+        "tabpfn": {
+          "mape_pct": 4.903,
+          "within_10pct": 0.9
+        }
+      },
+      "method_weights": {
+        "chronos": 0.3044,
+        "timesfm": 0.3044,
+        "tabpfn": 0.3911
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.73
+    },
+    {
+      "event_id": "houthi_red_sea_campaign_2023_ongoing",
+      "event_date": "2023-11-19",
+      "severity": 0.85,
+      "region": "red_sea",
+      "n_context_obs": 200,
+      "context_last_date": "2023-11-17",
+      "context_last_price": 81.22,
+      "eval_horizon_days": 30,
+      "actual_window": [
+        "2023-11-20",
+        "2024-01-03"
+      ],
+      "realized_prices_first3": [
+        83.25,
+        82.42,
+        81.76
+      ],
+      "realized_peak": 83.25,
+      "ensemble_pred_peak": 82.512,
+      "peak_rel_err_pct": 0.886,
+      "metrics_vs_realized": {
+        "ensemble": {
+          "mape_pct": 3.777,
+          "within_10pct": 0.9
+        },
+        "chronos": {
+          "mape_pct": 3.336,
+          "within_10pct": 1.0
+        },
+        "timesfm": {
+          "mape_pct": 3.322,
+          "within_10pct": 1.0
+        },
+        "tabpfn": {
+          "mape_pct": 7.064,
+          "within_10pct": 0.7
+        }
+      },
+      "method_weights": {
+        "chronos": 0.3059,
+        "timesfm": 0.3059,
+        "tabpfn": 0.3882
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.74
+    },
+    {
+      "event_id": "us_uk_operation_poseidon_archer_2024_01",
+      "event_date": "2024-01-11",
+      "severity": 0.65,
+      "region": "red_sea",
+      "n_context_obs": 200,
+      "context_last_date": "2024-01-11",
+      "context_last_price": 80.21,
+      "eval_horizon_days": 30,
+      "actual_window": [
+        "2024-01-12",
+        "2024-02-22"
+      ],
+      "realized_prices_first3": [
+        79.89,
+        79.76,
+        80.15
+      ],
+      "realized_peak": 85.84,
+      "ensemble_pred_peak": 80.282,
+      "peak_rel_err_pct": 6.475,
+      "metrics_vs_realized": {
+        "ensemble": {
+          "mape_pct": 3.85,
+          "within_10pct": 1.0
+        },
+        "chronos": {
+          "mape_pct": 4.186,
+          "within_10pct": 1.0
+        },
+        "timesfm": {
+          "mape_pct": 8.465,
+          "within_10pct": 0.767
+        },
+        "tabpfn": {
+          "mape_pct": 3.186,
+          "within_10pct": 1.0
+        }
+      },
+      "method_weights": {
+        "chronos": 0.3069,
+        "timesfm": 0.3069,
+        "tabpfn": 0.3861
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.72
+    },
+    {
+      "event_id": "haifa_port_missile_2024_10",
+      "event_date": "2024-10-07",
+      "severity": 0.6,
+      "region": "iran_israel",
+      "n_context_obs": 200,
+      "context_last_date": "2024-10-07",
+      "context_last_price": 81.74,
+      "eval_horizon_days": 30,
+      "actual_window": [
+        "2024-10-08",
+        "2024-11-18"
+      ],
+      "realized_prices_first3": [
+        78.19,
+        77.06,
+        79.45
+      ],
+      "realized_peak": 80.27,
+      "ensemble_pred_peak": 82.428,
+      "peak_rel_err_pct": 2.688,
+      "metrics_vs_realized": {
+        "ensemble": {
+          "mape_pct": 9.471,
+          "within_10pct": 0.4
+        },
+        "chronos": {
+          "mape_pct": 10.376,
+          "within_10pct": 0.467
+        },
+        "timesfm": {
+          "mape_pct": 5.763,
+          "within_10pct": 0.933
+        },
+        "tabpfn": {
+          "mape_pct": 11.973,
+          "within_10pct": 0.3
+        }
+      },
+      "method_weights": {
+        "chronos": 0.3128,
+        "timesfm": 0.3128,
+        "tabpfn": 0.3744
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.73
+    },
+    {
+      "event_id": "houthi_yaffa_tel_aviv_2024_07",
+      "event_date": "2024-07-19",
+      "severity": 0.7,
+      "region": "red_sea",
+      "n_context_obs": 200,
+      "context_last_date": "2024-07-19",
+      "context_last_price": 85.19,
+      "eval_horizon_days": 30,
+      "actual_window": [
+        "2024-07-22",
+        "2024-09-02"
+      ],
+      "realized_prices_first3": [
+        83.44,
+        82.2,
+        83.01
+      ],
+      "realized_peak": 83.44,
+      "ensemble_pred_peak": 86.962,
+      "peak_rel_err_pct": 4.221,
+      "metrics_vs_realized": {
+        "ensemble": {
+          "mape_pct": 6.339,
+          "within_10pct": 0.867
+        },
+        "chronos": {
+          "mape_pct": 5.919,
+          "within_10pct": 0.933
+        },
+        "timesfm": {
+          "mape_pct": 2.144,
+          "within_10pct": 1.0
+        },
+        "tabpfn": {
+          "mape_pct": 10.282,
+          "within_10pct": 0.467
+        }
+      },
+      "method_weights": {
+        "chronos": 0.3014,
+        "timesfm": 0.3014,
+        "tabpfn": 0.3973
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.72
+    },
+    {
+      "event_id": "hormuz_trump_cargo_ship_2026_04",
+      "event_date": "2026-04-18",
+      "severity": 0.82,
+      "region": "hormuz",
+      "n_context_obs": 200,
+      "context_last_date": "2026-04-17",
+      "context_last_price": 98.63,
+      "eval_horizon_days": 30,
+      "actual_window": [
+        "2026-04-20",
+        "2026-06-02"
+      ],
+      "realized_prices_first3": [
+        103.4,
+        106.14,
+        113.44
+      ],
+      "realized_peak": 124.24,
+      "ensemble_pred_peak": 110.788,
+      "peak_rel_err_pct": 10.827,
+      "metrics_vs_realized": {
+        "ensemble": {
+          "mape_pct": 6.504,
+          "within_10pct": 0.8
+        },
+        "chronos": {
+          "mape_pct": 9.183,
+          "within_10pct": 0.633
+        },
+        "timesfm": {
+          "mape_pct": 7.044,
+          "within_10pct": 0.767
+        },
+        "tabpfn": {
+          "mape_pct": 6.156,
+          "within_10pct": 0.833
+        }
+      },
+      "method_weights": {
+        "chronos": 0.2841,
+        "timesfm": 0.2841,
+        "tabpfn": 0.4318
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.72
+    },
+    {
+      "event_id": "ukraine_neon_palladium_shock_2022_context",
+      "event_date": "2022-02-24",
+      "severity": 0.88,
+      "region": "europe",
+      "n_context_obs": 200,
+      "context_last_date": "2022-02-24",
+      "context_last_price": 101.29,
+      "eval_horizon_days": 30,
+      "actual_window": [
+        "2022-02-25",
+        "2022-04-07"
+      ],
+      "realized_prices_first3": [
+        98.56,
+        103.08,
+        110.93
+      ],
+      "realized_peak": 133.18,
+      "ensemble_pred_peak": 101.132,
+      "peak_rel_err_pct": 24.064,
+      "metrics_vs_realized": {
+        "ensemble": {
+          "mape_pct": 12.687,
+          "within_10pct": 0.367
+        },
+        "chronos": {
+          "mape_pct": 10.121,
+          "within_10pct": 0.5
+        },
+        "timesfm": {
+          "mape_pct": 20.573,
+          "within_10pct": 0.067
+        },
+        "tabpfn": {
+          "mape_pct": 9.073,
+          "within_10pct": 0.6
+        }
+      },
+      "method_weights": {
+        "chronos": 0.312,
+        "timesfm": 0.312,
+        "tabpfn": 0.3761
+      },
+      "n_models_used": 3,
+      "ensemble_method": "weighted_blend_chronos_timesfm_tabpfn_n=3",
+      "elapsed_s": 0.77
+    }
+  ],
+  "method": "REAL walk-forward backtest. For each documented crisis event (real date), slice the actual FRED DCOILBRENTEU daily observations ending on/before the event date (last 200) as pre-event context, forecast the next 30 trading days with the Chronos+TimesFM+TabPFN ensemble, and compare BOTH the ensemble and each individual member to the REAL realized Brent prices over that window (the observations that actually followed). Metrics: MAPE (mean abs % error) and within-+/-10% hit-rate. TabPFN is trained leave-one-out so the event under test never trains on its own documented outcome (no label leakage). History and ground truth are both real FRED data; nothing is synthesized."
+}

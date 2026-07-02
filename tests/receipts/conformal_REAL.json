@@ -1,0 +1,82 @@
+{
+  "generated_at_utc": "2026-07-02T22:56:52Z",
+  "git_sha": "a50d87569c9a117ad3aa79ab8032068bcb0a77d2",
+  "status": "OK",
+  "transitions_source": "versions/v5_phoenix/experiments/rap_xc_v1/transitions.npz",
+  "transitions_sha256": "a55eeb5824abdb985c415e4457b8b2d8e40b2efd9ad247ff4de3d9b71e4b32e8",
+  "n_transitions_total": 40000,
+  "n_unique_actions_in_data": 13,
+  "n_action_slots": 280,
+  "split": {
+    "train": 24000,
+    "calibration": 8000,
+    "test_heldout": 8000,
+    "seed": 42
+  },
+  "ref_policy": {
+    "arch": "MLP(in->128->128->280), dropout 0.1, AdamW lr=3e-4",
+    "epochs": 12,
+    "train_losses": [
+      4.2621,
+      1.9405,
+      1.9152,
+      1.9089,
+      1.9034,
+      1.8955,
+      1.8855,
+      1.8761,
+      1.8666,
+      1.8593,
+      1.8537,
+      1.85
+    ],
+    "final_train_loss": 1.85
+  },
+  "conformal_coverage_by_alpha": [
+    {
+      "alpha": 0.05,
+      "nominal_coverage": 0.95,
+      "nll_quantile": 3.65823,
+      "empirical_coverage_TEST": 0.95138,
+      "coverage_gap_TEST": 0.00138,
+      "empirical_coverage_calibration_circular": 0.95012,
+      "mean_set_size_TEST": 10.311,
+      "median_set_size_TEST": 11.0,
+      "min_set_size_TEST": 5,
+      "max_set_size_TEST": 12
+    },
+    {
+      "alpha": 0.1,
+      "nominal_coverage": 0.9,
+      "nll_quantile": 3.54511,
+      "empirical_coverage_TEST": 0.90025,
+      "coverage_gap_TEST": 0.00025,
+      "empirical_coverage_calibration_circular": 0.90013,
+      "mean_set_size_TEST": 8.71,
+      "median_set_size_TEST": 9.0,
+      "min_set_size_TEST": 5,
+      "max_set_size_TEST": 11
+    },
+    {
+      "alpha": 0.2,
+      "nominal_coverage": 0.8,
+      "nll_quantile": 3.36456,
+      "empirical_coverage_TEST": 0.7935,
+      "coverage_gap_TEST": -0.0065,
+      "empirical_coverage_calibration_circular": 0.80013,
+      "mean_set_size_TEST": 5.411,
+      "median_set_size_TEST": 5.0,
+      "min_set_size_TEST": 4,
+      "max_set_size_TEST": 8
+    }
+  ],
+  "headline": {
+    "target_alpha": 0.1,
+    "nominal_coverage": 0.9,
+    "empirical_coverage_on_heldout_test": 0.90025,
+    "coverage_gap": 0.00025
+  },
+  "weights_path": "supplymind/phoenix/action_v2/conformal_calibrated.pt",
+  "elapsed_s": 9.95,
+  "method": "Split-conformal (Vovk 2005) with a genuine held-out test set. Real harvested RAP-XC transitions split 60/20/20 into train/calibration/test. A small MLP reference policy is behaviour-cloned on train; the (1-alpha) NLL quantile of the expert action is fit on calibration (finite-sample corrected); empirical coverage is then measured on the disjoint held-out TEST set the quantile never saw. Reported coverage is raw conformal-set membership P[NLL(expert)<=q], not the product always-accept-argmax mask. Marginal coverage assumes exchangeability; transitions are shuffled across trajectories before splitting to approximate it (autocorrelation within a trajectory is a known caveat)."
+}
