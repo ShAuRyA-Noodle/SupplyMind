@@ -40,7 +40,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 MODELS_DIR = Path(__file__).resolve().parent / "trained"
 MODELS_DIR.mkdir(exist_ok=True)
 
-WGI_PATH = ROOT / "wgidataset_with_sourcedata-2025.xlsx"
+WGI_PATH = ROOT / "external_data" / "wgi" / "wgidataset_with_sourcedata-2025.xlsx"
 DATACO_PATH = ROOT / "rl" / "data" / "dataco.csv"
 
 
@@ -49,12 +49,20 @@ DATACO_PATH = ROOT / "rl" / "data" / "dataco.csv"
 # ============================================================
 
 WGI_SHEETS = ["va", "pv", "ge", "rq", "rl", "cc"]
-# va=Voice/Accountability, pv=Political Violence, ge=Gov Effectiveness,
-# rq=Regulatory Quality, rl=Rule of Law, cc=Control of Corruption
+# va=Voice/Accountability, pv=Political Stability/Absence of Violence,
+# ge=Gov Effectiveness, rq=Regulatory Quality, rl=Rule of Law,
+# cc=Control of Corruption
+
+# Non-circular target: predict the held-out Political Stability dimension (pv)
+# from the OTHER five governance indicators. pv is not a function of the
+# feature set, so the reported R2 is a genuine cross-indicator predictability
+# metric rather than the tautology y = f(X) that a mean-of-features target gives.
+POL_FEATURE_SHEETS = ["va", "ge", "rq", "rl", "cc"]
+POL_TARGET_SHEET = "pv"
 
 
 def train_political_risk():
-    log.info("[1/5] political_risk: training on WGI...")
+    log.info("[1/5] political_risk: training on WGI (predict held-out pv from other 5 dims)...")
     xls = pd.ExcelFile(WGI_PATH)
     frames = {}
     for sheet in WGI_SHEETS:
@@ -72,11 +80,9 @@ def train_political_risk():
     latest = merged.sort_values("Year").groupby("iso").tail(1).reset_index(drop=True)
     log.info(f"  WGI merged: {len(latest)} countries, most recent year={int(latest['Year'].max())}")
 
-    # Target: inverse of mean governance score (lower gov = higher political risk)
-    latest["political_risk"] = (100 - latest[WGI_SHEETS].mean(axis=1)) / 100.0
-
-    X = latest[WGI_SHEETS].values
-    y = latest["political_risk"].values
+    # Features: 5 governance dims (excluding the target). Target: held-out pv.
+    X = latest[POL_FEATURE_SHEETS].values
+    y = latest[POL_TARGET_SHEET].values
     X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)
 
     model = GradientBoostingRegressor(n_estimators=200, max_depth=3, learning_rate=0.05, random_state=42)
@@ -84,15 +90,26 @@ def train_political_risk():
     pred = model.predict(X_te)
     mae = mean_absolute_error(y_te, pred)
     r2 = r2_score(y_te, pred)
-    log.info(f"  political_risk: MAE={mae:.4f}, R2={r2:.4f}")
+    log.info(f"  political_risk: predicting pv, MAE={mae:.4f}, R2={r2:.4f}")
 
-    # Save model + country lookup (iso → risk)
-    lookup = {row["iso"]: float(row["political_risk"]) for _, row in latest.iterrows()}
+    # Country risk lookup grounded in ACTUAL Political Stability (pv): lower
+    # stability -> higher political risk. This is real WGI data, not the model's
+    # self-prediction.
+    lookup = {row["iso"]: float((100 - row[POL_TARGET_SHEET]) / 100.0) for _, row in latest.iterrows()}
     with open(MODELS_DIR / "political_risk_gbr.pkl", "wb") as f:
-        pickle.dump({"model": model, "features": WGI_SHEETS, "country_lookup": lookup}, f)
+        pickle.dump(
+            {
+                "model": model,
+                "features": POL_FEATURE_SHEETS,
+                "target": POL_TARGET_SHEET,
+                "risk_definition": "(100 - actual_pv) / 100",
+                "country_lookup": lookup,
+            },
+            f,
+        )
     log.info(f"  saved political_risk_gbr.pkl, {len(lookup)} countries")
 
-    return {"mae": mae, "r2": r2, "countries": len(lookup)}
+    return {"mae": mae, "r2": r2, "target": POL_TARGET_SHEET, "countries": len(lookup)}
 
 
 # ============================================================
@@ -101,11 +118,15 @@ def train_political_risk():
 
 def train_dependency_scoring(df: pd.DataFrame):
     log.info("[2/5] dependency_scoring: training MLP...")
-    # Features that encode supplier dependency risk
+    # Order-time features only. Late_delivery_risk is defined by realized
+    # (real - scheduled) shipping days, so "Days for shipping (real)" and the
+    # realized "Order Item Profit Ratio" are label leakage and are EXCLUDED.
+    # These features are all knowable at order placement.
     feat_cols = [
-        "Days for shipment (scheduled)", "Days for shipping (real)",
-        "Order Item Discount Rate", "Order Item Profit Ratio",
-        "Order Item Quantity", "Sales per customer",
+        "Days for shipment (scheduled)",
+        "Order Item Discount Rate",
+        "Order Item Quantity",
+        "Sales per customer",
     ]
     df2 = df.dropna(subset=feat_cols + ["Late_delivery_risk"])
     X = df2[feat_cols].values.astype(np.float32)

@@ -82,19 +82,35 @@ class SupplyMindGymnasiumEnv(gym.Env):
         # Core environment (in-process, no HTTP)
         self._env = SupplyMindEnvironment()
 
-        # Training mode: reduce Monte Carlo from 1000 to 50 simulations
+        # Training mode: reduce Monte Carlo from 1000 to 50 simulations.
         # MC produces P50/P95 OBSERVATIONS only — reward is independent of MC.
         # This gives ~15-20x CPU speedup with zero impact on learned policy.
+        # A silent no-op here would make training 15-20x slower without warning,
+        # so any failure to apply the patch is raised loudly, never swallowed.
+        self.training_mc_patched = False
         if training_mode:
-            try:
-                engine_mod = sys.modules.get("server.engine.monte_carlo")
-                if engine_mod and hasattr(engine_mod, "MonteCarloEngine"):
-                    _orig_run = engine_mod.MonteCarloEngine.run_simulation
-                    def _fast_mc(self_mc, graph, active_disruptions, n_simulations=50):
-                        return _orig_run(self_mc, graph, active_disruptions, n_simulations=50)
-                    engine_mod.MonteCarloEngine.run_simulation = _fast_mc
-            except Exception:
-                pass  # Graceful fallback — full MC if patch fails
+            import server.engine.monte_carlo as engine_mod
+
+            if not hasattr(engine_mod, "MonteCarloEngine"):
+                raise RuntimeError(
+                    "training_mode=True but server.engine.monte_carlo.MonteCarloEngine "
+                    "is missing — cannot apply the fast Monte-Carlo patch. Refusing to "
+                    "run 15-20x slower silently."
+                )
+
+            run_sim = engine_mod.MonteCarloEngine.run_simulation
+            if getattr(run_sim, "_supplymind_fast_mc", False):
+                # Already patched by a previous env instance — don't nest wrappers.
+                self.training_mc_patched = True
+            else:
+                _orig_run = run_sim
+
+                def _fast_mc(self_mc, graph, active_disruptions, n_simulations=50):
+                    return _orig_run(self_mc, graph, active_disruptions, n_simulations=50)
+
+                _fast_mc._supplymind_fast_mc = True
+                engine_mod.MonteCarloEngine.run_simulation = _fast_mc
+                self.training_mc_patched = True
 
         # Spaces
         self.observation_space = spaces.Box(

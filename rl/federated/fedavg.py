@@ -4,9 +4,10 @@ Federated Learning stub for SupplyMind.
 Simulates 3 companies training on private data, sharing only model
 parameters (not raw data) via FedAvg.
 
-Key insight: "Federated model outperforms any individual company's model
-by 23%" — because each company sees different disruptions in their
-supply chain segment.
+Hypothesis under test: a federated model may generalize better than any single
+company's model because each company observes different disruptions in its
+supply-chain segment. Whether that holds — and by how much — is only whatever
+a real run measures; no result is claimed here.
 
 Usage:
     python -m rl.federated.fedavg

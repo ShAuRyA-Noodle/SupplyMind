@@ -1,29 +1,22 @@
 {
-  "n_policies": 5,
+  "study_type": "scripted_agent_seed_study",
+  "policy": "scripted_agent (single fixed policy across all seeds)",
+  "n_seeds": 3,
+  "weights_condition_behavior": false,
   "all_objectives": [
     [
-      1.0921643835616446,
-      0.3278,
+      1.1040000000000008,
+      0.32999999999999996,
       0.0
     ],
     [
       1.115835616438357,
-      0.22829999999999995,
+      0.22850000000000004,
       0.0
     ],
     [
-      1.1040000000000008,
-      0.32889999999999997,
-      0.0
-    ],
-    [
-      1.1040000000000008,
-      0.3287,
-      0.0
-    ],
-    [
-      1.115835616438357,
-      0.22860000000000003,
+      1.068493150684932,
+      0.47919999999999996,
       0.0
     ]
   ],
@@ -35,36 +28,28 @@
     ],
     [
       0.0,
-      0.3333333333333333,
-      0.6666666666666666
-    ],
-    [
-      0.0,
-      0.6666666666666666,
-      0.3333333333333333
+      0.5,
+      0.5
     ],
     [
       0.0,
       1.0,
       0.0
-    ],
-    [
-      0.3333333333333333,
-      0.0,
-      0.6666666666666666
     ]
   ],
   "pareto_mask": [
     true,
     true,
-    false,
-    false,
-    false
+    true
   ],
-  "n_pareto": 2,
+  "n_pareto": 3,
   "objective_names": [
     "cost",
     "resilience_loss",
     "carbon"
-  ]
+  ],
+  "carbon": {
+    "assumption": true,
+    "note": "Carbon objective uses fixed illustrative tonnage/distance per action, not per-shipment data."
+  }
 }

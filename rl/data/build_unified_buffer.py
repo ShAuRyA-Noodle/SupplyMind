@@ -16,6 +16,14 @@ Output:
 Stratification: customer_segment × late_delivery_risk (no leakage).
 
 All data is real. Zero synthetic rollouts. Zero heuristic fallbacks in production path.
+
+!!! BUFFERS MUST BE REGENERATED !!!
+The action-type taxonomy in action_from_row() was corrected to match
+rl.gym_env.ACTION_TYPES exactly (1=activate_backup_supplier, 4=expedite_order,
+6=issue_supplier_alert; the bogus 'cancel'=6 mapping was removed). Any
+real_unified*.npz produced BEFORE this fix encodes the old, wrong action
+semantics and MUST be rebuilt (python -m rl.data.build_unified_buffer) before
+offline agents are trained or evaluated against the env.
 """
 
 from __future__ import annotations
@@ -211,21 +219,24 @@ def action_from_row(row) -> tuple[int, int]:
     delay = float(row.get("Days for shipping (real)", 3)) - float(row.get("Days for shipment (scheduled)", 3))
     profit = float(row.get("Order Item Profit Ratio", 0))
 
-    # action_type: 0=none, 1=alert, 2=reroute, 3=expedite, 4=inventory, 5=backup, 6=cancel
+    # action_type indices MUST match rl.gym_env.ACTION_TYPES exactly:
+    #   0=do_nothing, 1=activate_backup_supplier, 2=reroute_shipment,
+    #   3=increase_safety_stock, 4=expedite_order, 5=hedge_commodity,
+    #   6=issue_supplier_alert  ('cancel' does not exist in the env)
     if late == 0 and delay <= 0:
-        atype = 0
+        atype = 0  # do_nothing
     elif delay > 5 or profit < -0.3:
-        atype = 6
+        atype = 1  # activate_backup_supplier (severe delay / loss-making order)
     elif "Same Day" in mode or "First" in mode:
-        atype = 3
+        atype = 4  # expedite_order
     elif late == 1 and delay > 2:
-        atype = 2
+        atype = 2  # reroute_shipment
     elif late == 1:
-        atype = 1
+        atype = 6  # issue_supplier_alert
     elif "Second" in mode:
-        atype = 4
+        atype = 3  # increase_safety_stock
     else:
-        atype = 5
+        atype = 5  # hedge_commodity
 
     market = str(row.get("Market", "Pacific Asia"))
     segment = str(row.get("Customer Segment", "Consumer"))

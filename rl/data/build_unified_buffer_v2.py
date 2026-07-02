@@ -16,6 +16,14 @@ Output:
   rl/data/real_unified_v2.npz            — full buffer
   rl/data/real_unified_v2_meta.json      — schema + stats
   rl/data/real_train_v2.npz / val_v2.npz / test_v2.npz  — stratified splits
+
+!!! BUFFERS MUST BE REGENERATED !!!
+action_of() was corrected to match rl.gym_env.ACTION_TYPES exactly
+(1=activate_backup_supplier, 4=expedite_order, 6=issue_supplier_alert; the
+bogus 'cancel'=6 mapping was removed) and the WGI path was repointed to
+external_data/wgi/. Any real_unified_v2*.npz produced BEFORE this fix encodes
+the old, wrong action semantics and MUST be rebuilt
+(python -m rl.data.build_unified_buffer_v2) before use.
 """
 
 from __future__ import annotations
@@ -44,7 +52,7 @@ USGS = DATA / "usgs_m55_30days.csv"
 FRED = DATA / "fred_cache.json"
 FRED_EXT = DATA / "fred_extended.json"
 LEADING = DATA / "leading_indicators.json"
-WGI = ROOT / "wgidataset_with_sourcedata-2025.xlsx"
+WGI = ROOT / "external_data" / "wgi" / "wgidataset_with_sourcedata-2025.xlsx"
 FIN_MODEL = ROOT / "rl" / "analysis" / "trained" / "financial_impact_ridge.pkl"
 POL_MODEL = ROOT / "rl" / "analysis" / "trained" / "political_risk_gbr.pkl"
 
@@ -393,20 +401,24 @@ def action_of(row):
     late = int(row.get("Late_delivery_risk", 0))
     delay = float(row.get("Days for shipping (real)", 3)) - float(row.get("Days for shipment (scheduled)", 3))
     profit = float(row.get("Order Item Profit Ratio", 0))
+    # action_type indices MUST match rl.gym_env.ACTION_TYPES exactly:
+    #   0=do_nothing, 1=activate_backup_supplier, 2=reroute_shipment,
+    #   3=increase_safety_stock, 4=expedite_order, 5=hedge_commodity,
+    #   6=issue_supplier_alert  ('cancel' does not exist in the env)
     if late == 0 and delay <= 0:
-        atype = 0
+        atype = 0  # do_nothing
     elif delay > 5 or profit < -0.3:
-        atype = 6
+        atype = 1  # activate_backup_supplier (severe delay / loss-making order)
     elif "Same Day" in mode or "First" in mode:
-        atype = 3
+        atype = 4  # expedite_order
     elif late == 1 and delay > 2:
-        atype = 2
+        atype = 2  # reroute_shipment
     elif late == 1:
-        atype = 1
+        atype = 6  # issue_supplier_alert
     elif "Second" in mode:
-        atype = 4
+        atype = 3  # increase_safety_stock
     else:
-        atype = 5
+        atype = 5  # hedge_commodity
     market = str(row.get("Market", "Pacific Asia"))
     segment = str(row.get("Customer Segment", "Consumer"))
     base = _MARKET_NODE.get(market, 0)

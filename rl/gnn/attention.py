@@ -10,8 +10,10 @@ Architecture:
 
 If PyG is not installed, falls back to a pure-PyTorch MLP version.
 
-Usage:
-    python -m rl.gnn.attention --train
+NOTE: this module has no training entrypoint and no GAT checkpoint ships with
+the repo. get_attention_edges() therefore requires a caller-supplied trained
+model or a checkpoint on disk — it will NOT fabricate attention weights from an
+untrained network. Until a GAT is trained, the dashboard attention feed is off.
 """
 
 from __future__ import annotations
@@ -38,6 +40,7 @@ torch.backends.cudnn.benchmark = True
 torch.backends.cuda.matmul.allow_tf32 = True
 
 CHECKPOINT_DIR = Path(__file__).resolve().parent.parent / "checkpoints"
+GAT_CHECKPOINT = CHECKPOINT_DIR / "gat_best.pt"
 
 # Check if PyG is available
 _HAS_PYG = False
@@ -192,11 +195,24 @@ def get_attention_edges(
 
     Returns list of {source, target, attention_weight} for rendering
     edge thickness proportional to attention.
+
+    Requires a TRAINED model: either passed in via `model`, or loaded from
+    GAT_CHECKPOINT on disk. Raises RuntimeError if neither is available —
+    an untrained randomly-initialized GAT's attention is meaningless noise and
+    must never be served as edge criticality.
     """
     x, edge_index, node_ids = load_graph_as_tensors(graph_path)
 
     if model is None:
+        if not GAT_CHECKPOINT.exists():
+            raise RuntimeError(
+                f"no trained GAT checkpoint (looked for {GAT_CHECKPOINT}). "
+                "Refusing to serve attention weights from an untrained network. "
+                "Train and save a SupplyChainGAT, or pass a trained `model`."
+            )
         model = SupplyChainGAT()
+        state = torch.load(str(GAT_CHECKPOINT), map_location="cpu", weights_only=False)
+        model.load_state_dict(state["state_dict"] if isinstance(state, dict) and "state_dict" in state else state)
 
     model.eval()
     with torch.no_grad():

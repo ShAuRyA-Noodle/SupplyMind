@@ -117,10 +117,20 @@ def fetch_fred_data(force_refresh: bool = False) -> dict[str, Any]:
 
 
 def _fallback_fred_data() -> dict[str, Any]:
-    """Fallback commodity price data when FRED API is unavailable."""
+    """Hardcoded commodity price fallback when the live FRED API is unavailable.
+
+    These are a handful of hand-picked historical points, NOT live data. The
+    returned dict carries "source": "hardcoded_fallback" so nothing downstream
+    can present it as a live fetch, and a warning is always logged.
+    """
+    logger.warning(
+        "Serving HARDCODED FRED fallback data (source=hardcoded_fallback) — "
+        "not a live FRED fetch. Set FRED_API_KEY and install fredapi for real data."
+    )
     # Real approximate values from public FRED data
     return {
         "fetched_at": "fallback",
+        "source": "hardcoded_fallback",
         "DCOILWTICO": {
             "label": "Crude Oil (WTI)",
             "count": 5,

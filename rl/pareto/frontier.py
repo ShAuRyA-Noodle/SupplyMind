@@ -1,19 +1,22 @@
 """
-Pareto frontier — Multi-Objective Optimization for SupplyMind.
+Pareto frontier — scripted-agent seed study for SupplyMind.
 
 3 objectives: cost, resilience, sustainability (carbon cost).
 
-Carbon cost constants (kg CO2 per tonne-km):
-  - air_freight: 0.82
-  - sea_freight: 0.013
-  - rail: 0.028
-  - road: 0.096
+IMPORTANT — what this actually does: it runs the SAME scripted agent under N
+different environment seeds and computes a 3-objective vector per run. The
+per-run weight vectors are recorded for reference but do NOT condition the
+agent's behavior (the scripted agent ignores them). This is a seed study of a
+single fixed policy, not a set of trained weight-conditioned policies. Do not
+present it as multi-policy training.
 
-Trains 20 policies with different objective weightings via pymoo NSGA2.
-Dashboard: 3D scatter plot (Plotly), draggable weight slider.
+Carbon estimates use ILLUSTRATIVE assumptions (fixed tonnage / distance per
+action), not per-shipment data — every result dict carries "assumption": true.
+Emission factors (kg CO2 per tonne-km) are literature values (EPA/IMO/ICAO):
+air 0.82, express_sea 0.026, sea 0.013, rail 0.028, road 0.096.
 
 Usage:
-    python -m rl.pareto.frontier --train
+    python -m rl.pareto.frontier --run       # run the scripted-agent seed study
     python -m rl.pareto.frontier --visualize
 """
 
@@ -76,16 +79,18 @@ class ParetoObjectives:
         score = financials.get("score", 0.5)
         resilience_loss = 1.0 - score
 
-        # 3. Carbon emissions from logistics actions
+        # 3. Carbon emissions from logistics actions.
+        # ILLUSTRATIVE ONLY: tonnage/distance per action are fixed assumptions,
+        # not measured per-shipment data. Emission factors are literature values.
         carbon = 0.0
         for step in episode_history:
             action = step.get("action", "do_nothing")
             if action == "expedite_order":
                 mode = step.get("expedite_mode", "air")
-                # Assume 100 tonnes moved 5000km per expedite
+                # Illustrative assumption: 100 tonnes moved 5000km per expedite
                 carbon += self.carbon_factors.get(mode, 0.5) * 100 * 5000
             elif action == "reroute_shipment":
-                # Rerouting adds distance: assume 3500nm extra (Red Sea scenario)
+                # Illustrative assumption: rerouting adds 3500nm (Red Sea scenario)
                 carbon += self.carbon_factors["sea"] * 100 * 3500 * 1.852  # nm to km
 
         # Normalize carbon to [0, 1]
@@ -144,19 +149,23 @@ def compute_pareto_front(
     return is_pareto
 
 
-def train_pareto_policies(
-    n_policies: int = 20,
+def run_scripted_seed_study(
+    n_seeds: int = 20,
     task_id: str = "easy_typhoon_response",
     seed: int = 42,
 ) -> dict[str, Any]:
-    """Train/evaluate n_policies with different weight vectors.
+    """Run the scripted agent under n_seeds different env seeds and score objectives.
+
+    The recorded weight vectors do NOT condition the agent — they are kept only
+    so the same grid can later drive genuinely weight-conditioned policies. This
+    is a seed study of one fixed policy, not multi-policy training.
 
     Returns Pareto front data for visualization.
     """
     from server.supply_environment import SupplyMindEnvironment
     from scripted_agent import choose_action
 
-    weights_grid = generate_weight_grid(n_policies)
+    weights_grid = generate_weight_grid(n_seeds)
     objectives_module = ParetoObjectives()
 
     all_objectives = []
@@ -165,7 +174,8 @@ def train_pareto_policies(
     env = SupplyMindEnvironment()
 
     for w_idx, weights in enumerate(weights_grid):
-        # Run episode with scripted agent (placeholder for weight-conditioned policy)
+        # Same scripted agent every run; only the env seed changes. Weights are
+        # recorded but do not influence behavior.
         obs = env.reset(task_id=task_id, seed=seed + w_idx)
         history = []
         step = 0
@@ -190,19 +200,27 @@ def train_pareto_policies(
         all_weights.append(weights)
 
         if (w_idx + 1) % 5 == 0:
-            logger.info("  Policy %d/%d: cost=%.3f resilience_loss=%.3f carbon=%.3f",
-                        w_idx + 1, n_policies, obj[0], obj[1], obj[2])
+            logger.info("  Seed run %d/%d: cost=%.3f resilience_loss=%.3f carbon=%.3f",
+                        w_idx + 1, n_seeds, obj[0], obj[1], obj[2])
 
     all_objectives = np.array(all_objectives)
     pareto_mask = compute_pareto_front(all_objectives)
 
     result = {
-        "n_policies": n_policies,
+        "study_type": "scripted_agent_seed_study",
+        "policy": "scripted_agent (single fixed policy across all seeds)",
+        "n_seeds": n_seeds,
+        "weights_condition_behavior": False,
         "all_objectives": all_objectives.tolist(),
         "all_weights": [w.tolist() for w in all_weights],
         "pareto_mask": pareto_mask.tolist(),
         "n_pareto": int(pareto_mask.sum()),
         "objective_names": ["cost", "resilience_loss", "carbon"],
+        "carbon": {
+            "assumption": True,
+            "note": "Carbon objective uses fixed illustrative tonnage/distance per "
+                    "action, not per-shipment data.",
+        },
     }
 
     # Save
@@ -210,6 +228,6 @@ def train_pareto_policies(
     CHECKPOINT_DIR.mkdir(parents=True, exist_ok=True)
     output_path = CHECKPOINT_DIR / "pareto_results.json"
     output_path.write_text(json.dumps(result, indent=2))
-    logger.info("Pareto front: %d/%d solutions are non-dominated", result["n_pareto"], n_policies)
+    logger.info("Pareto front: %d/%d seed runs are non-dominated", result["n_pareto"], n_seeds)
 
     return result

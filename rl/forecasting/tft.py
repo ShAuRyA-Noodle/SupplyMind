@@ -11,9 +11,15 @@ Config:
   - max_encoder_length=90, max_prediction_length=30
   - ~20 min for 100 epochs on GPU
 
+CHECKPOINTS: the pytorch-forecasting train_tft() below writes tft_best.ckpt,
+but the checkpoint that actually ships and is consumed at inference is the
+pure-PyTorch tft_real.pt produced by train_tft_real.py (avoids lightning/
+pytorch-forecasting version drift). predict_tft() loads tft_real.pt and errors
+loudly if it is absent.
+
 Usage:
-    python -m rl.forecasting.tft --train
-    python -m rl.forecasting.tft --predict
+    python -m rl.forecasting.train_tft_real   # the real trainer (-> tft_real.pt)
+    python -m rl.forecasting.tft --predict    # forecast from tft_real.pt
 """
 
 from __future__ import annotations
@@ -195,32 +201,91 @@ def train_tft(
 
 def predict_tft(
     checkpoint_path: Path | None = None,
-    horizon: int = 30,
 ) -> dict:
-    """Generate 30-day commodity forecasts with P10/P50/P90."""
-    import pytorch_lightning as pl
-    from pytorch_forecasting import TemporalFusionTransformer
+    """Generate a real commodity-price forecast from the trained TFT model.
+
+    Loads the pure-PyTorch checkpoint produced by train_tft_real.py
+    (rl/checkpoints/tft_real.pt) — the only TFT checkpoint that actually
+    exists — reconstructs the TFTLike model, runs the most recent encoder
+    window through it, and returns de-normalized P10/P50/P90 forecasts for
+    the target series (WTI crude, DCOILWTICO) over the model's native horizon.
+
+    Raises FileNotFoundError if no trained checkpoint is present. There is no
+    silent fabrication: callers that want a heuristic band must call
+    _fallback_forecast() explicitly.
+    """
+    from rl.forecasting.train_tft_real import TFTLike, load_fred_df
 
     if checkpoint_path is None:
-        checkpoint_path = CHECKPOINT_DIR / "tft_best.ckpt"
+        checkpoint_path = CHECKPOINT_DIR / "tft_real.pt"
+    checkpoint_path = Path(checkpoint_path)
 
     if not checkpoint_path.exists():
-        logger.warning("TFT checkpoint not found. Returning fallback forecast.")
-        return _fallback_forecast(horizon)
+        raise FileNotFoundError(
+            f"No trained TFT checkpoint at {checkpoint_path}. "
+            f"Train one with: python -m rl.forecasting.train_tft_real"
+        )
 
-    tft = TemporalFusionTransformer.load_from_checkpoint(str(checkpoint_path))
-    tft.eval()
+    ckpt = torch.load(str(checkpoint_path), map_location="cpu", weights_only=False)
+    required = {"state_dict", "mu", "sd", "y_mu", "y_sd", "quantiles", "horizon", "enc_len", "n_feats"}
+    missing = required - set(ckpt)
+    if missing:
+        raise ValueError(
+            f"Checkpoint {checkpoint_path} is not a train_tft_real TFTLike checkpoint "
+            f"(missing keys: {sorted(missing)}). predict_tft only supports that format."
+        )
 
-    # Load latest data for prediction
-    df = load_fred_series()
+    horizon = int(ckpt["horizon"])
+    enc_len = int(ckpt["enc_len"])
+    quantiles = list(ckpt["quantiles"])
+    n_feats = int(ckpt["n_feats"])
 
-    # Use last max_encoder_length days as encoder input
-    # Return forecast dict
+    model = TFTLike(n_feats=n_feats, horizon=horizon, n_quantiles=len(quantiles))
+    model.load_state_dict(ckpt["state_dict"])
+    model.eval()
+
+    # Most recent encoder window of the exact 7 feature columns used in training.
+    df = load_fred_df()
+    if len(df) < enc_len:
+        raise ValueError(
+            f"Only {len(df)} FRED business days available; need >= enc_len={enc_len}."
+        )
+    feat_cols = ["DCOILWTICO", "PCOPPUSDM", "DEXTAUS", "DEXKOUS", "DEXJPUS", "DEXUSEU", "DEXCHUS"]
+    window = df[feat_cols].values[-enc_len:].astype(np.float32)
+    mu = np.asarray(ckpt["mu"], dtype=np.float32)
+    sd = np.asarray(ckpt["sd"], dtype=np.float32)
+    x = (window - mu) / sd
+    x_t = torch.from_numpy(x).unsqueeze(0)  # [1, enc_len, n_feats]
+
+    with torch.no_grad():
+        pred = model(x_t).squeeze(0).numpy()  # [horizon, n_quantiles]
+
+    # De-normalize to USD.
+    y_mu = float(ckpt["y_mu"])
+    y_sd = float(ckpt["y_sd"])
+    pred = pred * y_sd + y_mu
+    q_index = {q: i for i, q in enumerate(quantiles)}
+    last_date = pd.to_datetime(df["date"].values[-1])
+    last_observed = float(df["DCOILWTICO"].values[-1])
+
+    def _band(q: float) -> list[float]:
+        return [round(float(v), 2) for v in pred[:, q_index[q]]]
+
     return {
-        "horizon_days": horizon,
-        "model": "TemporalFusionTransformer",
-        "quantiles": [0.1, 0.5, 0.9],
         "status": "trained",
+        "model": "TFTLike (pure-PyTorch, train_tft_real.py)",
+        "checkpoint": checkpoint_path.name,
+        "target": "DCOILWTICO",
+        "target_label": "Crude Oil (WTI)",
+        "horizon_days": horizon,
+        "quantiles": quantiles,
+        "last_observed_date": str(last_date.date()),
+        "last_observed": round(last_observed, 2),
+        "forecast": {
+            "p10": _band(min(quantiles)),
+            "p50": _band(sorted(quantiles)[len(quantiles) // 2]),
+            "p90": _band(max(quantiles)),
+        },
     }
 
 

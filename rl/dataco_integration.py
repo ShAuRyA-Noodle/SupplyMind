@@ -204,27 +204,88 @@ class DataCoAnalyzer:
         return signals
 
     def backtest_agent_on_real_data(
-        self, agent_fn, n_orders: int = 100,
+        self, agent_fn, n_orders: int = 100, seed: int = 42,
     ) -> dict[str, float]:
-        """Run agent's logic on real historical DataCo orders.
+        """Backtest a late-delivery predictor on a mixed sample of real orders.
 
-        For each late order, check if the agent would have predicted/mitigated
-        the disruption. Score = prediction accuracy vs actual outcomes.
+        Draws ``n_orders`` orders uniformly from the FULL DataCo table (both
+        late and on-time — not late-only), builds an order-time feature signal
+        for each (no realized-delay leakage), and calls ``agent_fn(signal)`` to
+        obtain a prediction. ``agent_fn`` may return a bool or a probability/
+        score (thresholded at 0.5). Predictions are scored against the actual
+        outcome ``is_late = (real - scheduled) > 0``.
+
+        Returns accuracy plus precision/recall/F1 and the sample's base late
+        rate, so a trivial always-late predictor cannot look good by accuracy.
         """
-        signals = self.generate_real_signals(n_orders)
+        if self.df is None:
+            self.load()
+        if self.df is None:
+            raise RuntimeError(
+                "DataCo dataframe is unavailable (load failed) — cannot backtest."
+            )
 
-        correct = 0
-        for signal in signals:
-            # Simplified: agent predicts if this order will be late
-            is_late = signal["delay_days"] > 0
-            predicted_late = signal["severity"] > 0.3  # Agent threshold
-            if is_late == predicted_late:
-                correct += 1
+        df = self.df.dropna(
+            subset=["Days for shipping (real)", "Days for shipment (scheduled)"]
+        ).reset_index(drop=True)
+        if df.empty:
+            raise RuntimeError("No DataCo orders with shipping columns available.")
+
+        rng = np.random.default_rng(seed)
+        n = min(n_orders, len(df))
+        idx = rng.choice(len(df), size=n, replace=False)
+
+        tp = fp = tn = fn = 0
+        n_actual_late = 0
+        for i in idx:
+            row = df.iloc[int(i)]
+            scheduled = float(row["Days for shipment (scheduled)"])
+            delay = float(row["Days for shipping (real)"]) - scheduled
+            is_late = delay > 0
+            n_actual_late += int(is_late)
+
+            # Order-time features only — the realized delay is NOT exposed.
+            signal = {
+                "market": row.get("Market"),
+                "order_country": row.get("Order Country"),
+                "category": row.get("Category Name"),
+                "shipping_mode": row.get("Shipping Mode"),
+                "order_status": row.get("Order Status"),
+                "scheduled_days": scheduled,
+                "sales_per_customer": float(row.get("Sales per customer", 0.0) or 0.0),
+                "order_item_quantity": float(row.get("Order Item Quantity", 0.0) or 0.0),
+                "source": "DataCo historical order",
+            }
+
+            pred = agent_fn(signal)
+            if isinstance(pred, (bool, np.bool_)):
+                predicted_late = bool(pred)
+            else:
+                predicted_late = float(pred) >= 0.5
+
+            if predicted_late and is_late:
+                tp += 1
+            elif predicted_late and not is_late:
+                fp += 1
+            elif not predicted_late and not is_late:
+                tn += 1
+            else:
+                fn += 1
+
+        accuracy = (tp + tn) / n
+        precision = tp / (tp + fp) if (tp + fp) else 0.0
+        recall = tp / (tp + fn) if (tp + fn) else 0.0
+        f1 = (2 * precision * recall / (precision + recall)) if (precision + recall) else 0.0
 
         return {
-            "n_orders": n_orders,
-            "accuracy": correct / n_orders,
-            "source": "DataCo historical orders",
+            "n_orders": int(n),
+            "accuracy": float(accuracy),
+            "precision": float(precision),
+            "recall": float(recall),
+            "f1": float(f1),
+            "actual_late_rate": float(n_actual_late / n),
+            "confusion": {"tp": tp, "fp": fp, "tn": tn, "fn": fn},
+            "source": "DataCo historical orders (mixed late + on-time sample)",
         }
 
 

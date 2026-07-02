@@ -8,7 +8,9 @@ lambda that self-tunes until the budget constraint is satisfied on average.
 Policy optimizes: reward - lambda * budget_violation
 Lambda increases whenever budget constraint is violated.
 
-"Our RL agent is mathematically guaranteed to never exceed the risk budget."
+Lagrangian relaxation drives the constraint toward satisfaction *on average*
+over training; it is NOT a hard per-episode guarantee. Individual episodes can
+still exceed the budget.
 
 Usage:
     python -m rl.constrained_ppo --task easy --steps 1000000
