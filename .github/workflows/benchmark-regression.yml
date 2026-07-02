@@ -1,0 +1,40 @@
+name: Benchmark regression guard
+
+# Re-enabled per CLAUDE.md P0.5. scripts/check_benchmarks.py is now FAIL-CLOSED
+# (a missing result file is a FAILURE + exit 1, never a silent [SKIP]) and all six
+# committed v3.0-arcadia result JSONs it reads are tracked in the repo. It is a pure
+# file/threshold check over versions/v3_arcadia/results/*.json — no GPU, no network,
+# no ML deps — so it runs on a bare ubuntu Python 3.11 runner in seconds.
+#
+# This is intentionally ALSO run as a step inside ci.yml (defense in depth): ci.yml
+# guards every push/PR, this workflow additionally guards any change to the result
+# JSONs or the checker itself even outside the normal CI path.
+
+on:
+  pull_request:
+    paths:
+      - 'versions/v3_arcadia/results/**'
+      - 'scripts/check_benchmarks.py'
+      - '.github/workflows/benchmark-regression.yml'
+  push:
+    branches: ['**']
+    paths:
+      - 'versions/v3_arcadia/results/**'
+      - 'scripts/check_benchmarks.py'
+      - '.github/workflows/benchmark-regression.yml'
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: verify headline benchmarks meet floor
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify headline benchmarks meet floor (fail-closed)
+        run: python scripts/check_benchmarks.py

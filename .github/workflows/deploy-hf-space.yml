@@ -5,6 +5,16 @@ name: Deploy to HuggingFace Space
 # historical divergence on the HF side is overwritten cleanly.
 #
 # REQUIRES: repo secret HF_TOKEN with Write access.
+#
+# SECURITY (SECURITY.md): HF_TOKEN is supplied ONLY via `secrets.HF_TOKEN`, scoped to
+# the single "Run HF deploy" step's env. The deploy script prints the token's presence
+# (bool) and LENGTH only — never the value — and whoami() logs the account name/role,
+# not the token. Verified: no `echo $HF_TOKEN` / raw-value print anywhere in this file.
+#
+# TARGET / TRIGGERS UNCHANGED ON PURPOSE: the owner keeps the old Space
+# `Shaurya-Noodle/Supplymind` frozen as-is. Retargeting to the NEW Space (CLAUDE.md
+# §10/§12, owner creates it + a fresh write-scoped HF_TOKEN) is a LATER task — do not
+# change repo_id or the push triggers here until then.
 
 on:
   push:
@@ -66,13 +76,23 @@ jobs:
                   repo_id="Shaurya-Noodle/Supplymind",
                   repo_type="space",
                   commit_message="Deploy v6.0-genesis from GitHub main",
+                  # ignore_patterns updated for the post-cleanup tree (CLAUDE.md P0.4/P0.5):
+                  #   - _dump/** and vendor/** are being removed by de-bloat, but stay
+                  #     listed so a concurrent/partial tree never leaks them to the Space.
+                  #   - dashboard/** (Streamlit dashboard, ledger 6.1 delete) is NOT part
+                  #     of the FastAPI Space — excluded.
+                  #   - notebooks/** already covers notebooks/archive/**.
+                  #   - external_data/** stays fully excluded: the fetch SCRIPTS are now
+                  #     tracked in git, but the multi-GB data corpus never ships.
+                  #   - _audit/** holds internal audit JSONs — never for a public Space.
                   ignore_patterns=[
                       ".git/**", ".github/**", "_dump/**", "*.pyc",
                       "__pycache__/**", ".pytest_cache/**", ".tmp_pytest/**",
                       ".source_cache/**", ".openrouter_cache/**", ".agents/**",
                       ".claude/**", ".venv/**", "venv/**", "wandb/**",
                       "catboost_info/**", "notebooks/**", "models/**",
-                      "external_data/**", "vendor/**", "rl/checkpoints/**",
+                      "external_data/**", "vendor/**", "dashboard/**",
+                      "_audit/**", "rl/checkpoints/**",
                       "rl/analysis/**",
                       "rl/data/*.npz", "rl/data/*.csv",
                       "versions/v3_arcadia/logs/**",

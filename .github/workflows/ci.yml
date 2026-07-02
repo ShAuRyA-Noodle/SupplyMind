@@ -1,0 +1,123 @@
+name: CI
+
+# Re-enabled per CLAUDE.md P0.5. The suite is CPU-only, offline, and finishes in
+# ~2min (184 tests verified locally). There is NO Ollama/GPU requirement for tests/ —
+# that excuse only ever applied to fine-tuning experiments, not this suite.
+# Disabling CI is exactly how the v3_arcadia path-reorg regression shipped unnoticed.
+#
+# NOTE: this is the FIRST real CI definition since the workflow was disabled — the
+# first genuine Actions run happens on the next push/PR to GitHub (cannot be executed
+# from a local working tree). All steps were dry-validated locally against the venv.
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: pytest + smoke (ubuntu, py3.11, CPU)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: requirements.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio
+
+      # Primary gate: the full 184-test suite. Runs with only requirements.txt +
+      # pytest — verified that server.app imports torch/rl lazily (only inside the
+      # untested /predict + /agent/decide handlers), so the suite needs no ML deps.
+      - name: Run test suite
+        run: pytest tests/ -q --tb=short
+
+      # Fail-closed regression guard (also owns its own workflow benchmark-regression.yml).
+      # Pure file checks against committed v3.0-arcadia result JSONs; missing file = FAIL.
+      - name: Benchmark regression guard
+        run: python scripts/check_benchmarks.py
+
+      # ML deps installed AFTER the primary gate so a torch wheel hiccup can never mask
+      # a real test failure. Only needed by the RL/GNN smoke steps below.
+      - name: Install RL deps (CPU torch)
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install gymnasium==0.29.1
+
+      - name: RL env smoke
+        run: |
+          python - <<'PY'
+          import gymnasium as gym
+          import rl  # noqa: F401  (registers SupplyMind-*-v1 ids)
+          env = gym.make('SupplyMind-Easy-v1')
+          obs, info = env.reset(seed=42)
+          assert obs.shape == (408,), f'Bad obs shape: {obs.shape}'
+          assert info['action_masks'].shape == (280,), f'Bad mask shape: {info["action_masks"].shape}'
+          obs2, r, term, trunc, info2 = env.step(env.action_space.sample())
+          assert obs2.shape == (408,)
+          print('RL env smoke passed')
+          env.close()
+          PY
+
+      - name: API smoke
+        run: |
+          python - <<'PY'
+          from server.app import app
+          from fastapi.testclient import TestClient
+          client = TestClient(app)
+          r = client.get('/health')
+          assert r.status_code == 200, f'Bad status: {r.status_code}'
+          print('API smoke passed')
+          PY
+
+      # Legacy v3 conformal band — import path fixed from the dead pre-reorg
+      # `v3_arcadia.utils.conformal_smoke_check` to the real `versions/...` location.
+      - name: Conformal band smoke (v3, no GPU)
+        run: |
+          python - <<'PY'
+          import numpy as np
+          import sys, pathlib
+          sys.path.insert(0, str(pathlib.Path('.').resolve()))
+          from versions.v3_arcadia.utils.conformal_smoke_check import per_horizon_conformal_band
+          cal = np.random.RandomState(0).randn(30, 14)
+          q = per_horizon_conformal_band(cal, 0.1)
+          assert q.shape == (14,)
+          assert np.all(q >= 0)
+          print(f'Conformal smoke OK: q_per_horizon={q[0]:.3f}..{q[-1]:.3f}')
+          PY
+
+      # Legacy v3 GCN layer — structural shape smoke only (no AI claim, no dashboard feed).
+      - name: GCN layer smoke (v3, pure-torch CPU)
+        run: |
+          python - <<'PY'
+          import sys, pathlib, importlib.util
+          sys.path.insert(0, str(pathlib.Path('.').resolve()))
+          spec = importlib.util.spec_from_file_location(
+              "r6_gnn", pathlib.Path("versions/v3_arcadia/70_provider/r6_gnn.py"))
+          m = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(m)
+          import torch
+          layer = m.GCNLayer(8, 16)
+          x = torch.randn(12, 8)
+          ei = torch.tensor([[0,1,2,3,4,5,6,7,8,9,10,11], [1,2,3,4,5,6,7,8,9,10,11,0]])
+          out = layer(x, ei)
+          assert out.shape == (12, 16), f'Bad shape {out.shape}'
+          print('GCN layer smoke passed')
+          PY
