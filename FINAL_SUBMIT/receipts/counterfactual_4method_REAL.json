@@ -1,0 +1,237 @@
+{
+  "receipt": "counterfactual_4method_REAL",
+  "capability": "R6 \u2014 real 4-method causal counterfactual",
+  "analog": "tohoku_2011",
+  "git_sha": "a50d87569c9a117ad3aa79ab8032068bcb0a77d2",
+  "python": "c:/Users/Dell/Desktop/Sleep-Token/.venv/Scripts/python.exe",
+  "reproduce": "c:/Users/Dell/Desktop/Sleep-Token/.venv/Scripts/python.exe -m supplymind.phoenix.counterfactual_v2.causal_methods --analog tohoku_2011 --receipt",
+  "data_sources": {
+    "method_a_and_d_engine": "server/engine/monte_carlo.py + server/engine/graph.py (server/data/graphs/)",
+    "method_b_worldbank": "World Bank API (keyless, treated) + external_data/world_bank_macro/*.json (donors)",
+    "method_c_fred": "external_data/fred_brent_daily.csv (DCOILBRENTEU)"
+  },
+  "result": {
+    "analog": "tohoku_2011",
+    "event_date": "2011-03-11",
+    "description": "Great East Japan (T\u014dhoku) earthquake + tsunami; auto / semiconductor supply chain.",
+    "methods": {
+      "a": {
+        "method": "a",
+        "label": "paired_bootstrap_mc",
+        "estimate_usd": 16759204637.533257,
+        "ci_low_usd": 15337095959.416286,
+        "ci_high_usd": 18148583881.913185,
+        "unit": "USD (annual customer revenue-at-risk)",
+        "scope": "supply_graph",
+        "status": "ok",
+        "data_source": "engine MonteCarloEngine on hard_graph.json",
+        "inputs": {
+          "graph_file": "hard_graph.json",
+          "do_nodes": [
+            "SUP_RENESAS",
+            "SUP_DENSO",
+            "SUP_MURATA"
+          ],
+          "mc_severity": 0.85,
+          "mc_duration_days": 90.0,
+          "n_seeds": 200,
+          "n_boot": 2000,
+          "mean_loss_usd": 16759204637.533257,
+          "median_loss_usd": 18214050916.52868,
+          "std_loss_usd": 10344847347.333761,
+          "frac_seeds_nonzero": 0.83
+        },
+        "notes": "N seeded engine rollouts (n_sim=1 each \u2192 raw per-seed loss draw), bootstrap CI on the mean. PAIRED same-seed no-mitigation vs safety-stock(+90d @ WH_JAPAN) gives value_of_acting mean=$6,162,746,773 [bootstrap 95% $5,637,126,342, $6,689,556,416]. Estimand: expected customer revenue-at-risk under the modelled disruption \u2014 a supply-graph subset, not whole-economy damage."
+      },
+      "b": {
+        "method": "b",
+        "label": "synthetic_control_abadie",
+        "estimate_usd": 230288834478.5462,
+        "ci_low_usd": 230041247894.3379,
+        "ci_high_usd": 232299733056.18564,
+        "unit": "USD (lost annual output, |growth gap| \u00d7 GDP)",
+        "scope": "macro_economy",
+        "status": "ok",
+        "data_source": "World Bank GDP-growth (treated live; donors on-disk)",
+        "inputs": {
+          "treated": "Japan",
+          "donors": [
+            "China",
+            "Germany",
+            "India"
+          ],
+          "donor_weights": {
+            "China": 0.0,
+            "Germany": 0.9971,
+            "India": 0.0029
+          },
+          "pre_years": [
+            2000,
+            2001,
+            2002,
+            2003,
+            2004,
+            2005,
+            2006,
+            2007,
+            2008,
+            2009,
+            2010
+          ],
+          "pre_fit_rmse_pp": 1.2974,
+          "actual_growth_pct": -0.2,
+          "synthetic_growth_pct": 3.762,
+          "gap_pp": -3.963,
+          "base_gdp_usd": 5811578109447.07,
+          "event_year": 2011
+        },
+        "notes": "Abadie convex synthetic control. Pre-fit RMSE 1.30pp over 11 years. Japan 2011 grew -0.20% vs synthetic 3.76% \u2192 gap -3.96pp \u2192 |gap|\u00d7GDP2010. CI = leave-one-pre-year-out weight sensitivity. Whole-economy scope \u2014 captures far more than the auto supply chain, so expected to sit near the documented headline, above the supply-graph methods."
+      },
+      "c": {
+        "method": "c",
+        "label": "arima_p10_fred_brent",
+        "estimate_usd": 157846742.6009928,
+        "ci_low_usd": 8418990.951743534,
+        "ci_high_usd": 643140709.2728908,
+        "unit": "USD (oil-import cost, |per-bbl gap| \u00d7 imports \u00d7 window)",
+        "scope": "oil_channel",
+        "status": "ok",
+        "data_source": "FRED DCOILBRENTEU daily (external_data/fred_brent_daily.csv)",
+        "inputs": {
+          "event_date": "2011-03-11",
+          "ar_order_p": 1,
+          "pre_window_days": 60,
+          "post_window_days": 20,
+          "pre_window_dates": [
+            "2010-12-14",
+            "2011-03-10"
+          ],
+          "actual_post_avg_usd_bbl": 116.288,
+          "counterfactual_avg_usd_bbl": 118.543,
+          "effect_per_bbl_usd": -2.255,
+          "signed_direction": "actual_below_counterfactual",
+          "oil_import_bbl_per_day": 3500000,
+          "n_prices_loaded": 9922
+        },
+        "notes": "AR(1) (AIC-selected) on the differenced pre-event Brent window, iteratively forecast + integrated to a counterfactual price path; residual-bootstrap CI (n=1000). Effect -2.25 $/bbl. OIL-CHANNEL scope only \u2014 a narrow slice, and confounded: Concurrent Libyan civil war / Arab-Spring rally drove Brent from ~$95 (Feb) to ~$115 (early Mar) 2011; the T\u014dhoku oil signal is confounded by it \u2014 surfaced, not hidden."
+      },
+      "d": {
+        "method": "d",
+        "label": "scm_do_intervention",
+        "estimate_usd": 36500000000.0,
+        "ci_low_usd": 0.0,
+        "ci_high_usd": 36500000000.0,
+        "unit": "USD (annual customer revenue with no operational supply path)",
+        "scope": "supply_graph",
+        "status": "ok",
+        "data_source": "engine SupplyChainGraph structural propagation on hard_graph.json",
+        "inputs": {
+          "graph_file": "hard_graph.json",
+          "do_nodes": [
+            "SUP_RENESAS",
+            "SUP_DENSO",
+            "SUP_MURATA"
+          ],
+          "intervention": "set do_nodes is_operational=False, then get_total_revenue_at_risk() (path-based)",
+          "sensitivity_scenarios_usd": {
+            "do(all_target_suppliers)": 36500000000.0,
+            "do(minus:SUP_RENESAS)": 0.0,
+            "do(minus:SUP_DENSO)": 0.0,
+            "do(minus:SUP_MURATA)": 0.0,
+            "do(+downstream_factory)": 36500000000.0
+          }
+        },
+        "notes": "do(X): the engine's real graph.get_total_revenue_at_risk() counts customers whose every supply path passes through a disrupted node. CI = sensitivity across intervention subsets (leave-one-supplier-out and +downstream-factory). Discrete/structural: redundancy makes the effect near all-or-nothing. Supply-graph subset scope (a few automakers), so well below the whole-economy headline."
+      }
+    },
+    "pooled": {
+      "n_methods_ok": 4,
+      "n_methods_total": 4,
+      "per_method_usd": {
+        "paired_bootstrap_mc": 16759204638.0,
+        "synthetic_control_abadie": 230288834479.0,
+        "arima_p10_fred_brent": 157846743.0,
+        "scm_do_intervention": 36500000000.0
+      },
+      "per_method_scope": {
+        "paired_bootstrap_mc": "supply_graph",
+        "synthetic_control_abadie": "macro_economy",
+        "arima_p10_fred_brent": "oil_channel",
+        "scm_do_intervention": "supply_graph"
+      },
+      "per_method_status": {
+        "paired_bootstrap_mc": "ok",
+        "synthetic_control_abadie": "ok",
+        "arima_p10_fred_brent": "ok",
+        "scm_do_intervention": "ok"
+      },
+      "pooled_median_usd": 26629602318.76663,
+      "pooled_mean_usd": 70926471464.6701,
+      "min_usd": 157846742.6009928,
+      "max_usd": 230288834478.5462,
+      "spread_max_over_min": 1458.9,
+      "orders_of_magnitude_spread": 3.16,
+      "by_scope_usd": {
+        "supply_graph": {
+          "n": 2,
+          "median": 26629602318.76663,
+          "range": [
+            16759204637.533257,
+            36500000000.0
+          ]
+        },
+        "macro_economy": {
+          "n": 1,
+          "median": 230288834478.5462,
+          "range": [
+            230288834478.5462,
+            230288834478.5462
+          ]
+        },
+        "oil_channel": {
+          "n": 1,
+          "median": 157846742.6009928,
+          "range": [
+            157846742.6009928,
+            157846742.6009928
+          ]
+        }
+      },
+      "methods_agree_within_3x": false,
+      "documented_headline_usd": [
+        210000000000,
+        235000000000
+      ],
+      "documented_bracketed_by": [
+        "synthetic_control_abadie"
+      ],
+      "pooled_range_brackets_headline": true,
+      "documented_citations": [
+        "World Bank (2011-03-21): total economic damage of the Great East Japan Earthquake estimated at up to US$235B \u2014 the costliest natural disaster on record.",
+        "Japan Cabinet Office (2011-06): direct capital-stock damage \u00a516.9 trillion \u2248 US$210B.",
+        "Toyota FY2011 (2011-06 earnings): quake cut operating income by \u2248\u00a5110B \u2248 US$1.2B and \u2248800,000 units of lost production.",
+        "Renesas Naka fab (auto MCUs) offline ~3 months \u2014 the single largest automotive semiconductor disruption of 2011."
+      ],
+      "documented_scope_note": "Headline $210\u2013235B is WHOLE-ECONOMY damage; the auto industry is a subset, and any single-firm / supply-graph estimate should be well below the headline.",
+      "honest_reading": "The 4 methods DISAGREE by ~1459\u00d7 \u2014 expected, because they measure different SCOPES: the macro synthetic control captures whole-economy output loss while the supply-graph MC/SCM methods capture only the modelled auto-supplier subset, and the ARIMA method captures only the (confounded) oil-price channel. Against the documented whole-economy headline, the macro method is the scope-appropriate comparison; the supply-graph methods are a subset and correctly land below it. Do not average across scopes as if they estimated the same quantity."
+    },
+    "documented_outcome": {
+      "headline_low_usd": 210000000000,
+      "headline_high_usd": 235000000000,
+      "citations": [
+        "World Bank (2011-03-21): total economic damage of the Great East Japan Earthquake estimated at up to US$235B \u2014 the costliest natural disaster on record.",
+        "Japan Cabinet Office (2011-06): direct capital-stock damage \u00a516.9 trillion \u2248 US$210B.",
+        "Toyota FY2011 (2011-06 earnings): quake cut operating income by \u2248\u00a5110B \u2248 US$1.2B and \u2248800,000 units of lost production.",
+        "Renesas Naka fab (auto MCUs) offline ~3 months \u2014 the single largest automotive semiconductor disruption of 2011."
+      ],
+      "firm_level_usd": {
+        "toyota_operating_income_hit": 1200000000
+      },
+      "scope_note": "Headline $210\u2013235B is WHOLE-ECONOMY damage; the auto industry is a subset, and any single-firm / supply-graph estimate should be well below the headline."
+    },
+    "generated_utc": "2026-07-02T22:56:49.613416+00:00"
+  },
+  "sha256": "ebdbdcc20bcddb01c9627cb8b6d1c81bc4329e2eaba90016f312e01b13b55a80",
+  "sha256_scope": "sha256 of the receipt with result.generated_utc removed; deterministic across re-runs (seeded RNG).",
+  "values_sha256": "01f5291e3b9bbab24d468cb5391a495dcc6686d5ae544cb9f3eb36cccc7e2699"
+}

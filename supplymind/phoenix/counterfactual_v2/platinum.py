@@ -349,39 +349,36 @@ def method_c_bsts_lite(
     pre_periods: int = 30, post_periods: int = 14,
     target_severity: str = "HIGH",
 ) -> MethodResult:
-    """Bayesian-structural-time-series-style counterfactual on REAL FRED daily
-    Brent crude oil prices (series DCOILBRENTEU, USD/bbl; CSV header
-    ``observation_date,DCOILBRENTEU``).
+    """ARIMA(p,1,0) counterfactual on REAL FRED daily Brent (DCOILBRENTEU).
 
-    Without a treatment (intervention) column we construct one: treat the last
-    ``post_periods`` days as 'observed under treatment' and drift-extrapolate an
-    ARIMA(1,1,0)-style counterfactual from the preceding ``pre_periods`` days.
-    Treatment effect = (observed avg - counterfactual avg) USD/bbl
-                       × global daily consumption (bbl) × post-period days.
+    Delegates to the real event-anchored implementation in
+    ``causal_methods.method_c_arima_fred``: it fits an AIC-selected AR(p) on the
+    pre-event window of a documented historical analog (default Tōhoku 2011) and
+    forecasts the no-shock counterfactual price path, comparing it to the actual
+    post-event path. This replaces the previous "treat the last N days as the
+    treatment" construction, which was not a real event counterfactual.
 
-    If the real series is unavailable/too short the method falls back to a
-    hardcoded severity-tier table. That fallback is LOUDLY surfaced via
-    ``extra['source'] == 'hardcoded_fallback'`` (+ ``fallback_reason``) and logged
-    — it is never silently substituted for real data.
-
-    Severity anchor table (delta USD/bbl, EIA order-of-magnitude):
-      LOW: 1   MEDIUM: 5   HIGH: 12   CRITICAL: 25
+    The loud hardcoded severity-tier table below is retained ONLY as a clearly
+    marked DEGRADED fallback (``extra['source'] == 'hardcoded_fallback_DEGRADED'``,
+    ``extra['degraded'] == True``), used solely when the real FRED method is
+    unavailable. It is logged and surfaced — never silently substituted.
     """
-    fred_csv = fred_csv or (REPO_ROOT / "external_data" / "fred_brent_daily.csv")
-
     def _fallback(reason: str) -> MethodResult:
         delta_per_bbl = {"LOW": 1, "MEDIUM": 5, "HIGH": 12, "CRITICAL": 25}.get(target_severity, 5)
         # Daily global oil consumption ~100 M bbl
         point = delta_per_bbl * 100_000_000 * post_periods
+        logger.warning("[method_c] DEGRADED hardcoded fallback engaged: %s", reason)
         return MethodResult(
             name="bsts_lite",
             point_usd=float(point),
             ci95_low_usd=float(point) * 0.7, ci95_high_usd=float(point) * 1.3,
             n_samples=0,
-            notes=(f"HARDCODED FALLBACK ({reason}). delta_per_bbl from severity tier "
-                   f"× 100M bbl/day × {post_periods} days. This is NOT a real-data estimate."),
+            notes=(f"DEGRADED HARDCODED FALLBACK ({reason}). delta_per_bbl from "
+                   f"severity tier x 100M bbl/day x {post_periods} days. This is "
+                   "NOT a real-data estimate — surfaced loudly, never silent."),
             extra={
-                "source": "hardcoded_fallback",
+                "source": "hardcoded_fallback_DEGRADED",
+                "degraded": True,
                 "fallback_reason": reason,
                 "delta_per_bbl_used": delta_per_bbl,
                 "anchor_assumption_global_bbl_per_day": 100_000_000,
@@ -389,82 +386,27 @@ def method_c_bsts_lite(
             },
         )
 
-    if not fred_csv.exists():
-        logger.warning("[method_c] FRED Brent CSV not found at %s — hardcoded fallback", fred_csv)
-        return _fallback(f"FRED CSV not present at {fred_csv}")
-
-    # Parse the real series. FRED CSV = 'observation_date,<SERIES_ID>'; missing
-    # observations are the literal '.', which we skip. Parse failures are logged
-    # and surfaced as a fallback — never silently swallowed.
-    import csv
-    dated_prices: list[tuple[str, float]] = []
     try:
-        with open(fred_csv, encoding="utf-8", newline="") as f:
-            reader = csv.reader(f)
-            next(reader, None)  # header: observation_date,DCOILBRENTEU
-            for row in reader:
-                if len(row) < 2:
-                    continue
-                try:
-                    v = float(row[-1].strip())
-                except ValueError:
-                    continue  # FRED missing-value marker '.'
-                if v > 0:
-                    dated_prices.append((row[0].strip(), v))
-    except Exception as e:  # noqa: BLE001 — logged + surfaced, not swallowed
-        logger.error("[method_c] failed reading FRED Brent CSV %s: %s", fred_csv, e)
-        return _fallback(f"CSV read error: {e}")
+        from supplymind.phoenix.counterfactual_v2 import causal_methods as cm
+        est = cm.method_c_arima_fred(cm.ANALOGS["tohoku_2011"])
+    except Exception as e:  # noqa: BLE001 — surfaced as degraded, not swallowed
+        return _fallback(f"causal_methods unavailable: {type(e).__name__}: {e}")
 
-    prices = [v for _, v in dated_prices]
-    if len(prices) < pre_periods + post_periods:
-        logger.error("[method_c] FRED Brent series too short: %d usable rows < %d required",
-                     len(prices), pre_periods + post_periods)
-        return _fallback(f"series too short ({len(prices)} usable rows)")
+    if est.status != "ok" or est.estimate_usd is None:
+        return _fallback(f"real ARIMA blocked: {est.notes[:120]}")
 
-    pre = np.array(prices[-(pre_periods + post_periods):-post_periods])
-    post = np.array(prices[-post_periods:])
-
-    # ARIMA(1,1,0) by hand (random walk with drift) — fit on pre, project on post
-    drift = float(np.diff(pre).mean())
-    last = float(pre[-1])
-    counterfactual = np.array([last + drift * (i + 1) for i in range(post_periods)])
-    treatment_effect_per_bbl = float((post - counterfactual).mean())
-    daily_global_bbl = 100_000_000
-    point = treatment_effect_per_bbl * daily_global_bbl * post_periods
-
-    # CI via residual bootstrap
-    resid = np.diff(pre) - drift
-    rng = np.random.default_rng(7)
-    boot_pts = []
-    for _ in range(500):
-        path = [last]
-        for _i in range(post_periods):
-            path.append(path[-1] + drift + float(rng.choice(resid)))
-        cf = np.array(path[1:])
-        eff_per_bbl = float((post - cf).mean())
-        boot_pts.append(eff_per_bbl * daily_global_bbl * post_periods)
-    lo = float(np.percentile(boot_pts, 2.5))
-    hi = float(np.percentile(boot_pts, 97.5))
-
+    extra = dict(est.inputs)
+    extra["source"] = "real_fred_arima_via_causal_methods"
+    extra["degraded"] = False
+    extra["scope"] = est.scope
+    extra["analog"] = "tohoku_2011"
     return MethodResult(
-        name="bsts_lite", point_usd=point, ci95_low_usd=lo, ci95_high_usd=hi,
-        n_samples=int(len(prices)),
-        notes=("ARIMA(1,1,0)-style drift-extrapolation counterfactual on REAL FRED "
-               "DCOILBRENTEU daily Brent crude (USD/bbl). CI via residual bootstrap "
-               "n=500. USD impact = per-bbl effect × 100M bbl/day × post-period days."),
-        extra={
-            "source": "real_fred_brent_daily",
-            "series_id": "DCOILBRENTEU",
-            "fred_csv": str(fred_csv),
-            "n_prices_loaded": len(prices),
-            "last_observation_date": dated_prices[-1][0],
-            "last_price_usd_per_bbl": dated_prices[-1][1],
-            "pre_period_days": pre_periods,
-            "post_period_days": post_periods,
-            "drift_per_day": drift,
-            "treatment_effect_per_bbl": treatment_effect_per_bbl,
-            "daily_global_bbl_assumption": daily_global_bbl,
-        },
+        name="bsts_lite",
+        point_usd=float(est.estimate_usd),
+        ci95_low_usd=float(est.ci_low_usd), ci95_high_usd=float(est.ci_high_usd),
+        n_samples=int(est.inputs.get("n_prices_loaded", 0)),
+        notes=est.notes,
+        extra=extra,
     )
 
 
@@ -579,17 +521,45 @@ def method_d_scm(task_id: str = "easy_typhoon_response",
 # ---------------------------------------------------------------------
 
 def consensus(results: Sequence[MethodResult]) -> dict:
+    """Honest cross-method pooling, delegated to ``causal_methods.pool_estimates``.
+
+    The pooler reports each estimate, the median/mean, the min/max, the
+    order-of-magnitude spread, a per-scope breakdown, and a plain-language
+    disagreement reading — it never manufactures a false consensus. Legacy keys
+    (``point_usd``, ``ci95_usd``, ``n_methods``, ``method_agreement``) are kept
+    for backward-compatible callers (server/app.py, demo_orchestrator)."""
+    from supplymind.phoenix.counterfactual_v2 import causal_methods as cm
+
+    # platinum's four methods each capture a different scope — tag them so the
+    # pooler can explain any disagreement instead of hiding it.
+    scope_map = {
+        "paired_bootstrap_mc": "supply_graph",
+        "synthetic_control": "disaster_analog",
+        "bsts_lite": "oil_channel",
+        "scm_dowhy_proxy": "supply_graph",
+    }
+    ests = [
+        cm.MethodEstimate(
+            method=r.name, label=r.name,
+            estimate_usd=(r.point_usd if r.point_usd != 0 else None),
+            ci_low_usd=r.ci95_low_usd, ci_high_usd=r.ci95_high_usd,
+            unit="USD", scope=scope_map.get(r.name, "supply_graph"),
+            status=("ok" if r.point_usd != 0 else "blocked"),
+            data_source=r.name, inputs=dict(r.extra), notes=r.notes,
+        )
+        for r in results
+    ]
+    pooled = cm.pool_estimates(ests, documented=None)
+
+    # Legacy-compatible surface (kept alongside the richer honest fields).
     points = [r.point_usd for r in results if r.point_usd != 0]
     los = [r.ci95_low_usd for r in results if r.point_usd != 0]
     his = [r.ci95_high_usd for r in results if r.point_usd != 0]
-    if not points:
-        return {"point": 0.0, "ci95": [0.0, 0.0], "n_methods": 0}
-    return {
-        "point_usd": float(statistics.median(points)),
-        "ci95_usd": [float(min(los)), float(max(his))],
-        "n_methods": len(points),
-        "method_agreement": _agreement_score(points),
-    }
+    pooled["point_usd"] = float(statistics.median(points)) if points else 0.0
+    pooled["ci95_usd"] = [float(min(los)), float(max(his))] if points else [0.0, 0.0]
+    pooled["n_methods"] = len(points)
+    pooled["method_agreement"] = _agreement_score(points)
+    return pooled
 
 
 def _agreement_score(points: list[float]) -> float:
