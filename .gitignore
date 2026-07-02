@@ -59,8 +59,27 @@ rl/autoresearch_results/
 *.bak
 models/
 sota-bundle/
-external_data/
 catboost_info/
+
+# external_data — TRACK the fetch scripts + provenance so a fresh clone can rebuild the
+# corpus (python external_data/fetch_all.py), but IGNORE the large, regeneratable data
+# files themselves (SEC 10-Ks, EM-DAT xlsx, FRED CSVs, policy PDFs, Wikipedia txt,
+# World Bank JSON, NOAA JSON, WGI xlsx, ...). Ignore by extension across all data dirs:
+external_data/**/*.csv
+external_data/**/*.xlsx
+external_data/**/*.xls
+external_data/**/*.html
+external_data/**/*.pdf
+external_data/**/*.zip
+external_data/**/*.dat
+external_data/**/*.json
+external_data/**/*.txt
+external_data/**/*.faiss
+external_data/**/*.npz
+external_data/**/*.parquet
+# ...but always keep the tracked fetchers + provenance docs:
+!external_data/*.py
+!external_data/PROVENANCE.md
 versions/v3_arcadia/tools/
 versions/v3_arcadia/gguf_out/
 
@@ -68,8 +87,10 @@ versions/v3_arcadia/gguf_out/
 versions/v3_arcadia/checkpoints/granite/corpus_emb_*.npy
 versions/v3_arcadia/checkpoints/gethsemane/best_*/
 
-# Third-party source checkouts (not our code) — vendored under vendor/
-vendor/
+# Third-party source checkouts (not our code) — the repo-root vendor/ (e.g. vendor/ROLL).
+# Anchored to repo root so it does NOT swallow server/static/vendor/ (locally-vendored
+# Tailwind + fonts that MUST ship so the offline demo survives a fresh clone).
+/vendor/
 
 # Phoenix v5 auto-generated state (keep source code, exclude heavy + auto-gen)
 versions/v5_phoenix/.venv-roll/
@@ -106,3 +127,18 @@ versions/v5_phoenix/experiments/rap_xc_v1/smoke*.npz
 versions/v5_phoenix/experiments/rap_xc_v1/rapxc_synth.pt
 versions/v5_phoenix/experiments/rap_xc_v1/*.log
 tests/receipts/*.log
+
+# P0.4 de-bloat — purged dead-weight artifacts (keep them out of git)
+rl/analysis/trained/v3/*.pkl
+rl/legacy/buffers/*.npz
+
+# Security — never commit secrets / key material (see SECURITY.md)
+# .env is already ignored above; also ignore any variant (.env.local, .env.prod, ...)
+# while keeping the placeholder-only .env.example tracked.
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+# NOTE: .openrouter_usage.jsonl and wandb/ are already ignored above.
