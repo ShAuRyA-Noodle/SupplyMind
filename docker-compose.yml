@@ -1,4 +1,16 @@
-version: "3.8"
+# SupplyMind — one honest service: the FastAPI OpenEnv API.
+#
+# Removed in P0.2/P0.3 solidification:
+#   - `version:` key            — obsolete in Compose v2 (warning noise).
+#   - DEMO_MODE / OFFLINE_MODE  — placebo env vars no production code reads,
+#                                 and "demo mode" contradicts the everything-live mandate.
+#   - `dashboard` service       — built the DEPRECATED Streamlit dashboard/app.py
+#                                 (self-declared deprecated). The war room is served by
+#                                 the api service's static files (server/static/).
+#   - `damocles` service        — its container could not start (stale uvicorn module
+#                                 path) and 4/5 endpoints were dead on arrival.
+#                                 POINTER: the Damocles endpoints (/assess, /forecast,
+#                                 /rag, /rl/act) fold into server/app.py in P0.3.
 
 services:
   api:
@@ -7,51 +19,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-    environment:
-      - DEMO_MODE=true
-      - OFFLINE_MODE=true
     volumes:
+      # RL checkpoints/data are excluded from the image (.dockerignore) and
+      # mounted read-only at runtime for the /predict RL-agent endpoint.
       - ./rl/checkpoints:/app/rl/checkpoints:ro
       - ./rl/data:/app/rl/data:ro
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  dashboard:
-    build:
-      context: .
-      dockerfile: Dockerfile.dashboard
-    ports:
-      - "8501:8501"
-    environment:
-      - DEMO_MODE=true
-      - OFFLINE_MODE=true
-      - API_URL=http://api:8000
-    depends_on:
-      api:
-        condition: service_healthy
-    volumes:
-      - ./rl/checkpoints:/app/rl/checkpoints:ro
-      - ./rl/data:/app/rl/data:ro
-
-  # v3 Damocles API — /assess, /forecast, /rag, /rl/act, /health
-  damocles:
-    build:
-      context: .
-      dockerfile: Dockerfile.damocles
-    ports:
-      - "8765:8765"
-    environment:
-      - DEMO_MODE=true
-    volumes:
-      - ./versions/v3_arcadia/checkpoints/granite:/app/versions/v3_arcadia/checkpoints/granite:ro
-      - ./versions/v3_arcadia/checkpoints/gethsemane:/app/versions/v3_arcadia/checkpoints/gethsemane:ro
-      - ./models/mxbai-embed-large:/app/models/mxbai-embed-large:ro
-      - ./models/chronos-bolt-base:/app/models/chronos-bolt-base:ro
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8765/health"]
+      # python:3.11-slim has no curl; use urllib (matches the Dockerfile HEALTHCHECK).
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
       interval: 30s
       timeout: 10s
       retries: 3

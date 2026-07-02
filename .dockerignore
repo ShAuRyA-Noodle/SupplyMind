@@ -1,17 +1,61 @@
-.git
-__pycache__
+# Docker build context excludes.
+# The main Dockerfile does `COPY . .`, so anything not excluded here is baked
+# into the image. Goal: a slim (<500 MB) production image that ships only the
+# server, the OpenEnv contract (models.py), the agent entry points, and the
+# manifest. Large weights, datasets, and RL checkpoints are mounted at runtime
+# (see docker-compose.yml) — never baked in.
+
+# ── Version control & Python caches ──────────────────────────────
+.git/
+.gitignore
+.gitattributes
+__pycache__/
 *.pyc
-.pytest_cache
-.mypy_cache
-.ruff_cache
-tests/
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Virtualenvs ──────────────────────────────────────────────────
+.venv/
+venv/
+env/
+
+# ── Secrets & local env (never bake keys) ────────────────────────
 .env
 .env.*
-*.egg-info
+
+# ── Large model weights & datasets (mounted at runtime) ──────────
+models/
+external_data/
+rl/checkpoints/
+rl/data/
+wandb/
+.openrouter_cache/
+
+# ── Legacy / staging trees (promoted into supplymind/ in P0.3) ───
+# NOTE: versions/ holds the war-room / phoenix routers, which are imported
+# by server/app.py behind graceful try/except no-ops. Excluding them keeps
+# the build context small; the affected endpoints degrade to logged no-ops
+# until P0.3 promotes those live modules into the installable package.
+versions/
+_dump/
+FINAL_SUBMIT/
+notebooks/
+
+# ── Tests & receipts (not needed at runtime) ─────────────────────
+tests/
+
+# ── Sibling archive tree (defensive; normally outside context) ───
+Sleep-Token-ARCHIVE/
+
+# ── Build artifacts / IDE ────────────────────────────────────────
 dist/
 build/
 .vscode/
 .idea/
+
+# ── Docs & markdown (keep README for the image) ──────────────────
 *.md
 !README.md
-LICENSE

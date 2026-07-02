@@ -67,6 +67,14 @@ testpaths = ["tests"]
 asyncio_mode = "auto"
 addopts = ["--import-mode=importlib"]
 
+# Top-level single-file modules. packages.find CANNOT discover these (it only
+# finds packages), so pip install . otherwise shipped a dist where
+# `from models import ...` and `from baseline import ...` (server/app.py) fail.
+# Listing them here also avoids the `models*` glob colliding with the models/
+# weights directory.
+[tool.setuptools]
+py-modules = ["models", "baseline", "client", "scripted_agent", "inference", "llm_agent_common"]
+
 [tool.setuptools.packages.find]
-include = ["server*", "models*", "client*", "baseline*", "rl*", "dashboard*", "benchmark*"]
-exclude = ["tests*"]
+include = ["server*", "rl*", "benchmark*"]
+exclude = ["tests*", "dashboard*"]

@@ -5,3 +5,8 @@ networkx>=3.2,<4.0
 numpy>=1.24.0,<3.0
 openai>=1.0,<2.0
 httpx>=0.25.0,<1.0
+# OpenEnv SDK — provides the /ws and /mcp endpoints (server/openenv_adapter.py).
+# Declared in pyproject dependencies; without it here the Docker image silently
+# dropped those endpoints (server/app.py guards the import with try/except).
+openenv-core>=0.2.3
+
