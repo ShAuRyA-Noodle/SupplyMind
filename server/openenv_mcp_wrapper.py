@@ -22,8 +22,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from pydantic import BaseModel
-
 # Allow direct invocation
 _ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
@@ -49,30 +47,16 @@ except ImportError:
     logger.info("[openenv-mcp] OpenEnv core not installed — using FastAPI fallback")
 
 
-class SupplyMindObservation(BaseModel):
-    """Pydantic-typed observation per OpenEnv convention."""
-    current_day: int
-    days_remaining: int
-    financials: dict
-    node_statuses: list
-    edge_statuses: list
-    active_disruptions: list
-    recent_events: list
-    cumulative_reward: float
-    done: bool
-
-
 class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
     """OpenEnv MCPEnvironment subclass.
 
     Tools (per MCP spec — names DO NOT collide with reserved reset/step/state/close):
       - sm_get_node_status(node_id)         get one node's risk + inventory
-      - sm_get_edge_status(edge_id)         get one edge's lead-time + cost
       - sm_query_recent_events(hours=24)    last-N event-store events
       - sm_query_crisis_library(text, k=3)  RAG against 8 v1 events
       - sm_get_financial_state()            budget + losses + profit
       - sm_describe_action_space()          280-action enumeration
-      - sm_explain_disruption(disruption_id) plain-English explanation
+      - sm_explain_disruption(signal_id)    plain-English explanation
 
     The 4 standard OpenEnv methods (reset/step/state/close) are inherited.
     """
@@ -86,6 +70,10 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
             super().__init__()
         self._env = SupplyMindEnvironment()
         self._current_task = None
+        # SupplyMindEnvironment has no get_observation(); the observation is the
+        # return value of reset()/step(). Cache the latest one so the MCP tools
+        # can answer point queries about the current episode state.
+        self._last_obs: Any = None
         logger.info("[openenv-mcp] SupplyMindMCP initialized")
 
     # ------ standard OpenEnv API ------
@@ -93,6 +81,7 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
                 seed: int | None = None) -> dict:
         obs = self._env.reset(task_id=task_id, seed=seed)
         self._current_task = task_id
+        self._last_obs = obs
         return self._observation_to_dict(obs)
 
     def step(self, action: dict) -> dict:
@@ -105,12 +94,24 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
                 "done": False,
                 "info": {"error": "invalid_action_format", "detail": str(e)[:200]},
             }
-        obs, reward, done, info = self._env.step(sm_action)
+        # SupplyMindEnvironment.step returns a SINGLE SupplyMindObservation
+        # (reward/done/info live on the observation), not a Gym 4-tuple.
+        try:
+            obs = self._env.step(sm_action)
+        except RuntimeError as e:
+            # e.g. step() before reset(), or step() after done. Surface, don't crash.
+            return {
+                "observation": None,
+                "reward": 0.0,
+                "done": False,
+                "info": {"error": "step_failed", "detail": str(e)[:200]},
+            }
+        self._last_obs = obs
         return {
             "observation": self._observation_to_dict(obs),
-            "reward": float(reward),
-            "done": bool(done),
-            "info": info,
+            "reward": float(obs.reward),
+            "done": bool(obs.done),
+            "info": obs.info,
         }
 
     def state(self) -> dict:
@@ -125,10 +126,27 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
         return {"status": "closed"}
 
     # ------ MCP tools (non-reserved names) ------
+    def _current_observation(self) -> dict | None:
+        """Latest observation as a dict, or None if no episode is active.
+
+        SupplyMindEnvironment exposes no get_observation() accessor — the
+        observation is returned by reset()/step(). We read the cached copy,
+        falling back to the engine's initial observation if the episode was
+        reset elsewhere but never stepped through this wrapper.
+        """
+        if self._last_obs is not None:
+            return self._observation_to_dict(self._last_obs)
+        engine = getattr(self._env, "engine", None)
+        if engine is not None:
+            return self._observation_to_dict(engine.get_initial_observation())
+        return None
+
     def tool_sm_get_node_status(self, node_id: str) -> dict:
         """Get one supply-chain node's risk + inventory + last-known status."""
         try:
-            obs = self._env.get_observation()
+            obs = self._current_observation()
+            if obs is None:
+                return {"ok": False, "error": "no active episode — call reset() first"}
             for n in (obs.get("node_statuses") or []):
                 if n.get("node_id") == node_id:
                     return {"ok": True, "node": n}
@@ -164,34 +182,50 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
     def tool_sm_get_financial_state(self) -> dict:
         """Current budget remaining / cumulative cost / expected loss."""
         try:
-            obs = self._env.get_observation()
+            obs = self._current_observation()
+            if obs is None:
+                return {"ok": False, "error": "no active episode — call reset() first"}
             return {"ok": True, "financials": obs.get("financials") or {}}
         except Exception as e:
             return {"ok": False, "error": str(e)[:200]}
 
     def tool_sm_describe_action_space(self) -> dict:
-        """Enumerate the 7 action types and 40 node targets (280 total)."""
+        """Enumerate the action types and 40 node targets.
+
+        Action types are read from the real SupplyMindAction schema so this can
+        never drift from the actual contract.
+        """
+        from typing import get_args
+
+        action_types = list(
+            get_args(SupplyMindAction.model_fields["action_type"].annotation)
+        )
+        n_types = len(action_types)
+        n_targets = 40  # RL gym wrapper pads node targets to 40 (rl/gym_env.py)
         return {
             "ok": True,
-            "action_types": [
-                "do_nothing", "activate_backup", "reroute_shipment",
-                "increase_safety_stock", "expedite_shipment",
-                "hedge_commodity", "issue_supplier_alert",
-            ],
-            "n_action_types": 7,
-            "n_node_targets": 40,
-            "total_actions": 280,
-            "note": "MultiDiscrete([7,40]) flattened to Discrete(280)",
+            "action_types": action_types,
+            "n_action_types": n_types,
+            "n_node_targets": n_targets,
+            "total_actions": n_types * n_targets,
+            "note": f"MultiDiscrete([{n_types},{n_targets}]) flattened to "
+                    f"Discrete({n_types * n_targets})",
         }
 
-    def tool_sm_explain_disruption(self, disruption_id: str) -> dict:
-        """Plain-English explanation of a disruption from disruptions.json."""
+    def tool_sm_explain_disruption(self, signal_id: str) -> dict:
+        """Plain-English explanation of an active disruption signal.
+
+        The observation exposes disruptions as `active_signals`, each keyed by
+        `signal_id` (see models.DisruptionSignal).
+        """
         try:
-            obs = self._env.get_observation()
-            for d in (obs.get("active_disruptions") or []):
-                if d.get("id") == disruption_id:
-                    return {"ok": True, "disruption": d}
-            return {"ok": False, "error": f"disruption_id={disruption_id} not active"}
+            obs = self._current_observation()
+            if obs is None:
+                return {"ok": False, "error": "no active episode — call reset() first"}
+            for d in (obs.get("active_signals") or []):
+                if d.get("signal_id") == signal_id:
+                    return {"ok": True, "signal": d}
+            return {"ok": False, "error": f"signal_id={signal_id} not active"}
         except Exception as e:
             return {"ok": False, "error": str(e)[:200]}
 
@@ -206,8 +240,14 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
 
 
 def is_openenv_compliant() -> dict:
-    """Self-check used by /openenv/compliance endpoint."""
-    out = {
+    """Self-check used by /openenv/compliance endpoint.
+
+    This does NOT hardcode passes: it checks openenv.yaml actually exists on
+    disk and it actually exercises reset -> step -> grade against the real
+    SupplyMindEnvironment, reporting whatever happens.
+    """
+    yaml_path = _ROOT / "openenv.yaml"
+    out: dict[str, Any] = {
         "openenv_core_installed": _OPENENV,
         "subclass_of_MCPEnvironment": _OPENENV and issubclass(SupplyMindMCP, MCPEnvironment),
         "standard_methods_present": all(hasattr(SupplyMindMCP, m)
@@ -218,12 +258,38 @@ def is_openenv_compliant() -> dict:
             not m.startswith(("tool_reset", "tool_step", "tool_state", "tool_close"))
             for m in dir(SupplyMindMCP)
         ),
-        "openenv_yaml_at_repo_root": True,  # we have it
+        "openenv_yaml_at_repo_root": yaml_path.is_file(),
     }
+
+    # Actually execute the loop instead of asserting attributes exist.
+    exec_report: dict[str, Any] = {
+        "reset_ok": False, "step_ok": False, "grade_ok": False,
+    }
+    try:
+        mcp = SupplyMindMCP()
+        obs0 = mcp.reset(task_id="easy_typhoon_response")
+        exec_report["reset_ok"] = isinstance(obs0, dict) and "current_day" in obs0
+        step_out = mcp.step({"action_type": "do_nothing"})
+        exec_report["step_ok"] = (
+            isinstance(step_out, dict)
+            and isinstance(step_out.get("observation"), dict)
+            and "reward" in step_out
+            and "done" in step_out
+        )
+        grade = mcp._env.grade()
+        exec_report["grade_ok"] = isinstance(grade, dict) and "score" in grade
+        exec_report["sample_score"] = grade.get("score") if isinstance(grade, dict) else None
+    except Exception as e:  # noqa: BLE001 — report the failure, don't hide it
+        exec_report["error"] = f"{type(e).__name__}: {str(e)[:200]}"
+    out["execution_check"] = exec_report
+
     out["compliant"] = all([
         out["standard_methods_present"],
         out["no_reserved_collisions"],
         out["openenv_yaml_at_repo_root"],
+        exec_report["reset_ok"],
+        exec_report["step_ok"],
+        exec_report["grade_ok"],
     ])
     return out
 

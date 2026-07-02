@@ -12,8 +12,10 @@ Example — against the live Space, no local install needed:
     env = SupplyMindClient("https://shaurya-noodle-supplymind.hf.space")
     obs = env.reset(task_id="easy_typhoon_response", seed=42)
     while not obs.get("done"):
-        action = {"task_id": env.current_task_id,
-                  "action_type": "NO_OP", "target": 0, "magnitude": 0.0}
+        # A flat SupplyMindAction payload (see models.SupplyMindAction).
+        # do_nothing needs no other fields; other types require params, e.g.
+        # {"action_type": "issue_supplier_alert", "target_node_id": "SUP001"}.
+        action = {"action_type": "do_nothing"}
         obs = env.step(action)
     print(env.grade())
 """
@@ -31,6 +33,8 @@ class SupplyMindClient:
     Args:
         base_url: URL of the server (e.g. "http://localhost:8000" or the HF Space).
         session_id: Optional session identifier for concurrent-session isolation.
+            When set, it is sent on every request as the ``X-Session-Id`` header,
+            which is exactly how the server (server/app.py) reads it.
         timeout_s: Per-request timeout in seconds.
     """
 
@@ -43,7 +47,12 @@ class SupplyMindClient:
         self.base_url = base_url.rstrip("/")
         self.session_id = session_id
         self.timeout_s = timeout_s
-        self._client = httpx.Client(base_url=self.base_url, timeout=timeout_s)
+        # The server reads per-session isolation from the X-Session-Id header
+        # (not the JSON body / query string). Set it once as a default header.
+        headers = {"X-Session-Id": session_id} if session_id else None
+        self._client = httpx.Client(
+            base_url=self.base_url, timeout=timeout_s, headers=headers
+        )
         self.current_task_id: str | None = None
         self.current_episode_id: str | None = None
 
@@ -55,14 +64,15 @@ class SupplyMindClient:
         seed: int | None = None,
         episode_id: str | None = None,
     ) -> dict[str, Any]:
-        """POST /reset — start a new episode."""
+        """POST /reset — start a new episode.
+
+        The server's ResetRequest body accepts only ``task_id`` and ``seed``;
+        session isolation travels in the X-Session-Id header (set at __init__).
+        ``episode_id`` is a client-side label only (the server assigns its own).
+        """
         payload: dict[str, Any] = {"task_id": task_id}
         if seed is not None:
             payload["seed"] = seed
-        if episode_id is not None:
-            payload["episode_id"] = episode_id
-        if self.session_id:
-            payload["session_id"] = self.session_id
         r = self._client.post("/reset", json=payload)
         r.raise_for_status()
         obs = r.json()
@@ -71,25 +81,25 @@ class SupplyMindClient:
         return obs
 
     def step(self, action: dict[str, Any]) -> dict[str, Any]:
-        """POST /step — apply an action and return the next observation."""
-        payload: dict[str, Any] = {"action": action}
-        if self.session_id:
-            payload["session_id"] = self.session_id
-        r = self._client.post("/step", json=payload)
+        """POST /step — apply an action and return the next observation.
+
+        The server declares a single SupplyMindAction body parameter, so the
+        action dict is sent flat (NOT wrapped in {"action": ...}). Session
+        isolation travels in the X-Session-Id header (set at __init__).
+        """
+        r = self._client.post("/step", json=action)
         r.raise_for_status()
         return r.json()
 
     def state(self) -> dict[str, Any]:
         """GET /state — current episode metadata."""
-        params = {"session_id": self.session_id} if self.session_id else None
-        r = self._client.get("/state", params=params)
+        r = self._client.get("/state")
         r.raise_for_status()
         return r.json()
 
     def grade(self) -> dict[str, Any]:
         """POST /grader — score the current episode against the task rubric."""
-        payload = {"session_id": self.session_id} if self.session_id else {}
-        r = self._client.post("/grader", json=payload)
+        r = self._client.post("/grader")
         r.raise_for_status()
         return r.json()
 

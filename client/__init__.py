@@ -10,7 +10,8 @@ Usage:
     from client import SupplyMindClient
     env = SupplyMindClient("http://localhost:8000")
     obs = env.reset(task_id="easy_typhoon_response", seed=42)
-    obs = env.step({"task_id": "...", "action_type": "ROUTE", "target": 3})
+    # step() takes a flat SupplyMindAction payload (see models.SupplyMindAction):
+    obs = env.step({"action_type": "issue_supplier_alert", "target_node_id": "SUP001"})
     print(env.state())
 """
 from .supplymind_client import SupplyMindClient

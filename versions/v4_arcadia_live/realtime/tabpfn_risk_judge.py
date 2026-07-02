@@ -8,7 +8,11 @@ features (severity, brent_pre, duration_days, region_id, hormuz_dep_share)
 Output: predicted tier (LOW/MEDIUM/HIGH/CRITICAL) + class probabilities +
 contributing feature ranks.
 
-Falls back gracefully if TabPFN package or weights are missing.
+Availability: this judge requires the TabPFN-v2 classifier weights at
+models/tabpfn-v2-clf/ (NOT present in this checkout) and the `tabpfn` package.
+When either is missing, predict() returns an explicit unavailable status with
+install instructions — it does NOT silently emit a severity-band tier dressed
+as a model prediction (that would be a fake per CLAUDE.md §0).
 """
 from __future__ import annotations
 
@@ -67,10 +71,11 @@ def _build_train_set() -> tuple[np.ndarray, np.ndarray] | None:
 
 
 _clf = None
+_LOAD_ERROR: str | None = None
 
 
 def _load_clf():
-    global _clf, DEVICE_ENV
+    global _clf, DEVICE_ENV, _LOAD_ERROR
     if _clf is not None:
         return _clf
     try:
@@ -79,7 +84,10 @@ def _load_clf():
         DEVICE_ENV = "cuda" if torch.cuda.is_available() else "cpu"
         ckpt = MODEL_DIR / "tabpfn-v2-classifier.ckpt"
         if not ckpt.exists():
-            raise FileNotFoundError(f"missing {ckpt}")
+            raise FileNotFoundError(
+                f"TabPFN-v2 classifier weights not found at {ckpt} "
+                f"(models/tabpfn-v2-clf/ is absent in this checkout)"
+            )
         _clf = TabPFNClassifier(
             device=DEVICE_ENV, model_path=str(ckpt),
             n_estimators=1, ignore_pretraining_limits=True,
@@ -87,26 +95,38 @@ def _load_clf():
         # Fit once on the 8-event corpus
         train = _build_train_set()
         if train is None:
-            _clf = "FAILED"; return None
+            raise FileNotFoundError(f"training corpus not found at {LIB}")
         X, y = train
         _clf.fit(X, y)
         logger.info("[tabpfn-judge] trained on %d events, device=%s",
                     X.shape[0], DEVICE_ENV)
         return _clf
     except Exception as e:  # noqa: BLE001
-        logger.warning("[tabpfn-judge] load/train failed: %s", e)
+        _LOAD_ERROR = f"{type(e).__name__}: {e}"
+        logger.warning("[tabpfn-judge] unavailable: %s", _LOAD_ERROR)
         _clf = "FAILED"
         return None
 
 
 def predict(severity: float, brent_pre: float, duration_days: int,
              region: str = "hormuz", hormuz_dep: float = 0.6) -> dict:
-    """Public API. Returns predicted tier + per-class probabilities."""
+    """Public API. Returns predicted tier + per-class probabilities, OR an
+    explicit unavailable status (never a silent fallback tier)."""
     t0 = time.time()
     clf = _load_clf()
     if clf is None or clf == "FAILED":
-        return {"ok": False, "error": "tabpfn_unavailable",
-                "fallback_tier": TIER_NAMES[_severity_to_tier(severity)]}
+        return {
+            "ok": False,
+            "available": False,
+            "error": "tabpfn_unavailable",
+            "reason": _LOAD_ERROR or "TabPFN classifier could not be loaded",
+            "instructions": (
+                "The TabPFN 7th judge needs the classifier weights at "
+                "models/tabpfn-v2-clf/tabpfn-v2-classifier.ckpt (absent here) "
+                "plus the `tabpfn` package. Install both and retry. No fallback "
+                "tier is produced — the judge is simply unavailable."
+            ),
+        }
 
     region_id = {"hormuz": 1.0, "red_sea": 2.0,
                   "iran_israel": 3.0}.get(region.lower(), 0.0)

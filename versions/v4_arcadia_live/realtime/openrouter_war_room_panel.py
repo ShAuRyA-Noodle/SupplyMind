@@ -32,6 +32,9 @@ from scripts.openrouter_client import OpenRouterClient  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
+# The 6-judge base panel. Every one of these slugs has real, logged 200
+# responses in .openrouter_usage.jsonl (55-114 successful calls each), so
+# this panel genuinely runs when a valid OPENROUTER_API_KEY is present.
 JUDGES = [
     "openai/gpt-oss-120b:free",
     "google/gemma-4-31b-it:free",
@@ -41,16 +44,12 @@ JUDGES = [
     "google/gemma-4-26b-a4b-it:free",
 ]
 
-# Extended 12-judge frontier panel (used when expand_to_12=True).
-# Adds 6 more independent frontier models for tighter Krippendorff α.
-JUDGES_12 = JUDGES + [
-    "deepseek/deepseek-v3.5:free",
-    "qwen/qwen-3-235b-a22b:free",
-    "meta-llama/llama-4-405b-instruct:free",
-    "mistralai/mistral-large-3-2510:free",
-    "x-ai/grok-4-mini:free",
-    "anthropic/claude-haiku-4.5:beta",
-]
+# NOTE: the former 12-judge extension (JUDGES_12) was DELETED. Its 6 extra
+# slugs (deepseek-v3.5, qwen-3-235b-a22b, llama-4-405b-instruct,
+# mistral-large-3-2510, grok-4-mini, claude-haiku-4.5:beta) had ZERO
+# successful calls in .openrouter_usage.jsonl and could not be verified live
+# (see blockers: OPENROUTER_API_KEY currently 401s "User not found"). Shipping
+# them advertised a 12-judge panel that never ran — a fake, per CLAUDE.md §0.
 
 RISK_ORDER = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
 
@@ -184,11 +183,16 @@ async def _query_one(client: OpenRouterClient, model: str,
 async def run_panel(scenario_text: str, severity: float, brent: float,
                      duration: int, top_analog: str = "(none)",
                      expand_to_12: bool = False) -> dict:
-    """Fan out to all judges in parallel; aggregate. Total wall-clock ~5-25s
-    depending on which models 429.
-    expand_to_12=True uses the 12-judge JUDGES_12 panel (adds DeepSeek, Qwen-3,
-    Llama-4, Mistral-3, Grok-4-mini, Claude-Haiku-4.5)."""
-    panel = JUDGES_12 if expand_to_12 else JUDGES
+    """Fan out to the 6-judge base panel in parallel; aggregate. Total
+    wall-clock ~5-25s depending on which models 429.
+
+    The 12-judge extension was removed (its 6 extra slugs had zero successful
+    OpenRouter calls and were unverifiable). `expand_to_12` is still accepted so
+    the existing router keeps working, but it no longer selects a larger panel —
+    when True the result carries an explicit `expand_to_12_removed` flag rather
+    than silently behaving as if a 12-judge panel ran.
+    """
+    panel = JUDGES
     user_prompt = USER_TEMPLATE.format(
         scenario=scenario_text[:600],
         severity=round(severity, 2),
@@ -211,7 +215,7 @@ async def run_panel(scenario_text: str, severity: float, brent: float,
     mean_conf = (sum(r.get("confidence", 0.0) for r in results if r.get("ok"))
                   / max(1, n_ok))
 
-    return {
+    out = {
         "consensus_risk": consensus,
         "panel_size": len(panel),
         "n_succeeded": n_ok,
@@ -223,14 +227,47 @@ async def run_panel(scenario_text: str, severity: float, brent: float,
         "elapsed_s": round(time.time() - t0, 2),
         "judges_used": panel,
     }
+    if expand_to_12:
+        # Surface, don't silently ignore: the 12-judge panel no longer exists.
+        out["expand_to_12_removed"] = True
+        out["expand_to_12_note"] = (
+            "12-judge extension removed — its 6 extra slugs had no successful "
+            "OpenRouter calls and were unverifiable; ran the 6-judge base panel."
+        )
+    return out
 
 
 def run_panel_sync(scenario_text: str, severity: float, brent: float,
                     duration: int, top_analog: str = "(none)",
                     expand_to_12: bool = False) -> dict:
-    """Sync wrapper for FastAPI routes that aren't async."""
-    return asyncio.run(run_panel(scenario_text, severity, brent, duration,
-                                     top_analog, expand_to_12=expand_to_12))
+    """Sync wrapper for FastAPI routes that aren't async.
+
+    Robust against being called with an already-running event loop in the
+    current thread (which makes bare ``asyncio.run`` raise "cannot be called
+    from a running event loop"). If no loop is running we run the coroutine on
+    a fresh, explicitly-managed loop; if one is running we execute it on a
+    dedicated worker thread that owns its own loop.
+    """
+    def _make_coro():
+        return run_panel(scenario_text, severity, brent, duration,
+                         top_analog, expand_to_12=expand_to_12)
+
+    try:
+        asyncio.get_running_loop()
+    except RuntimeError:
+        # No running loop in this thread — safe to drive one ourselves.
+        loop = asyncio.new_event_loop()
+        try:
+            return loop.run_until_complete(_make_coro())
+        finally:
+            loop.close()
+
+    # A loop is already running here (e.g. called from async code): offload to
+    # a separate thread so we never re-enter the running loop.
+    import concurrent.futures
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+        return pool.submit(lambda: asyncio.run(_make_coro())).result()
 
 
 if __name__ == "__main__":
