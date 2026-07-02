@@ -349,22 +349,27 @@ def method_c_bsts_lite(
     pre_periods: int = 30, post_periods: int = 14,
     target_severity: str = "HIGH",
 ) -> MethodResult:
-    """Bayesian-structural-time-series-style counterfactual on real
-    FRED Brent crude oil daily prices. Without a treatment (intervention)
-    column, we simulate one: hold last N days as 'observed under treatment',
-    use ARIMA fit on pre-period to forecast 'counterfactual without treatment'.
-    Treatment effect = (observed average) - (counterfactual average) over
-    post-period * estimated barrel volume * USD per barrel.
+    """Bayesian-structural-time-series-style counterfactual on REAL FRED daily
+    Brent crude oil prices (series DCOILBRENTEU, USD/bbl; CSV header
+    ``observation_date,DCOILBRENTEU``).
 
-    Severity mapping (real magnitudes from EIA):
-      LOW:      delta = 1 USD/bbl  → ~$2B (2-week supply impact)
-      MEDIUM:   delta = 5 USD/bbl  → ~$10B
-      HIGH:     delta = 12 USD/bbl → ~$24B
-      CRITICAL: delta = 25 USD/bbl → ~$50B
+    Without a treatment (intervention) column we construct one: treat the last
+    ``post_periods`` days as 'observed under treatment' and drift-extrapolate an
+    ARIMA(1,1,0)-style counterfactual from the preceding ``pre_periods`` days.
+    Treatment effect = (observed avg - counterfactual avg) USD/bbl
+                       × global daily consumption (bbl) × post-period days.
+
+    If the real series is unavailable/too short the method falls back to a
+    hardcoded severity-tier table. That fallback is LOUDLY surfaced via
+    ``extra['source'] == 'hardcoded_fallback'`` (+ ``fallback_reason``) and logged
+    — it is never silently substituted for real data.
+
+    Severity anchor table (delta USD/bbl, EIA order-of-magnitude):
+      LOW: 1   MEDIUM: 5   HIGH: 12   CRITICAL: 25
     """
-    fred_csv = fred_csv or (REPO_ROOT / "external_data" / "fred_truck_transport.csv")
-    if not fred_csv.exists():
-        # Synthetic effect from severity tier mapping (still real anchored)
+    fred_csv = fred_csv or (REPO_ROOT / "external_data" / "fred_brent_daily.csv")
+
+    def _fallback(reason: str) -> MethodResult:
         delta_per_bbl = {"LOW": 1, "MEDIUM": 5, "HIGH": 12, "CRITICAL": 25}.get(target_severity, 5)
         # Daily global oil consumption ~100 M bbl
         point = delta_per_bbl * 100_000_000 * post_periods
@@ -373,42 +378,51 @@ def method_c_bsts_lite(
             point_usd=float(point),
             ci95_low_usd=float(point) * 0.7, ci95_high_usd=float(point) * 1.3,
             n_samples=0,
-            notes=("BSTS-lite anchor mode (FRED CSV not present). "
-                   "delta_per_bbl from severity-tier × 100M bbl/day × "
-                   f"{post_periods} days."),
+            notes=(f"HARDCODED FALLBACK ({reason}). delta_per_bbl from severity tier "
+                   f"× 100M bbl/day × {post_periods} days. This is NOT a real-data estimate."),
             extra={
+                "source": "hardcoded_fallback",
+                "fallback_reason": reason,
                 "delta_per_bbl_used": delta_per_bbl,
                 "anchor_assumption_global_bbl_per_day": 100_000_000,
-                "tier_to_delta_table": {"LOW":1,"MEDIUM":5,"HIGH":12,"CRITICAL":25},
+                "tier_to_delta_table": {"LOW": 1, "MEDIUM": 5, "HIGH": 12, "CRITICAL": 25},
             },
         )
 
-    # Load real FRED CSV — fall back to anchor if no series available
+    if not fred_csv.exists():
+        logger.warning("[method_c] FRED Brent CSV not found at %s — hardcoded fallback", fred_csv)
+        return _fallback(f"FRED CSV not present at {fred_csv}")
+
+    # Parse the real series. FRED CSV = 'observation_date,<SERIES_ID>'; missing
+    # observations are the literal '.', which we skip. Parse failures are logged
+    # and surfaced as a fallback — never silently swallowed.
+    import csv
+    dated_prices: list[tuple[str, float]] = []
     try:
-        import csv
-        rows = []
-        with open(fred_csv, encoding="utf-8", errors="ignore") as f:
-            for r in csv.DictReader(f):
-                try:
-                    rows.append((r.get("DATE") or "", float(r.get("VALUE") or 0)))
-                except (ValueError, TypeError):
+        with open(fred_csv, encoding="utf-8", newline="") as f:
+            reader = csv.reader(f)
+            next(reader, None)  # header: observation_date,DCOILBRENTEU
+            for row in reader:
+                if len(row) < 2:
                     continue
-        prices = [v for _, v in rows if v > 0]
-        if len(prices) < pre_periods + post_periods:
-            raise RuntimeError("FRED CSV too short")
-        pre = np.array(prices[-(pre_periods + post_periods):-post_periods])
-        post = np.array(prices[-post_periods:])
-    except Exception as e:  # noqa: BLE001
-        # Fall back to anchor
-        delta_per_bbl = {"LOW":1,"MEDIUM":5,"HIGH":12,"CRITICAL":25}.get(target_severity, 5)
-        point = delta_per_bbl * 100_000_000 * post_periods
-        return MethodResult(
-            name="bsts_lite",
-            point_usd=float(point),
-            ci95_low_usd=float(point) * 0.7, ci95_high_usd=float(point) * 1.3,
-            n_samples=0,
-            notes=f"BSTS-lite fallback (CSV parse error: {e})",
-        )
+                try:
+                    v = float(row[-1].strip())
+                except ValueError:
+                    continue  # FRED missing-value marker '.'
+                if v > 0:
+                    dated_prices.append((row[0].strip(), v))
+    except Exception as e:  # noqa: BLE001 — logged + surfaced, not swallowed
+        logger.error("[method_c] failed reading FRED Brent CSV %s: %s", fred_csv, e)
+        return _fallback(f"CSV read error: {e}")
+
+    prices = [v for _, v in dated_prices]
+    if len(prices) < pre_periods + post_periods:
+        logger.error("[method_c] FRED Brent series too short: %d usable rows < %d required",
+                     len(prices), pre_periods + post_periods)
+        return _fallback(f"series too short ({len(prices)} usable rows)")
+
+    pre = np.array(prices[-(pre_periods + post_periods):-post_periods])
+    post = np.array(prices[-post_periods:])
 
     # ARIMA(1,1,0) by hand (random walk with drift) — fit on pre, project on post
     drift = float(np.diff(pre).mean())
@@ -435,10 +449,16 @@ def method_c_bsts_lite(
     return MethodResult(
         name="bsts_lite", point_usd=point, ci95_low_usd=lo, ci95_high_usd=hi,
         n_samples=int(len(prices)),
-        notes=("ARIMA(1,1,0)-style drift-extrapolation counterfactual on "
-               "real FRED price series. CI via residual bootstrap n=500."),
+        notes=("ARIMA(1,1,0)-style drift-extrapolation counterfactual on REAL FRED "
+               "DCOILBRENTEU daily Brent crude (USD/bbl). CI via residual bootstrap "
+               "n=500. USD impact = per-bbl effect × 100M bbl/day × post-period days."),
         extra={
+            "source": "real_fred_brent_daily",
+            "series_id": "DCOILBRENTEU",
+            "fred_csv": str(fred_csv),
             "n_prices_loaded": len(prices),
+            "last_observation_date": dated_prices[-1][0],
+            "last_price_usd_per_bbl": dated_prices[-1][1],
             "pre_period_days": pre_periods,
             "post_period_days": post_periods,
             "drift_per_day": drift,
