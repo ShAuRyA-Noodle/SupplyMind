@@ -15,22 +15,18 @@ import hashlib
 import json
 import os
 import re
+import sys
 import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 RECEIPTS = ROOT / "FINAL_SUBMIT" / "receipts"
 
-# Load .env
-ENV_PATH = ROOT / ".env"
-if ENV_PATH.exists():
-    for line in ENV_PATH.read_text().splitlines():
-        line = line.strip()
-        if not line or line.startswith("#"):
-            continue
-        if "=" in line:
-            k, v = line.split("=", 1)
-            os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts._env import load_env  # noqa: E402
+load_env()
 
 
 def _sha(b: bytes) -> str:

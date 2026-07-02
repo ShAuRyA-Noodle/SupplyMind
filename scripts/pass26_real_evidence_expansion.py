@@ -3,8 +3,8 @@
 Adds real, verifiable artifacts the judges can re-run:
 1. Live SupplyMind rollout against HF Space (/reset + 30 /step with heuristic policy)
 2. Algorithm efficiency receipt — quantifies "97-98% efficiency" claim
-3. Process supervision concrete trajectory walkthrough
-4. SUBMIT_PRECHECK — programmatic minimum-requirement verifier
+3. SUBMIT_PRECHECK — programmatic minimum-requirement verifier
+4. TRL config validation from the notebook
 5. SupplyMind reward curve plot from live rollout
 """
 
@@ -264,83 +264,7 @@ def algorithm_efficiency_receipt() -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 3 — Process supervision concrete trajectory walkthrough
-# ---------------------------------------------------------------------------
-def process_supervision_concrete() -> dict:
-    """Single Wordle trajectory broken down step-by-step with credit assignment."""
-
-    # Hand-crafted 4-guess solve to illustrate
-    target = "brain"
-    trajectory = [
-        {"step": 1, "guess": "about", "feedback": ["yellow", "gray", "yellow", "gray", "gray"],
-         "letters_decoded": "a, b confirmed in word, not at pos 0/2",
-         "reward_components_step": {"green_credit": 0.0, "yellow_credit": 0.04, "solve_bonus": 0},
-         "reward_step": 0.04,
-         "credit_uniform_episode": 0.243,  # 1.0 / 4 guesses
-         "credit_process_supervision": 0.04,  # actual step credit
-         },
-        {"step": 2, "guess": "alarm", "feedback": ["yellow", "gray", "yellow", "gray", "yellow"],
-         "letters_decoded": "a, r, m confirmed; positions ruled out",
-         "reward_components_step": {"green_credit": 0.0, "yellow_credit": 0.06, "solve_bonus": 0},
-         "reward_step": 0.06,
-         "credit_uniform_episode": 0.243,
-         "credit_process_supervision": 0.06,
-         },
-        {"step": 3, "guess": "blame", "feedback": ["green", "yellow", "yellow", "gray", "gray"],
-         "letters_decoded": "b at pos 0 LOCKED, l in word, a in word at non-pos-2",
-         "reward_components_step": {"green_credit": 0.05, "yellow_credit": 0.04, "solve_bonus": 0},
-         "reward_step": 0.09,
-         "credit_uniform_episode": 0.243,
-         "credit_process_supervision": 0.09,
-         },
-        {"step": 4, "guess": "brain", "feedback": ["green", "green", "green", "green", "green"],
-         "letters_decoded": "SOLVED — all 5 green",
-         "reward_components_step": {"green_credit": 0.25, "yellow_credit": 0.0, "solve_bonus": 0.25},
-         "reward_step": 0.50,
-         "credit_uniform_episode": 0.243,
-         "credit_process_supervision": 0.50,
-         },
-    ]
-
-    total_reward = sum(s["reward_step"] for s in trajectory)
-    uniform_credit_sum = sum(s["credit_uniform_episode"] for s in trajectory)
-    process_credit_sum = sum(s["credit_process_supervision"] for s in trajectory)
-
-    # Variance amplification: how much more credit goes to the actual decisive step (step 4)?
-    last_step_uniform = trajectory[-1]["credit_uniform_episode"]
-    last_step_process = trajectory[-1]["credit_process_supervision"]
-    var_amplification = last_step_process / max(last_step_uniform, 1e-6)
-
-    return {
-        "name": "process_supervision_concrete_example",
-        "target_word": target,
-        "n_guesses_to_solve": 4,
-        "trajectory": trajectory,
-        "totals": {
-            "total_reward": round(total_reward, 4),
-            "uniform_episode_credit_sum": round(uniform_credit_sum, 4),
-            "process_supervision_credit_sum": round(process_credit_sum, 4),
-        },
-        "decisive_step_credit_amplification": {
-            "uniform_credit_at_solve_step": last_step_uniform,
-            "process_credit_at_solve_step": last_step_process,
-            "amplification_factor": round(var_amplification, 4),
-            "interpretation": (
-                "Uniform-episode credit gives every step 0.243. Process supervision "
-                "concentrates credit at the actual decisive step (step 4 'brain' green-locks all 5). "
-                "Amplification factor 2.06× concentrates the learning signal where the win actually happened."
-            ),
-        },
-        "evidence_chain": [
-            "process_supervision.json (variance amplification 2735× over real distributions)",
-            "wordle_env/env.py (per-letter green/yellow credit code)",
-            "Lightman et al 2023 'Let's Verify Step by Step' (theoretical anchor)",
-        ],
-    }
-
-
-# ---------------------------------------------------------------------------
-# 4 — SUBMIT_PRECHECK programmatic verifier
+# 3 — SUBMIT_PRECHECK programmatic verifier
 # ---------------------------------------------------------------------------
 def submit_precheck() -> dict:
     """Verify each minimum requirement programmatically."""
@@ -421,19 +345,21 @@ def submit_precheck() -> dict:
         "n_receipts": receipts_count,
     })
 
-    # 8 — Adversarial defense
+    # 8 — Adversarial defense (read the REAL gauntlet summary; no hardcoded ok)
     adv = RECEIPTS / "adversarial_20_attack_gauntlet.json"
     if adv.exists():
         d = json.loads(adv.read_text())
-        # Look for blocked count
-        n_blocked = 0
-        for k, v in d.items():
-            if isinstance(v, dict) and v.get("blocked"):
-                n_blocked += 1
+        summ = d.get("summary", {}) if isinstance(d, dict) else {}
+        n_blocked = summ.get("n_blocked")
+        n_attacks = summ.get("n_attacks")
+        verdict = summ.get("verdict")
         checks.append({
             "id": "M8_adversarial_defense",
-            "ok": True,  # 19/19 from receipt content
-            "n_attacks_blocked_documented": "19/19",
+            "ok": bool(verdict == "PASS" and n_attacks and n_blocked == n_attacks),
+            "n_attacks_blocked": (f"{n_blocked}/{n_attacks}"
+                                  if n_attacks is not None else None),
+            "verdict": verdict,
+            "evidence": str(adv.relative_to(ROOT)),
         })
 
     n_pass = sum(1 for c in checks if c.get("ok"))
@@ -514,13 +440,7 @@ def main():
     print(f"  headline solve rate: {eff['headline']['actual_solve_rate_pct']}%")
 
     # 3
-    print("\n[3/5] Process supervision concrete trajectory...")
-    proc = process_supervision_concrete()
-    out, sha = _write("pass26_process_supervision_concrete.json", proc)
-    print(f"  receipt: {out}  sha={sha[:24]}")
-
-    # 4
-    print("\n[4/5] SUBMIT_PRECHECK...")
+    print("\n[3/4] SUBMIT_PRECHECK...")
     precheck = submit_precheck()
     out, sha = _write("pass26_submit_precheck.json", precheck)
     print(f"  receipt: {out}  sha={sha[:24]}")
@@ -529,8 +449,8 @@ def main():
         flag = "[ok]" if c.get("ok") else "[FAIL]"
         print(f"    {flag} {c['id']}")
 
-    # 5
-    print("\n[5/5] TRL config validation...")
+    # 4
+    print("\n[4/4] TRL config validation...")
     trl = trl_config_validation()
     out, sha = _write("pass26_trl_config_validation.json", trl)
     print(f"  receipt: {out}  sha={sha[:24]}")
@@ -538,7 +458,7 @@ def main():
     print(f"  required_args_missing: {trl.get('required_args_missing')}")
 
     print("\n" + "=" * 70)
-    print("PASS 26 complete — 5 new receipts + 1 new plot")
+    print("PASS 26 complete — 4 new receipts + 1 new plot")
     print("=" * 70)
 
 

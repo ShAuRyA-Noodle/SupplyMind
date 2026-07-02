@@ -184,13 +184,12 @@ class OpenRouterClient:
         # Read key from env; never accept as string arg in production.
         key = api_key or os.environ.get("OPENROUTER_API_KEY")
         if not key:
-            # Try loading .env file manually (no python-dotenv dependency)
-            env_path = REPO_ROOT / ".env"
-            if env_path.exists():
-                for line in env_path.read_text(encoding="utf-8").splitlines():
-                    if line.startswith("OPENROUTER_API_KEY="):
-                        key = line.split("=", 1)[1].strip()
-                        break
+            # Populate os.environ from .env via the shared loader (names only,
+            # values never logged), then re-read.
+            from scripts._env import load_env
+
+            load_env()
+            key = os.environ.get("OPENROUTER_API_KEY")
         if not key:
             raise RuntimeError("OPENROUTER_API_KEY not set in env or .env")
         self._key = key

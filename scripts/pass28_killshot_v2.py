@@ -8,13 +8,10 @@ Blocks:
   28.B — 6-judge local Ollama panel (qwen2.5:14b, deepseek-r1, mistral-nemo,
          supplymind-analyst:v5, gemma4, qwen25-coder)
   28.C — Live HF Space hard tier 60-step rollout
-  28.D — Combined attack gauntlet 239 attacks (19 reward + 210 MCP + 10 prompt-inject)
-  28.E — Conformal 32K calibration (best dev <0.001 target)
-  28.F — Process supervision per-step credit visualization PNG
-  28.G — Cross-env transfer matrix (Wordle / Reasoning Gym / SupplyMind)
-  28.I — License audit
+  28.D — Combined attack gauntlet (real reward gauntlet + MCP fuzz + prompt-inject)
+  28.F — Process supervision per-step credit visualization PNG (real _score_guess)
+  28.I — License audit (real importlib.metadata)
   28.J — REINFORCE longer training -> >=97% deterministic
-  28.K — 10 prompt-injection attacks on MCP tools
 """
 
 from __future__ import annotations
@@ -434,52 +431,67 @@ def block_28d_combined_attack_gauntlet() -> dict:
         "//<!--inject--><script>fetch('/admin')</script>",
         "_NULL_TERMINATOR_\x00ADMIN_BACKDOOR",
     ]
-    inj_results = {"n_total": 0, "n_safe": 0, "exceptions": []}
-    for tool_name in ["tool_sm_get_node_status", "tool_sm_query_crisis_library",
-                      "tool_sm_explain_disruption", "tool_sm_query_recent_events"]:
+    inj_results = {"n_total": 0, "n_safe": 0, "n_unstructured": 0, "exceptions": []}
+    # Only tools that accept adversarial free-text; the injection string is
+    # passed as that argument. Tools with no free-text param (query_recent_events,
+    # get_financial_state) are excluded rather than called with a dummy value.
+    text_tools = ["tool_sm_get_node_status", "tool_sm_query_crisis_library",
+                  "tool_sm_explain_disruption"]
+    for tool_name in text_tools:
         tool = getattr(mcp, tool_name, None)
         if tool is None:
             continue
         for inj in PROMPT_INJECTIONS:
             inj_results["n_total"] += 1
             try:
-                if tool_name == "tool_sm_query_recent_events":
-                    ret = tool(hours=24, limit=10)  # input doesn't affect this tool
-                elif tool_name == "tool_sm_query_crisis_library":
+                if tool_name == "tool_sm_query_crisis_library":
                     ret = tool(text=inj, k=3)
                 else:
                     ret = tool(inj)
+                # Safe ONLY when the tool returned a well-formed structured dict
+                # (it handled the injection and did not execute it). A non-dict
+                # return is NOT counted safe; a raised exception is tracked.
                 if isinstance(ret, dict) and "ok" in ret:
                     inj_results["n_safe"] += 1
                 else:
-                    inj_results["n_safe"] += 1  # still didn't crash
+                    inj_results["n_unstructured"] += 1
             except Exception as e:
                 inj_results["exceptions"].append({
                     "tool": tool_name, "input": inj[:60],
                     "exception": type(e).__name__, "msg": str(e)[:120],
                 })
 
-    # Aggregate
-    total_attacks = 19 + (mcp_data.get("fuzz_results", {}).get("n_total_calls", 0)) + inj_results["n_total"]
-    total_blocked = 19 + (mcp_data.get("fuzz_results", {}).get("calls_completed_safely", 0)) + inj_results["n_safe"]
+    # Reward-hack component: read the REAL adversarial gauntlet receipt summary
+    # (no hardcoded blocked count).
+    adv_summary = adv_data.get("summary", {}) if isinstance(adv_data, dict) else {}
+    reward_n = int(adv_summary.get("n_attacks", 0))
+    reward_blocked = int(adv_summary.get("n_blocked", 0))
+
+    mcp_calls = mcp_data.get("fuzz_results", {}).get("n_total_calls", 0)
+    mcp_safe = mcp_data.get("fuzz_results", {}).get("calls_completed_safely", 0)
+
+    total_attacks = reward_n + mcp_calls + inj_results["n_total"]
+    total_blocked = reward_blocked + mcp_safe + inj_results["n_safe"]
 
     return {
         "name": "combined_attack_gauntlet_v3",
         "components": {
             "reward_hack_attacks": {
                 "source": "adversarial_20_attack_gauntlet.json",
-                "n": 19, "blocked": 19, "blocked_pct": 100.0,
+                "n": reward_n, "blocked": reward_blocked,
+                "blocked_pct": round(reward_blocked / max(reward_n, 1) * 100, 2),
             },
             "mcp_fuzz": {
                 "source": "pass27_D_extended_mcp_fuzz.json",
-                "n_calls": mcp_data.get("fuzz_results", {}).get("n_total_calls", 0),
-                "blocked": mcp_data.get("fuzz_results", {}).get("calls_completed_safely", 0),
+                "n_calls": mcp_calls,
+                "blocked": mcp_safe,
                 "blocked_pct": (mcp_data.get("fuzz_results", {}).get("overall_pass_rate", 0)) * 100,
             },
             "prompt_injection_attacks": {
                 "source": "pass28_inline",
                 "n": inj_results["n_total"],
                 "blocked": inj_results["n_safe"],
+                "n_unstructured": inj_results["n_unstructured"],
                 "blocked_pct": (inj_results["n_safe"] / max(inj_results["n_total"], 1)) * 100,
                 "exceptions": inj_results["exceptions"],
             },
@@ -493,41 +505,6 @@ def block_28d_combined_attack_gauntlet() -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 28.E — Conformal 32K calibration
-# ---------------------------------------------------------------------------
-def block_28e_conformal_32k() -> dict:
-    rng = np.random.default_rng(2026)
-    n_calib = 32_000
-    n_test = 8_000
-    nlls_calib = rng.normal(0.5, 0.3, n_calib).clip(0, None)
-    nlls_test = rng.normal(0.5, 0.3, n_test).clip(0, None)
-
-    alphas = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30]
-    out = {
-        "name": "conformal_32k_recal",
-        "supersedes": "pass27_G_conformal_v3_full_payload.json (was 16K calib)",
-        "method": "split_conformal_NLL_vovk2005",
-        "n_calib": n_calib,
-        "n_test": n_test,
-        "per_alpha": [],
-    }
-    for alpha in alphas:
-        q = float(np.quantile(nlls_calib, 1 - alpha))
-        accepted = float((nlls_test <= q).mean())
-        out["per_alpha"].append({
-            "alpha_target": alpha, "target_coverage": 1 - alpha,
-            "quantile_threshold": round(q, 6),
-            "empirical_coverage": round(accepted, 6),
-            "abs_deviation": round(abs(accepted - (1 - alpha)), 6),
-            "conservative_valid": accepted >= (1 - alpha) - 0.005,
-        })
-    best = min(out["per_alpha"], key=lambda x: x["abs_deviation"])
-    out["best_alpha"] = best["alpha_target"]
-    out["best_dev"] = best["abs_deviation"]
-    return out
-
-
-# ---------------------------------------------------------------------------
 # 28.F — Process supervision per-step credit visualization PNG
 # ---------------------------------------------------------------------------
 def block_28f_process_super_plot() -> dict:
@@ -536,10 +513,27 @@ def block_28f_process_super_plot() -> dict:
     except ImportError:
         return {"skipped": "matplotlib missing"}
 
-    # Synthetic 4-step Wordle trajectory matching pass26_process_supervision_concrete.json
-    steps = [1, 2, 3, 4]
-    process_credit = [0.04, 0.06, 0.09, 0.50]
-    uniform_credit = [0.243, 0.243, 0.243, 0.243]
+    # Real 4-guess solve trajectory: score each guess against the target with
+    # the env's actual _score_guess, derive per-step (process) credit vs
+    # uniform-episode credit. No hardcoded credit values.
+    import sys
+    sys.path.insert(0, str(ROOT))
+    from versions.v5_phoenix.wordle_env.env import _score_guess
+
+    target = "brain"
+    guesses = ["stare", "cloud", "brink", "brain"]  # ends on the solving word
+    process_credit = []
+    for g in guesses:
+        fb = _score_guess(g, target)
+        n_g = sum(1 for f in fb if f.state == "green")
+        n_y = sum(1 for f in fb if f.state == "yellow")
+        r = 0.05 * n_g + 0.02 * n_y
+        if g == target:
+            r += 0.25  # solve bonus (matches wordle_env reward shaping)
+        process_credit.append(round(r, 4))
+    steps = list(range(1, len(guesses) + 1))
+    total_reward = sum(process_credit)
+    uniform_credit = [round(total_reward / len(guesses), 4)] * len(guesses)
 
     fig, ax = plt.subplots(figsize=(9, 5))
     width = 0.35
@@ -578,117 +572,60 @@ def block_28f_process_super_plot() -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 28.G — Cross-env transfer matrix
-# ---------------------------------------------------------------------------
-def block_28g_cross_env_transfer() -> dict:
-    """3-way state-encoding entropy comparison: Wordle, Reasoning Gym, SupplyMind.
-    Use REINFORCE-trained Wordle policy to encode states from each env, measure
-    entropy reduction (as proxy for representation usefulness)."""
-    import torch
-    import sys
-    sys.path.insert(0, str(ROOT / "scripts"))
-    import importlib
-    smoke_mod = importlib.import_module("pass23_colab_local_smoke")
-    Policy = smoke_mod.Policy
-
-    # Train minimal REINFORCE policy
-    policy = Policy(n_obs=188, n_act=102, hidden=256)
-    policy.eval()
-
-    # Generate features from 3 source envs
-    rng = np.random.default_rng(2026)
-
-    def featurize_supplymind() -> np.ndarray:
-        """Mock: 188-dim feature from supply-chain state."""
-        return rng.normal(0, 1, 188).astype(np.float32)
-
-    def featurize_reasoning_gym() -> np.ndarray:
-        return rng.normal(0, 1, 188).astype(np.float32)
-
-    def featurize_wordle() -> np.ndarray:
-        return rng.normal(0, 1, 188).astype(np.float32)
-
-    sources = {
-        "wordle": featurize_wordle,
-        "reasoning_gym": featurize_reasoning_gym,
-        "supplymind": featurize_supplymind,
-    }
-
-    n_samples = 200
-    entropies = {}
-    for name, fn in sources.items():
-        ents = []
-        with torch.no_grad():
-            for _ in range(n_samples):
-                x = torch.from_numpy(fn()).unsqueeze(0)
-                logits = policy(x).squeeze(0)
-                # softmax entropy
-                p = torch.softmax(logits, dim=-1)
-                ent = float(-(p * torch.log(p + 1e-9)).sum())
-                ents.append(ent)
-        entropies[name] = {
-            "mean_entropy": float(np.mean(ents)),
-            "std_entropy": float(np.std(ents)),
-            "n_samples": n_samples,
-        }
-
-    # Entropy ratio (transfer signal)
-    base = entropies["wordle"]["mean_entropy"]
-    return {
-        "name": "cross_env_transfer_matrix_v2",
-        "supersedes": "cross_env_transfer.json (was 2-way)",
-        "policy_trained_on": "Wordle (REINFORCE 1500 ep)",
-        "evaluated_on": list(sources.keys()),
-        "per_source_entropy": entropies,
-        "transfer_ratios_relative_to_wordle": {
-            name: round(entropies[name]["mean_entropy"] / max(base, 1e-6), 4)
-            for name in sources
-        },
-        "interpretation": (
-            "Lower entropy on a source env = policy's representations are more confident "
-            "(transfer signal). Random featurizers used here as baseline; with real env "
-            "encoders (run on Pro Colab), transfer signal would be sharper."
-        ),
-    }
-
-
-# ---------------------------------------------------------------------------
-# 28.I — License audit
+# 28.I — License audit (real installed-package metadata)
 # ---------------------------------------------------------------------------
 def block_28i_license_audit() -> dict:
-    """Verify third-party library licenses for MIT/Apache/BSD compatibility."""
-    deps = [
-        ("torch", "BSD-3-Clause"),
-        ("numpy", "BSD-3-Clause"),
-        ("scipy", "BSD-3-Clause"),
-        ("scikit-learn", "BSD-3-Clause"),
-        ("matplotlib", "Matplotlib (BSD-style)"),
-        ("transformers", "Apache 2.0"),
-        ("trl", "Apache 2.0"),
-        ("peft", "Apache 2.0"),
-        ("unsloth", "Apache 2.0"),
-        ("bitsandbytes", "MIT"),
-        ("stable-baselines3", "MIT"),
-        ("sb3-contrib", "MIT"),
-        ("d3rlpy", "MIT"),
-        ("fastapi", "MIT"),
-        ("uvicorn", "BSD-3-Clause"),
-        ("pydantic", "MIT"),
-        ("httpx", "BSD-3-Clause"),
-        ("ollama (server)", "MIT"),
-        ("openenv-core", "Apache 2.0"),
-        ("reasoning-gym", "Apache 2.0"),
-        ("faiss-cpu", "MIT"),
+    """Read REAL license metadata from installed distributions via
+    importlib.metadata. No hand-typed license strings."""
+    from importlib import metadata as importlib_metadata
+
+    packages = [
+        "torch", "numpy", "scipy", "scikit-learn", "matplotlib",
+        "transformers", "trl", "peft", "bitsandbytes",
+        "stable-baselines3", "sb3-contrib", "d3rlpy",
+        "fastapi", "uvicorn", "pydantic", "httpx", "faiss-cpu",
     ]
+    permissive_markers = ("MIT", "Apache", "BSD", "PSF", "ISC",
+                          "Python Software Foundation", "Mozilla", "MPL")
+
+    def _license_of(dist_name: str):
+        try:
+            md = importlib_metadata.metadata(dist_name)
+        except importlib_metadata.PackageNotFoundError:
+            return None, None
+        version = md.get("Version")
+        lic = md.get("License-Expression") or ""
+        if not lic:
+            classifiers = [c for c in (md.get_all("Classifier") or [])
+                           if c.startswith("License ::")]
+            if classifiers:
+                lic = "; ".join(c.split("::")[-1].strip() for c in classifiers)
+        if not lic:
+            raw = (md.get("License") or "").strip()
+            lic = raw.splitlines()[0][:120] if raw else "UNKNOWN"
+        return version, lic
+
     audit = []
-    for dep, license_str in deps:
-        compatible = any(t in license_str for t in ("MIT", "Apache", "BSD"))
-        audit.append({"dep": dep, "license": license_str, "mit_compatible": compatible})
+    for pkg in packages:
+        version, lic = _license_of(pkg)
+        if version is None:
+            audit.append({"dep": pkg, "installed": False,
+                          "license": None, "permissive": None})
+            continue
+        permissive = any(m in lic for m in permissive_markers)
+        audit.append({"dep": pkg, "installed": True, "version": version,
+                      "license": lic, "permissive": permissive})
+
+    installed = [a for a in audit if a["installed"]]
     return {
-        "name": "license_audit_v1",
+        "name": "license_audit_v2_importlib_metadata",
         "project_license": "MIT",
-        "n_deps_audited": len(deps),
-        "all_mit_compatible": all(a["mit_compatible"] for a in audit),
+        "method": "importlib.metadata.metadata() read from the live environment",
+        "n_deps_queried": len(packages),
+        "n_installed": len(installed),
+        "n_not_installed": len(packages) - len(installed),
+        "all_installed_permissive": (all(a["permissive"] for a in installed)
+                                     if installed else None),
         "audit": audit,
     }
 
@@ -858,9 +795,7 @@ def main():
         ("28.B", "six_judge_panel", block_28b_six_judge_panel, "pass28_B_six_judge_panel.json"),
         ("28.C", "hard_tier_rollout", block_28c_hard_tier_rollout, "pass28_C_hard_tier_rollout.json"),
         ("28.D", "combined_attack_gauntlet", block_28d_combined_attack_gauntlet, "pass28_D_combined_attack_gauntlet.json"),
-        ("28.E", "conformal_32k", block_28e_conformal_32k, "pass28_E_conformal_32k.json"),
         ("28.F", "process_super_plot", block_28f_process_super_plot, "pass28_F_process_super_plot.json"),
-        ("28.G", "cross_env_transfer", block_28g_cross_env_transfer, "pass28_G_cross_env_transfer.json"),
         ("28.I", "license_audit", block_28i_license_audit, "pass28_I_license_audit.json"),
         ("28.J", "reinforce_longer", block_28j_reinforce_longer, "pass28_J_reinforce_longer.json"),
     ]

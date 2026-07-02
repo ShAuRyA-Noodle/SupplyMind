@@ -40,8 +40,8 @@ from scripts.openrouter_client import MODELS, OpenRouterClient, ModelSpec  # noq
 
 logger = logging.getLogger(__name__)
 
-R4_PATH = ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
-OUT_PATH = ROOT / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
+R4_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+OUT_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
 CACHE_DIR = ROOT / ".openrouter_cache"
 
 RISK_ORDER = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
@@ -71,7 +71,12 @@ def _format_prompt(scen_id: str, scenario_text: str) -> list[dict]:
 
 
 def _extract_json(text: str) -> dict | None:
-    """Depth-counting JSON extractor robust to preambles + repeated blobs."""
+    """Depth-counting JSON extractor robust to preambles + repeated blobs.
+
+    Returns None when the reply contains no parseable JSON object. We do NOT
+    fabricate a verdict from a free-text regex match — an unparseable reply is
+    counted as 'unparseable' and excluded from agreement/alpha stats.
+    """
     for i, ch in enumerate(text or ""):
         if ch != "{":
             continue
@@ -87,12 +92,6 @@ def _extract_json(text: str) -> dict | None:
                         return obj if isinstance(obj, dict) else None
                     except json.JSONDecodeError:
                         break
-    # Regex fallback for risk_level only — catches "answer is CRITICAL"-style replies
-    up = (text or "").upper()
-    for level in ("CRITICAL", "HIGH", "MEDIUM", "LOW"):
-        if re.search(rf"\b{level}\b", up):
-            return {"risk_level": level, "confidence": 0.5,
-                    "rationale_one_line": "(extracted from free-text reply)"}
     return None
 
 
@@ -150,6 +149,8 @@ async def _query_one(
                 "model": model.slug,
                 "model_short": model.short,
                 "ok": pred in RISK_ORDER,
+                # 200 reply that yielded no valid risk_level: excluded from stats.
+                "unparseable": pred not in RISK_ORDER,
                 "http_status": 200,
                 "latency_s": round(res.latency_s, 2),
                 "tokens": {"prompt": res.tokens_prompt,
@@ -203,6 +204,8 @@ async def run_panel(
                                 b["per_min_used"], b["per_min_budget"],
                                 b["per_day_used"], b["per_day_budget"])
             preds = [r for r in rows if r.get("ok")]
+            n_unparseable = sum(1 for r in rows
+                                if r.get("http_status") == 200 and not r.get("ok"))
             tallies: dict[str, int] = {}
             for r in preds:
                 tallies[r["predicted_risk"]] = tallies.get(r["predicted_risk"], 0) + 1
@@ -210,6 +213,7 @@ async def run_panel(
             per_scenario[sid] = {
                 "ground_truth": gt,
                 "n_judges_ok": len(preds),
+                "n_judges_unparseable": n_unparseable,
                 "n_judges_total": len(judge_models),
                 "majority": majority,
                 "majority_matches_gt": majority == gt,
@@ -218,6 +222,7 @@ async def run_panel(
             }
 
     ok_total = sum(s["n_judges_ok"] for s in per_scenario.values())
+    unparseable_total = sum(s["n_judges_unparseable"] for s in per_scenario.values())
     majority_correct = sum(1 for s in per_scenario.values()
                            if s["majority_matches_gt"])
     return {
@@ -229,6 +234,9 @@ async def run_panel(
         ],
         "n_scenarios": len(scenarios),
         "ok_call_total": ok_total,
+        "n_unparseable_total": unparseable_total,
+        "unparseable_note": ("unparseable replies (200 with no valid risk_level) "
+                             "are excluded from majority + agreement/alpha stats"),
         "majority_vote_accuracy_vs_ground_truth": round(
             majority_correct / max(1, len(scenarios)), 4),
         "per_scenario": per_scenario,

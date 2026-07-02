@@ -1,10 +1,9 @@
 """final_validation_bundle.py — combined validation receipts for final submit.
 
-Produces 4 receipts in one execution:
-  1. cross_env_transfer.json       — Wordle policy features map to SupplyMind state
-  2. process_supervision.json      — line-level credit assignment per RL guide §9
-  3. ablation_matrix.json          — drop each component, measure metric drop
-  4. api_keys_live_proof.json      — 4 keys (OPENROUTER, EIA, NASA_FIRMS, GFW)
+Produces 3 receipts in one execution:
+  1. process_supervision.json      — line-level credit assignment per RL guide §9
+  2. ablation_matrix.json          — drop each component, measure metric drop
+  3. api_keys_live_proof.json      — 4 keys (OPENROUTER, EIA, NASA_FIRMS, GFW)
                                        each makes a real call, hash response
 
 Each receipt mirrored to FINAL_SUBMIT/receipts/ + sha256 stamped.
@@ -27,120 +26,7 @@ if str(REPO) not in sys.path:
 
 
 # ---------------------------------------------------------------------------
-# 1. CROSS-ENV TRANSFER (Wordle policy features -> SupplyMind decision)
-# ---------------------------------------------------------------------------
-
-def cross_env_transfer() -> dict:
-    """Demonstrate that the Wordle REINFORCE policy's *constraint encoding*
-    pattern (one-hot per-position constraint -> action) generalizes to
-    SupplyMind's risk-encoding -> action selection.
-
-    Both share the same RL primitive: state -> categorical policy over
-    finite discrete actions. We measure transfer by:
-      - load Wordle policy parameters (or initialize random baseline)
-      - measure entropy on Wordle states (calibrated, low after training)
-      - encode SupplyMind disruption state into 130-dim feature
-      - measure entropy on SupplyMind state with same policy
-      - if entropy drops on SupplyMind too, transferable inductive bias holds
-    """
-    try:
-        import torch
-        import torch.nn as nn
-        from torch.distributions import Categorical
-    except ImportError:
-        return {"ok": False, "error": "torch not installed"}
-
-    # Mirror policy architecture
-    n_actions = 102
-    policy = nn.Sequential(
-        nn.Linear(130, 128), nn.Tanh(),
-        nn.Linear(128, 64), nn.Tanh(),
-        nn.Linear(64, n_actions),
-    )
-    # 1. Random-init entropy on uniform input (Wordle reset state)
-    torch.manual_seed(0)
-    state_wordle = torch.zeros(130)
-    pre_logits_w = policy(state_wordle)
-    pre_entropy_w = Categorical(logits=pre_logits_w).entropy().item()
-
-    # 2. Quick training pass: REINFORCE 30 steps on Wordle subset
-    from versions.v5_phoenix.wordle_env.env import WORD_LIST, _score_guess
-    import random
-    rng = random.Random(7)
-    optim = torch.optim.Adam(policy.parameters(), lr=3e-3)
-    for _ in range(30):
-        target = rng.choice(WORD_LIST[:20])
-        history_feats = [0.0] * 130
-        log_probs = []
-        ep_r = 0.0
-        for _g in range(6):
-            x = torch.tensor(history_feats, dtype=torch.float32)
-            logits = policy(x)
-            dist = Categorical(logits=logits)
-            a = dist.sample()
-            log_probs.append(dist.log_prob(a))
-            guess = WORD_LIST[a.item()]
-            fb = _score_guess(guess, target)
-            n_g = sum(1 for f in fb if f.state == "green")
-            n_y = sum(1 for f in fb if f.state == "yellow")
-            ep_r += 0.05 * n_g + 0.02 * n_y
-            for f in fb:
-                p, l, s = f.position, f.letter.lower(), f.state
-                idx = p * 26 + (ord(l) - ord("a"))
-                if s == "green":
-                    history_feats[idx] = 1.0
-                elif s == "yellow":
-                    history_feats[idx] = -1.0
-            if guess == target:
-                ep_r += 1.0
-                break
-        loss = -(torch.stack(log_probs).sum() * (ep_r - 0.2))
-        optim.zero_grad(); loss.backward(); optim.step()
-
-    # 3. Post-training entropy on Wordle reset state
-    post_logits_w = policy(state_wordle)
-    post_entropy_w = Categorical(logits=post_logits_w).entropy().item()
-
-    # 4. Now encode a SupplyMind state into the same 130-dim feature.
-    # Use real disruption profile: typhoon Taiwan 2021 → 5 affected nodes,
-    # 3 high-risk, 2 medium, encoded as one-hot bins per "risk position".
-    sm_state_feats = [0.0] * 130
-    # Map disruption signals into the same 5-position scheme:
-    # position 0..4 = severity buckets (risk level), 26 letters = 26 SKU bins
-    # Real Tohoku $276B replication signal → severity 4 (extreme)
-    sm_state_feats[4 * 26 + 0] = 1.0  # severity-4 SKU-A high alert
-    sm_state_feats[3 * 26 + 5] = 1.0  # severity-3 SKU-F alert
-    sm_state_feats[2 * 26 + 12] = -0.5  # severity-2 SKU-M deprioritize
-
-    pre_logits_sm = policy(torch.tensor(sm_state_feats, dtype=torch.float32))
-    sm_entropy = Categorical(logits=pre_logits_sm).entropy().item()
-
-    # Transfer measure: did learned representation make state-discrimination
-    # sharper across BOTH envs?
-    entropy_drop_w = pre_entropy_w - post_entropy_w
-    entropy_drop_sm = pre_entropy_w - sm_entropy
-    transfer_ratio = entropy_drop_sm / max(0.01, entropy_drop_w)
-
-    return {
-        "ok": True,
-        "framework": "Inductive bias transfer (per RL guide §1: 'efficient version of repeated in-context improvement')",
-        "wordle_pre_entropy": round(pre_entropy_w, 4),
-        "wordle_post_entropy": round(post_entropy_w, 4),
-        "wordle_entropy_drop": round(entropy_drop_w, 4),
-        "supplymind_entropy_post_wordle_train": round(sm_entropy, 4),
-        "supplymind_entropy_drop": round(entropy_drop_sm, 4),
-        "transfer_ratio": round(transfer_ratio, 4),
-        "interpretation": (
-            "transfer_ratio > 0 means Wordle-trained policy ALSO sharpens"
-            " state-discrimination on SupplyMind state encoding — same"
-            " state->action primitive transfers."
-        ),
-        "transfer_demonstrated": entropy_drop_sm > 0.001,
-    }
-
-
-# ---------------------------------------------------------------------------
-# 2. PROCESS SUPERVISION (line-level credit, RL guide §9)
+# 1. PROCESS SUPERVISION (line-level credit, RL guide §9)
 # ---------------------------------------------------------------------------
 
 def process_supervision() -> dict:
@@ -274,18 +160,8 @@ def ablation_matrix() -> dict:
 def api_keys_live_proof() -> dict:
     """Make 1 real call per key, hash response, prove keys actively used."""
     import requests
-    # Load .env file if present
-    env_file = REPO / ".env"
-    if env_file.exists():
-        for line in env_file.read_text(encoding="utf-8").splitlines():
-            line = line.strip()
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-            k, _, v = line.partition("=")
-            k = k.strip()
-            v = v.strip().strip('"').strip("'")
-            if k and v and k not in os.environ:
-                os.environ[k] = v
+    from scripts._env import load_env
+    load_env()
     out = {"framework": "live-call hash proof",
             "started_at": time.time(),
             "keys": {}}
@@ -372,9 +248,8 @@ def api_keys_live_proof() -> dict:
                 headers={"Authorization": f"Bearer {gfw_key}"},
                 timeout=15,
             )
-            # 422 means key authenticated but params malformed → still proves key valid
             if r.status_code == 422:
-                # Retry with /v3/4wings/stats which only needs auth
+                # Retry once with /v3/4wings/stats which only needs auth
                 r = requests.get(
                     "https://gateway.api.globalfishingwatch.org/v3/4wings/stats",
                     params={"datasets[0]": "public-global-fishing-effort:latest",
@@ -382,18 +257,20 @@ def api_keys_live_proof() -> dict:
                     headers={"Authorization": f"Bearer {gfw_key}"},
                     timeout=15,
                 )
-            # Status 200 = full success, 422/503 = key authenticated by server
-            # (would be 401 if key invalid). Both prove the key is live.
-            ok = r.status_code in (200, 422, 503)
+            # ok is TRUE only on a real 2xx data response. A non-2xx status
+            # (422 malformed, 503 unavailable) is NOT a success — it is a
+            # degraded/failed call. key_authenticated is a separate, weaker
+            # signal: the credential passed auth iff we did not get 401/403.
+            ok = 200 <= r.status_code < 300
             content_hash = hashlib.sha256(r.content[:1000]).hexdigest()
             out["keys"]["GFW"] = {
                 "status_code": r.status_code, "ok": ok,
-                "key_authenticated": r.status_code != 401,
+                "key_authenticated": r.status_code not in (401, 403),
                 "response_hash_first_1k": content_hash,
                 "endpoint": "gateway.api.globalfishingwatch.org/v3/4wings/stats",
                 "n_bytes": len(r.content),
-                "note": ("200 = live data; 422/503 = key validated, "
-                          "service transient or query refinement needed"),
+                "note": ("ok=true requires 2xx live data. 422/503 => ok=false "
+                          "(degraded); key_authenticated stays true unless 401/403."),
             }
         except Exception as e:  # noqa: BLE001
             out["keys"]["GFW"] = {"ok": False, "error": str(e)[:200]}
@@ -430,25 +307,19 @@ def main() -> dict:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     summary = {}
 
-    logger.info("[1/4] cross-env transfer ...")
-    r1 = cross_env_transfer()
-    summary["cross_env_transfer_sha"] = save("cross_env_transfer", r1)
-
-    logger.info("[2/4] process supervision ...")
+    logger.info("[1/3] process supervision ...")
     r2 = process_supervision()
     summary["process_supervision_sha"] = save("process_supervision", r2)
 
-    logger.info("[3/4] ablation matrix ...")
+    logger.info("[2/3] ablation matrix ...")
     r3 = ablation_matrix()
     summary["ablation_matrix_sha"] = save("ablation_matrix", r3)
 
-    logger.info("[4/4] api keys live proof ...")
+    logger.info("[3/3] api keys live proof ...")
     r4 = api_keys_live_proof()
     summary["api_keys_live_sha"] = save("api_keys_live_proof", r4)
 
     summary["headlines"] = {
-        "transfer_demonstrated": r1.get("transfer_demonstrated"),
-        "transfer_ratio": r1.get("transfer_ratio"),
         "process_var_amplification": r2.get("variance_amplification"),
         "ablation_largest_drop": (
             r3.get("ranked_by_impact", [{}])[0].get("disabled"),

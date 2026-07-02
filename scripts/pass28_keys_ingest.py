@@ -1,9 +1,8 @@
-"""Pass 28 K1-K4 — LIVE real-data ingest with new keys (no Colab needed).
+"""Pass 28 K1-K3 — LIVE real-data ingest with new keys (no Colab needed).
 
 K1 FRED Brent backfill 8 events (closes L9)
 K2 NewsAPI live ingest 5 queries (closes G4)
 K3 NOAA CDO live (closes M typhoon-response)
-K4 W&B live smoke run (closes V8)
 """
 
 from __future__ import annotations
@@ -11,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import sys
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -18,14 +18,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RECEIPTS = ROOT / "FINAL_SUBMIT" / "receipts"
 
-ENV_PATH = ROOT / ".env"
-if ENV_PATH.exists():
-    for line in ENV_PATH.read_text().splitlines():
-        line = line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        k, v = line.split("=", 1)
-        os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from scripts._env import load_env  # noqa: E402
+load_env()
 
 
 def _sha(b: bytes) -> str:
@@ -200,63 +197,18 @@ def k3_noaa_cdo() -> dict:
     return out
 
 
-# ---------------------------------------------------------------------------
-# K4 — W&B live smoke run
-# ---------------------------------------------------------------------------
-def k4_wandb_smoke() -> dict:
-    key = os.environ.get("WANDB_API_KEY")
-    if not key:
-        return {"skipped": "no WANDB_API_KEY"}
-
-    try:
-        import wandb
-    except ImportError:
-        # Try install
-        import subprocess, sys
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "wandb"])
-        import wandb
-
-    try:
-        wandb.login(key=key, relogin=True, timeout=10)
-        run = wandb.init(
-            project="supplymind-pass28",
-            name=f"pass28_K4_smoke_{int(time.time())}",
-            config={"pass": 28, "block": "K4", "purpose": "live_dashboard_proof"},
-            mode="online",
-            settings=wandb.Settings(silent=True),
-        )
-        for i in range(20):
-            wandb.log({"reward": 0.5 + 0.4 * (i / 20),
-                        "loss": 1.0 - 0.6 * (i / 20),
-                        "win_rate": min(1.0, 0.1 + 0.045 * i)},
-                       step=i)
-        run_url = run.url
-        wandb.finish()
-        return {
-            "name": "K4_wandb_live_smoke",
-            "closes": "V8 W&B-style logs gap",
-            "wandb_run_url": run_url,
-            "n_steps_logged": 20,
-            "metrics_logged": ["reward", "loss", "win_rate"],
-            "status": "OK",
-        }
-    except Exception as e:
-        return {"name": "K4_wandb_live_smoke", "error": f"{type(e).__name__}: {str(e)[:300]}"}
-
-
 def main():
     print("=" * 78)
-    print("PASS 28 K1-K4 LIVE INGEST -- 4 new keys, no Colab needed")
+    print("PASS 28 K1-K3 LIVE INGEST -- 3 new keys, no Colab needed")
     print("=" * 78)
 
     blocks = [
         ("K1", "fred_brent_real", k1_fred_brent_real, "pass28_K1_fred_brent_real.json"),
         ("K2", "newsapi_live_ingest", k2_newsapi_ingest, "pass28_K2_newsapi_live_ingest.json"),
         ("K3", "noaa_cdo_live", k3_noaa_cdo, "pass28_K3_noaa_cdo_live.json"),
-        ("K4", "wandb_live_smoke", k4_wandb_smoke, "pass28_K4_wandb_smoke.json"),
     ]
 
-    summary = {"pass": 28, "tier": "K1-K4 keys ingest", "blocks": []}
+    summary = {"pass": 28, "tier": "K1-K3 keys ingest", "blocks": []}
     for letter, name, fn, receipt_name in blocks:
         print(f"\n[{letter}] {name}...")
         t0 = time.time()

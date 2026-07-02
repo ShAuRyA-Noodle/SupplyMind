@@ -61,9 +61,7 @@ ALLOW_PATTERNS = [
     'scripts/pass27_scenario_extractor.py',
     'scripts/pass28_killshot_v2.py',
     'scripts/pass28_keys_ingest.py',
-    'scripts/push_to_hf_space.py',
     'scripts/push_to_hf_space_minimal.py',
-    'scripts/patch_nb13*.py',
     # Small data
     'data/**.json',
     'data/**.yaml',

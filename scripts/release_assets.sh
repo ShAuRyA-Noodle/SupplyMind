@@ -38,7 +38,6 @@ gh release create "$TAG" \
 - **261,175 real data points** from 8 cited sources (zero synthetic)
 - **8,100-episode RL benchmark**, PPO_v3 beats every baseline with bootstrap CI95 non-overlapping
 - **mxbai RAG P@1 = 0.962**, reranker +5pp on hard paraphrased queries
-- **Krippendorff α = 0.750** on 2-judge LLM panel
 - **Custom 3-layer GCN in pure PyTorch** (+48-64% vs MLP on arrival-time regression)
 - **Per-horizon split-conformal** intervals hit nominal ±2pp on oil@95%
 - **3× ONNX-exported PPO policies** (0.97 MB each, verified via onnxruntime)
@@ -55,7 +54,6 @@ gh release create "$TAG" \
 - All plots from `versions/v3_arcadia/plots/**`
 - All JSON results from `versions/v3_arcadia/results/**`
 - ONNX policies from `versions/v3_arcadia/checkpoints/gethsemane/*.onnx`
-- Pitch deck (markdown + rendered PDF if built)
 
 ## Links
 - GitHub: https://github.com/ShAuRyA-Noodle/Sleep-Token
@@ -88,8 +86,7 @@ for f in versions/v3_arcadia/checkpoints/gethsemane/*.onnx; do
   [ -f "$f" ] && gh release upload "$TAG" "$f" --repo "$REPO" --clobber || true
 done
 
-# Pitch deck (markdown + PDF if exists)
-gh release upload "$TAG" demo/PITCH_DECK.md --repo "$REPO" --clobber || true
+# Demo assets (upload only if the file actually exists)
 [ -f demo/SupplyMind_pitch.pdf ] && gh release upload "$TAG" demo/SupplyMind_pitch.pdf --repo "$REPO" --clobber
 [ -f demo/supplymind_v3_demo.mp4 ] && gh release upload "$TAG" demo/supplymind_v3_demo.mp4 --repo "$REPO" --clobber
 

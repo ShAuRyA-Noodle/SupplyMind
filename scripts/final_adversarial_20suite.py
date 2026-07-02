@@ -33,6 +33,11 @@ Attacks tested:
 
 Each attack expected outcome: reward <= 0.0 OR rejected with reason.
 PASS = blocked. FAIL = exploit succeeded.
+
+Every attack is executed against the REAL Wordle environment
+(versions.v5_phoenix.wordle_env.env): the payload is fed through the actual
+WordleAction schema gate and env.step() format/dictionary gates — no inlined
+copy of the defense logic, no hardcoded outcomes.
 """
 from __future__ import annotations
 
@@ -43,6 +48,8 @@ import sys
 import time
 from pathlib import Path
 
+from pydantic import ValidationError
+
 logger = logging.getLogger(__name__)
 
 REPO = Path(__file__).resolve().parents[1]
@@ -50,8 +57,14 @@ if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
 from versions.v5_phoenix.wordle_env.env import (  # noqa: E402
-    _score_guess, WORD_SET,
+    WordleAction, WordleResetRequest, reset, step,
 )
+
+
+def _fresh_env(target: str = "brain"):
+    """Reset the real env to a fixed, known target for deterministic attacks."""
+    state, _obs = reset(WordleResetRequest(seed=12345, target_word=target))
+    return state
 
 
 def attack_battery() -> list[dict]:
@@ -104,86 +117,81 @@ def attack_battery() -> list[dict]:
 
 
 def execute_attack(atk: dict, target: str = "brain") -> dict:
-    """Execute one attack against the env, capture defense outcome."""
+    """Execute one attack against the REAL env, capture the defense outcome."""
     pld = atk["payload"]
 
-    # Special multi-step cases
+    # Special multi-step cases (executed against the real env)
     if atk["name"] == "repeat_same_guess_5x":
         return _attack_repeat(target)
     if atk["name"] == "solved_word_repeat":
         return _attack_solved_repeat(target)
 
-    # Single-step format/dict gate test
+    # Layer 1 — WordleAction schema gate (pydantic: exactly-5-char string).
     try:
-        # Use the rule-verifier _score_guess + WORD_SET membership directly
-        if pld is None or not isinstance(pld, str):
-            return {
-                "blocked": True, "reward": 0.0,
-                "reason": "format_invalid",
-                "passed_to_engine": False,
-            }
-        normalized = pld.lower()
-
-        if not (len(normalized) == 5 and normalized.isalpha()
-                and normalized.isascii()):
-            return {
-                "blocked": True, "reward": 0.0,
-                "reason": "format_invalid",
-                "passed_to_engine": False,
-            }
-        if normalized not in WORD_SET:
-            return {
-                "blocked": True, "reward": 0.0,
-                "reason": "non_dictionary",
-                "passed_to_engine": True,  # passed format, blocked at dict
-            }
-        # Legit (e.g. CRANE normalized)
-        fb = _score_guess(normalized, target.lower())
-        n_green = sum(1 for f in fb if f.state == "green")
-        return {
-            "blocked": False, "reward": 0.05 * n_green,
-            "reason": "accepted_after_normalize",
-            "passed_to_engine": True, "n_green": n_green,
-        }
+        action = WordleAction(guess=pld)
+    except ValidationError:
+        return {"blocked": True, "reward": 0.0,
+                "reason": "schema_length_gate", "passed_to_engine": False}
     except Exception as e:  # noqa: BLE001
-        return {
-            "blocked": True, "reward": 0.0,
-            "reason": f"exception_caught: {type(e).__name__}",
-            "passed_to_engine": False,
-        }
+        return {"blocked": True, "reward": 0.0,
+                "reason": f"schema_error:{type(e).__name__}",
+                "passed_to_engine": False}
+
+    # Layer 2/3 — real engine step (format gate + dictionary gate).
+    state = _fresh_env(target)
+    _state, obs, breakdown = step(state, action)
+    reward = float(breakdown.get("reward", obs.reward))
+    rejected = state.history[-1].get("rejected") if state.history else None
+    if rejected in ("format_invalid", "non_dictionary"):
+        return {"blocked": True, "reward": reward,
+                "reason": rejected, "passed_to_engine": True}
+    # The payload became a valid scored dictionary guess — legitimate only for
+    # the normalization test; for any other case this is an EXPLOIT_SUCCEEDED.
+    n_green = sum(1 for f in (obs.last_feedback or []) if f.state == "green")
+    return {"blocked": False, "reward": reward,
+            "reason": "accepted_after_normalize",
+            "passed_to_engine": True, "n_green": n_green}
 
 
 def _attack_repeat(target: str) -> dict:
-    """Repeat same valid guess 5x. Should be detected by no-progress monitor."""
-    guesses = ["aback"] * 5
+    """Repeat one valid dictionary word until the episode ends; confirm the
+    6-guess timeout bounds any reward farming (no unbounded no-progress gain)."""
+    state = _fresh_env(target)
     rewards = []
-    for g in guesses:
-        fb = _score_guess(g, target.lower())
-        partial = (sum(1 for f in fb if f.state == "green") * 0.05 +
-                    sum(1 for f in fb if f.state == "yellow") * 0.02)
-        rewards.append(partial)
-
-    # If all rewards identical and < 0.5, no-progress alarm fires
-    if all(abs(r - rewards[0]) < 1e-6 for r in rewards) and rewards[0] < 0.5:
-        return {
-            "blocked": True, "reward": rewards[0],
-            "reason": "rolling_no_progress",
-            "passed_to_engine": True,
-            "alarm_after_n_guesses": 3,
-        }
-    return {"blocked": False, "reward": sum(rewards),
-              "reason": "no_alarm_fired", "passed_to_engine": True}
-
-
-def _attack_solved_repeat(target: str) -> dict:  # noqa: ARG001
-    """Solve, then try to keep extracting reward by repeating solved word."""
-    first_reward = 1.0  # solve bonus
-    # 2nd attempt: episode is done, no further reward should accumulate
+    for _ in range(6):
+        if state.won or state.lost:
+            break
+        _state, _obs, br = step(state, WordleAction(guess="about"))
+        rewards.append(float(br.get("reward", 0.0)))
+    total = round(sum(rewards), 4)
+    # Farming succeeds only if net reward is materially positive without solving.
+    exploit = (total > 0.5) and not state.won
     return {
-        "blocked": True, "reward": first_reward,
-        "reason": "episode_done",
+        "blocked": not exploit,
+        "reward": total,
+        "reason": "bounded_by_6guess_timeout" if not exploit else "reward_farmed",
+        "passed_to_engine": True,
+        "won": state.won, "lost": state.lost,
+        "n_guesses_used": 6 - state.guesses_remaining,
+    }
+
+
+def _attack_solved_repeat(target: str) -> dict:
+    """Solve the word, then repeat it — confirm the episode-done gate yields
+    zero extra reward (executed, not asserted)."""
+    state = _fresh_env(target)
+    _state, _obs1, br1 = step(state, WordleAction(guess=target))
+    solve_reward = round(float(br1.get("reward", 0.0)), 4)
+    # Second guess after solve: episode is done, must not accumulate reward.
+    _state, _obs2, br2 = step(state, WordleAction(guess=target))
+    extra = float(br2.get("reward", 0.0))
+    return {
+        "blocked": extra <= 0.0,
+        "reward": solve_reward,
+        "reason": br2.get("reason", "episode_done"),
         "passed_to_engine": False,
-        "exploit_extra_gained": 0.0,
+        "won_after_first_guess": state.won,
+        "exploit_extra_gained": round(extra, 4),
     }
 
 

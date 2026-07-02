@@ -12,9 +12,6 @@ Blocks:
      word pools to show honest OOD scaling)
   D. Extended MCP fuzz (50+ adversarial inputs across 10 attack categories)
   E. Mirror REINFORCE v2 headline keys to root of receipt (U7)
-  F. GFW key honesty patch (separate key_authenticated vs data_ok) (U8)
-  G. Conformal v3 full payload re-run (U11)
-  H. Cold-open opening lines (U35) + Pareto efficiency plot
 """
 
 from __future__ import annotations
@@ -562,6 +559,7 @@ def block_d_extended_mcp_fuzz() -> dict:
         "n_total_inputs": total_inputs,
         "n_total_calls": len(tool_methods) * total_inputs,
         "calls_completed_safely": 0,
+        "unstructured_returns": 0,
         "exceptions_caught": 0,
         "uncaught_exceptions": [],
         "per_category_pass_rate": {},
@@ -587,12 +585,15 @@ def block_d_extended_mcp_fuzz() -> dict:
                     else:
                         # tool_sm_get_node_status, tool_sm_explain_disruption
                         ret = tool_fn(str(fuzz_in))
+                    # Safe ONLY when the tool returned a well-formed structured
+                    # dict (handled the adversarial input) — not merely "didn't
+                    # crash". Unstructured returns are tracked, not counted safe.
                     if isinstance(ret, dict) and ("ok" in ret):
                         results["calls_completed_safely"] += 1
                         cat_pass += 1
                     else:
-                        results["calls_completed_safely"] += 1
-                        cat_pass += 1
+                        results["unstructured_returns"] = (
+                            results.get("unstructured_returns", 0) + 1)
                 except Exception as e:
                     results["uncaught_exceptions"].append({
                         "tool": tool_name, "category": cat, "input": str(fuzz_in)[:80],
@@ -643,112 +644,6 @@ def block_e_mirror_v2_keys() -> dict:
 
 
 # ---------------------------------------------------------------------------
-# F — GFW key honesty patch
-# ---------------------------------------------------------------------------
-def block_f_gfw_honesty() -> dict:
-    api_path = RECEIPTS / "api_keys_live_proof.json"
-    if not api_path.exists():
-        return {"skipped": "api_keys_live_proof.json missing"}
-    d = json.loads(api_path.read_text())
-    # Find GFW entry and split key_authenticated vs data_ok
-    if isinstance(d, dict):
-        gfw = d.get("GFW") or d.get("gfw") or {}
-        if isinstance(gfw, dict):
-            gfw["key_authenticated"] = True
-            gfw["data_ok"] = gfw.get("data_ok", False)
-            gfw["honest_note"] = (
-                "Key is valid (Bearer auth). GFW service often returns 503 transient on free tier; "
-                "this is service-side, not credential-side. Receipt now distinguishes these."
-            )
-            d["GFW"] = gfw
-    api_path.write_text(json.dumps(d, indent=2, default=str))
-    return {
-        "name": "gfw_key_honesty_patch",
-        "patched_file": str(api_path.relative_to(ROOT)),
-        "closes_audit_bug": "B4 (GFW marked ok=true even when 503 transient)",
-    }
-
-
-# ---------------------------------------------------------------------------
-# G — Conformal v3 full payload re-run
-# ---------------------------------------------------------------------------
-def block_g_conformal_v3_full_payload() -> dict:
-    """Re-run conformal calibration with full per-alpha breakdown payload."""
-    rng = np.random.default_rng(789)
-    # Use 16K NLLs (Vovk 2005 split conformal): synthetic but properly-distributed
-    n_calib = 16_000
-    n_test = 4_000
-    nlls_calib = rng.normal(0.5, 0.3, n_calib).clip(0, None)
-    nlls_test = rng.normal(0.5, 0.3, n_test).clip(0, None)
-
-    alphas = [0.05, 0.10, 0.15, 0.20, 0.25, 0.30]
-    out = {
-        "name": "conformal_tight_v3_full_payload",
-        "supersedes": "conformal_tight_v3.json (was 710 bytes truncated)",
-        "method": "split_conformal_NLL_vovk2005",
-        "n_calib": n_calib,
-        "n_test": n_test,
-        "per_alpha": [],
-    }
-    for alpha in alphas:
-        q = float(np.quantile(nlls_calib, 1 - alpha))
-        accepted_test = (nlls_test <= q).mean()
-        out["per_alpha"].append({
-            "alpha_target": alpha,
-            "target_coverage": 1 - alpha,
-            "quantile_threshold": round(q, 6),
-            "empirical_coverage": float(round(accepted_test, 6)),
-            "abs_deviation": float(round(abs(accepted_test - (1 - alpha)), 6)),
-            "conservative_valid": bool(accepted_test >= (1 - alpha) - 0.01),
-        })
-    # Best deviation
-    best = min(out["per_alpha"], key=lambda x: x["abs_deviation"])
-    out["best_alpha"] = best["alpha_target"]
-    out["best_dev"] = best["abs_deviation"]
-    out["payload_size_bytes_target"] = ">5000 (vs old 710)"
-    return out
-
-
-# ---------------------------------------------------------------------------
-# H — Cold-open opening lines + judge persona one-pagers
-# ---------------------------------------------------------------------------
-def block_h_cold_open_doc() -> dict:
-    cold_open_path = DOCS / "COLD_OPEN_OPENING_LINES.md"
-    cold_open_path.write_text("""# COLD OPEN -- opening lines for judge pitch (<= 8 sec each)
-
-## Three variants depending on judge persona
-
-### A -- Technical depth judge (academic/research)
-> "REINFORCE on Wordle: 100% solve rate, Wilcoxon p=1.87e-34, Cohen's d=3.89, 9.8 seconds on a single CPU thread. Same loop drives a 280-action supply-chain RL env with 1500-event EMDAT RAG corpus and conformal action filter at 0.9001 empirical coverage."
-
-### B -- Industry pragmatist (engineer/PM)
-> "If Hormuz closes tomorrow, India loses INR X-trillion in 30 days. Watch what one LLM, RL-trained, does about it -- live API calls, real EIA price data, real NASA fire feed, end-to-end in 7 seconds with a sha256 receipt for every claim."
-
-### C -- Storyteller (DevRel/PM)
-> "Most hackathon entries train on Wordle. We ALSO train on Wordle -- and use the same canonical loop on a real-world supply-chain crisis simulator with 9 live data feeds. One submission, all three hackathon themes, every claim sha256-replayable."
-
-## Use-case map
-
-| Persona | Likely panel weight | Use line |
-|---|---|---|
-| Academic/research | 40% (per VICTORY_CALCULUS) | A |
-| Industry/PM | 35% | B |
-| Storyteller/DevRel | 25% | C |
-
-## Backup ultra-short variants (<= 4 sec)
-
-- "100% solve, p=1e-34, 9.8 seconds, CPU only."
-- "9 live APIs. 1500 events. 7-second war room."
-- "Three themes. One env. Every claim hashed."
-""", encoding="utf-8")
-    return {
-        "name": "cold_open_opening_lines",
-        "doc": str(cold_open_path.relative_to(ROOT)),
-        "n_variants": 3,
-    }
-
-
-# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 def main():
@@ -762,9 +657,6 @@ def main():
         ("C", "tier3_degradation_curve", block_c_tier3_degradation_curve, "pass27_C_tier3_degradation.json"),
         ("D", "extended_mcp_fuzz", block_d_extended_mcp_fuzz, "pass27_D_extended_mcp_fuzz.json"),
         ("E", "mirror_v2_keys", block_e_mirror_v2_keys, "pass27_E_mirror_v2_keys.json"),
-        ("F", "gfw_honesty", block_f_gfw_honesty, "pass27_F_gfw_honesty.json"),
-        ("G", "conformal_v3_full_payload", block_g_conformal_v3_full_payload, "pass27_G_conformal_v3_full.json"),
-        ("H", "cold_open_doc", block_h_cold_open_doc, "pass27_H_cold_open.json"),
     ]
 
     summary = {"pass": 27, "blocks": []}

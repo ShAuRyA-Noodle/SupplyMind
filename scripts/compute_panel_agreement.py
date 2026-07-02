@@ -18,8 +18,8 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-R4_PATH = ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
-PANEL_JSON = ROOT / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
+R4_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+PANEL_JSON = ROOT / "versions" / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
 CACHE_DIR = ROOT / ".openrouter_cache"
 RECEIPT = ROOT / "tests" / "receipts" / "frontier_panel_alpha.json"
 
@@ -85,11 +85,17 @@ def _load_local_r4() -> dict[str, dict[str, str]]:
     return out
 
 
-def _load_frontier_cache() -> dict[str, dict[str, str]]:
-    """frontier[scenario_id][model_slug] = risk_level from cached panel calls."""
+def _load_frontier_cache() -> tuple[dict[str, dict[str, str]], int]:
+    """frontier[scenario_id][model_slug] = risk_level from cached panel calls.
+
+    Returns (table, n_unparseable). Cached rows whose predicted_risk is not a
+    valid tier (unparseable / no verdict) are counted and EXCLUDED from the
+    agreement table — never coerced into a fabricated verdict.
+    """
     out: dict[str, dict[str, str]] = {}
+    n_unparseable = 0
     if not CACHE_DIR.exists():
-        return out
+        return out, n_unparseable
     for model_dir in CACHE_DIR.iterdir():
         if not model_dir.is_dir():
             continue
@@ -103,7 +109,9 @@ def _load_frontier_cache() -> dict[str, dict[str, str]]:
             pred = str(row.get("predicted_risk", "")).upper()
             if pred in RISK_ORDER:
                 out.setdefault(sid, {})[f"frontier:{model_slug}"] = pred
-    return out
+            else:
+                n_unparseable += 1
+    return out, n_unparseable
 
 
 def _ground_truth_map() -> dict[str, str]:
@@ -114,7 +122,7 @@ def _ground_truth_map() -> dict[str, str]:
 
 def main() -> None:
     local = _load_local_r4()
-    frontier = _load_frontier_cache()
+    frontier, n_frontier_unparseable = _load_frontier_cache()
     gt = _ground_truth_map()
 
     # Combined table: every judge × every scenario
@@ -167,6 +175,7 @@ def main() -> None:
             "n_judges_total": len(judges_local) + len(judges_frontier),
             "n_scenarios": {"local": n_local, "frontier": n_frontier,
                              "combined": n_combined},
+            "n_frontier_verdicts_unparseable_excluded": n_frontier_unparseable,
             "krippendorff_alpha_ordinal": {
                 "local_only": alpha_local,
                 "frontier_only": alpha_frontier,

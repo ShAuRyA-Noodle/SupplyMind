@@ -6,13 +6,15 @@ Per OpenEnv India 2026 judging criteria §"Make your plots readable":
   - Multiple-run comparisons on same axes
   - One-line caption per plot
 
+Every plot renders only from real result files (a real trained checkpoint or a
+committed receipt). If an input file is missing the loader raises — no synthetic
+fallback, no hardcoded stat annotations.
+
 Outputs to FINAL_SUBMIT/plots/:
-  1. reward_curve.png       — RAP-XC training: BC loss 5.62 → 0.23 over 12 epochs
+  1. reward_curve.png       — RAP-XC training BC loss (from rapxc.pt history)
   2. loss_components.png    — 4 loss components (BC, V, CQL, KL) over training steps
-  3. before_after.png       — RAP-XC vs scripted_baseline reward distribution
-  4. algo_leaderboard.png   — 9-agent bootstrap CI95 leaderboard
-  5. wilcoxon_grid.png      — pairwise p-values heatmap (log10 scale)
-  6. conformal_coverage.png — empirical vs target coverage (0.9001 vs 0.9)
+  3. conformal_coverage.png — empirical vs target coverage (conformal_calibration.json)
+  4. brent_backtest.png     — ensemble Brent backtest (ensemble_brent_validation.json)
 """
 from __future__ import annotations
 
@@ -107,131 +109,7 @@ def plot_loss_components():
 
 
 # ---------------------------------------------------------------------------
-# 3. Before vs after — RAP-XC vs baselines reward distribution
-# ---------------------------------------------------------------------------
-def plot_before_after():
-    bootstrap = json.loads((ROOT / "tests" / "receipts" / "bootstrap_leaderboard.json")
-                            .read_text(encoding="utf-8"))
-    hard = bootstrap["per_task_per_agent"]["hard_cascading_crisis"]
-    fig, ax = plt.subplots(figsize=(9, 5.5))
-    rows = []
-    for agent in ["rap_xc", "maskable_ppo_v3", "scripted_baseline"]:
-        s = hard.get(agent, {})
-        if s.get("status") == "no_data":
-            continue
-        rows.append((agent, s["mean_reward"], s["ci95_lo"], s["ci95_hi"], s["n_episodes"]))
-    rows.sort(key=lambda x: x[1])
-    names = [r[0] for r in rows]
-    means = [r[1] for r in rows]
-    lo = [r[1] - r[2] for r in rows]
-    hi = [r[3] - r[1] for r in rows]
-    ns = [r[4] for r in rows]
-    colors = [C_GREEN if n == "rap_xc" else (C_CYAN if "ppo" in n.lower() else C_AMBER)
-                for n in names]
-    bars = ax.barh(names, means, xerr=[lo, hi], color=colors, alpha=0.85,
-                     error_kw={"ecolor": "#3a3f4d", "elinewidth": 1.5, "capsize": 5})
-    for i, (b, mean, n) in enumerate(zip(bars, means, ns)):
-        ax.text(mean + 0.05, i, f"{mean:+.3f} (n={n})",
-                 va="center", fontsize=10, color="black")
-    ax.axvline(0, color="#3a3f4d", linewidth=0.8)
-    ax.set_xlabel("Mean episode reward (higher is better) · CI95 error bars")
-    ax.set_title("Before-after · RAP-XC vs baselines on hard_cascading_crisis (60-day, 40-node)")
-    ax.text(0.98, 0.05,
-             "RAP-XC vs MaskablePPO-v3:\n"
-             "Wilcoxon p = 3.9e-18 (Cohen d = +2.73)\n"
-             "Bootstrap mean Δ = +0.228, CI95 [+0.198, +0.257]\n"
-             "→ CI strictly excludes zero",
-             transform=ax.transAxes, ha="right", va="bottom", fontsize=9,
-             bbox=dict(boxstyle="round", facecolor="#0c1018",
-                        edgecolor="#34d399"), color="white")
-    fig.tight_layout()
-    out = PLOTS / "before_after.png"
-    fig.savefig(out, dpi=130, bbox_inches="tight", facecolor="white")
-    plt.close(fig)
-    print(f"+ {out.name}")
-
-
-# ---------------------------------------------------------------------------
-# 4. Full leaderboard CI95 across 3 tasks
-# ---------------------------------------------------------------------------
-def plot_algo_leaderboard():
-    bootstrap = json.loads((ROOT / "tests" / "receipts" / "bootstrap_leaderboard.json")
-                            .read_text(encoding="utf-8"))
-    tasks = ["easy_typhoon_response", "medium_multi_front", "hard_cascading_crisis"]
-    agents = ["rap_xc", "maskable_ppo_v3", "scripted_baseline",
-                "recurrent_ppo", "a2c"]
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=True)
-    for ax, task in zip(axes, tasks):
-        per = bootstrap["per_task_per_agent"][task]
-        rows = []
-        for a in agents:
-            s = per.get(a, {})
-            if s.get("status") == "no_data":
-                continue
-            rows.append((a, s["mean_reward"], s["ci95_lo"], s["ci95_hi"]))
-        rows.sort(key=lambda x: x[1])
-        names = [r[0] for r in rows]
-        means = [r[1] for r in rows]
-        lo = [r[1] - r[2] for r in rows]
-        hi = [r[3] - r[1] for r in rows]
-        colors = [C_GREEN if "rap_xc" in n else (C_CYAN if "ppo" in n.lower() else
-                    (C_AMBER if "scripted" in n else "#71717a")) for n in names]
-        ax.barh(names, means, xerr=[lo, hi], color=colors, alpha=0.85,
-                  error_kw={"ecolor": "#3a3f4d", "elinewidth": 1.2, "capsize": 4})
-        ax.axvline(0, color="#3a3f4d", linewidth=0.8)
-        ax.set_title(task.replace("_", " "))
-        ax.set_xlabel("Mean reward (CI95)")
-    axes[0].set_ylabel("Agent")
-    fig.suptitle("9-agent bootstrap CI95 leaderboard · 3 difficulty tiers", fontsize=14)
-    fig.tight_layout()
-    out = PLOTS / "algo_leaderboard.png"
-    fig.savefig(out, dpi=130, bbox_inches="tight", facecolor="white")
-    plt.close(fig)
-    print(f"+ {out.name}")
-
-
-# ---------------------------------------------------------------------------
-# 5. Wilcoxon p-value heatmap
-# ---------------------------------------------------------------------------
-def plot_wilcoxon():
-    wil = json.loads((ROOT / "tests" / "receipts" / "wilcoxon_pairwise_leaderboard.json")
-                       .read_text(encoding="utf-8"))
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-    tasks = ["easy_typhoon_response", "medium_multi_front", "hard_cascading_crisis"]
-    for ax, task in zip(axes, tasks):
-        comps = wil["per_task"][task].get("comparisons", [])
-        agents = sorted(set([c["a"] for c in comps] + [c["b"] for c in comps]))
-        idx = {a: i for i, a in enumerate(agents)}
-        n = len(agents)
-        mat = np.full((n, n), np.nan)
-        for c in comps:
-            i, j = idx[c["a"]], idx[c["b"]]
-            log_p = c["wilcoxon_p_log10"]
-            log_p = max(log_p, -200)  # clip for plotting
-            mat[i, j] = log_p
-            mat[j, i] = log_p
-        im = ax.imshow(mat, cmap="RdYlGn_r", vmin=-150, vmax=0, aspect="auto")
-        ax.set_xticks(range(n)); ax.set_yticks(range(n))
-        ax.set_xticklabels(agents, rotation=35, ha="right", fontsize=9)
-        ax.set_yticklabels(agents, fontsize=9)
-        for i in range(n):
-            for j in range(n):
-                v = mat[i, j]
-                if not np.isnan(v):
-                    ax.text(j, i, f"{v:.0f}", ha="center", va="center",
-                              fontsize=7, color="white" if v < -30 else "black")
-        ax.set_title(task.replace("_", " "))
-    fig.colorbar(im, ax=axes, fraction=0.025, pad=0.02,
-                   label="log10(p-value) · more negative = more significant")
-    fig.suptitle("Wilcoxon signed-rank pairwise · log10 p-values", fontsize=14)
-    out = PLOTS / "wilcoxon_grid.png"
-    fig.savefig(out, dpi=130, bbox_inches="tight", facecolor="white")
-    plt.close(fig)
-    print(f"+ {out.name}")
-
-
-# ---------------------------------------------------------------------------
-# 6. Conformal coverage actual vs target
+# 3. Conformal coverage actual vs target
 # ---------------------------------------------------------------------------
 def plot_conformal():
     conf = json.loads((ROOT / "tests" / "receipts" / "conformal_calibration.json")
@@ -301,9 +179,6 @@ def plot_brent_validation():
 if __name__ == "__main__":
     plot_reward_curve()
     plot_loss_components()
-    plot_before_after()
-    plot_algo_leaderboard()
-    plot_wilcoxon()
     plot_conformal()
     plot_brent_validation()
     print(f"\nAll plots saved to {PLOTS}")

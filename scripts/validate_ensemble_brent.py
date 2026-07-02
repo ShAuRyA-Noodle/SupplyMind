@@ -1,10 +1,13 @@
 """validate_ensemble_brent.py — backtest the ensemble Brent forecaster on the
-8 documented historical events, comparing peak prediction to documented peak.
+documented historical events, comparing peak prediction to documented peak.
 
-Each event provides: severity, pre-event Brent, peak Brent, duration_days,
-region. We synthesize a 200-day pre-event history (real Brent series anchored
-at the documented `pre` price), then call ensemble_forecast and record the
-predicted peak vs documented peak.
+For each event we slice the REAL FRED DCOILBRENTEU daily series (the actual
+observations ending on/before the event date) as the pre-event history, then
+call ensemble_forecast and record the predicted peak vs documented peak.
+
+The Brent series is loaded from a local cache or fetched live from FRED
+(FRED_API_KEY in .env) and cached. If neither is available the script FAILS
+LOUD — it never synthesizes a price history.
 
 Receipt: tests/receipts/ensemble_brent_validation.json
 """
@@ -12,6 +15,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import sys
 import time
 from pathlib import Path
@@ -29,26 +33,73 @@ logger = logging.getLogger(__name__)
 LIB = ROOT / "versions/v4_arcadia_live" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
 RECEIPT = ROOT / "tests" / "receipts" / "ensemble_brent_validation.json"
 
-
-def synth_pre_history(pre_brent: float, n_days: int = 200, seed: int = 42) -> np.ndarray:
-    """Real-style 200-day Brent history anchored at the documented pre-event price.
-    Uses ±8% sinusoidal seasonal + AR(1) noise; identical seeded process for
-    each event so the eval is deterministic."""
-    rng = np.random.default_rng(seed)
-    base = pre_brent + (pre_brent * 0.04) * np.sin(np.linspace(0, 6.28, n_days))
-    noise = rng.standard_normal(n_days) * (pre_brent * 0.012)
-    # AR(1) smoothing
-    out = np.zeros(n_days, dtype=np.float32)
-    out[0] = base[0] + noise[0]
-    for t in range(1, n_days):
-        out[t] = 0.85 * out[t-1] + 0.15 * (base[t] + noise[t])
-    # Pin last point to documented pre-event price (operator's known starting state)
-    drift = pre_brent - out[-1]
-    out += drift
-    return out.astype(np.float32)
+FRED_SERIES = "DCOILBRENTEU"
+BRENT_CACHE = ROOT / "rl" / "data" / "brent_daily_fred_cache.json"
 
 
-def evaluate_one(event: dict) -> dict:
+def load_brent_series() -> list[tuple[str, float]]:
+    """Return the REAL FRED DCOILBRENTEU daily series as a sorted list of
+    (ISO-date, price). Resolution order: local cache -> live FRED fetch (then
+    cached). Raises RuntimeError if neither is available — no synthetic data."""
+    if BRENT_CACHE.exists():
+        try:
+            cached = json.loads(BRENT_CACHE.read_text(encoding="utf-8"))
+            series = [(o["date"], float(o["value"]))
+                      for o in cached.get("observations", [])
+                      if o.get("value") not in (None, ".", "")]
+            if series:
+                return sorted(series)
+        except (json.JSONDecodeError, KeyError, ValueError, OSError):
+            pass  # fall through to a live fetch
+
+    from scripts._env import load_env
+    load_env()
+    key = os.environ.get("FRED_API_KEY")
+    if not key:
+        raise RuntimeError(
+            f"No real Brent history: FRED_API_KEY unset and no cache at "
+            f"{BRENT_CACHE.relative_to(ROOT)}. Refusing to synthesize prices."
+        )
+    import httpx
+    r = httpx.get(
+        "https://api.stlouisfed.org/fred/series/observations",
+        params={"api_key": key, "file_type": "json", "series_id": FRED_SERIES,
+                "observation_start": "2010-01-01"},
+        timeout=60,
+    )
+    if r.status_code != 200:
+        raise RuntimeError(
+            f"FRED fetch for {FRED_SERIES} failed: HTTP {r.status_code} "
+            f"{r.text[:200]}")
+    obs = r.json().get("observations", [])
+    series = [(o["date"], float(o["value"])) for o in obs
+              if o.get("value") not in (None, ".", "")]
+    if not series:
+        raise RuntimeError(f"FRED returned no usable {FRED_SERIES} observations")
+    series.sort()
+    BRENT_CACHE.parent.mkdir(parents=True, exist_ok=True)
+    BRENT_CACHE.write_text(json.dumps({
+        "series_id": FRED_SERIES,
+        "source": "FRED https://api.stlouisfed.org (DCOILBRENTEU)",
+        "fetched_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "n_observations": len(series),
+        "observations": [{"date": d, "value": v} for d, v in series],
+    }, indent=2), encoding="utf-8")
+    return series
+
+
+def _pre_event_history(series: list[tuple[str, float]], event_date: str,
+                        n_days: int = 200, min_obs: int = 20):
+    """Real Brent observations on/before event_date, last n_days. ISO dates
+    sort lexically. Returns (np.ndarray, n_obs) or (None, n_obs) if too few."""
+    window = [v for d, v in series if event_date and d <= event_date]
+    if len(window) < min_obs:
+        return None, len(window)
+    hist = window[-n_days:]
+    return np.asarray(hist, dtype=np.float32), len(hist)
+
+
+def evaluate_one(event: dict, series: list[tuple[str, float]]) -> dict:
     sev = float(event["severity"])
     oi = event.get("oil_impact_usd_bbl") or {}
     pre = oi.get("pre")
@@ -62,8 +113,14 @@ def evaluate_one(event: dict) -> dict:
 
     duration = max(7, int(event.get("duration_days") or 21))
     region = event.get("region", "hormuz")
+    event_date = event.get("date") or event.get("event_date") or ""
 
-    history = synth_pre_history(pre, n_days=200)
+    history, n_real = _pre_event_history(series, event_date, n_days=200)
+    if history is None:
+        return {"event_id": event["id"],
+                "skipped": "insufficient_real_brent_history",
+                "event_date": event_date, "n_real_obs_before_event": n_real}
+
     t0 = time.time()
     try:
         out = ensemble_forecast(
@@ -87,6 +144,10 @@ def evaluate_one(event: dict) -> dict:
         "severity": sev,
         "duration_days": duration,
         "region": region,
+        "brent_history_source": f"FRED {FRED_SERIES} (real observations)",
+        "pre_event_window_end": event_date,
+        "n_real_pre_event_obs": n_real,
+        "real_history_last3": [round(float(x), 3) for x in history[-3:]],
         "documented_pre_brent": pre,
         "documented_peak_brent": peak,
         "documented_peak_delta_pct": round((peak - pre) / pre * 100, 2),
@@ -107,11 +168,13 @@ def main() -> dict:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     catalog = json.loads(LIB.read_text(encoding="utf-8"))
     events = catalog.get("events", [])
-    logger.info("[ensemble-validate] loaded %d events", len(events))
+    series = load_brent_series()  # fails loud if no real data
+    logger.info("[ensemble-validate] loaded %d events, %d real Brent observations",
+                len(events), len(series))
 
     rows: list[dict] = []
     for ev in events:
-        row = evaluate_one(ev)
+        row = evaluate_one(ev, series)
         rows.append(row)
         if "fatal_error" in row or "skipped" in row:
             logger.warning("[ensemble-validate] %s: %s",
@@ -135,11 +198,16 @@ def main() -> dict:
     median_p50_err = (float(np.median([r["rel_err_p50_pct"] for r in valid]))
                       if valid else None)
 
+    n_skipped = sum(1 for r in rows if "skipped" in r or "fatal_error" in r)
     receipt = {
         "generated_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "library_path": str(LIB.relative_to(ROOT)),
+        "brent_series": FRED_SERIES,
+        "brent_series_source": "FRED api.stlouisfed.org (real daily observations)",
+        "n_brent_observations": len(series),
         "n_events_tested": len(rows),
         "n_events_valid": len(valid),
+        "n_events_skipped": n_skipped,
         "ensemble_models": ["chronos-bolt-base", "timesfm-2", "tabpfn-v2-reg"],
         "aggregate_accuracy": {
             "p50_within_30pct": round(p50_acc, 4),
@@ -148,11 +216,13 @@ def main() -> dict:
         },
         "per_event_results": rows,
         "method": (
-            "Per-event closed-form backtest. For each documented event, build "
-            "a 200-day synthetic Brent history anchored at the documented pre-"
-            "event price, then call ensemble_forecast(history, severity=sev, "
-            "duration=duration, region=region) and compare predicted p50_peak "
-            "+ p90_peak to the documented peak. Pass = within 30%."
+            "Per-event backtest on REAL data. For each documented event, slice "
+            "the actual FRED DCOILBRENTEU daily observations ending on/before "
+            "the event date (last 200) as the pre-event history, then call "
+            "ensemble_forecast(history, severity, duration, region) and compare "
+            "predicted p50_peak + p90_peak to the documented peak. Pass = "
+            "within 30%. Events without enough real pre-event history are "
+            "skipped (never synthesized)."
         ),
     }
     RECEIPT.parent.mkdir(parents=True, exist_ok=True)
