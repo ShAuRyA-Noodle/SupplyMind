@@ -14,6 +14,12 @@
    `np.random`/`Math.random` dressed as model output, no canned LLM responses, no placeholder
    receipts, no `alert()` cards pretending to be endpoints, no dead UI. If a feature cannot be
    real yet, it is **removed or explicitly labeled experimental** — never faked.
+   **1b. REBUILD-REAL DOCTRINE (owner directive 2026-07-02): removal is triage, not the endpoint.**
+   Every capability that was deleted/stubbed/relabeled because it was fake MUST get an entry in
+   `REBUILD_BACKLOG.md` and, where feasible, be REBUILT as the genuine world-class version.
+   The goal is not a smaller honest project — it is a complete phenomenal one. Deleted code is
+   recoverable from git history; ambition is mandatory. Limitations get engineered into
+   strengths, not merely documented.
 2. **Evidence-gated "done".** No task is complete until its acceptance criterion is executed and
    the output is captured (test run, curl output, screenshot, committed receipt with real
    exit_code 0). Claims without artifacts are lies.
