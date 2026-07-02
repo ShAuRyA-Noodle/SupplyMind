@@ -1,8 +1,13 @@
 """
-Full benchmark suite for SupplyMind.
+Benchmark suite for SupplyMind.
 
-9 agents + Ensemble x 3 tasks x 5 seeds x 20 episodes each.
-Outputs CSV with scores, means, stds to benchmark/results/.
+Evaluates the agents that have a real evaluator here (random, scripted) across
+3 tasks x 5 seeds x 20 episodes each and writes CSVs to benchmark/results/.
+
+Trained agents (bc, td3bc, cql, iql, ppo, qrdqn, dt, ensemble) require loaded
+checkpoints and are evaluated by benchmark/run_full_benchmark.py against
+rl/checkpoints/. This module does NOT substitute a placeholder for them: any
+trained agent requested here is skipped loudly and recorded as 'not_evaluated'.
 
 Usage:
     python -m benchmark.run_benchmark
@@ -34,6 +39,14 @@ TASK_SHORT = {"easy_typhoon_response": "Easy", "medium_multi_front": "Medium", "
 ALL_AGENTS = [
     "random", "bc", "td3bc", "cql", "scripted", "iql", "ppo", "qrdqn", "dt", "ensemble",
 ]
+
+# Agents with a real evaluator in this module. Everything else needs a trained
+# checkpoint and is handled by run_full_benchmark.py.
+REAL_AGENTS = {"random", "scripted"}
+
+
+class AgentNotAvailable(RuntimeError):
+    """Raised when an agent has no real evaluator in this module."""
 
 
 def evaluate_random(task_id: str, seed: int, n_episodes: int = 20) -> list[float]:
@@ -79,15 +92,24 @@ def evaluate_scripted(task_id: str, seed: int, n_episodes: int = 20) -> list[flo
 
 
 def evaluate_agent(agent_name: str, task_id: str, seed: int, n_episodes: int = 20) -> list[float]:
-    """Dispatch to the right evaluation function."""
+    """Dispatch to the right evaluation function.
+
+    Raises:
+        AgentNotAvailable: If the agent needs a trained checkpoint that this
+            module does not load. Callers must exclude it from results rather
+            than substitute a placeholder.
+    """
     if agent_name == "random":
         return evaluate_random(task_id, seed, n_episodes)
     elif agent_name == "scripted":
         return evaluate_scripted(task_id, seed, n_episodes)
     else:
-        # For trained agents — use scripted as placeholder until models are trained
-        logger.info("Agent '%s' not yet trained. Using scripted baseline scores.", agent_name)
-        return evaluate_scripted(task_id, seed, n_episodes)
+        raise AgentNotAvailable(
+            f"Agent '{agent_name}' has no real evaluator in run_benchmark.py "
+            f"(only {sorted(REAL_AGENTS)} do). Trained checkpoints are evaluated "
+            f"by benchmark/run_full_benchmark.py against rl/checkpoints/. "
+            f"Refusing to substitute a scripted placeholder."
+        )
 
 
 def run_benchmark(
@@ -113,40 +135,56 @@ def run_benchmark(
     logger.info("=" * 70)
 
     all_results: list[dict[str, Any]] = []
+    evaluated_agents: list[str] = []
+    not_evaluated: list[str] = []
     start = time.time()
 
     for agent in agents:
-        for task_id in TASK_IDS:
-            agent_task_scores = []
-            for seed in seeds:
-                scores = evaluate_agent(agent, task_id, seed, n_episodes)
-                agent_task_scores.extend(scores)
-                for s in scores:
-                    all_results.append({
-                        "agent": agent,
-                        "task": TASK_SHORT[task_id],
-                        "task_id": task_id,
-                        "seed": seed,
-                        "score": s,
-                    })
+        try:
+            agent_rows: list[dict[str, Any]] = []
+            for task_id in TASK_IDS:
+                agent_task_scores = []
+                for seed in seeds:
+                    scores = evaluate_agent(agent, task_id, seed, n_episodes)
+                    agent_task_scores.extend(scores)
+                    for s in scores:
+                        agent_rows.append({
+                            "agent": agent,
+                            "task": TASK_SHORT[task_id],
+                            "task_id": task_id,
+                            "seed": seed,
+                            "score": s,
+                        })
 
-            mean = np.mean(agent_task_scores)
-            std = np.std(agent_task_scores)
-            logger.info("  %s x %s: %.4f +/- %.4f (n=%d)",
-                        agent, TASK_SHORT[task_id], mean, std, len(agent_task_scores))
+                mean = np.mean(agent_task_scores)
+                std = np.std(agent_task_scores)
+                logger.info("  %s x %s: %.4f +/- %.4f (n=%d)",
+                            agent, TASK_SHORT[task_id], mean, std, len(agent_task_scores))
+        except AgentNotAvailable as e:
+            logger.warning("NOT EVALUATED — excluding agent '%s' from results: %s", agent, e)
+            not_evaluated.append(agent)
+            continue
 
-    # Write CSV
+        all_results.extend(agent_rows)
+        evaluated_agents.append(agent)
+
+    # Write per-episode CSV (evaluated agents only)
     with open(output_path, "w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=["agent", "task", "task_id", "seed", "score"])
         writer.writeheader()
         writer.writerows(all_results)
 
-    # Write summary table
+    # Write summary table. Evaluated agents get real means; agents that could
+    # not be evaluated are written with an explicit 'not_evaluated' marker so
+    # they are never mistaken for a real (or scripted) score.
     summary_path = RESULTS_DIR / "benchmark_summary.csv"
     with open(summary_path, "w", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(["Agent", "Easy", "Medium", "Hard", "Average"])
         for agent in agents:
+            if agent in not_evaluated:
+                writer.writerow([agent, "not_evaluated", "not_evaluated", "not_evaluated", "not_evaluated"])
+                continue
             row = [agent]
             task_avgs = []
             for task_id in TASK_IDS:
@@ -161,6 +199,9 @@ def run_benchmark(
     elapsed = time.time() - start
     logger.info("=" * 70)
     logger.info("Benchmark complete in %.1f min", elapsed / 60)
+    logger.info("  Evaluated: %s", evaluated_agents)
+    if not_evaluated:
+        logger.warning("  NOT evaluated (no checkpoint / no real evaluator here): %s", not_evaluated)
     logger.info("  Results: %s", output_path)
     logger.info("  Summary: %s", summary_path)
     logger.info("=" * 70)

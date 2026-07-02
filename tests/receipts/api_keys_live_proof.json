@@ -25,16 +25,16 @@
     },
     "GFW": {
       "status_code": 503,
-      "ok": true,
+      "ok": false,
       "key_authenticated": true,
       "response_hash_first_1k": "46175066e5610cd06ed0f24ee1cead0703fb171a90593ba6d387c502bd37a013",
       "endpoint": "gateway.api.globalfishingwatch.org/v3/4wings/stats",
       "n_bytes": 224,
-      "note": "200 = live data; 422/503 = key validated, service transient or query refinement needed"
+      "note": "503 = key authenticated but service returned no live data; ok:false because the call did not return 200. 422/503 mean the key was validated but the query/service was not fully served."
     }
   },
   "finished_at": 1777142914.8302271,
   "wall_clock_s": 5.78,
   "n_keys_present": 4,
-  "n_keys_ok_200": 4
+  "n_keys_ok_200": 3
 }

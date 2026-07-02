@@ -1,11 +1,15 @@
 """
-Publication-quality chart generation for SupplyMind benchmarks.
+Chart generation for SupplyMind benchmarks.
+
+Every figure is generated ONLY from a real result file produced by the
+benchmark runners. There is no invented / hardcoded fallback data: if the
+required result file is missing, the generator raises FileNotFoundError with a
+message telling you which command to run first.
 
 Generates:
-  - Benchmark table as image
-  - Ablation progressive bar chart
-  - Agent comparison radar chart
-  - Training curves with CI bands
+  - Benchmark comparison table   (from benchmark/results/benchmark_summary.csv)
+  - Ablation progressive bar chart (from benchmark/results/ablation_results.csv)
+  - Agent comparison radar chart (from benchmark/results/benchmark_summary.csv)
 
 Usage:
     python -m benchmark.visualize
@@ -14,12 +18,9 @@ Usage:
 from __future__ import annotations
 
 import csv
-import json
 import logging
 import sys
 from pathlib import Path
-
-import numpy as np
 
 _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
@@ -30,9 +31,39 @@ logger = logging.getLogger(__name__)
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 FIGURES_DIR = RESULTS_DIR / "figures"
 
+SUMMARY_CSV = RESULTS_DIR / "benchmark_summary.csv"
+ABLATION_CSV = RESULTS_DIR / "ablation_results.csv"
+
+
+def _require(path: Path, generator: str) -> None:
+    """Raise a helpful FileNotFoundError if a required result file is absent."""
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Required benchmark result file not found: {path}\n"
+            f"Generate it first by running: {generator}"
+        )
+
+
+def _parse_mean(cell: str) -> float | None:
+    """Parse '0.771+/-0.020' or '0.714' -> 0.771 float, or None if not numeric."""
+    cell = cell.strip()
+    if "+/-" in cell:
+        cell = cell.split("+/-")[0]
+    try:
+        return float(cell)
+    except ValueError:
+        return None
+
 
 def generate_benchmark_table() -> Path | None:
-    """Generate benchmark comparison table as image."""
+    """Generate the benchmark comparison table from benchmark_summary.csv."""
+    _require(SUMMARY_CSV, "python -m benchmark.run_benchmark")
+
+    with open(SUMMARY_CSV) as f:
+        reader = csv.reader(f)
+        headers = next(reader)
+        rows = list(reader)
+
     try:
         import plotly.graph_objects as go
     except ImportError:
@@ -40,29 +71,6 @@ def generate_benchmark_table() -> Path | None:
         return None
 
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-
-    # Read summary CSV or use target scores
-    summary_path = RESULTS_DIR / "benchmark_summary.csv"
-    if summary_path.exists():
-        with open(summary_path) as f:
-            reader = csv.reader(f)
-            headers = next(reader)
-            rows = list(reader)
-    else:
-        headers = ["Agent", "Easy", "Medium", "Hard", "Average"]
-        rows = [
-            ["Random", "0.27+/-0.00", "0.25+/-0.00", "0.24+/-0.00", "0.25"],
-            ["BC", "0.65+/-0.03", "0.58+/-0.04", "0.55+/-0.03", "0.59"],
-            ["TD3+BC", "0.72+/-0.03", "0.65+/-0.03", "0.62+/-0.03", "0.66"],
-            ["CQL", "0.75+/-0.02", "0.68+/-0.03", "0.65+/-0.02", "0.69"],
-            ["Scripted", "0.77+/-0.02", "0.70+/-0.03", "0.67+/-0.02", "0.71"],
-            ["IQL", "0.79+/-0.03", "0.72+/-0.03", "0.69+/-0.03", "0.73"],
-            ["PPO", "0.80+/-0.03", "0.72+/-0.04", "0.69+/-0.03", "0.74"],
-            ["QR-DQN", "0.83+/-0.02", "0.76+/-0.02", "0.73+/-0.02", "0.77"],
-            ["DT", "0.85+/-0.03", "0.78+/-0.03", "0.75+/-0.03", "0.79"],
-            ["Ensemble", "0.87+/-0.02", "0.80+/-0.02", "0.77+/-0.02", "0.81"],
-        ]
-
     fig = go.Figure(data=[go.Table(
         header=dict(
             values=headers,
@@ -77,7 +85,10 @@ def generate_benchmark_table() -> Path | None:
             align="center",
         ),
     )])
-    fig.update_layout(title="SupplyMind Benchmark Results (9 Agents)", height=400, margin=dict(l=10, r=10, t=40, b=10))
+    fig.update_layout(
+        title=f"SupplyMind Benchmark Results ({len(rows)} agents)",
+        height=400, margin=dict(l=10, r=10, t=40, b=10),
+    )
     path = FIGURES_DIR / "benchmark_table.html"
     fig.write_html(str(path))
     logger.info("Benchmark table: %s", path)
@@ -85,24 +96,27 @@ def generate_benchmark_table() -> Path | None:
 
 
 def generate_ablation_chart() -> Path | None:
-    """Generate ablation progressive bar chart."""
+    """Generate the ablation bar chart from ablation_results.csv."""
+    _require(ABLATION_CSV, "python -m benchmark.ablation")
+
+    configs: list[str] = []
+    scores: list[float] = []
+    with open(ABLATION_CSV) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            configs.append(row["configuration"])
+            scores.append(float(row["avg_mean"]))
+
     try:
         import plotly.graph_objects as go
     except ImportError:
+        logger.warning("plotly not installed, skipping ablation chart")
         return None
 
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-
-    configs = ["Random", "Scripted", "PPO", "+Real Data", "+CVaR", "+Uncertainty", "+DT", "+Ensemble"]
-    scores = [0.25, 0.71, 0.74, 0.76, 0.77, 0.78, 0.79, 0.81]
-    colors = ["#e0e0e0", "#bdbdbd", "#90caf9", "#64b5f6", "#42a5f5", "#2196f3", "#1976d2", "#0d47a1"]
-
-    # Incremental contribution
-    increments = [scores[0]] + [scores[i] - scores[i-1] for i in range(1, len(scores))]
-
     fig = go.Figure()
     fig.add_trace(go.Bar(
-        x=configs, y=scores, marker_color=colors,
+        x=configs, y=scores,
         text=[f"{s:.2f}" for s in scores], textposition="outside",
     ))
     fig.update_layout(
@@ -117,35 +131,43 @@ def generate_ablation_chart() -> Path | None:
 
 
 def generate_radar_chart() -> Path | None:
-    """Generate agent comparison radar chart."""
+    """Generate an agent comparison radar from real per-task means in
+    benchmark_summary.csv. Axes are the three task difficulties (the only
+    per-agent breakdown the benchmark actually produces)."""
+    _require(SUMMARY_CSV, "python -m benchmark.run_benchmark")
+
+    categories = ["Easy", "Medium", "Hard"]
+    agents: dict[str, list[float]] = {}
+    with open(SUMMARY_CSV) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            values = [_parse_mean(row.get(cat, "")) for cat in categories]
+            if any(v is None for v in values):
+                continue  # e.g. a 'not_evaluated' agent — skip, never invent
+            agents[row["Agent"]] = values  # type: ignore[assignment]
+
+    if not agents:
+        raise FileNotFoundError(
+            f"No agent in {SUMMARY_CSV} has numeric per-task scores to plot "
+            f"(all rows may be 'not_evaluated'). Run: python -m benchmark.run_benchmark"
+        )
+
     try:
         import plotly.graph_objects as go
     except ImportError:
+        logger.warning("plotly not installed, skipping radar chart")
         return None
 
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-
-    categories = ["Revenue Preservation", "Timeliness", "Cost Efficiency",
-                   "Stockout Prevention", "Risk Awareness"]
-
     fig = go.Figure()
-    agents = {
-        "Scripted": [0.75, 0.65, 0.80, 0.70, 0.60],
-        "PPO": [0.80, 0.75, 0.72, 0.78, 0.70],
-        "QR-DQN (CVaR)": [0.85, 0.80, 0.70, 0.85, 0.90],
-        "DT": [0.88, 0.85, 0.72, 0.82, 0.85],
-        "Ensemble": [0.90, 0.87, 0.74, 0.88, 0.92],
-    }
-
     for name, values in agents.items():
         fig.add_trace(go.Scatterpolar(
             r=values + [values[0]], theta=categories + [categories[0]],
             fill="toself", name=name, opacity=0.6,
         ))
-
     fig.update_layout(
         polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
-        title="Agent Capability Radar",
+        title="Agent Score by Task Difficulty",
         height=500,
     )
     path = FIGURES_DIR / "radar_chart.html"
@@ -155,12 +177,32 @@ def generate_radar_chart() -> Path | None:
 
 
 def generate_all() -> None:
-    """Generate all publication-quality figures."""
-    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
-    generate_benchmark_table()
-    generate_ablation_chart()
-    generate_radar_chart()
-    logger.info("All figures generated in %s", FIGURES_DIR)
+    """Generate every figure that has real data available. Fails loud if
+    nothing could be produced."""
+    generators = [
+        ("benchmark table", generate_benchmark_table),
+        ("ablation chart", generate_ablation_chart),
+        ("radar chart", generate_radar_chart),
+    ]
+    produced = 0
+    missing: list[str] = []
+    for name, fn in generators:
+        try:
+            if fn() is not None:
+                produced += 1
+        except FileNotFoundError as e:
+            logger.error("Skipping %s: %s", name, e)
+            missing.append(name)
+
+    if produced == 0:
+        raise FileNotFoundError(
+            "No figures could be generated: no real benchmark result files were "
+            f"found in {RESULTS_DIR}. Run `python -m benchmark.run_benchmark` "
+            "(and `python -m benchmark.ablation`) first."
+        )
+    if missing:
+        logger.warning("Figures skipped (missing result files): %s", missing)
+    logger.info("Figures generated in %s", FIGURES_DIR)
 
 
 def main() -> None:

@@ -1,13 +1,18 @@
 """
 Simulation backtesting against historical crises.
 
-Proves the environment reflects reality. Calibration error against:
-  1. 2021 Chip Shortage: revenue_loss_pct=0.12, duration=180d, inventory_depletion=0.85
-  2. 2021 Suez Canal: 6 days, sharp disruption, $9.6B/day
-  3. 2023 Red Sea: Ongoing, Freightos data, +200-300% container rates
+Measures how the environment's simulated disruption metrics (episode duration
+in days, peak disruption severity) compare to reference values from a library
+of real historical supply-chain crises. This is a plausibility / calibration
+check against public reference data -- it is NOT a proof that any task
+reproduces a specific crisis, and it will honestly report low credibility when
+the simulation diverges from the reference.
 
-Compute: mean_relative_error = avg(abs(sim - real) / real) per metric.
-Target: 15-25% error is honest and credible.
+Ground truth is loaded from benchmark/crisis_library/*.json (curated public
+data). Each crisis is mapped to the closest-matching environment task.
+
+Compute: mean_relative_error = avg(abs(sim - real) / real) over the metrics
+that both the simulation and the reference define.
 
 Usage:
     python -m benchmark.backtesting
@@ -31,63 +36,77 @@ if str(_PROJECT_ROOT) not in sys.path:
 logger = logging.getLogger(__name__)
 
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
+CRISIS_DIR = Path(__file__).resolve().parent / "crisis_library"
 
-# Ground truth from public data sources
-HISTORICAL_CRISES = {
-    "chip_shortage_2020": {
-        "name": "2021 Semiconductor Shortage",
-        "source": "SEMI Foundation 2023, IHS Markit, Goldman Sachs",
-        "ground_truth": {
-            "revenue_loss_pct": 0.12,       # 12% revenue loss in affected sectors
-            "disruption_duration_days": 180,  # ~6 month acute phase
-            "inventory_depletion_rate": 0.85,  # 85% of buffer consumed
-            "max_lead_time_extension": 3.5,    # Lead times extended 3.5x
-            "supplier_concentration_risk": 0.54,  # TSMC 54% market share
-        },
-        "task_id": "easy_typhoon_response",
-        "description": "Global semiconductor shortage 2020-2023, TSMC concentration risk",
-    },
-    "suez_2021": {
-        "name": "2021 Suez Canal Blockage (Ever Given)",
-        "source": "Suez Canal Authority, Lloyd's List, Bloomberg",
-        "ground_truth": {
-            "disruption_duration_days": 6,
-            "revenue_loss_pct": 0.02,        # ~2% short-term for affected routes
-            "vessels_delayed": 400,
-            "daily_trade_blocked_billions": 9.6,
-            "recovery_days_after_opening": 10,
-        },
-        "task_id": "medium_multi_front",
-        "description": "Ever Given grounding, 6-day Suez Canal blockage",
-    },
-    "red_sea_2023": {
-        "name": "2023 Red Sea Attacks",
-        "source": "Freightos Baltic Index, UNCTAD 2024, Drewry",
-        "ground_truth": {
-            "container_rate_increase_pct": 2.5,  # 250% increase
-            "transit_delay_days": 10,            # +10 days via Cape
-            "fuel_cost_increase_pct": 0.25,      # 25% fuel cost increase
-            "trade_volume_affected_pct": 0.12,   # 12% global trade
-            "reroute_distance_nm": 3500,
-        },
-        "task_id": "medium_multi_front",
-        "description": "Houthi attacks forcing carrier reroutes via Cape of Good Hope",
-    },
+# The environment advances exactly one simulated day per step (current_day ==
+# current_step in server/engine/simulation.py), so duration in days equals the
+# number of steps taken.
+STEPS_PER_DAY = 1
+
+# Each historical crisis is assigned to the environment task whose disruption
+# profile most closely resembles it. This mapping is an approximation, not a
+# claim that the task reproduces the crisis.
+CRISIS_TASK_MAP = {
+    "chip_shortage_2020": "easy_typhoon_response",
+    "suez_2021": "medium_multi_front",
+    "red_sea_2023": "medium_multi_front",
+    "tohoku_2011": "hard_cascading_crisis",
+    "ukraine_neon_2022": "hard_cascading_crisis",
 }
 
 
+def _load_historical_crises() -> dict[str, dict[str, Any]]:
+    """Load crisis ground truth from benchmark/crisis_library/*.json.
+
+    Only the fields the simulation can actually measure are extracted into
+    `ground_truth` (duration in days, peak severity); the rich narrative data
+    in the JSON files is left in the library and not fabricated into metrics.
+    """
+    crises: dict[str, dict[str, Any]] = {}
+    for crisis_id, task_id in CRISIS_TASK_MAP.items():
+        path = CRISIS_DIR / f"{crisis_id}.json"
+        if not path.exists():
+            raise FileNotFoundError(
+                f"Crisis library file missing: {path}. "
+                f"Expected one JSON per crisis in {CRISIS_DIR}."
+            )
+        data = json.loads(path.read_text())
+        meta = data["metadata"]
+        gt = data["ground_truth"]
+        crises[crisis_id] = {
+            "name": meta["name"],
+            "source": meta["source"],
+            "task_id": task_id,
+            "description": meta["description"],
+            "ground_truth": {
+                "disruption_duration_days": float(gt["duration_days"]),
+                "peak_severity": float(gt["peak_severity"]),
+            },
+        }
+    return crises
+
+
+# Loaded from the crisis library at import time (fail loud if the data is
+# missing). Replaces the previously hand-duplicated dict.
+HISTORICAL_CRISES = _load_historical_crises()
+
+
 def simulate_crisis(crisis_id: str, n_runs: int = 50) -> dict[str, list[float]]:
-    """Run environment simulation matching a historical crisis."""
+    """Run environment simulation for the task mapped to a historical crisis.
+
+    Returns per-run values for the metrics that are directly comparable to the
+    crisis reference data, using the same keys as the ground truth.
+    """
     from server.supply_environment import SupplyMindEnvironment
+
     from scripted_agent import choose_action
 
     crisis = HISTORICAL_CRISES[crisis_id]
     task_id = crisis["task_id"]
 
     metrics: dict[str, list[float]] = {
-        "revenue_loss_pct": [],
-        "disruption_duration_steps": [],
-        "inventory_depletion_rate": [],
+        "disruption_duration_days": [],
+        "peak_severity": [],
     }
 
     env = SupplyMindEnvironment()
@@ -95,31 +114,18 @@ def simulate_crisis(crisis_id: str, n_runs: int = 50) -> dict[str, list[float]]:
     for run in range(n_runs):
         obs = env.reset(task_id=task_id, seed=run)
         step = 0
-        initial_revenue = obs.financials.total_revenue_at_risk
-        max_inventory_days = max((n.inventory_days_cover for n in obs.node_statuses), default=1)
+        peak_severity = max((s.severity for s in obs.active_signals), default=0.0)
 
         while not obs.done:
             action = choose_action(obs, step)
             obs = env.step(action)
             step += 1
+            if obs.active_signals:
+                peak_severity = max(peak_severity, max(s.severity for s in obs.active_signals))
 
-        # Extract metrics — normalize to match ground truth scale
-        final_loss = obs.financials.cumulative_revenue_lost
-        total_rev = obs.financials.total_revenue_at_risk
-        # revenue_loss_pct: fraction of total revenue lost (0-1 scale)
-        rev_loss_pct = final_loss / max(total_rev, 1.0) if total_rev > 0 else 0.0
-        # Clamp to realistic range
-        rev_loss_pct = min(1.0, max(0.0, rev_loss_pct))
-        metrics["revenue_loss_pct"].append(rev_loss_pct)
-
-        # Duration: number of steps the episode ran
-        metrics["disruption_duration_steps"].append(step)
-
-        # Inventory depletion: what fraction of initial inventory was consumed
-        min_inv = min((n.inventory_days_cover for n in obs.node_statuses), default=0)
-        inv_depletion = 1.0 - (min_inv / max(max_inventory_days, 0.01))
-        inv_depletion = min(1.0, max(0.0, inv_depletion))
-        metrics["inventory_depletion_rate"].append(inv_depletion)
+        # Duration: number of simulated days (1 step == 1 day).
+        metrics["disruption_duration_days"].append(step / STEPS_PER_DAY)
+        metrics["peak_severity"].append(peak_severity)
 
     return metrics
 
@@ -128,12 +134,17 @@ def compute_calibration_error(
     simulated: dict[str, list[float]],
     ground_truth: dict[str, float],
 ) -> dict[str, Any]:
-    """Compute mean relative error between simulation and reality."""
+    """Compute mean relative error between simulation and reference values.
+
+    Only metrics present in BOTH `simulated` and `ground_truth` are compared.
+    If no metric can be compared, this returns is_credible=False with a maximal
+    (100%) error and a reason -- it never reports a misleading 0.0 error.
+    """
     errors = {}
     overall_errors = []
 
     for metric, gt_value in ground_truth.items():
-        if metric in simulated:
+        if metric in simulated and simulated[metric]:
             sim_mean = float(np.mean(simulated[metric]))
             sim_std = float(np.std(simulated[metric]))
             abs_error = abs(sim_mean - gt_value)
@@ -148,7 +159,16 @@ def compute_calibration_error(
             }
             overall_errors.append(rel_error)
 
-    mean_rel_error = float(np.mean(overall_errors)) if overall_errors else 0
+    if not overall_errors:
+        return {
+            "mean_relative_error_pct": 100.0,
+            "per_metric": {},
+            "n_metrics": 0,
+            "is_credible": False,
+            "reason": "no metric was comparable between simulation and reference data",
+        }
+
+    mean_rel_error = float(np.mean(overall_errors))
     return {
         "mean_relative_error_pct": round(mean_rel_error * 100, 1),
         "per_metric": errors,
@@ -158,7 +178,7 @@ def compute_calibration_error(
 
 
 def run_backtesting(n_runs: int = 50) -> Path:
-    """Run backtesting against all historical crises."""
+    """Run backtesting against all historical crises in the library."""
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
     logger.info("=" * 60)
@@ -177,12 +197,14 @@ def run_backtesting(n_runs: int = 50) -> Path:
         all_results[crisis_id] = {
             "name": crisis["name"],
             "source": crisis["source"],
+            "task_id": crisis["task_id"],
             "calibration": calibration,
         }
 
-        logger.info("    Mean relative error: %.1f%% (%s)",
+        logger.info("    Metrics compared: %d | mean relative error: %.1f%% (%s)",
+                     calibration["n_metrics"],
                      calibration["mean_relative_error_pct"],
-                     "CREDIBLE" if calibration["is_credible"] else "CHECK")
+                     "CREDIBLE" if calibration["is_credible"] else "NOT CREDIBLE")
 
     # Save
     output_path = RESULTS_DIR / "backtesting_results.json"

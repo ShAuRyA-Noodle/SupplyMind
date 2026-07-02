@@ -1,23 +1,24 @@
 {
   "chip_shortage_2020": {
-    "name": "2021 Semiconductor Shortage",
-    "source": "SEMI Foundation 2023, IHS Markit, Goldman Sachs",
+    "name": "Global Semiconductor Shortage",
+    "source": "SIA / Gartner / IHS Markit / TSMC Annual Reports",
+    "task_id": "easy_typhoon_response",
     "calibration": {
-      "mean_relative_error_pct": 58.8,
+      "mean_relative_error_pct": 59.0,
       "per_metric": {
-        "revenue_loss_pct": {
-          "ground_truth": 0.12,
-          "simulated_mean": 0.0,
+        "disruption_duration_days": {
+          "ground_truth": 1035.0,
+          "simulated_mean": 20.0,
           "simulated_std": 0.0,
-          "absolute_error": 0.12,
-          "relative_error_pct": 100.0
+          "absolute_error": 1015.0,
+          "relative_error_pct": 98.1
         },
-        "inventory_depletion_rate": {
-          "ground_truth": 0.85,
-          "simulated_mean": 1.0,
-          "simulated_std": 0.0,
-          "absolute_error": 0.15,
-          "relative_error_pct": 17.6
+        "peak_severity": {
+          "ground_truth": 0.7,
+          "simulated_mean": 0.8399,
+          "simulated_std": 0.0423,
+          "absolute_error": 0.1399,
+          "relative_error_pct": 20.0
         }
       },
       "n_metrics": 2,
@@ -25,30 +26,106 @@
     }
   },
   "suez_2021": {
-    "name": "2021 Suez Canal Blockage (Ever Given)",
-    "source": "Suez Canal Authority, Lloyd's List, Bloomberg",
+    "name": "Ever Given Suez Canal Blockage",
+    "source": "Suez Canal Authority / Lloyd's List / Allianz",
+    "task_id": "medium_multi_front",
     "calibration": {
-      "mean_relative_error_pct": 100.0,
+      "mean_relative_error_pct": 332.0,
       "per_metric": {
-        "revenue_loss_pct": {
-          "ground_truth": 0.02,
-          "simulated_mean": 0.0,
-          "simulated_std": 0.0,
-          "absolute_error": 0.02,
-          "relative_error_pct": 100.0
+        "disruption_duration_days": {
+          "ground_truth": 6.0,
+          "simulated_mean": 44.7,
+          "simulated_std": 0.4583,
+          "absolute_error": 38.7,
+          "relative_error_pct": 645.0
+        },
+        "peak_severity": {
+          "ground_truth": 0.75,
+          "simulated_mean": 0.8928,
+          "simulated_std": 0.0435,
+          "absolute_error": 0.1428,
+          "relative_error_pct": 19.0
         }
       },
-      "n_metrics": 1,
+      "n_metrics": 2,
       "is_credible": false
     }
   },
   "red_sea_2023": {
-    "name": "2023 Red Sea Attacks",
-    "source": "Freightos Baltic Index, UNCTAD 2024, Drewry",
+    "name": "Red Sea / Houthi Shipping Attacks",
+    "source": "UNCTAD / Drewry / Freightos / US CENTCOM",
+    "task_id": "medium_multi_front",
     "calibration": {
-      "mean_relative_error_pct": 0,
-      "per_metric": {},
-      "n_metrics": 0,
+      "mean_relative_error_pct": 62.6,
+      "per_metric": {
+        "disruption_duration_days": {
+          "ground_truth": 365.0,
+          "simulated_mean": 44.7,
+          "simulated_std": 0.4583,
+          "absolute_error": 320.3,
+          "relative_error_pct": 87.8
+        },
+        "peak_severity": {
+          "ground_truth": 0.65,
+          "simulated_mean": 0.8928,
+          "simulated_std": 0.0435,
+          "absolute_error": 0.2428,
+          "relative_error_pct": 37.4
+        }
+      },
+      "n_metrics": 2,
+      "is_credible": false
+    }
+  },
+  "tohoku_2011": {
+    "name": "Tohoku Earthquake and Tsunami",
+    "source": "Japan Meteorological Agency / World Bank / OICA",
+    "task_id": "hard_cascading_crisis",
+    "calibration": {
+      "mean_relative_error_pct": 35.4,
+      "per_metric": {
+        "disruption_duration_days": {
+          "ground_truth": 180.0,
+          "simulated_mean": 55.92,
+          "simulated_std": 0.796,
+          "absolute_error": 124.08,
+          "relative_error_pct": 68.9
+        },
+        "peak_severity": {
+          "ground_truth": 0.95,
+          "simulated_mean": 0.9682,
+          "simulated_std": 0.0308,
+          "absolute_error": 0.0182,
+          "relative_error_pct": 1.9
+        }
+      },
+      "n_metrics": 2,
+      "is_credible": true
+    }
+  },
+  "ukraine_neon_2022": {
+    "name": "Ukraine Neon Gas Supply Disruption",
+    "source": "Techcet / SEMI / Reuters / US Department of Commerce",
+    "task_id": "hard_cascading_crisis",
+    "calibration": {
+      "mean_relative_error_pct": 73.0,
+      "per_metric": {
+        "disruption_duration_days": {
+          "ground_truth": 365.0,
+          "simulated_mean": 55.92,
+          "simulated_std": 0.796,
+          "absolute_error": 309.08,
+          "relative_error_pct": 84.7
+        },
+        "peak_severity": {
+          "ground_truth": 0.6,
+          "simulated_mean": 0.9682,
+          "simulated_std": 0.0308,
+          "absolute_error": 0.3682,
+          "relative_error_pct": 61.4
+        }
+      },
+      "n_metrics": 2,
       "is_credible": false
     }
   }

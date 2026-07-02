@@ -35,7 +35,12 @@ def load_benchmark_scores() -> dict[str, dict[str, list[float]]]:
     """Load benchmark CSV into {agent: {task: [scores]}} structure."""
     path = RESULTS_DIR / "benchmark_results.csv"
     if not path.exists():
-        raise FileNotFoundError(f"Benchmark results not found at {path}. Run benchmark first.")
+        raise FileNotFoundError(
+            f"Benchmark results CSV not found at {path}.\n"
+            f"Generate it first by running the full benchmark: "
+            f"`python benchmark/run_full_benchmark.py` "
+            f"(or `python -m benchmark.run_benchmark` for the random/scripted subset)."
+        )
 
     results: dict[str, dict[str, list[float]]] = {}
     with open(path) as f:
@@ -60,22 +65,38 @@ def wilcoxon_test(
     a = np.array(scores_a[:n])
     b = np.array(scores_b[:n])
 
-    # Handle identical arrays
+    # Handle identical arrays (Wilcoxon is undefined when all diffs are zero)
     diff = a - b
-    if np.all(diff == 0):
-        return {"statistic": 0, "p_value": 1.0, "significant": False, "effect_size": 0.0}
+    n_nonzero = int(np.count_nonzero(diff))
+    if n_nonzero == 0:
+        return {
+            "statistic": 0.0,
+            "p_value": 1.0,
+            "significant": False,
+            "effect_size": 0.0,
+            "z_statistic": 0.0,
+            "n_pairs": n,
+            "n_nonzero_pairs": 0,
+            "mean_diff": 0.0,
+        }
 
-    stat, p = wilcoxon(a, b, alternative=alternative)
-    # Effect size: r = Z / sqrt(N)
-    # Approximate Z from stat
-    effect_size = stat / (n * (n + 1) / 4)
+    # method="approx" gives the normal-approximation z-statistic directly, which
+    # is what the matched-pairs rank-biserial effect size r = Z / sqrt(N) needs.
+    res = wilcoxon(a, b, alternative=alternative, method="approx")
+    stat = float(res.statistic)
+    p = float(res.pvalue)
+    z = float(res.zstatistic)
+    # r = Z / sqrt(N), N = number of non-zero-difference pairs entering the test.
+    effect_size = z / np.sqrt(n_nonzero)
 
     return {
-        "statistic": float(stat),
-        "p_value": float(p),
+        "statistic": stat,
+        "p_value": p,
         "significant": p < 0.05,
         "effect_size": round(float(effect_size), 3),
+        "z_statistic": round(z, 4),
         "n_pairs": n,
+        "n_nonzero_pairs": n_nonzero,
         "mean_diff": round(float(np.mean(diff)), 4),
     }
 

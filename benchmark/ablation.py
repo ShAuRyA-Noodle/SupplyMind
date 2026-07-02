@@ -1,8 +1,12 @@
 """
 Ablation study for SupplyMind.
 
-Systematic component contribution analysis:
-  Random -> Scripted -> PPO -> +RealData -> +CVaR -> +Uncertainty -> +DT -> +Ensemble
+Compares the agents that have a real evaluator here (random baseline vs the
+scripted heuristics). Trained-agent configurations (PPO / +CVaR / +DT /
++Ensemble ...) are intentionally omitted: they require loaded checkpoints and
+are evaluated by benchmark/run_full_benchmark.py. Including them here would
+mean re-scoring the scripted agent under different labels, which is fabricated
+component-contribution evidence and is not done.
 
 5 seeds x 20 episodes per configuration.
 
@@ -28,16 +32,12 @@ logger = logging.getLogger(__name__)
 
 RESULTS_DIR = Path(__file__).resolve().parent / "results"
 
-# Ablation configurations (cumulative)
+# Ablation configurations. Only agents with a real evaluator in run_benchmark
+# are included; adding trained-agent rows here without loaded checkpoints would
+# produce byte-identical scripted scores under different labels.
 CONFIGURATIONS = [
     {"name": "Random agent", "agent": "random", "description": "Uniform random action selection"},
     {"name": "Scripted (no ML)", "agent": "scripted", "description": "Hand-crafted heuristics"},
-    {"name": "PPO baseline", "agent": "ppo", "description": "MaskablePPO with basic state"},
-    {"name": "+ Real data calibration", "agent": "ppo_real", "description": "PPO with FRED commodity injection"},
-    {"name": "+ CVaR optimization", "agent": "qrdqn", "description": "QR-DQN with CVaR policy"},
-    {"name": "+ Uncertainty quantification", "agent": "qrdqn_unc", "description": "QR-DQN + MC Dropout"},
-    {"name": "+ Decision Transformer", "agent": "dt", "description": "DT with return-to-go conditioning"},
-    {"name": "+ Ensemble", "agent": "ensemble", "description": "DT + QR-DQN weighted ensemble"},
 ]
 
 
@@ -71,11 +71,7 @@ def run_ablation(
         for task_id in task_ids:
             task_scores = []
             for seed in seeds:
-                # Map ablation agent to actual evaluation
-                agent = config["agent"]
-                if agent in ("ppo_real", "qrdqn_unc"):
-                    agent = "scripted"  # Placeholder until trained
-                scores = evaluate_agent(agent, task_id, seed, n_episodes)
+                scores = evaluate_agent(config["agent"], task_id, seed, n_episodes)
                 task_scores.extend(scores)
             config_scores[task_short[task_id]] = task_scores
 

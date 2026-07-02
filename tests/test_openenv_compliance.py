@@ -139,7 +139,9 @@ def test_grader_endpoint(client):
     for _ in range(3):
         client.post("/step", json={"action_type": "do_nothing"})
     r = client.post("/grader")
-    assert r.status_code == 200 or r.status_code == 422  # may require body
+    assert r.status_code == 200, f"/grader must return 200 after a reset+steps, got {r.status_code}: {r.text}"
+    score = r.json()["score"]
+    assert 0.0 <= score <= 1.0, f"Grader score out of bounds [0,1]: {score}"
 
 
 # ============================================================
@@ -184,10 +186,13 @@ def test_grader_zero_variance():
         for _ in range(5):
             c.post("/step", json={"action_type": "do_nothing"})
         r = c.post("/grader")
-        if r.status_code == 200:
-            scores.append(r.json())
-    # Don't assert exact match across versions; just that repeat runs don't crash
-    assert len(scores) >= 2 or True  # tolerant
+        assert r.status_code == 200, f"/grader failed on run {len(scores)}: {r.status_code} {r.text}"
+        scores.append(r.json()["score"])
+    # Determinism: identical seed + identical trajectory must yield identical scores.
+    assert len(scores) == 3, f"Expected 3 grader results, got {len(scores)}"
+    assert len(set(scores)) == 1, (
+        f"Grader is not deterministic across identical trajectories: {scores}"
+    )
 
 
 # ============================================================

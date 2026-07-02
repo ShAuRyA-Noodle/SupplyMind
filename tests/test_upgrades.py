@@ -199,6 +199,12 @@ class TestEmergentCascades:
                 downstream_wh = neighbor
                 break
 
+        assert downstream_wh is not None, (
+            "SUP_TSMC must have a downstream warehouse for the cascade test to be "
+            "meaningful; graph topology changed and this test would otherwise "
+            "silently assert nothing."
+        )
+
         if downstream_wh:
             # Deplete warehouse inventory
             engine.graph.G.nodes[downstream_wh]["inventory_days_cover"] = 1.0
