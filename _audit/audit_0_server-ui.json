@@ -1,0 +1,248 @@
+﻿{
+    "subsystem":  "server-ui (server/, client/, client.py, dashboard/, demo/)",
+    "purpose":  "FastAPI OpenEnv environment server (server/app.py) wrapping a genuinely deterministic supply-chain simulation (server/engine/* + graders + tasks) with reset/step/state/grade endpoints, plus ~15 bolt-on demo endpoints (/predict, /agent/decide, /v3/e2e, /analyst/*, /library/v2, /counterfactual/platinum, /live/intel-fan-out) that lazily import routers/data from versions/. Two browser dashboards in server/static (master.html brag-board, hormuz_war_room.html interactive war room driven by POST /demo/hormuz-war-room), two duplicate HTTP clients (root client.py and client/ package), a deprecated Streamlit dashboard (dashboard/), and a demo video script (demo/).",
+    "verdict":  "Split personality. The core OpenEnv loop (supply_environment.py, engine, graders, tasks) is real, deterministic, seeded, and well-engineered â€” no fakery found there, and hormuz_war_room.html is genuinely wired to backend JSON with zero Math.random. But the demo/showcase layer around it is riddled with exactly what the owner banned: a repo-root \"v3_arcadia\" path that no longer exists (renamed to versions/v3_arcadia) silently 503s or degrades SIX endpoints (/analyst/grade, /analyst/scenarios, /analyst/next-scenario, /analyst/holdout-eval, /analyst/panel-consensus, plus /v3/e2e and /agent/decide fall to fallbacks) both locally and on the HF Space; /predict swallows every error and returns canned action=0/confidence=0.5 with a literal placeholder string as \"counterfactual\"; the \"5-stage IntegratedAgent\" runs its RL policy on an all-zeros observation and its \"forecast\" is a hardcoded $123.28 anchor plus a hand-typed severity shift table while the docstring claims a GCN that is actually degree-counting; dashboard/app.py charts are np.random.normal fabrications labeled \"QR-DQN Quantiles\" plus hardcoded SHAP/radar/ablation/agent-comparison numbers; master.html has ~25 cards that are javascript:void(0) alert() popups of static text directly under a footer claiming \"Every cell on this page links to a real endpoint. No mocks\"; the MCP wrapper cited in FINAL_SUBMIT as compliance proof has a step() that would crash (unpacks a 4-tuple from a single object) and 3 of 6 tools call a method that does not exist; and the package client\u0027s step() sends a wrapped payload the server will 422. This is a strong engine wearing a partly cardboard costume.",
+    "score":  4,
+    "fakeInventory":  [
+                          {
+                              "file":  "dashboard/app.py",
+                              "line":  283,
+                              "kind":  "synthetic",
+                              "issue":  "Violin chart titled \u0027Return Distribution (QR-DQN Quantiles)\u0027 is generated from np.random.normal, not any agent",
+                              "evidence":  "np.random.seed(42)\\n# Simulate quantile distributions for visualization\\n\"Scripted\": np.random.normal(0.71, 0.05, 200)"
+                          },
+                          {
+                              "file":  "dashboard/app.py",
+                              "line":  242,
+                              "kind":  "hardcoded",
+                              "issue":  "Agent-comparison bar chart uses invented target scores presented as agent performance",
+                              "evidence":  "# Target scores from kickoff (will be replaced with real benchmarks)\\neasy_scores = [0.27, 0.65, 0.72, ...]"
+                          },
+                          {
+                              "file":  "dashboard/app.py",
+                              "line":  260,
+                              "kind":  "hardcoded",
+                              "issue":  "Agent radar chart values for Scripted/QR-DQN/DT are hand-typed",
+                              "evidence":  "r=[0.85, 0.80, 0.70, 0.85, 0.90], theta=categories, ... name=\"QR-DQN (CVaR)\""
+                          },
+                          {
+                              "file":  "dashboard/app.py",
+                              "line":  303,
+                              "kind":  "hardcoded",
+                              "issue":  "Ablation study chart scores are fabricated constants",
+                              "evidence":  "ablation_scores = [0.25, 0.71, 0.74, 0.76, 0.77, 0.78, 0.79, 0.81]"
+                          },
+                          {
+                              "file":  "dashboard/app.py",
+                              "line":  353,
+                              "kind":  "fake_ai_output",
+                              "issue":  "\u0027Counterfactual Analysis\u0027 panel is a static st.info blob of invented dollar figures",
+                              "evidence":  "\"P50 additional loss: **$4.2M**\\n\\nP95 worst case: **$12.8M**\\n\\nAction value: **$6.1M** saved\""
+                          },
+                          {
+                              "file":  "dashboard/app.py",
+                              "line":  384,
+                              "kind":  "mock_data",
+                              "issue":  "SHAP importance chart uses hand-typed demo values, not real SHAP output",
+                              "evidence":  "# Demo SHAP values\\nshap_vals = [0.18, -0.15, 0.12, -0.10, ...]"
+                          },
+                          {
+                              "file":  "dashboard/app.py",
+                              "line":  414,
+                              "kind":  "mock_data",
+                              "issue":  "Explainability tab fabricates a MockObs object to feed the explainer",
+                              "evidence":  "class MockObs:\\n    class financials:\\n        supply_chain_health_score = h[\"health\"]"
+                          },
+                          {
+                              "file":  "server/app.py",
+                              "line":  697,
+                              "kind":  "stub",
+                              "issue":  "/predict: bare except Exception silently replaces RL inference with canned action 0 / confidence 0.5 â€” indistinguishable from real output in the response",
+                              "evidence":  "except Exception:\\n        flat_action = 0\\n        confidence = 0.5"
+                          },
+                          {
+                              "file":  "server/app.py",
+                              "line":  711,
+                              "kind":  "placeholder",
+                              "issue":  "/predict returns a to-do note as the \u0027counterfactual\u0027 API field",
+                              "evidence":  "counterfactual=\"Train surrogate model for live counterfactual analysis\""
+                          },
+                          {
+                              "file":  "server/app.py",
+                              "line":  1546,
+                              "kind":  "hardcoded",
+                              "issue":  "/v3/e2e \u0027forecast\u0027 point = hardcoded $123.28 anchor + hand-typed severity shift dict; not a forecaster",
+                              "evidence":  "base_price = 123.28  # FRED DCOILBRENTEU last committed observation ... sev_shift = {\"CRITICAL\": 6.0, \"HIGH\": 3.0, ...}"
+                          },
+                          {
+                              "file":  "server/app.py",
+                              "line":  1482,
+                              "kind":  "simulated",
+                              "issue":  "/v3/e2e \u0027Stage 2 â€” 3-judge risk panel\u0027 is actually a hardcoded keyword lookup, with static panel stats (Î±=0.750, Îº=0.747) embedded in the response",
+                              "evidence":  "_kw = {\"CRITICAL\": (\"closure\", \"shut down\", \"nuclear\", ... )} ... \"panel_alpha_ordinal\": 0.750, \"panel_cohen_kappa\": 0.747"
+                          },
+                          {
+                              "file":  "server/integrated_agent.py",
+                              "line":  294,
+                              "kind":  "fake_ai_output",
+                              "issue":  "\u0027RL policy action\u0027 stage runs ONNX on an all-zeros 408-dim vector â€” the recommended action never depends on the actual observation",
+                              "evidence":  "obs_arr = np.zeros((1, 408), dtype=np.float32)\\nout = sess.run(None, {\"observation\": obs_arr})"
+                          },
+                          {
+                              "file":  "server/integrated_agent.py",
+                              "line":  324,
+                              "kind":  "hardcoded",
+                              "issue":  "Forecast stage anchor is a committed constant, response labels it a \u0027forecast\u0027",
+                              "evidence":  "anchor = 123.28  # FRED Brent last committed observation"
+                          },
+                          {
+                              "file":  "server/integrated_agent.py",
+                              "line":  21,
+                              "kind":  "fake_ai_output",
+                              "issue":  "Docstring sells \u0027Stage 3 GNN cascade ... 3-layer pure-PyTorch GCN\u0027 but _stage_gnn only counts node degrees",
+                              "evidence":  "\"cascade_source\": \"degree-centrality proxy (3-layer GCN weights committed at ...)\""
+                          },
+                          {
+                              "file":  "server/app.py",
+                              "line":  1371,
+                              "kind":  "simulated",
+                              "issue":  "/analyst/panel-consensus/{id}/stream fakes \u0027judges arriving\u0027 with asyncio.sleep over a static committed file (\u0027demo-surface flair\u0027)",
+                              "evidence":  "yield f\"event: verdict\\ndata: {json.dumps(v)}\\n\\n\"\\n            await asyncio.sleep(0.35)"
+                          },
+                          {
+                              "file":  "server/static/master.html",
+                              "line":  279,
+                              "kind":  "dead_ui",
+                              "issue":  "~25 of 34 cards (7, Eâ€“I, Jâ€“T, Uâ€“BB) are href=javascript:void(0) alert() popups of hardcoded claim text, not endpoints",
+                              "evidence":  "\u003ca href=\"javascript:void(0)\" onclick=\"alert(\u0027split-conformal NLL filter\\\\nalpha=0.1\\\\nN=8000 ...\u0027)\""
+                          },
+                          {
+                              "file":  "server/static/master.html",
+                              "line":  716,
+                              "kind":  "fake_ai_output",
+                              "issue":  "Footer claim is false given the alert-only cards and the broken /analyst link",
+                              "evidence":  "Every cell on this page links to a real endpoint.  No mocks, no synthetic facts"
+                          },
+                          {
+                              "file":  "server/static/master.html",
+                              "line":  105,
+                              "kind":  "hardcoded",
+                              "issue":  "Header chips and entire hero stat wall (100%, 90.01%, Î±=0.567, +12.15%, 3.14M â€¦) are static HTML, refreshed by nothing",
+                              "evidence":  "\u003cspan class=\"chip chip-good\"\u003e9 cards Â· all live\u003c/span\u003e"
+                          },
+                          {
+                              "file":  "server/static/master.html",
+                              "line":  757,
+                              "kind":  "dead_ui",
+                              "issue":  "LED probes treat HTTP 405 as green \u0027live\u0027, so led-4/led-5 glow green without the endpoint ever being exercised",
+                              "evidence":  "} else if (r.status === 405) {\\n        // Method Not Allowed â€” endpoint exists but is POST-only; that\u0027s OK"
+                          },
+                          {
+                              "file":  "server/static/hormuz_war_room.html",
+                              "line":  1258,
+                              "kind":  "simulated",
+                              "issue":  "6-stage progress pills are cosmetic: all set to \u0027run\u0027 at once, all set to \u0027done\u0027 at once when the single fetch returns",
+                              "evidence":  "[\"signals\",\"analogs\",\"judges\",\"sectors\",\"cf\",\"receipt\"].forEach(s=\u003esetStage(s,\"run\"));"
+                          },
+                          {
+                              "file":  "server/openenv_mcp_wrapper.py",
+                              "line":  221,
+                              "kind":  "hardcoded",
+                              "issue":  "\u0027Compliance self-check\u0027 hardcodes a pass instead of checking the file",
+                              "evidence":  "\"openenv_yaml_at_repo_root\": True,  # we have it"
+                          },
+                          {
+                              "file":  "dashboard/crisis_ingestion.py",
+                              "line":  1,
+                              "kind":  "stub",
+                              "issue":  "Docstring promises \u0027RL agent responds with optimal actions ... Dollar difference appears live\u0027; implementation only keyword-parses text and prints pre-cached scenario blurbs. Steps 2â€“5 don\u0027t exist",
+                              "evidence":  "3. RL agent responds with optimal actions\\n4. Counterfactual panel shows what baseline would have done"
+                          },
+                          {
+                              "file":  "dashboard/app.py",
+                              "line":  361,
+                              "kind":  "mock_data",
+                              "issue":  "Section titled \u0027Real-Time Market Data (FRED)\u0027 renders a static committed cache file, not live data",
+                              "evidence":  "fred_cache = _PROJECT_ROOT / \"rl\" / \"data\" / \"fred_cache.json\""
+                          },
+                          {
+                              "file":  "demo/DEMO_VIDEO_SCRIPT.md",
+                              "line":  55,
+                              "kind":  "fake_ai_output",
+                              "issue":  "Video script pre-writes the \u0027live API\u0027 judge responses to be shown on screen; also targets /assess,/forecast,/rag which don\u0027t exist on the current server (only in versions/v3_arcadia/90_damocles/app.py)",
+                              "evidence":  "Click \"Execute\". Response appears:\\n{ \"consensus_risk\": \"CRITICAL\", ... {\"judge\": \"qwen25-14b-local\", \"risk_level\": \"CRITICAL\", \"confidence\": 0.95"
+                          },
+                          {
+                              "file":  "server/app.py",
+                              "line":  121,
+                              "kind":  "hardcoded",
+                              "issue":  "Root landing page hero metrics (100% solve, p=9.39e-35, 257/257, 20/20) are static HTML strings inside the endpoint",
+                              "evidence":  "\u003cdiv class=\"num\"\u003e100%\u003c/div\u003e"
+                          }
+                      ],
+    "deadCode":  [
+                     "client.py (repo root) â€” shadowed: `from client import SupplyMindClient` resolves to the client/ package, so the root module is unreachable via its own documented import; duplicate of client/supplymind_client.py with a different API",
+                     "dashboard/crisis_ingestion.py:render_crisis_ingestion() â€” never imported or called anywhere in live code (only referenced in legacy docs and _dump scripts)",
+                     "dashboard/app.py â€” self-declared DEPRECATED (\u0027kept for reference and v2 reproducibility only\u0027) yet still ships the fake-chart Streamlit app at the canonical dashboard/ path",
+                     "server/openenv_mcp_wrapper.py â€” docstring advertises tool sm_get_edge_status(edge_id) that is never implemented; tool_sm_get_node_status / tool_sm_get_financial_state / tool_sm_explain_disruption all call self._env.get_observation() which does not exist on SupplyMindEnvironment, so they can only ever return {\"ok\": False, error}",
+                     "server/static/master.html â€” ~25 alert-only cards (see fakeInventory); card 6 links /analyst/panel-consensus/2021_Suez_Canal_obstruction which 503s due to the v3_arcadia path bug; led-6 probes /analyst/panel-consensus/scen_001 (nonexistent scenario id AND broken endpoint)",
+                     "server/**/__pycache__/*.pyc â€” compiled artifacts sitting inside the source tree (7 in engine/, 4 in tasks/, plus server/ and graders/)",
+                     "server/app.py /baseline endpoint â€” depends on root baseline.py + an OpenAI-style key; effectively unreachable in the no-key demo posture the rest of the repo advertises"
+                 ],
+    "brokenOrSuspect":  [
+                            "STALE REORG PATH (critical): server/app.py lines 789, 880, 979, 1061, 1282-1283, 1437, 1481, 1529, 1590-1592 and server/integrated_agent.py lines 49-52 build Path(repo_root)/\u0027v3_arcadia\u0027/... but the directory is versions/v3_arcadia (repo_root/v3_arcadia does not exist â€” verified). Result: /analyst/grade, /analyst/scenarios, /analyst/next-scenario, /analyst/holdout-eval, /analyst/panel-consensus all return 503 \u0027not available in this deploy\u0027; /v3/e2e RAG+judge-anchor+forecast and /agent/decide panel/RAG/R6 all silently degrade to \u0027unavailable\u0027/hardcoded fallbacks. The HF deploy (upload_folder from \u0027.\u0027) mirrors repo layout, so this is broken in production too.",
+                            "HF Space deploy excludes versions/v3_arcadia/checkpoints/** and rl/checkpoints/** (.github/workflows/deploy-hf-space.yml:75-79), so even after the path fix, corpus_chunks.pkl, ppo_*.onnx and qrdqn_best_easy.pt are absent on the Space â€” /predict always serves the canned (0, 0.5) fallback there.",
+                            "server/openenv_mcp_wrapper.py:108 â€” `obs, reward, done, info = self._env.step(sm_action)` but SupplyMindEnvironment.step returns a single SupplyMindObservation â†’ TypeError on every step. This class is cited in FINAL_SUBMIT/ENV_CARD.md and Blog.MD as the OpenEnv-compliance artifact; is_openenv_compliant() only checks attribute existence, never execution.",
+                            "client/supplymind_client.py:75 â€” step() POSTs {\"action\": action} but server/app.py /step declares a single Pydantic body param (non-embedded), so FastAPI expects the flat action JSON â†’ 422 on every step. rollout() is therefore unusable; versions/v5_phoenix/.../train_grpo_live_env.py imports this client.",
+                            "client/supplymind_client.py â€” session_id is sent in the JSON body, but the server reads the X-Session-Id header; per-session isolation silently never engages.",
+                            "client/__init__.py and client/supplymind_client.py docstrings show invalid actions ({\"action_type\": \"NO_OP\", \"target\": 0, \"magnitude\": 0.0} and \"ROUTE\") â€” models.SupplyMindAction has neither those types nor those fields; copy-pasting the documented example fails validation.",
+                            "dashboard/scenario_builder.py:183 imports rl.analysis.financial_impact â€” works locally, but rl/analysis/** is excluded from the HF deploy (commit 06fd576), so the \u0027Run Scenario\u0027 button crashes on the Space.",
+                            "server/app.py /predict bare `except Exception:` (line 696) hides torch/checkpoint/import failures; response carries no degraded flag, unlike the rest of the codebase\u0027s inference_type discipline.",
+                            "demo/DEMO_VIDEO_SCRIPT.md targets endpoints (/assess, /forecast, /rag) and a Space URL (supplymind.hf.space/docs) that don\u0027t match the current server/app.py route set â€” stale from the v3 damocles app era.",
+                            "master.html led-7 \u0027Conformal Safety\u0027 probes generic /health (comment admits \u0027conformal is file-based; fallback to general\u0027) â€” the green LED asserts nothing about the conformal subsystem."
+                        ],
+    "localModelDeps":  [
+                           "Ollama (3-judge war-room panel): versions/v4_arcadia_live/realtime/hormuz_endpoint.py:52 OLLAMA_URL = os.environ.get(\u0027OLLAMA_BASE_URL\u0027, \u0027http://127.0.0.1:11434\u0027) â€” hormuz_war_room.html advertises \u00273 Ollama\u0027 judges; without a local Ollama daemon the panel silently becomes the deterministic rubric fallback (flagged in judge_source)",
+                           "Local torch checkpoint: server/app.py:681 loads rl/checkpoints/qrdqn_best_easy.pt via rl.distributional.qr_dqn.QRDQNNetwork for /predict (file exists locally; excluded from HF deploy)",
+                           "Local ONNX policies: server/app.py:1590-1592 and server/integrated_agent.py:138-139 load versions/v3_arcadia/checkpoints/{onnx_bundle,gethsemane}/ppo_\u003ctask\u003e.onnx via onnxruntime (path currently broken, see brokenOrSuspect)",
+                           "Local pickle corpus: v3_arcadia/checkpoints/granite/corpus_chunks.pkl for /v3/e2e and IntegratedAgent RAG (broken path)",
+                           "master.html card 3 claims \u002713 Foundation Models ... all loaded under models/\u0027 (Qwen-14B, Mistral-Nemo, DeepSeek-R1-Q4, Chronos, TimesFM, mxbai, BGE, Qwen-VL) â€” 159GB local weights excluded from deploy per card W",
+                           "demo/DEMO_VIDEO_SCRIPT.md Scene 2 requires `ollama list` showing 4 local models + local sentence-transformers mxbai on CUDA",
+                           "/library/v2/search response claims mxbai-embed-large + FAISS HNSW (via versions/v4_arcadia_live/scenarios/library_v2_search)"
+                       ],
+    "externalServices":  [
+                             "HuggingFace Space shaurya-noodle-supplymind.hf.space â€” deploy target (.github/workflows/deploy-hf-space.yml) and default base_url in client/supplymind_client.py:170; landing page links huggingface.co/spaces/Shaurya-Noodle/Supplymind",
+                             "OpenRouter â€” war-room 6/12-judge frontier panels (hormuz_war_room.html checkboxes â†’ versions/v4_arcadia_live openrouter caller); master.html cites .openrouter_cache/ spend tracking",
+                             "OpenAI-compatible API â€” server/app.py /baseline requires HF_TOKEN or API_KEY or OPENAI_API_KEY env vars and root baseline.py (openai\u003e=1.0)",
+                             "FRED â€” Brent/WTI anchors: server/app.py reads versions/v4_arcadia_live/realtime/fred_brent_latest.json cache (currently missing â†’ hardcoded 123.28); dashboard/app.py reads rl/data/fred_cache.json",
+                             "20-source live fan-out (NewsAPI, GDELT, USGS, NOAA NDBC/Tides, NASA EONET/FIRMS, EIA, MarineTraffic, GFW, WHO DON, SEC, CISA, OFAC, World Bank, Wikipedia, HN) â€” reached from server/app.py /live/intel-fan-out and /demo/recent-disaster via versions/v4_arcadia_live/realtime/orchestrator_v2 and demo_orchestrator",
+                             "CDN dependencies in both dashboards: cdn.tailwindcss.com + fonts.googleapis.com (server/static/master.html:7-8, hormuz_war_room.html) â€” offline/demo-room network loss silently destroys all styling",
+                             "YouTube demo link and Colab links hardcoded in the / landing page HTML (server/app.py:126-127)"
+                         ],
+    "couplings":  [
+                      "server/app.py â†’ repo-root models.py (from models import SupplyMindAction) and root baseline.py â€” moving either breaks the server",
+                      "server/app.py mounts routers by import string: versions.v4_arcadia_live.realtime.hormuz_endpoint (/live), versions.v4_arcadia_live.realtime.hormuz_war_room_router (/demo/hormuz-war-room*, /demo/master), versions.v4_arcadia_live.realtime.port_imagery_router, versions.v5_phoenix.wordle_env.router (/wordle*), versions.v5_phoenix.arena.router (/arena), versions.v5_phoenix.counterfactual_twin.router (/twin), versions.v5_phoenix.realtime_v5.replay_adapter (/replay) â€” all wrapped in try/except so renames fail silently to \u0027degraded\u0027 stubs",
+                      "server/app.py lazy imports inside endpoints: versions.v4_arcadia_live.realtime.demo_orchestrator, versions.v4_arcadia_live.scenarios.library_v2_search, versions.v4_arcadia_live.realtime.orchestrator_v2, versions.v5_phoenix.counterfactual_v2.platinum, rl.distributional.qr_dqn",
+                      "server/app.py + server/integrated_agent.py hardcode data paths: \u003croot\u003e/v3_arcadia/results/{R4_DANGEROUS_V2,R4_FRONTIER_PANEL_V2,R6_AQUA_REGIA_V2}.json, \u003croot\u003e/v3_arcadia/checkpoints/granite/corpus_chunks.pkl, \u003croot\u003e/v3_arcadia/checkpoints/{onnx_bundle,gethsemane}/ppo_*.onnx (WRONG â€” actual location versions/v3_arcadia/...), plus versions/v4_arcadia_live/realtime/fred_brent_latest.json and rl/checkpoints/qrdqn_best_easy.pt",
+                      "server/static/{master,hormuz_war_room}.html are served by versions/v4_arcadia_live/realtime/hormuz_war_room_router.py via parents[3]/\u0027server\u0027/\u0027static\u0027/... â€” moving server/static or changing versions/ depth breaks both dashboards",
+                      "hormuz_war_room.html JS calls POST /demo/hormuz-war-room, POST /demo/hormuz-war-room/validate, GET /demo/hormuz-war-room/health; master.html JS probes /demo/hormuz-war-room/health, /arena/health, /phoenix/status, /library/v2/search, /counterfactual/platinum, /analyst/panel-consensus/scen_001, /health, /replay/health, /live/health and links /wordle/ui and /docs",
+                      "server/openenv_adapter.py â†’ openenv.core (openenv-core pip pkg); server/openenv_mcp_wrapper.py â†’ versions.v4_arcadia_live.realtime.store and .crisis_library",
+                      "dashboard/app.py â†’ server.supply_environment, root scripted_agent.py, rl.forecasting.tft, rl.explainer, rl.rag.indexer, dashboard.scenario_builder; scenario_builder â†’ rl.analysis.financial_impact; both read server/data/graphs/*.json",
+                      "client/ package consumed by versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py (from client import SupplyMindClient)",
+                      "engine data files referenced by task definitions: server/data/graphs/{easy,medium,hard}_graph.json + server/data/disruptions/*_scenarios.json + server/data/commodities/price_data.json",
+                      ".github/workflows/deploy-hf-space.yml uploads repo root verbatim to the Space and excludes rl/checkpoints/**, rl/analysis/**, versions/v3_arcadia/checkpoints/** â€” any server code depending on those is production-degraded by design"
+                  ],
+    "mustFix":  [
+                    "Fix the v3_arcadia â†’ versions/v3_arcadia path in server/app.py (8+ sites) and server/integrated_agent.py (4 constants); add a startup assertion that logs loudly if the R4/R6/corpus files are missing instead of silently 503ing â€” this alone revives 6 dead endpoints locally and on the Space",
+                    "Delete or quarantine dashboard/app.py\u0027s fabricated visuals (np.random violin, hardcoded bar/radar/ablation/SHAP/counterfactual) â€” they are the single worst \u0027fake AI output\u0027 offender in the repo; either wire them to real receipts JSON or remove the tabs",
+                    "Fix client/supplymind_client.py: send the action flat (not {\"action\": ...}), send X-Session-Id as a header, and correct both docstring examples to valid SupplyMindAction payloads; then delete root client.py or make one canonical client",
+                    "Fix server/openenv_mcp_wrapper.py: step() must consume the single SupplyMindObservation, and the three tools must use a real accessor (add SupplyMindEnvironment.get_observation() or read env.engine); make is_openenv_compliant() actually execute reset/step instead of hardcoding openenv_yaml_at_repo_root=True â€” this file is cited as submission evidence",
+                    "/predict: replace the bare except with logged, surfaced degradation (inference_type: \u0027degraded_fallback\u0027) and drop the placeholder \u0027counterfactual\u0027 string; ship qrdqn checkpoint to the Space or remove the endpoint from deployed docs",
+                    "Make /v3/e2e and IntegratedAgent honest or real: label the forecast stage \u0027heuristic anchor + shift\u0027 (or call the actual Chronos/ARIMA stack), remove hardcoded Î±=0.750/Îº=0.747 from responses, and build the structured-obsâ†’408-dim projector so the ONNX policy consumes the real reset observation instead of zeros",
+                    "master.html: replace the ~25 alert() cards with links to real receipt files/endpoints, delete the false \u0027Every cell links to a real endpoint / 9 cards all live\u0027 claims, fix the card-6 /analyst/panel-consensus link and led-6 scenario id, and stop counting 405 as \u0027live\u0027 in the LED probe",
+                    "Vendor Tailwind + fonts locally in both static dashboards so the Qualcomm demo doesn\u0027t depend on CDN reachability",
+                    "Remove committed __pycache__/*.pyc from server/ and add to .gitignore",
+                    "Update demo/DEMO_VIDEO_SCRIPT.md to the current endpoint set (/agent/decide, /demo/hormuz-war-room) or mark it legacy â€” a judge following it hits 404s"
+                ],
+    "salvage":  "Refactor â€” do not rebuild. Keep as-is: server/supply_environment.py, server/engine/*, server/graders/*, server/tasks/*, server/openenv_adapter.py, static/hormuz_war_room.html (genuinely backend-driven), and the /analyst reward-oracle design (well-thought-out, just path-broken). Refactor: server/app.py (fix v3_arcadia paths, de-fake /predict and /v3/e2e), integrated_agent.py (real obs projector, honest forecast labeling), client layer (one client, fixed step payload), master.html (real links or delete brag cards), openenv_mcp_wrapper.py (fix step/get_observation). Delete: root client.py (duplicate), dashboard/app.py + crisis_ingestion.py (deprecated + fabricated data; scenario_builder.py is salvageable if kept), committed .pyc files."
+}

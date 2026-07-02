@@ -1,0 +1,117 @@
+﻿{
+    "subsystem":  "models-openrouter",
+    "purpose":  "Two halves. (1) c:/Users/Dell/Desktop/Sleep-Token/models/ = 9.68 GB of locally-downloaded HF weights (chronos-bolt-base 821MB, mxbai-embed-large ~5.3GB in 4 redundant formats incl. GGUF, tabpfn-v2-reg 6 ckpts ~225MB, timesfm-2 ~4GB duplicated) consumed by the Brent forecast ensemble (versions/v5_phoenix/forecast_v2/ensemble_brent.py), the TabPFN risk judge, the embedder ensemble/reranker, and legacy v3 training scripts. (2) The OpenRouter integration: scripts/openrouter_client.py (async httpx client, 18-model registry, token-bucket rate limiter, .openrouter_usage.jsonl audit log) feeding scripts/verify_openrouter_models.py, scripts/run_frontier_judge_panel.py, scripts/compute_panel_agreement.py, scripts/compute_cross_corpus_alpha.py, scripts/ollama_v5_vs_frontier.py, and the live server path versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py (6/12-judge frontier panel called from hormuz_war_room_router.py). .openrouter_cache/ holds ~300 per-(model,scenario) JSON cache files from real panel runs.",
+    "verdict":  "The OpenRouter client itself is the single best-engineered file in this subsystem â€” real HTTP calls, real rate limiting, real usage logging (753 log lines including honest 400 errors), env-only key handling, and ~300 cache files with real token counts and latencies proving the frontier panel actually ran. But it is wrapped in rot and overstatement: the two panel scripts crash on stale pre-reorg paths (ROOT/\"v3_arcadia\" no longer exists); the advertised \"12-judge frontier panel\" (sold in master.html as part of a \"25-judge ensemble\") extends with 6 model slugs that appear in ZERO cache files and ZERO usage-log lines and are almost certainly invalid OpenRouter IDs; the committed \"liveness proof\" receipt shows 4/14 models OK; the registry still lists inclusionai/ling-2.6-1t:free with the note \"GOING AWAY 2026-04-30\" â€” two months past dead as of today. Meanwhile the models/ directory violates the owner\u0027s zero-local-models mandate with 9.68GB of weights, roughly 6GB of which is pure waste (4 redundant mxbai formats, a duplicate 2GB timesfm safetensors, 5 unused tabpfn ckpts), and three MORE model dirs the live code references (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf) don\u0027t exist at all â€” so the \"multi-embedder ensemble\", \"reranker\", and \"TabPFN 7th judge\" features silently fall back and never run, while FEATURE_INVENTORY.md marks tabpfn-v2-clf as \"PRESENT ... verified\". Also note: the live crisis-library code loads mxbai from the HF hub ID, not from the 5.3GB local copy â€” the local mxbai dir is effectively used only by broken v3 scripts and Docker. Critically for the migration: OpenRouter serves chat LLMs only; Chronos/TimesFM/TabPFN/mxbai are NOT LLMs and have no OpenRouter equivalent â€” \"everything via OpenRouter\" requires an explicit decision (drop, replace with API-based forecasting, or accept these as the one local exception).",
+    "score":  4.5,
+    "fakeInventory":  [
+                          {
+                              "file":  "FINAL_SUBMIT/FEATURE_INVENTORY.md",
+                              "line":  97,
+                              "kind":  "placeholder",
+                              "issue":  "Claims TabPFN-v2-clf weights are PRESENT and \u0027partial (verified)\u0027 but models/tabpfn-v2-clf/ does not exist on disk (only tabpfn-v2-reg does); the dependent judge in tabpfn_risk_judge.py can never load",
+                              "evidence":  "| TabPFN-v2-clf | PRESENT | `models/tabpfn-v2-clf/` | partial (verified) |"
+                          },
+                          {
+                              "file":  "versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py",
+                              "line":  46,
+                              "kind":  "dead_ui",
+                              "issue":  "12-judge expansion advertised in master.html (\u002725-judge ensemble ... 12 OpenRouter\u0027) uses 6 extension slugs that appear in zero .openrouter_cache dirs and zero .openrouter_usage.jsonl lines â€” never tested, several slugs almost certainly invalid on OpenRouter (llama-4-405b:free, claude-haiku-4.5:beta, grok-4-mini:free, deepseek-v3.5:free)",
+                              "evidence":  "JUDGES_12 = JUDGES + [\"deepseek/deepseek-v3.5:free\", \"qwen/qwen-3-235b-a22b:free\", \"meta-llama/llama-4-405b-instruct:free\", \"mistralai/mistral-large-3-2510:free\", \"x-ai/grok-4-mini:free\", \"anthropic/claude-haiku-4.5:beta\"]"
+                          },
+                          {
+                              "file":  "tests/receipts/openrouter_liveness.json",
+                              "kind":  "stub",
+                              "issue":  "Committed as \u0027real liveness proof\u0027 for judges but records n_ok=4 / n_fail=10 of 14 models, with 400 \u0027not a valid model ID\u0027 errors and status-0 timeouts; slugs predate the current registry â€” stale proof presented as evidence",
+                              "evidence":  "n_models_tested=14, n_ok=4, n_fail=10; nvidia/nemotron-3-super:free -\u003e 400, inclusionai/ling-1t:free -\u003e 400"
+                          },
+                          {
+                              "file":  "versions/v4_arcadia_live/realtime/embedder_ensemble.py",
+                              "line":  22,
+                              "kind":  "dead_ui",
+                              "issue":  "\u0027Multi-embedder ensemble (mxbai + Snowflake-Arctic)\u0027 feature can never run: models/snowflake-arctic-embed-l does not exist, so every call silently returns the mxbai_only fallback while receipts/docs advertise a 2-embedder ensemble",
+                              "evidence":  "SNOWFLAKE_DIR = REPO_ROOT / \"models\" / \"snowflake-arctic-embed-l\"  (dir absent; fallback: \"fallback\": \"mxbai_only\")"
+                          },
+                          {
+                              "file":  "versions/v4_arcadia_live/realtime/library_v2_rerank.py",
+                              "line":  23,
+                              "kind":  "dead_ui",
+                              "issue":  "BGE reranker feature dead: models/bge-reranker-v2-m3 does not exist on disk",
+                              "evidence":  "RERANKER_DIR = REPO_ROOT / \"models\" / \"bge-reranker-v2-m3\""
+                          },
+                          {
+                              "file":  "scripts/openrouter_client.py",
+                              "line":  56,
+                              "kind":  "hardcoded",
+                              "issue":  "Registry ships a judge model past its own hardcoded deprecation date (today is 2026-07-02); panels including it will 400 and silently shrink",
+                              "evidence":  "ModelSpec(\"inclusionai/ling-2.6-1t:free\", ..., \"GOING AWAY 2026-04-30 â€” use urgently\")"
+                          },
+                          {
+                              "file":  "scripts/run_frontier_judge_panel.py",
+                              "line":  90,
+                              "kind":  "synthetic",
+                              "issue":  "When a judge returns unparseable text, a verdict dict is fabricated from a regex keyword hit with a hardcoded confidence=0.5 â€” labeled, but it manufactures a structured judge opinion that feeds panel agreement stats",
+                              "evidence":  "return {\"risk_level\": level, \"confidence\": 0.5, \"rationale_one_line\": \"(extracted from free-text reply)\"}"
+                          }
+                      ],
+    "deadCode":  [
+                     "scripts/openrouter_client.py:110-111 â€” REDTEAM_SLUGS and VISION_SLUGS (plus all \u0027vision\u0027/\u0027red-team\u0027/\u0027utility\u0027 ModelSpecs, lines 88-105) are never imported anywhere; port imagery actually runs via local Ollama qwen-vl (versions/v4_arcadia_live/features/qwen_vl_port_imagery.py)",
+                     "models/mxbai-embed-large/{gguf,onnx,openvino}/ â€” ~3.35 GB of alternate-format weights (gguf f16, onnx x3, openvino x4) referenced by no code anywhere (only push_to_hf_space exclusion globs mention .gguf)",
+                     "models/timesfm-2/model.safetensors (1.99 GB) â€” ensemble_brent.py loads only torch_model.ckpt; the safetensors duplicate is never read",
+                     "models/tabpfn-v2-reg/tabpfn-v2-regressor-{09gpqh39,2noar4o2,5wof9ojf,wyl4o83o,v2_default}.ckpt â€” 5 variant checkpoints (~180 MB) unused; code loads only tabpfn-v2-regressor.ckpt (ensemble_brent.py:103)",
+                     "models/tabpfn-v2-reg/.DS_Store â€” macOS junk file",
+                     "models/*/.cache/huggingface/ download-metadata dirs â€” leftover hf_hub download state, safe to delete",
+                     "versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py:46-53 JUDGES_12 extension â€” unreachable-in-practice feature (untested slugs), plus expand_to_12_judges flag in hormuz_war_room_router.py WarRoomRequest",
+                     "models/mxbai-embed-large/model.safetensors as used by LIVE code: crisis_library.py:90 and library_v2_search.py:37 load SentenceTransformer(\"mixedbread-ai/mxbai-embed-large-v1\") from the HF hub, NOT the local dir â€” the local 5.3GB copy is only referenced by broken v3 legacy scripts and Dockerfile.damocles/docker-compose"
+                 ],
+    "brokenOrSuspect":  [
+                            "scripts/run_frontier_judge_panel.py:43-44 â€” R4_PATH/OUT_PATH = ROOT / \"v3_arcadia\" / \"results\" / ... ; c:/Users/Dell/Desktop/Sleep-Token/v3_arcadia does not exist (moved to versions/v3_arcadia in reorg) â€” script crashes with FileNotFoundError on every run",
+                            "scripts/compute_panel_agreement.py:21-22 â€” same stale ROOT/\"v3_arcadia\" paths; crashes on run (its own line 185 string even says the correct versions/v3_arcadia path)",
+                            "versions/v3_arcadia/** legacy scripts (r5_rag_beast.py:36-37, r5_hard_queries.py, r5_mteb_subset.py, r5_manual_beir.py, r4_v2_beast.py:44, 90_damocles/app.py:27+47, 80_aqua_regia/r6_conformal.py, train_v3_block2/3/4.py) â€” ROOT parent-count is off-by-one after the move under versions/, so MODELS resolves to versions/models or versions/v3_arcadia/models which don\u0027t exist; every local-model load in v3 is broken",
+                            "versions/v4_arcadia_live/realtime/tabpfn_risk_judge.py:25 â€” MODEL_DIR = REPO_ROOT/\"models\"/\"tabpfn-v2-clf\" missing; the \u00277th judge\u0027 always returns {ok:False, error:\u0027tabpfn_unavailable\u0027}",
+                            "docker-compose.yml:51-52 + Dockerfile.damocles:25 â€” container mounts/copies only mxbai-embed-large and chronos-bolt-base, but forecast_v2/ensemble_brent.py also needs models/timesfm-2 and models/tabpfn-v2-reg; in Docker the \u00273-model ensemble\u0027 silently degrades to Chronos-only (try/except down-weights to zero)",
+                            ".env.example â€” has no OPENROUTER_API_KEY entry even though openrouter_client.py hard-requires it (raises RuntimeError); docs gap for anyone reproducing",
+                            "versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py:228-233 run_panel_sync uses asyncio.run() inside a sync FastAPI route â€” will raise \u0027asyncio.run() cannot be called from a running event loop\u0027 if the route is ever served from an async context/threadpool nuance changes; fragile",
+                            "scripts/openrouter_client.py:186-192 â€” silently reads the raw .env file line-by-line as a fallback; works but bypasses any dotenv quoting/escaping and will happily pick up a commented-out line\u0027s absence without warning"
+                        ],
+    "localModelDeps":  [
+                           "models/chronos-bolt-base (821 MB safetensors) â€” loaded by versions/v5_phoenix/forecast_v2/ensemble_brent.py:_load_chronos via chronos.BaseChronosPipeline.from_pretrained(MODELS_DIR/\u0027chronos-bolt-base\u0027); NO OpenRouter equivalent exists (time-series model, not an LLM)",
+                           "models/timesfm-2 (torch_model.ckpt 1.99 GB used; model.safetensors 1.99 GB unused) â€” loaded by ensemble_brent.py:_load_timesfm via timesfm.TimesFmCheckpoint(path=models/timesfm-2/torch_model.ckpt); no OpenRouter equivalent",
+                           "models/tabpfn-v2-reg/tabpfn-v2-regressor.ckpt â€” loaded by ensemble_brent.py:_load_tabpfn_reg via TabPFNRegressor(model_path=...); no OpenRouter equivalent",
+                           "models/tabpfn-v2-clf (MISSING but referenced) â€” versions/v4_arcadia_live/realtime/tabpfn_risk_judge.py:25,80",
+                           "models/mxbai-embed-large (5.3 GB, 4 formats) â€” referenced by Dockerfile.damocles:25, docker-compose.yml:51, and broken v3 scripts; live code instead does SentenceTransformer(\u0027mixedbread-ai/mxbai-embed-large-v1\u0027) = runtime HF-hub download in versions/v4_arcadia_live/realtime/crisis_library.py:90 and versions/v4_arcadia_live/scenarios/library_v2_search.py:37; embeddings are NOT offered by OpenRouter â€” migration needs a different provider or a conscious local exception",
+                           "models/snowflake-arctic-embed-l (MISSING but referenced) â€” versions/v4_arcadia_live/realtime/embedder_ensemble.py:22",
+                           "models/bge-reranker-v2-m3 (MISSING but referenced) â€” versions/v4_arcadia_live/realtime/library_v2_rerank.py:23",
+                           "Ollama at http://127.0.0.1:11434 â€” 332 references across 46 .py files (the actual ollamaâ†’openrouter migration scope); live-path consumers: versions/v4_arcadia_live/realtime/hormuz_endpoint.py (3-judge panel), coder_action_critic.py, port_imagery_router.py, features/qwen_vl_port_imagery.py, features/counterfactual_explainer.py, autoresearch/hypothesis_engine.py + orchestrator.py (and v5_phoenix copies), rl/explainer.py, rl/rag/indexer.py, versions/v5_phoenix/wordle_env/dual_verifier.py, roll_integration/reward_bridge/supplymind_judge_worker.py; local model tags include supplymind-analyst:v5, qwen2.5:14b, deepseek-r1, mistral-nemo (scripts/ollama_v5_vs_frontier.py:50-51, scripts/pass28_killshot_v2.py:39)",
+                           "rl/lora/create_ollama_model.py + rl/lora/finetune*.py + versions/v3_arcadia/train_v3_block3_llm.py â€” GGUF conversion / local fine-tune tooling for Ollama models"
+                       ],
+    "externalServices":  [
+                             "OpenRouter https://openrouter.ai/api/v1/chat/completions â€” scripts/openrouter_client.py (httpx AsyncClient, Bearer OPENROUTER_API_KEY, headers HTTP-Referer from OPENROUTER_SITE_URL default huggingface.co/spaces/Shaurya-Noodle/Supplymind, X-Title from OPENROUTER_APP_NAME); consumers: scripts/verify_openrouter_models.py, scripts/run_frontier_judge_panel.py, scripts/compute_cross_corpus_alpha.py, scripts/ollama_v5_vs_frontier.py, scripts/final_validation_bundle.py, scripts/pass20_grand_final.py, scripts/pass22_full_squeeze.py, scripts/pass27_scenario_extractor.py, versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py (live FastAPI path via hormuz_war_room_router.py). Real usage proven: 753 lines in .openrouter_usage.jsonl (status 200s with token counts + honest 400s), ~300 cache JSONs across 12 model dirs in .openrouter_cache/",
+                             "HuggingFace Hub (runtime download) â€” SentenceTransformer(\u0027mixedbread-ai/mxbai-embed-large-v1\u0027) in versions/v4_arcadia_live/realtime/crisis_library.py:90 and versions/v4_arcadia_live/scenarios/library_v2_search.py:37; also the models/*/.cache/huggingface dirs prove the local weights were pulled via hf_hub download",
+                             "Local Ollama HTTP API http://127.0.0.1:11434 (localhost, not external, but a live service dependency) â€” 46 files"
+                         ],
+    "couplings":  [
+                      "scripts/openrouter_client.py is imported via `sys.path.insert(0, ROOT)` + `from scripts.openrouter_client import ...` by: scripts/verify_openrouter_models.py:19, scripts/run_frontier_judge_panel.py:39, scripts/ollama_v5_vs_frontier.py:42, scripts/compute_cross_corpus_alpha.py, versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py:27-31 (ROOT = parents[3]) â€” moving scripts/ or the versions tree changes these parent counts",
+                      "openrouter_client.py writes REPO_ROOT/.openrouter_usage.jsonl (REPO_ROOT = parents[1] of scripts/) â€” gitignored at .gitignore:97",
+                      "CACHE_DIR = ROOT/.openrouter_cache used by scripts/run_frontier_judge_panel.py:45, scripts/compute_panel_agreement.py:23 (reads cache to compute alpha receipts), scripts/compute_cross_corpus_alpha.py:33 (.openrouter_cache/cross_corpus â€” subdir currently absent) â€” gitignored at .gitignore:99, excluded from HF deploy in .github/workflows/deploy-hf-space.yml:72",
+                      "versions/v4_arcadia_live/realtime/hormuz_war_room_router.py:360 lazily imports openrouter_war_room_panel.run_panel_sync; router also reads server/static/hormuz_war_room.html and master.html via Path(__file__).parents[3] (line 51-52) â€” reorg-sensitive",
+                      "versions/v5_phoenix/forecast_v2/ensemble_brent.py:35-36 MODELS_DIR = parents[3]/models; versions/v4_arcadia_live/realtime/{embedder_ensemble.py:21, tabpfn_risk_judge.py:25, library_v2_rerank.py:23} same parents[3]/models pattern â€” moving these files breaks model resolution",
+                      "versions/v3_arcadia legacy scripts expect models/ at wrong depth (already broken; see brokenOrSuspect)",
+                      "docker-compose.yml:51-52 volume-mounts ./models/mxbai-embed-large and ./models/chronos-bolt-base; Dockerfile.damocles:25 COPYs models/mxbai-embed-large",
+                      "models/ is gitignored (.gitignore:60) â€” 9.68 GB never in git; scripts/push_to_hf_space*.py exclude *.gguf/*.safetensors/*.ckpt from Space deploys",
+                      "receipts written into tests/receipts/ (openrouter_liveness.json, frontier_panel_alpha.json, cross_corpus_alpha.json, ollama_v5_vs_frontier.json) and duplicated in FINAL_SUBMIT/receipts/ â€” docs in docs/CLONE_AND_STUDY.md and FINAL_SUBMIT/*.md cite them",
+                      "scripts/run_frontier_judge_panel.py output path (versions/v3_arcadia/results/R4_FRONTIER_PANEL_V2.json) is committed and referenced by compute_panel_agreement.py and FINAL_SUBMIT receipts"
+                  ],
+    "mustFix":  [
+                    "Fix stale pre-reorg paths: run_frontier_judge_panel.py:43-44 and compute_panel_agreement.py:21-22 must use ROOT/\u0027versions\u0027/\u0027v3_arcadia\u0027/\u0027results\u0027/... â€” both scripts currently crash, and they are the reproducibility backbone of the panel-alpha receipts",
+                    "Delete or live-verify the JUDGES_12 extension slugs in openrouter_war_room_panel.py:46-53 (zero evidence any of the 6 ever returned 200), and correct the master.html \u002725-judge ensemble / 12 OpenRouter\u0027 marketing to match what actually runs (6 frontier judges)",
+                    "Prune dead/deprecated slugs from the MODELS registry in openrouter_client.py: inclusionai/ling-2.6-1t:free expired 2026-04-30; then re-run scripts/verify_openrouter_models.py and commit a fresh openrouter_liveness.json (the committed one shows 4/14 OK â€” actively harmful as \u0027proof\u0027)",
+                    "Make the migration decision explicit: OpenRouter serves chat LLMs only. Chronos-Bolt, TimesFM-2, TabPFN, and mxbai embeddings have no OpenRouter route. Either (a) drop the forecast ensemble/embedder features, (b) move embeddings+forecast to a hosted API (HF Inference, provider-native), or (c) declare these the sanctioned local exception â€” but stop claiming \u0027everything via OpenRouter\u0027 until decided",
+                    "Migrate the real Ollama surface (46 files, 332 refs; core live paths: hormuz_endpoint.py 3-judge panel, qwen_vl_port_imagery.py, autoresearch hypothesis_engine.py, rl/explainer.py, wordle_env/dual_verifier.py) to openrouter_client.py â€” this is the actual ollamaâ†’openrouter scope; openrouter_client.py is a solid foundation, keep it",
+                    "Reclaim ~6 GB: delete models/mxbai-embed-large/{gguf,onnx,openvino} (~3.35 GB, unreferenced), models/timesfm-2/model.safetensors (2 GB duplicate), 5 unused tabpfn-v2-reg ckpt variants (~180 MB), .DS_Store, and the .cache/huggingface leftovers",
+                    "Resolve the mxbai split-brain: live code downloads mixedbread-ai/mxbai-embed-large-v1 from HF hub at runtime while a 5.3 GB local copy sits unused â€” point SentenceTransformer at one canonical source (or an API) and delete the other",
+                    "Ship or remove the three ghost model deps: snowflake-arctic-embed-l (embedder_ensemble), bge-reranker-v2-m3 (library_v2_rerank), tabpfn-v2-clf (tabpfn_risk_judge) â€” today all three features are silently dead fallbacks while docs claim them; and fix FEATURE_INVENTORY.md line 97\u0027s false \u0027PRESENT\u0027",
+                    "Add OPENROUTER_API_KEY (+ OPENROUTER_SITE_URL, OPENROUTER_APP_NAME) to .env.example",
+                    "Fix docker-compose.yml/Dockerfile.damocles to mount all model dirs ensemble_brent.py needs, or remove model mounts entirely once the API migration lands"
+                ],
+    "salvage":  "Refactor. Keep scripts/openrouter_client.py, verify_openrouter_models.py, run_frontier_judge_panel.py, compute_panel_agreement.py, and openrouter_war_room_panel.py â€” they are real, well-instrumented, receipt-backed OpenRouter integrations and the natural foundation for the ollamaâ†’openrouter migration (fix the two stale v3_arcadia paths and prune dead/deprecated model slugs first). Delete ~6 GB of never-referenced weight formats and duplicates inside models/ immediately. The remaining local weights (chronos, timesfm, tabpfn-reg, one mxbai copy) cannot be \u0027moved to OpenRouter\u0027 because OpenRouter has no time-series or embedding endpoints â€” the owner must either cut those features, swap to a hosted inference API, or grant them an explicit local exception. Delete the JUDGES_12 fiction and the untested vision/red-team registry tiers rather than shipping advertised capabilities with zero execution evidence."
+}

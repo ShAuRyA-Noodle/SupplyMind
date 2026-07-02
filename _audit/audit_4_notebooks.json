@@ -1,0 +1,189 @@
+﻿{
+    "subsystem":  "notebooks (c:/Users/Dell/Desktop/Sleep-Token/notebooks, 13 .ipynb files)",
+    "purpose":  "Colab-facing demo/training notebooks for the hackathon submission: env quickstart + PPO training (01-03), v3/v4 pipeline demos (04-05), TRL DPO on 21 real preference pairs (06), hackathon training recipes (07), self-contained REINFORCE Wordle + GRPO micro-finetune (08), LLaMA-3.2 GRPO recipe (09), GPU \"gap-closing\" runs writing sha256 receipts (10), live API-key data ingest (11), FRED Brent refit (12), and the 43-cell \"master submission\" notebook 13 that runs 13 sections and emits an HTML certificate.",
+    "verdict":  "Split personality. Roughly half the code is genuinely real and competent: nb06\u0027s DPO trains on 21 verified-real preference pairs in the repo, nb08/nb13-Â§3\u0027s REINFORCE Wordle training is honest end-to-end RL with paired eval, nb09\u0027s GRPO recipe is sound, and nb11/nb12 hit real external APIs with sha256-stamped responses. But the flagship 13_MASTER_HACKATHON_FINAL â€” the one README points judges at â€” contains outright fabrication: Â§9\u0027s \"4-method causal counterfactual\" is literally four np.random.normal() draws around hand-picked means (275/250/263/285) relabeled as paired-bootstrap/synthetic-control/ARIMA-BSTS/do-calculus and written to a receipt; Â§1\u0027s \"269/269 attacks blocked = 100%\" is structurally rigged (n_safe increments in BOTH branches, injection strings never even passed to two tools, 19 attacks added as a constant, compliant:True hardcoded in the fallback); Â§5 plots a hardcoded 4-row trajectory and stamps a hardcoded \"2735x\" into a receipt; Â§7 is a SyntaxError that cannot execute (proof nobody ever ran the notebook top-to-bottom); and the certificate cell\u0027s locals().get() hacks silently substitute defaults while the HTML hardcodes the string \"= 100%\". Every single notebook has zero stored outputs and zero execution counts, so every headline number (\"8%â†’100%, p=2.71e-18\", \"100-step real run on T4\") exists only as markdown claims. nb10 clones a GitHub repo that does not exist and its gym wrapper mis-unpacks the env\u0027s single-Observation return, so it would crash cell 3 and produce zero-reward episodes even if fixed. nb11\u0027s K4 pushes a synthetic linear reward/loss curve to W\u0026B to \"close the W\u0026B gap\". This is exactly the pattern the owner banned.",
+    "score":  3,
+    "fakeInventory":  [
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "fake_ai_output",
+                              "issue":  "Â§9 \u00274-method causal counterfactual replay on TÅhoku 2011\u0027 runs NO causal methods â€” all four \u0027estimates\u0027 are Gaussian draws around hand-picked means, then pooled to $268B vs anchor $235B and written into receipt nb13_S9_counterfactual.json",
+                              "line":  1196,
+                              "evidence":  "\u0027paired_bootstrap_mc\u0027: float(np.mean(rng.normal(275, 18, n_sim))), \u0027synthetic_control_abadie2010\u0027: float(np.mean(rng.normal(250, 15, n_sim)))"
+                          },
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "simulated",
+                              "issue":  "Â§1 \u0027269/269 = 100% blocked\u0027 gauntlet is rigged: n_safe increments whether or not the tool returned a safe dict; injection strings are never passed to tool_sm_query_recent_events; the 19 reward-hack attacks are a constant added to both numerator and denominator; assert BLOCK_PCT==100.0 is thus guaranteed",
+                              "line":  380,
+                              "evidence":  "if isinstance(r, dict): n_safe += 1\\n                else: n_safe += 1"
+                          },
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "stub",
+                              "issue":  "Â§1 inline-fallback SupplyMindMCP is a stub whose tools return canned dicts, and its is_openenv_compliant() hardcodes compliant:True â€” so on the HF-mirror clone (where the wrapper may be missing) \u0027OpenEnv compliant: [OK]\u0027 is printed against a mock",
+                              "line":  339,
+                              "evidence":  "\u0027compliant\u0027: True,\\n            \u0027mode\u0027: \u0027inline_fallback\u0027"
+                          },
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "hardcoded",
+                              "issue":  "Â§5 \u0027process supervision step-credit trajectory\u0027 is a hardcoded 4-row literal list plotted as if measured, and the receipt stamps a hardcoded \u0027full_distribution_amp\u0027: 2735",
+                              "line":  803,
+                              "evidence":  "trajectory = [ {\u0027step\u0027:1,\u0027guess\u0027:\u0027about\u0027,\u0027feedback\u0027:\u0027YGYGG\u0027,\u0027reward\u0027:0.04,\u0027uniform\u0027:0.243,\u0027process\u0027:0.04}, ..."
+                          },
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "synthetic",
+                              "issue":  "Â§8 \u0027cross-env transfer\u0027 entropy probe feeds pure random noise vectors (seeded by hash of the question) into the Wordle policy and reports the entropy as \u0027representation transfer\u0027 â€” measures nothing",
+                              "line":  1138,
+                              "evidence":  "x = torch.from_numpy(np.random.default_rng(hash(item[\u0027question\u0027])%2**32).normal(0, 1, 188)...)"
+                          },
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "hardcoded",
+                              "issue":  "HTML certificate hardcodes the string \u0027= 100%\u0027 for attacks-blocked regardless of actual values, and cert-cell _g() locals().get() fallbacks silently substitute defaults (solve_rate 0.0, NaN p-value, 248 features) into the \u0027sha256-stamped\u0027 certificate when upstream sections failed",
+                              "line":  1471,
+                              "evidence":  "\u003ctd class=\"ok\"\u003e{TOTAL_BLOCKED}/{TOTAL_ATKS} = 100%\u003c/td\u003e ... _g = lambda n, d: locals().get(n, globals().get(n, d))"
+                          },
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "hardcoded",
+                              "issue":  "Â§12 claims \u0027248/250 features demonstrated\u0027 as a hardcoded constant, not computed from anything in the run",
+                              "line":  1379,
+                              "evidence":  "PROJECT_TOTAL_DEMONSTRATED = 248  # full project across 128 receipts"
+                          },
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "hardcoded",
+                              "issue":  "Â§9 coverage check contains a +50 fudge to force \u0027CI covers truth\u0027 (variable then never used)",
+                              "line":  1206,
+                              "evidence":  "covers = ci_low \u003c= ANCHOR_TOHOKU_BN \u003c= ci_high or (ci_low \u003c= ANCHOR_TOHOKU_BN \u003c= ci_high+50)"
+                          },
+                          {
+                              "file":  "notebooks/11_REAL_DATA_INGEST.ipynb",
+                              "kind":  "fake_ai_output",
+                              "issue":  "K4 \u0027closes V8 W\u0026B logs gap\u0027 by logging a fabricated linear reward/loss curve (not from any training) to a live W\u0026B dashboard, then writes receipt pass28_K4_wandb_smoke.json",
+                              "line":  215,
+                              "evidence":  "wandb.log({\u0027reward\u0027: 0.5 + 0.4*(i/20), \u0027loss\u0027: 1.0 - 0.6*(i/20), \u0027step\u0027: i})"
+                          },
+                          {
+                              "file":  "notebooks/12_FRED_BRENT_REFIT.ipynb",
+                              "kind":  "placeholder",
+                              "issue":  "Header claims \u0027Re-runs Chronos+TimesFM+TabPFN ensemble\u0027 but the code is an admitted placeholder (last-value + mean-30 + linear extrapolation), yet still writes receipt pass28_T3_brent_ensemble_fred_refit.json claiming to close L9",
+                              "line":  71,
+                              "evidence":  "# Naive ensemble: weighted last-value + linear trend + mean of last-30 â€” placeholder\\n# (Real ensemble would use Chronos-Bolt + TimesFM + TabPFN â€” install if needed)"
+                          },
+                          {
+                              "file":  "notebooks/10_PRO_COLAB_KILLSHOT.ipynb",
+                              "kind":  "simulated",
+                              "issue":  "N1 GRPO \u0027training\u0027 leaks the answer into the prompt (\u0027TARGET: {tgt}\u0027) so the reward-improvement is trivially gamed â€” the model just copies the target; same leak repeated in nb13 Â§6 sweep (line 926 there)",
+                              "line":  174,
+                              "evidence":  "\u0027prompt\u0027: f\u0027You are playing Wordle. Output a single 5-letter word guess.\\nTARGET: {tgt}\\nGUESS: \u0027"
+                          },
+                          {
+                              "file":  "notebooks/08_HACKATHON_FOOLPROOF.ipynb",
+                              "kind":  "simulated",
+                              "issue":  "GRPO cell\u0027s reward seeds a fresh WordleEnv from hash of the model\u0027s own completion text, so the target depends on the output being scored â€” the reward signal is effectively noise, not env-grounded learning",
+                              "line":  536,
+                              "evidence":  "e = WordleEnv(seed=hash(txt) \u0026 0xFFFFFFFF)"
+                          },
+                          {
+                              "file":  "notebooks/08_HACKATHON_FOOLPROOF.ipynb",
+                              "kind":  "simulated",
+                              "issue":  "\u0027Wilcoxon paired signed-rank\u0027 computed over two UNpaired samples (baseline eval seed_base=10000 vs trained seed_base=20000 â†’ different episodes/targets); p-value and Cohen\u0027s d are statistically invalid as \u0027paired\u0027",
+                              "line":  436,
+                              "evidence":  "def eval_policy(policy_fn, n_episodes=200, seed_base=10000) ... trained = eval_policy(trained_policy, n_episodes=200, seed_base=20000) ... wilcoxon(trained[\u0027rewards\u0027], baseline[\u0027rewards\u0027])"
+                          },
+                          {
+                              "file":  "notebooks/13_MASTER_HACKATHON_FINAL.ipynb",
+                              "kind":  "synthetic",
+                              "issue":  "Every headline metric in markdown (\u00278% â†’ 100% Â· p=2.71eâ»Â¹â¸ Â· d=4.28\u0027, \u0027~30 min\u0027, \u0027100% blocked\u0027) is pre-written prose; notebook has 0 outputs and 0 execution_counts â€” never run, and Â§7\u0027s SyntaxError proves it could not have completed",
+                              "line":  43,
+                              "evidence":  "## Â§3 Â· REINFORCE Wordle 1500-ep Â· 8% â†’ 100% Â· p=2.71eâ»Â¹â¸ Â· d=4.28 (all 43 cells: outputs=[], execution_count=null)"
+                          },
+                          {
+                              "file":  "notebooks/07_HACKATHON_TRAINING.ipynb",
+                              "kind":  "placeholder",
+                              "issue":  "Submission summary ships an unfilled template placeholder for the repo URL",
+                              "line":  321,
+                              "evidence":  "**Repo:** github.com/{your-handle}/SupplyMind"
+                          },
+                          {
+                              "file":  "notebooks/04_v3_quickstart_colab.ipynb",
+                              "kind":  "synthetic",
+                              "issue":  "Â§4 conformal demo runs on explicitly synthetic residuals (labeled, so honest, but it is not live data)",
+                              "evidence":  "# Synthetic demo: 30 calibration folds, horizon 14 ... cal = rng.normal(0, 1, (30, 14)) * np.linspace(1, 3, 14)"
+                          }
+                      ],
+    "deadCode":  [
+                     "notebooks/13_MASTER_HACKATHON_FINAL.ipynb cell 6 + cell 26: MODE \u0027t4_full\u0027 is compared against but is not an allowed MODE (assert whitelist excludes it) â€” SECTION_PLAN_T4 branch and TS=5000 branch are unreachable (stale mode name from an earlier revision)",
+                     "notebooks/13_MASTER_HACKATHON_FINAL.ipynb Â§9: variable \u0027covers\u0027 computed then never used or reported",
+                     "notebooks/07_HACKATHON_TRAINING.ipynb: superseded by nb08/09/13 (nb13 is declared \u0027the single canonical run\u0027; nb07 cell-8 is an explicitly non-training \u0027GRPO config skeleton\u0027 that never calls trainer.train())",
+                     "notebooks/01_environment_quickstart.ipynb + 02_training_your_own_agent.ipynb: Colab badges but no git-clone cell â€” \u0027import rl\u0027 can never succeed on Colab, so the advertised one-click path is dead",
+                     "notebooks/10_PRO_COLAB_KILLSHOT.ipynb: entire notebook dead-on-arrival â€” cell 3 clones https://github.com/ShAuRyA-Noodle/SupplyMind-OpenEnv.git which returns \u0027Repository not found\u0027 (verified via git ls-remote)",
+                     "notebooks/04_v3_quickstart_colab.ipynb links FAILURE_TABLE.md at repo root â€” file does not exist (only path referenced by notebooks that is missing)"
+                 ],
+    "brokenOrSuspect":  [
+                            "notebooks/13_MASTER_HACKATHON_FINAL.ipynb cell 26 (Â§7 baseline grid): hard SyntaxError â€” raw newline inside single-quoted f-string print(f\u0027\\nTraining {an}...\u0027) at raw line 1077-1078; verified \u0027unterminated f-string literal\u0027 via compile(); Â§7 can never run in any Python version",
+                            "notebooks/13_MASTER_HACKATHON_FINAL.ipynb cell 26 SMGym.step: SupplyMindEnvironment.step() returns a single SupplyMindObservation (server/supply_environment.py:109 \u0027-\u003e SupplyMindObservation\u0027), which has no __len__, so the tuple-unpack fallback yields (obs, 0.0, True, {}) â€” every episode would be 1 step with reward 0; the DQN/QRDQN/TRPO/A2C \u0027baseline grid\u0027 would be meaningless even after fixing the SyntaxError; also _f() gets a pydantic model, isinstance(obs, dict) is False â†’ all-zero features",
+                            "notebooks/10_PRO_COLAB_KILLSHOT.ipynb cell N2 (raw line 305): \u0027obs, reward, done, info = self.env.step(sm_action)\u0027 unpacks the single SupplyMindObservation â†’ ValueError/TypeError at first step; reset() also calls obs.get() on a pydantic model â†’ AttributeError",
+                            "notebooks/10_PRO_COLAB_KILLSHOT.ipynb + 13_MASTER cell 4: GitHub fallback URL ShAuRyA-Noodle/SupplyMind-OpenEnv does not exist (git ls-remote: \u0027Repository not found\u0027); nb08 Â§9 links ShAuRyA-Noodle/SupplyMind which only works via GitHub rename-redirect to Sleep-Token",
+                            "notebooks/10_PRO_COLAB_KILLSHOT.ipynb N1: uses gated \u0027meta-llama/Llama-3.2-1B-Instruct\u0027 with no HF_TOKEN handling â€” fails for any judge without Meta gating approval (nb09 correctly uses ungated unsloth mirror)",
+                            "notebooks/01_environment_quickstart.ipynb cell-5/02: \u0027from server.supply_environment import ...\u0027 / \u0027import rl\u0027 assume cwd = repo root; notebooks live in notebooks/ so even local Jupyter started in-place fails (nb03 is the only one that does sys.path.insert(0, \u0027..\u0027))",
+                            "notebooks/13_MASTER_HACKATHON_FINAL.ipynb cell 42: git identity hardcoded to placeholder email \u0027shauryapunj@example.com\u0027",
+                            "notebooks/11_REAL_DATA_INGEST.ipynb + 13 cell 32: parse .env by hand and load values into os.environ â€” fragile, and nb13 pushes to HF Space with token interpolated into a shell command (token would appear in process args)",
+                            "All 13 notebooks: with_outputs=0, executed=0 â€” no notebook in the repo carries any evidence of a successful end-to-end run despite docs (FINAL_SUBMIT/PRESENTATION_FINAL_CHECKLIST.md) claiming nb08/nb09 \u0027run end-to-end\u0027"
+                        ],
+    "localModelDeps":  [
+                           "notebooks/06_trl_training_colab.ipynb: local load of Qwen/Qwen2.5-0.5B-Instruct via Unsloth FastLanguageModel 4-bit (fallback vanilla transformers) + TRL DPOTrainer",
+                           "notebooks/08_HACKATHON_FOOLPROOF.ipynb cell 16: local AutoModelForCausalLM load of Qwen/Qwen2.5-0.5B-Instruct for GRPO",
+                           "notebooks/09_LLAMA_GRPO_FOOLPROOF.ipynb: local unsloth/Llama-3.2-1B-Instruct-bnb-4bit load + save_pretrained_merged(\u0027merged_16bit\u0027) + local reload",
+                           "notebooks/10_PRO_COLAB_KILLSHOT.ipynb: meta-llama/Llama-3.2-1B-Instruct (gated), Qwen/Qwen2.5-0.5B-Instruct (N4), Qwen/Qwen2.5-1.5B-Instruct (N5 merge); torch.load of versions/v5_phoenix/experiments/rap_xc_v1/rapxc.pt in nb07",
+                           "notebooks/13_MASTER_HACKATHON_FINAL.ipynb Â§6: Qwen2.5-0.5B/3B/7B/14B local loads depending on MODE, via Unsloth or transformers",
+                           "notebooks/04_v3_quickstart_colab.ipynb: sentence-transformers local load of mixedbread-ai/mxbai-embed-large-v1 (~1.3GB); markdown documents skipped Ollama dependency (\u0027R4 Dangerous needs 4 Ã— 9GB LLMs via Ollama\u0027) â€” only Ollama mention in notebooks, not executed",
+                           "notebooks/02/10/13: stable-baselines3 / sb3-contrib local RL training (MaskablePPO, DQN, QRDQN, TRPO, A2C)",
+                           "notebooks/07_HACKATHON_TRAINING.ipynb: AutoTokenizer Qwen/Qwen2.5-1.5B-Instruct + torch.load(rapxc.pt, weights_only=False)"
+                       ],
+    "externalServices":  [
+                             "HF Space https://shaurya-noodle-supplymind.hf.space â€” /health, /reset, /step (nb07, nb08, nb09, nb13 Â§2), /tasks, /phoenix/status (nb06 Â§9), /wordle/reset|step|grade (nb07), /demo/hormuz-war-room and /demo/hormuz-war-room/validate (nb07 Â§7-8)",
+                             "FRED api.stlouisfed.org series DCOILBRENTEU â€” FRED_API_KEY (nb11 K1, nb12, nb13 Â§10)",
+                             "NewsAPI newsapi.org/v2/everything â€” NEWS_API_KEY (nb11 K2, nb13 Â§10)",
+                             "NOAA CDO www.ncdc.noaa.gov/cdo-web/api/v2 â€” NOAA_TOKEN (nb11 K3, nb13 Â§10)",
+                             "Weights \u0026 Biases â€” WANDB_API_KEY (nb11 K4 fabricated-curve smoke, nb13 Â§3 real training logs)",
+                             "ACLED api.acleddata.com/acled/read â€” ACLED_API_KEY + ACLED_EMAIL (nb11 K5)",
+                             "Exa api.exa.ai/search â€” EXA_API_KEY (nb11 K6)",
+                             "HuggingFace Hub â€” HF_TOKEN: dataset upload Shaurya-Noodle/supplymind-pass28-receipts (nb11 K7), git push to Space (nb13 cell 42), model downloads (Qwen/LLaMA/mxbai)",
+                             "GitHub raw download of versions/v3_arcadia/checkpoints/granite/corpus_chunks.pkl (nb04)",
+                             "git clone of github.com/ShAuRyA-Noodle/Sleep-Token (nb04-06) / dead SupplyMind-OpenEnv (nb10, nb13 fallback) / HF Space git mirror as code source (nb13 cell 4)",
+                             "pip package reasoning-gym as eval env (nb10 N4, nb13 Â§8)"
+                         ],
+    "couplings":  [
+                      "Repo-root imports assuming cwd or sys.path root: server/supply_environment.py (nb01, 03, 10, 13), models.py SupplyMindAction (nb10, 13), scripted_agent.py choose_action/run_task (nb01, 03), rl/__init__.py gym registration \u0027SupplyMind-Easy-v1\u0027 (nb01, 02), benchmark/backtesting.py simulate_crisis/HISTORICAL_CRISES (nb03), server/openenv_mcp_wrapper.py is_openenv_compliant/SupplyMindMCP (nb13 Â§1)",
+                      "versions/v3_arcadia: checkpoints/granite/corpus_chunks.pkl (nb04), results/R5_GRANITE.json, R5_BEIR_MANUAL.json, R4_DANGEROUS_V2_ABLATION.json, R6_GETHSEMANE_MASKING_ABLATION.json, R6_PROVIDER_V2.json, R3_TIMESFM_QUANTILE.json (nb05 receipt-check cell)",
+                      "versions/v4_arcadia_live: realtime/hormuz_endpoint.py run_hormuz_pipeline/ScenarioRequest (nb05), tests/test_spof_v2.py + 5 other test files via pytest (nb05), docs/PREPRINT.md, autoresearch/orchestrator (nb05/06 links)",
+                      "versions/v5_phoenix: wordle_env/env.py WORD_LIST/WORD_SET/_score_guess â€” LetterFeedback objects with .state, matching nb10\u0027s f.state usage (nb10 N1), wordle_env/train_grpo.py (nb07 link), roll_integration/dpo_judge/data/preference_pairs.jsonl 21 lines (nb06 â€” verified), roll_integration/dpo_judge/train_grpo_live_env.py (nb06 links), experiments/rap_xc_v1/rapxc.pt torch.load ckpt[\u0027history\u0027] (nb07)",
+                      "tests/receipts/: bootstrap_leaderboard.json, wilcoxon_pairwise_leaderboard.json (nb07 cell-12 reads [\u0027per_task\u0027][\u0027hard_cascading_crisis\u0027][\u0027comparisons\u0027]), conformal_calibration.json, ensemble_brent_validation.json, adversarial_reward_audit.json (nb07 markdown)",
+                      "FINAL_SUBMIT/receipts + FINAL_SUBMIT/plots â€” write targets for nb10/11/12/13 receipts and PNGs; FINAL_SUBMIT/API_KEYS_TO_GET.md (nb11/12 docs); FINAL_SUBMIT/nb13_submission_certificate.html (nb13 cell 40)",
+                      "server/data/graphs/hard_graph.json (nb04 Â§3)",
+                      "openenv.yaml at repo root checked by nb13 compliance",
+                      ".env parsed line-by-line by nb11 cell-1 and nb13 cell 32 (KEY=VALUE format assumed)",
+                      "Inbound links: README.md badges to notebooks/06 and 13; FINAL_SUBMIT/{HACKATHON_README, FINAL_SUBMIT_INDEX, EXEC_SUMMARY_ONE_PAGE, PRESENTATION_FINAL_CHECKLIST, HACKATHON_BLOG_FINAL, GRPO_MATHEMATICAL_FORMULATION, BRUTAL_BREAKDOWN_19PART_IMPLEMENTATION_MAP, PASS28_HYPERMODE_FINAL, JUDGE_FAQ_30, JUDGE_OBJECTION_HANDBOOK}.md all deep-link specific notebook filenames/cells â€” renumbering or moving notebooks breaks ~15 docs",
+                      "Colab badge URLs hardcode github/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/\u003cname\u003e.ipynb (nb01-03, README) â€” file renames break badges",
+                      ".github/workflows/deploy-hf-space.yml line 74 excludes notebooks/** from the HF Space deploy; nb13 clones the HF Space AS its code source, so nb13 depends on server/, models.py, openenv.yaml surviving the deploy filter",
+                      "nb04 links docs/v3/MODEL_CARD.md, docs/v3/BENCHMARKS_VS_PUBLIC.md, docs/v3/PYTORCH_STORY.md, and missing FAILURE_TABLE.md; nb05 links docs/v4/JUDGES.md"
+                  ],
+    "mustFix":  [
+                    "Delete or honestly rewrite nb13 Â§9: either run the real 4 causal methods from the repo\u0027s counterfactual code or remove the section â€” shipping rng.normal() draws labeled \u0027ARIMA-BSTS/do-calculus\u0027 with a sha256 receipt is disqualifying if a judge reads the cell",
+                    "Fix nb13 Â§1 gauntlet counting: only count an attack as blocked when the returned dict is actually safe (e.g. r.get(\u0027ok\u0027) handled and no state mutation), pass the injection payloads to every tool, drop the \u0027+19\u0027 constant (or execute those 19 attacks live), and remove the hardcoded compliant:True in the fallback â€” or better, fail loudly instead of falling back to a stub",
+                    "Fix nb13 Â§7 SyntaxError (move the \\n escape inside the f-string onto one line) and rewrite SMGym.step to consume SupplyMindObservation properly (obs.reward/obs.done fields), with a real 64-dim featurizer â€” currently the section cannot run and would train on zero-reward 1-step episodes if it could",
+                    "Fix nb10: point REPO_URL at Sleep-Token, fix the same step-unpack bug, use the ungated unsloth LLaMA mirror, and remove the TARGET-in-prompt leak (also in nb13 Â§6): give the model constraint feedback, not the answer, otherwise \u0027reward improvement\u0027 is copy-paste",
+                    "Execute the key notebooks (at minimum 06, 08, 09, 13 in cpu_quick and t4 modes) and commit them WITH outputs â€” right now zero cells anywhere have outputs, so every claimed number is unverifiable prose; nb13\u0027s committed SyntaxError proves no full run ever happened",
+                    "Replace nb11 K4\u0027s fabricated W\u0026B curve with real metrics (nb13 Â§3 already logs real REINFORCE metrics to W\u0026B â€” reuse that) and either implement the real Chronos/TimesFM/TabPFN ensemble in nb12 or rename the receipt so it doesn\u0027t claim an ensemble refit",
+                    "Fix nb13 cert cell: remove the locals().get() default-substitution so the certificate refuses to render missing sections instead of printing hardcoded \u0027100%\u0027 and fallback 248-feature counts; fix \u0027t4_full\u0027 stale mode comparisons",
+                    "Fix nb08\u0027s unpaired \u0027paired Wilcoxon\u0027 (same seed_base for both evals, like nb13 Â§3 does correctly) and replace the hash(completion)-seeded reward env in the GRPO cell with a fixed per-prompt target",
+                    "Make nb01/02 runnable: add a clone+cd cell for Colab and sys.path bootstrap for local Jupyter; fill the {your-handle} placeholder in nb07 or delete nb07 as superseded",
+                    "Prune the notebook set: 13 notebooks with 5 overlapping Wordle-training copies is audit surface, not value â€” keep 01-03 (fixed), 06, 08 or 09, 13 (fixed), and move 04/05/07/10/11/12 to an archive dir (updating the ~15 FINAL_SUBMIT/README deep-links listed in couplings)"
+                ],
+    "salvage":  "Refactor â€” do not delete wholesale. The real assets (nb06 DPO on genuine committed preference pairs, nb08/nb13-Â§3 self-contained REINFORCE with honest paired eval, nb09\u0027s GRPO recipe, nb11/nb13-Â§10 real keyed API ingest with response hashing) are legitimately good hackathon material and better than most competitors will have. But nb13 must be surgically cleaned (Â§1 rigged gauntlet, Â§5 hardcoded demo, Â§7 SyntaxError, Â§8 noise probe, Â§9 fabricated counterfactual, cert fallbacks) before any judge with code-reading ability sees it, nb10 needs its dead repo URL and env-API breakage fixed or the file archived, and every kept notebook needs at least one committed executed run with outputs. The fabricated sections are concentrated and identifiable, so a 1-2 day cleanup converts this from a liability into a strength."
+}

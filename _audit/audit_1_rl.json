@@ -1,0 +1,207 @@
+﻿{
+    "subsystem":  "rl",
+    "purpose":  "The RL pipeline for SupplyMind. Core: a Gymnasium wrapper (rl/gym_env.py, 408-dim obs, MultiDiscrete[7,40], action masking) around the in-repo simulated supply-chain environment (server.supply_environment); online trainers (MaskablePPO via sb3-contrib in train_ppo.py, QR-DQN with CVaR in distributional/, constrained PPO with Lagrangian lambda, HER, A2C/RecurrentPPO baselines, Optuna HPO); an \"AutoResearch\" loop (autoresearch.py) that runs QR-DQN hyperparameter experiments and grades them; offline RL (BC/CQL/IQL/TD3+BC/Decision Transformer in offline/ and decision_transformer/) trained on buffers built from real datasets (DataCo 180K Kaggle orders, NOAA IBTRACS, USGS, FRED, WGI) by real_data_pipeline.py and data/build_unified_buffer(_v2).py; plus auxiliary modules: DT+QRDQN ensemble, specialist router, world-model surrogate + GPU Monte Carlo, TFT commodity forecasting, GNN attention viz, federated-learning demo, Pareto frontier, Ollama-based RAG and explainer, LoRA fine-tuning of Qwen 2.5, SHAP interpretability, ONNX export, numba fast MC engine, and a hand-rolled CUDA action-mask kernel.",
+    "verdict":  "Two-faced subsystem. The core is genuinely real and better than typical hackathon work: training actually ran (100+ checkpoints with varied sizes, autoresearch_results.json shows plausible varied grades 0.24-0.85 and per-experiment 4-6 min timings), the 300MB+ of DataCo/NOAA/USGS/FRED source data physically exists and the buffer builders genuinely parse it, and the trainers (PPO/QR-DQN/offline v2) are competent, complete implementations. But wrapped around that real core is a shell of fabricated \"wow features\" that directly violate the no-fake mandate: real_world_benchmark.py hardcodes agent scores and converts grader scores into invented \"real-world late rates\" and \"$-savings\" via made-up arithmetic; leaderboard.py ALWAYS serves a fabricated table (its CSV dependency doesn\u0027t exist anywhere) complete with fake Â±std and a hardcoded \"significant at p\u003c0.01\" claim; pareto/frontier.py claims to \"train 20 policies\" but runs the same scripted agent 20 times with different seeds; gnn/attention.py serves attention weights from an UNTRAINED randomly-initialized network to the dashboard; tft.py\u0027s trained-model predict path is a stub that never computes a forecast; the dashboard consumes the hardcoded-formula analysis modules (byte-identical to the \"legacy fallbacks\") while the \"Phase J trained models\" pkls sit unused at runtime; and the flagship \"real\" offline buffers label actions via a heuristic whose taxonomy contradicts the environment\u0027s own action space (\"cancel\" doesn\u0027t exist; index 1 means alert in the buffer but activate_backup in the env). Add reorg bitrot (WGI xlsx moved to _dump, breaking two scripts; explainer rename breaking dashboard import) and heavy local Ollama/RTX-4080 coupling, and this is a strong engine buried under demo theater.",
+    "score":  5,
+    "fakeInventory":  [
+                          {
+                              "file":  "rl/real_world_benchmark.py",
+                              "kind":  "hardcoded",
+                              "line":  157,
+                              "issue":  "The \u0027killer feature\u0027 real-world benchmark never evaluates any agent â€” it uses a hardcoded dict of agent scores, then fabricates \u0027estimated real-world late rate\u0027 by literally setting estimated_sla = avg_grade and invents savings via \u0027* 50  # $50 per delay\u0027",
+                              "evidence":  "# Known agent scores from our evaluation\n    agent_scores = {\n        \"Scripted\": {\"Easy\": 0.675, ... \"QR-DQN (AutoResearch)\": {\"Easy\": 0.873, \"Medium\": 0.881, ..."
+                          },
+                          {
+                              "file":  "rl/real_world_benchmark.py",
+                              "kind":  "fake_ai_output",
+                              "line":  164,
+                              "issue":  "Hardcoded \u0027QR-DQN (AutoResearch)\u0027 Medium=0.881 contradicts the actual autoresearch_results.json where the best medium grade ever achieved was 0.527 â€” the number appears invented or from an unrecorded run",
+                              "evidence":  "\"QR-DQN (AutoResearch)\": {\"Easy\": 0.873, \"Medium\": 0.881, \"Hard\": 0.710}"
+                          },
+                          {
+                              "file":  "rl/leaderboard.py",
+                              "kind":  "mock_data",
+                              "line":  57,
+                              "issue":  "Leaderboard falls back to fabricated \u0027target scores from blueprint\u0027 with fake Â±std â€” and since benchmark/results/benchmark_summary.csv does not exist anywhere in the repo, this fabricated table is ALWAYS what gets served",
+                              "evidence":  "# Fallback: target scores from blueprint\n    return [\n        {\"Agent\": \"Random\", \"Easy\": \"0.27Â±0.00\", ... {\"Agent\": \"Ensemble (DT+QR)\", \"Easy\": \"0.87Â±0.02\", ..."
+                          },
+                          {
+                              "file":  "rl/leaderboard.py",
+                              "kind":  "hardcoded",
+                              "line":  88,
+                              "issue":  "Hardcoded statistical claim rendered in the UI with no statistics behind it",
+                              "evidence":  "\"All differences vs Scripted significant at p\u003c0.01.\""
+                          },
+                          {
+                              "file":  "rl/pareto/frontier.py",
+                              "kind":  "simulated",
+                              "line":  168,
+                              "issue":  "\u0027Trains 20 policies with different objective weightings\u0027 per docstring, but every \u0027policy\u0027 is the identical scripted agent â€” the weight vectors are recorded and never influence behavior; only the env seed varies. Carbon objective uses invented constants (\u0027Assume 100 tonnes moved 5000km per expedite\u0027)",
+                              "evidence":  "# Run episode with scripted agent (placeholder for weight-conditioned policy)"
+                          },
+                          {
+                              "file":  "rl/gnn/attention.py",
+                              "kind":  "fake_ai_output",
+                              "line":  198,
+                              "issue":  "get_attention_edges() (\u0027for dashboard visualization\u0027) instantiates an UNTRAINED SupplyChainGAT when model=None and serves its random attention weights as edge criticality; without PyG it serves uniform 0.5. No training loop or __main__ exists despite the \u0027--train\u0027 usage docstring, and no GAT checkpoint exists",
+                              "evidence":  "if model is None:\n        model = SupplyChainGAT()  ...  \"attention_weight\": 0.5,"
+                          },
+                          {
+                              "file":  "rl/forecasting/tft.py",
+                              "kind":  "stub",
+                              "line":  217,
+                              "issue":  "predict_tft\u0027s trained path is a stub â€” it loads the checkpoint and data then returns only metadata, never an actual forecast; and rl/checkpoints/tft_best.ckpt doesn\u0027t exist so the fallback path always runs. dashboard/app.py line 322 imports _fallback_forecast directly, bypassing the model entirely",
+                              "evidence":  "# Use last max_encoder_length days as encoder input\n    # Return forecast dict\n    return {\"horizon_days\": horizon, \"model\": \"TemporalFusionTransformer\", ... \"status\": \"trained\"}"
+                          },
+                          {
+                              "file":  "rl/dataco_integration.py",
+                              "kind":  "stub",
+                              "line":  206,
+                              "issue":  "backtest_agent_on_real_data(agent_fn, ...) never calls agent_fn â€” \u0027accuracy\u0027 compares is_late (always true, sampled from late orders only) against a fixed severity\u003e0.3 threshold. A fake backtest of nothing",
+                              "evidence":  "def backtest_agent_on_real_data(self, agent_fn, n_orders: int = 100,) ... predicted_late = signal[\"severity\"] \u003e 0.3  # Agent threshold"
+                          },
+                          {
+                              "file":  "rl/analysis/political_risk.py",
+                              "kind":  "hardcoded",
+                              "line":  48,
+                              "issue":  "Active analysis module is a hardcoded per-country risk table (byte-identical to rl/legacy/fallbacks/political_risk.py) despite Phase J claiming formulas were \u0027replaced with trained models\u0027; the trained pkls are never loaded by any runtime consumer",
+                              "evidence":  "# Pre-computed country risk data from real public sources\nCOUNTRY_RISK_DATA: dict[str, dict[str, float]] = { \"Taiwan\": { \"governance_index\": 15, ..."
+                          },
+                          {
+                              "file":  "rl/analysis/financial_impact.py",
+                              "kind":  "hardcoded",
+                              "line":  21,
+                              "issue":  "Dashboard (dashboard/scenario_builder.py) imports estimate_cascade_impact from this hardcoded-multiplier formula module (\u002735% average\u0027, \u0027$25K/day\u0027, \u00275% reputation\u0027), NOT the trained financial_impact_ridge.pkl â€” the \u0027trained model\u0027 story is not what users see",
+                              "evidence":  "DEFAULT_FINANCIALS = {\"gross_margin\": 0.35, ... \"sla_penalty_per_day\": 25_000, ... \"reputation_cost_fraction\": 0.05}"
+                          },
+                          {
+                              "file":  "rl/data/build_unified_buffer.py",
+                              "kind":  "synthetic",
+                              "line":  214,
+                              "issue":  "The \u0027real\u0027 buffer\u0027s action labels are heuristic mappings from shipping mode, and the taxonomy contradicts the env: comment says \u00270=none, 1=alert, 2=reroute, 3=expedite, 4=inventory, 5=backup, 6=cancel\u0027 but gym_env ACTION_TYPES defines 1=activate_backup_supplier, 4=expedite, 6=issue_supplier_alert, and \u0027cancel\u0027 does not exist. Policies trained on these labels decode to wrong actions in the env. Header still claims \u0027All data is real. Zero synthetic rollouts.\u0027",
+                              "evidence":  "# action_type: 0=none, 1=alert, 2=reroute, 3=expedite, 4=inventory, 5=backup, 6=cancel"
+                          },
+                          {
+                              "file":  "rl/data/build_unified_buffer_v2.py",
+                              "kind":  "hardcoded",
+                              "line":  241,
+                              "issue":  "\u0027Leading indicators\u0027 feature is a hardcoded market-to-disruption-type flag table, not derived from any real indicator data, injected into the \u0027all real data\u0027 v2 buffer",
+                              "evidence":  "market_to_indicators = {\"Pacific Asia\": [\"tropical_cyclone\", \"earthquake\", \"geopolitical_conflict\", \"cyber_attack\"], ..."
+                          },
+                          {
+                              "file":  "rl/analysis/trained_models.py",
+                              "kind":  "synthetic",
+                              "line":  76,
+                              "issue":  "political_risk \u0027training\u0027 is circular: target y = (100 - mean(X))/100 is a deterministic function of the features, so the reported R2 is meaningless; dependency_scoring predicts Late_delivery_risk using \u0027Days for shipping (real)\u0027 â€” direct label leakage (late risk is defined by real vs scheduled days)",
+                              "evidence":  "latest[\"political_risk\"] = (100 - latest[WGI_SHEETS].mean(axis=1)) / 100.0"
+                          },
+                          {
+                              "file":  "rl/offline/dataset.py",
+                              "kind":  "hardcoded",
+                              "line":  119,
+                              "issue":  "_fallback_fred_data() returns hardcoded \u0027real approximate values\u0027 (5 handpicked oil/copper points) when FRED_API_KEY missing â€” silently substitutes canned prices for live data",
+                              "evidence":  "\"fetched_at\": \"fallback\", \"DCOILWTICO\": {..., \"data\": [{\"date\": \"2024-01-02\", \"value\": 70.38}, ..."
+                          },
+                          {
+                              "file":  "rl/constrained_ppo.py",
+                              "kind":  "placeholder",
+                              "line":  11,
+                              "issue":  "Baked-in marketing overclaim: Lagrangian relaxation satisfies constraints on average, which is not a mathematical guarantee",
+                              "evidence":  "\"Our RL agent is mathematically guaranteed to never exceed the risk budget.\""
+                          },
+                          {
+                              "file":  "rl/federated/fedavg.py",
+                              "kind":  "placeholder",
+                              "line":  7,
+                              "issue":  "Pre-written result claim in the docstring of a self-described stub before any experiment justifies it",
+                              "evidence":  "Key insight: \"Federated model outperforms any individual company\u0027s model by 23%\""
+                          },
+                          {
+                              "file":  "rl/train_rl_baselines.py",
+                              "kind":  "stub",
+                              "line":  143,
+                              "issue":  "SAC-Discrete trainer is \u0027skeleton_only\u0027 â€” returns a note instead of training (honest about it, but still an advertised trainer that does nothing)",
+                              "evidence":  "return {\"status\": \"skeleton_only\", \"algo\": \"SAC-Discrete\", ... \"Skeleton wired; full training requires that dep.\"}"
+                          },
+                          {
+                              "file":  "rl/explainer.py",
+                              "kind":  "dead_ui",
+                              "line":  232,
+                              "issue":  "\u0027Removed\u0027 heuristic explainer kept as dead code (_heuristic_explanation_REMOVED); pre_populate_cache docstring claims \u0027Uses heuristic explanations (no Ollama needed)\u0027 but it calls the Ollama-mandatory explain_action â€” stale doc; committed explanations_cache.json (14KB) lets demos serve cached LLM output without a live model",
+                              "evidence":  "def _heuristic_explanation_REMOVED(obs, action_type: str, target_node: str | None) -\u003e str:"
+                          }
+                      ],
+    "deadCode":  [
+                     "rl/explainer.py:_heuristic_explanation_REMOVED â€” dead function kept after \u0027removal\u0027, while dashboard still imports the old name (see brokenOrSuspect)",
+                     "rl/analysis/trained/v3/*.pkl (~230MB: delivery_status/shipping_mode/late_delivery_risk/benefit_per_order x xgb/lgb/cat) â€” not loaded by any Python file in the repo (grep hits only HF-exclusion scripts); orphaned artifacts eating 25% of the subsystem\u0027s size",
+                     "rl/analysis/{confidence,dependency_scoring,financial_impact,political_risk,safety_stock}.py are byte-identical (MD5-verified) to rl/legacy/fallbacks/* â€” full duplication; one of the two copies is redundant",
+                     "Three identical copies of the 4.7MB simulated buffer: rl/data/offline_buffer.npz, rl/data/offline_buffer_simulated_backup.npz, rl/data/archive_simulated/offline_buffer_simulated.npz, rl/legacy/buffers/offline_buffer_simulated.npz (4 total counting legacy)",
+                     "rl/gnn/attention.py â€” no __main__/train loop despite \u0027python -m rl.gnn.attention --train\u0027 usage docstring; module is unreachable as a script",
+                     "rl/leaderboard.py \u0027Submit your agent\u0027 promise â€” no submission path exists in the Gradio app; display-only",
+                     "rl/lora/Modelfile (v1) is regenerated by create_modelfile(); the committed copy plus v2/v3 are superseded by v4/v5 flow per docs",
+                     "rl/checkpoints/lora/ â€” empty directory; the LoRA adapters FINAL_SUBMIT/ARCHITECTURE.md claims live there do not exist on disk",
+                     "rl/offline/iql_agent.py (967 bytes) â€” thin shim of uncertain use; offline/baselines.py + baselines_v2.py already implement IQL"
+                 ],
+    "brokenOrSuspect":  [
+                            "rl/analysis/trained_models.py:43 WGI_PATH = ROOT/\u0027wgidataset_with_sourcedata-2025.xlsx\u0027 â€” file was moved to _dump/data_legacy/ by a past reorg; train_political_risk() crashes with FileNotFoundError",
+                            "rl/data/build_unified_buffer_v2.py:47 WGI = ROOT/\u0027wgidataset_with_sourcedata-2025.xlsx\u0027 â€” same stale path; build_wgi() crashes, so the v2 buffer cannot be regenerated as-is",
+                            "dashboard/app.py:412 \u0027from rl.explainer import _heuristic_explanation\u0027 â€” function was renamed _heuristic_explanation_REMOVED in rl/explainer.py; the dashboard Agent Reasoning Log raises ImportError when Run Episode is clicked (rl-side rename broke the consumer)",
+                            "rl/leaderboard.py:38 depends on benchmark/results/benchmark_summary.csv which is never produced by any script (glob across repo: no match) â€” real-results path is permanently dead",
+                            "rl/forecasting/tft.py: train_tft saves tft_best.ckpt but no such file exists in rl/checkpoints (only tft_real.pt/tft_v2.pt from train_tft_real.py) â€” predict path can never use a trained model",
+                            "Action-space semantics mismatch: offline buffers real_unified(.npz/_v2.npz) label actions with build_unified_buffer taxonomy (1=alert, 6=cancel) while rl/gym_env.py ACTION_TYPES has 1=activate_backup_supplier, 6=issue_supplier_alert â€” any offline-trained policy evaluated in the env executes different actions than it learned",
+                            "State-schema mismatch: buffer builders write NOAA/USGS/FRED into dims [350:407], which in the env encoding are node-35-39 features + the day/budget/health global slots â€” offline models and env-trained models see incompatible feature semantics in the same 408-dim vector",
+                            "rl/gym_env.py:88-97 training_mode Monte-Carlo speed patch wrapped in except: pass â€” silently no-ops if the engine module isn\u0027t in sys.modules, hiding a 15-20x slowdown",
+                            "benchmark/run_full_benchmark.py loads checkpoints via relative paths (\u0027rl/checkpoints/qrdqn_best_easy.pt\u0027) â€” breaks unless run from repo root",
+                            "30+ \u0027except Exception: pass\u0027 blocks across train_ppo.py, distributional/train.py, decision_transformer/train.py, surrogate/world_model.py, autoresearch_viz.py â€” mostly around W\u0026B/MLflow logging (benign) but pattern also hides real failures (gym_env MC patch)"
+                        ],
+    "localModelDeps":  [
+                           "Ollama qwen2.5:14b â€” rl/explainer.py (mandatory, \u0027PRODUCTION PATH: Ollama is mandatory. No heuristic fallback\u0027; raises ExplainerError without it)",
+                           "Ollama nomic-embed-text â€” rl/rag/indexer.py (embeddings, no fallback) and rl/rag/build_corpus.py; ChromaDB persistent store at rl/rag/chroma_db/ (2MB sqlite + 3.2MB vectors, populated)",
+                           "Ollama CLI subprocess â€” rl/lora/create_ollama_model.py (\u0027ollama create\u0027 from committed Modelfile/.v2/.v3/.v4; sets OLLAMA_MAX_LOADED_MODELS=1; references v5 that has no committed Modelfile)",
+                           "Local HuggingFace transformers weights â€” rl/lora/finetune.py (AutoModelForCausalLM Qwen-2.5-1.5B + PEFT/TRL + bitsandbytes NF4 QLoRA); output dir rl/checkpoints/lora/ is currently EMPTY",
+                           "Unsloth 4-bit local model â€” rl/lora/finetune_unsloth.py (unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit)",
+                           "sentence-transformers â€” rl/legacy/fallbacks/rag_indexer_with_fallback.py (legacy path only)",
+                           "CUDA GPU assumed throughout â€” device=\u0027cuda\u0027 defaults in autoresearch.py, train_ppo.py, hpo.py, ensemble.py, distributional/train.py, surrogate/gpu_monte_carlo.py (100K-scenario batches, \u0027\u003c80ms on RTX 4080\u0027 targets); custom compiled kernel rl/cuda/action_mask_kernel.cu/.obj; numba @njit in rl/fast_engine/fast_monte_carlo.py",
+                           "PyTorch Geometric (optional, MLP fallback) â€” rl/gnn/attention.py; pytorch-forecasting + lightning â€” rl/forecasting/tft.py; sb3/sb3-contrib for PPO baselines",
+                           "ONNX runtime artifacts â€” rl/checkpoints/supplymind_policy.onnx (+.data) and rl/checkpoints/onnx/{BC,CQL,IQL,TD3BC}_v2.onnx via rl/export_onnx.py (the one genuinely portable, Qualcomm-relevant path)"
+                       ],
+    "externalServices":  [
+                             "FRED API via fredapi â€” rl/offline/dataset.py fetch_fred_data() using FRED_API_KEY parsed directly out of .env (custom line parser, name only); results cached to rl/data/fred_cache.json (1.27MB, real series)",
+                             "NOAA IBTRACS â€” static download rl/data/ibtracs_wp.csv (111MB, present); no live calls in rl code",
+                             "USGS earthquake feed â€” cached rl/data/usgs_m55_30days.csv (1.8KB); live fetch lives outside rl (sources/usgs.py per docs)",
+                             "Kaggle DataCo dataset â€” rl/data/dataco.csv (96MB) + dataco_access_logs.csv (95MB), manual download, gitignored",
+                             "Weights \u0026 Biases â€” optional in rl/train_ppo.py (wandb.init project \u0027supplymind-grand-finale\u0027, swallowed on failure)",
+                             "MLflow â€” optional local tracking in rl/train_ppo.py",
+                             "Gradio / HuggingFace Spaces â€” rl/leaderboard.py (local Gradio app; \u0027huggingface-cli upload\u0027 deploy intent in docstring)",
+                             "World Bank WGI â€” static xlsx, currently missing from expected path (moved to _dump/data_legacy/)"
+                         ],
+    "couplings":  [
+                      "rl/gym_env.py, rl/autoresearch.py, rl/specialist_router.py, rl/explainer.py (pre_populate_cache), rl/offline/dataset.py, rl/pareto/frontier.py, rl/record_video.py import repo-root modules: `models`, `server.supply_environment`, `scripted_agent` â€” every one does sys.path.insert(project_root); moving rl/ or those root files breaks all of them",
+                      "dashboard/app.py imports rl.explainer._heuristic_explanation (BROKEN â€” renamed), rl.rag.indexer.CrisisRAG, rl.forecasting.tft._fallback_forecast; dashboard/scenario_builder.py imports rl.analysis.financial_impact.estimate_cascade_impact and calls gym env inject_disruption()",
+                      "benchmark/run_full_benchmark.py imports rl.gym_env (SupplyMindGymnasiumEnv, ACTION_TYPES), rl.distributional.qr_dqn.QRDQNNetwork, rl.offline.baselines.{BCNetwork,CQLQNetwork,TD3Actor} and loads cwd-relative \u0027rl/checkpoints/*.pt\u0027",
+                      "rl/real_world_benchmark.py and rl/leaderboard.py read/write ../benchmark/results/ (real_world_benchmark.json written there; benchmark_summary.csv expected but never produced)",
+                      "rl/data/build_unified_buffer_v2.py reads ROOT/wgidataset_with_sourcedata-2025.xlsx (moved to _dump/data_legacy/ â€” broken) and rl/analysis/trained/{financial_impact_ridge,political_risk_gbr}.pkl",
+                      "rl/train_rl_baselines.py and rl/lora/finetune_unsloth.py write receipts to ROOT/tests/receipts/*.json",
+                      "rl/offline/dataset.py parses ROOT/.env directly for FRED_API_KEY (bespoke parser, not python-dotenv)",
+                      "docker-compose.yml mounts ./rl/checkpoints and ./rl/data read-only into containers",
+                      "rl/gym_env.py monkeypatches server.engine.monte_carlo.MonteCarloEngine.run_simulation via sys.modules lookup â€” fragile name-based coupling to server internals",
+                      "rl/leaderboard.py writes ROOT/leaderboard.html; rl/autoresearch_summary.py writes ROOT/AUTORESEARCH_SUMMARY.md; rl/record_video.py writes ROOT/videos/",
+                      "notebooks/01+02 and benchmark/run_benchmark.py do `import rl` for Gymnasium env registration (rl/__init__.py registers SupplyMind-{Easy,Medium,Hard}-v1)",
+                      "CI (.github/workflows/deploy-hf-space.yml) excludes rl/checkpoints/**, rl/analysis/**, rl/data/*.npz|*.csv from the HF Space push; .gitignore excludes the big CSVs, npz buffers, and rl/checkpoints/{*.pt,*.zip,*.pkl,*.onnx,lora/}"
+                  ],
+    "mustFix":  [
+                    "Delete or genuinely implement rl/real_world_benchmark.py: load actual checkpoints, run actual evaluations, remove the hardcoded agent_scores dict and the grade-\u003elate-rate-\u003e\u0027$50/delay savings\u0027 fantasy arithmetic. As-is it manufactures the exact kind of fake numbers judges will probe.",
+                    "Fix rl/leaderboard.py: generate benchmark_summary.csv from a real benchmark run (benchmark/run_full_benchmark.py), delete the fabricated fallback table and the hardcoded \u0027p\u003c0.01\u0027 string, or delete the module.",
+                    "Fix the action-taxonomy mismatch: unify build_unified_buffer(_v2).py action_of() with rl/gym_env.ACTION_TYPES (indices 1/3/4/5/6 disagree; \u0027cancel\u0027 doesn\u0027t exist), regenerate real_unified*.npz, and retrain/re-eval offline agents â€” current offline-vs-env comparisons are semantically invalid.",
+                    "Repoint WGI paths in rl/analysis/trained_models.py and rl/data/build_unified_buffer_v2.py to _dump/data_legacy/wgidataset_with_sourcedata-2025.xlsx (or restore the file) â€” both scripts currently crash.",
+                    "Restore rl.explainer._heuristic_explanation or update dashboard/app.py:412 â€” the Agent Reasoning Log is currently an ImportError.",
+                    "Make the dashboard consume the trained analysis models (rl/analysis/trained/*.pkl) or stop claiming Phase J replaced the formulas; de-duplicate rl/analysis/*.py vs rl/legacy/fallbacks/*.py (byte-identical today).",
+                    "Implement predict_tft() to actually forecast (it returns metadata only) and reconcile checkpoint names (tft_best.ckpt vs tft_real.pt); either train and serve the GAT in rl/gnn/attention.py or remove the untrained-random-attention dashboard feed.",
+                    "Rework rl/pareto/frontier.py to use genuinely weight-conditioned policies (e.g., reward-scalarized PPO runs) or relabel it honestly as a scripted-agent seed study; remove the invented tonnage/distance carbon constants or cite per-episode shipment data.",
+                    "Fix circular target and label leakage in rl/analysis/trained_models.py (political_risk target is a deterministic function of its features; dependency_scoring uses realized shipping days to \u0027predict\u0027 late risk).",
+                    "For the Qualcomm hackathon: the Ollama qwen2.5:14b/RTX-4080 dependency chain (explainer, RAG, LoRA) will not run on Snapdragon targets â€” make the existing ONNX export path (supplymind_policy.onnx + 4 offline-agent ONNX) the first-class inference story and plan an on-device or small-model substitute for explanations.",
+                    "Purge dead weight: ~230MB unused rl/analysis/trained/v3 pkls, quadruplicated simulated buffers, empty rl/checkpoints/lora/ vs docs claiming adapters exist, _heuristic_explanation_REMOVED.",
+                    "Replace silent except:pass around the gym_env Monte-Carlo training patch with a hard assert or log â€” a silent no-op costs 15-20x training throughput."
+                ],
+    "salvage":  "Refactor â€” do not rebuild, do not keep as-is. The training core (gym_env.py, train_ppo.py, distributional/, autoresearch.py, offline/baselines_v2.py, decision_transformer/, ensemble.py, specialist_router.py, surrogate/, uncertainty.py, hpo.py, the data files and buffer builders, export_onnx.py, fast_engine/) is real, ran, and produced verifiable artifacts â€” that is the strongest asset in the repo and worth keeping nearly verbatim. Surgically delete or honestly reimplement the fabricated presentation layer (real_world_benchmark.py, leaderboard.py fallback, pareto \u0027trained policies\u0027, untrained GNN attention, TFT predict stub, fake backtest), fix the four reorg-broken paths and the buffer/env action-taxonomy mismatch, collapse the analysis/legacy duplication, and decide the on-device story for the Ollama-dependent explainer/RAG before the Qualcomm event. Roughly 20% of the code needs deletion/rework; 80% is keepable."
+}

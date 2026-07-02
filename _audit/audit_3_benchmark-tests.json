@@ -1,0 +1,150 @@
+﻿{
+    "subsystem":  "benchmark-tests",
+    "purpose":  "Two distinct things. tests/ (184 pytest tests + committed sha256-hashed \"receipt\" JSONs) validates the SupplyMind OpenEnv environment: graph/disruption/financial/reward engines, Pydantic contracts, task registry, FastAPI endpoints (reset/step/state/grader), OpenEnv spec compliance, grader discrimination/determinism, and an adversarial reward-hacking audit against the /analyst/grade oracle. benchmark/ is an agent-evaluation harness (run_benchmark.py, run_full_benchmark.py, ablation.py, backtesting.py, statistics.py, visualize.py) plus committed result artifacts in benchmark/results/ and 5 historical-crisis JSONs in benchmark/crisis_library/.",
+    "verdict":  "Split personality. The test suite is the single most genuinely engineered part of this audit scope: real behavioral assertions (smart strategy must beat do-nothing, seeds must jitter, cascades must inject, reward hacks must score low), determinism proofs, and receipts whose sha256 hashes actually verify. It even caught a real regression â€” 8 adversarial tests fail TODAY because server/app.py still points at the pre-reorg \"v3_arcadia/results/R4_DANGEROUS_V2.json\" path â€” but nobody noticed because CI is entirely disabled, and the \"requires Ollama+GPU\" excuse is false: the 176 passing tests are CPU-only with zero network calls (I ran them in 140s). The benchmark/ directory, by contrast, is substantially theater: run_benchmark.py silently substitutes the scripted baseline for all 8 \"trained\" agents, ablation.py inherits that so its committed ablation_results.csv has six rows (\"+CVaR\", \"+DT\", \"+Ensemble\"...) byte-identical to Scripted; visualize.py contains three fully fabricated hardcoded \"publication-quality\" figures (benchmark table, ablation bars, radar chart); backtesting.py\u0027s own committed output says is_credible=false on all 3 crises and compares 0 metrics for Red Sea due to a key-name mismatch; statistics.py crashes on a missing CSV whose generator was exiled to _dump; and the 5 crisis_library JSONs are dead data nothing loads.",
+    "score":  4,
+    "fakeInventory":  [
+                          {
+                              "file":  "benchmark/run_benchmark.py",
+                              "line":  88,
+                              "kind":  "placeholder",
+                              "issue":  "All 8 \u0027trained\u0027 agents (bc, td3bc, cql, iql, ppo, qrdqn, dt, ensemble) are silently evaluated as the scripted baseline â€” a benchmark of 10 agents is really 2.",
+                              "evidence":  "# For trained agents â€” use scripted as placeholder until models are trained ... return evaluate_scripted(task_id, seed, n_episodes)"
+                          },
+                          {
+                              "file":  "benchmark/ablation.py",
+                              "line":  76,
+                              "kind":  "placeholder",
+                              "issue":  "Ablation configs ppo_real/qrdqn_unc explicitly mapped to scripted; combined with run_benchmark\u0027s placeholder, the entire 8-step ablation is scripted-vs-scripted.",
+                              "evidence":  "if agent in (\"ppo_real\", \"qrdqn_unc\"):\n    agent = \"scripted\"  # Placeholder until trained"
+                          },
+                          {
+                              "file":  "benchmark/results/ablation_results.csv",
+                              "line":  4,
+                              "kind":  "fake_ai_output",
+                              "issue":  "Committed \u0027ablation study\u0027 artifact: rows for PPO, +Real Data, +CVaR, +Uncertainty, +DT, +Ensemble are byte-identical to Scripted (avg 0.6498466666666667 repeated 7x). Fabricated component-contribution evidence.",
+                              "evidence":  "PPO baseline,...,0.6498466666666667,0.07300055433579483 (identical to \u0027Scripted (no ML)\u0027 row and 5 others)"
+                          },
+                          {
+                              "file":  "benchmark/visualize.py",
+                              "line":  53,
+                              "kind":  "hardcoded",
+                              "issue":  "When benchmark_summary.csv is absent, the \u0027publication-quality\u0027 benchmark table is rendered from invented scores for 10 agents.",
+                              "evidence":  "rows = [ [\"Random\", \"0.27+/-0.00\", ...], [\"Ensemble\", \"0.87+/-0.02\", \"0.80+/-0.02\", \"0.77+/-0.02\", \"0.81\"] ]"
+                          },
+                          {
+                              "file":  "benchmark/visualize.py",
+                              "line":  97,
+                              "kind":  "hardcoded",
+                              "issue":  "Ablation chart values are unconditionally hardcoded â€” never reads ablation_results.csv at all.",
+                              "evidence":  "scores = [0.25, 0.71, 0.74, 0.76, 0.77, 0.78, 0.79, 0.81]"
+                          },
+                          {
+                              "file":  "benchmark/visualize.py",
+                              "line":  132,
+                              "kind":  "hardcoded",
+                              "issue":  "\u0027Agent Capability Radar\u0027 values for Scripted/PPO/QR-DQN/DT/Ensemble are entirely invented constants.",
+                              "evidence":  "\"Ensemble\": [0.90, 0.87, 0.74, 0.88, 0.92]"
+                          },
+                          {
+                              "file":  "tests/test_openenv_compliance.py",
+                              "line":  190,
+                              "kind":  "dead_ui",
+                              "issue":  "test_grader_zero_variance is an always-true assertion â€” pure test theater; can never fail.",
+                              "evidence":  "assert len(scores) \u003e= 2 or True  # tolerant"
+                          },
+                          {
+                              "file":  "tests/test_openenv_compliance.py",
+                              "line":  142,
+                              "kind":  "stub",
+                              "issue":  "Grader endpoint \u0027compliance\u0027 test accepts a 422 error as passing.",
+                              "evidence":  "assert r.status_code == 200 or r.status_code == 422  # may require body"
+                          },
+                          {
+                              "file":  "benchmark/results/backtesting_results.json",
+                              "line":  24,
+                              "kind":  "synthetic",
+                              "issue":  "Committed backtesting artifact contradicts the \u0027proves the environment reflects reality\u0027 claim: all 3 crises is_credible=false, Red Sea compares 0 metrics, simulated revenue_loss mean is 0.0 with 0.0 std.",
+                              "evidence":  "\"mean_relative_error_pct\": 100.0 ... \"n_metrics\": 0, \"is_credible\": false"
+                          },
+                          {
+                              "file":  "tests/receipts/api_keys_live_proof.json",
+                              "line":  27,
+                              "kind":  "mock_data",
+                              "issue":  "Receipt claims 4 keys returned 200 OK, but GFW returned 503 and is still counted with ok:true.",
+                              "evidence":  "\"GFW\": {\"status_code\": 503, \"ok\": true, ... } ... \"n_keys_ok_200\": 4"
+                          },
+                          {
+                              "file":  "tests/receipts/test_suite_grand_total.json",
+                              "line":  12,
+                              "kind":  "synthetic",
+                              "issue":  "Verifies user claim \u0027250 tests all green\u0027 by counting COLLECTED tests (261, with 1 admitted collection error), not passed tests â€” and 8 of them fail today.",
+                              "evidence":  "\"user_claim\": \"250 tests total all green\", \"actual_collected\": 261, \"match_or_exceeds\": true"
+                          },
+                          {
+                              "file":  "benchmark/statistics.py",
+                              "line":  71,
+                              "kind":  "hardcoded",
+                              "issue":  "Effect size formula is not the claimed r = Z/sqrt(N); it divides the Wilcoxon statistic by n(n+1)/4, producing a meaningless number that would decorate README p-value footnotes.",
+                              "evidence":  "# Effect size: r = Z / sqrt(N)\\n    # Approximate Z from stat\\n    effect_size = stat / (n * (n + 1) / 4)"
+                          }
+                      ],
+    "deadCode":  [
+                     "benchmark/crisis_library/*.json (5 files: chip_shortage_2020, red_sea_2023, suez_2021, tohoku_2011, ukraine_neon_2022) â€” never loaded by any Python code in the repo (grep confirms zero .py references); backtesting.py hardcodes its own HISTORICAL_CRISES dict instead. Only cited as \u0027PRESENT\u0027 in FINAL_SUBMIT/FEATURE_INVENTORY.md.",
+                     "benchmark/statistics.py â€” crashes immediately today: requires benchmark/results/benchmark_results.csv which does not exist (raises FileNotFoundError at line 38); the scripts that generated it live in _dump/scripts_legacy/legacy/.",
+                     "benchmark/visualize.py â€” figures dir benchmark/results/figures/ has never been created; no callers outside itself.",
+                     "benchmark/run_benchmark.py + ablation.py â€” only consumers are _dump/scripts_legacy/legacy/train_all.py etc. (already exiled), docs/legacy, and no live pipeline.",
+                     "benchmark/results/{FINAL_RESULTS.json, FINAL_BENCHMARK.csv, GRAND_BENCHMARK_V2.*, PAIRWISE_WILCOXON_V2.json, STATS_V2.json, FRAGILITY_FIXES.json, statistical_tests.json, real_world_benchmark.json} â€” orphaned artifacts; their generators (fix_all_fragilities.py, train_phase_z.py, train_phase_o.py...) were moved to _dump/scripts_legacy/legacy so none are reproducible from the current tree layout.",
+                     ".github/workflows-disabled/ci.yml.disabled and benchmark-regression.yml.disabled â€” entire test/benchmark CI is switched off.",
+                     "tests/__pycache__/ committed pytest bytecode (9 .pyc files) sitting in the tree."
+                 ],
+    "brokenOrSuspect":  [
+                            "8/184 tests FAIL today: all of tests/test_reward_hacking_adversarial.py â€” /analyst/grade returns 503 \u0027R4_DANGEROUS_V2.json not available in this deploy\u0027 because server/app.py:789 and :880 build the path as ROOT/\u0027v3_arcadia\u0027/results/R4_DANGEROUS_V2.json but the file lives at versions/v3_arcadia/results/R4_DANGEROUS_V2.json (version-dir reorg broke it). The committed receipt tests/receipts/adversarial_reward_audit.json is therefore unreproducible from the current tree.",
+                            "benchmark/run_full_benchmark.py:12 â€” hardcoded `os.chdir(\"c:/Users/Dell/Desktop/Sleep-Token\")`; breaks on any other machine including the HF Space it gets deployed to.",
+                            "benchmark/run_full_benchmark.py agent_bc/agent_iql/agent_cql/agent_td3bc/agent_qrdqn â€” torch.load() of the checkpoint on EVERY environment step (line 140 etc.), plus try/except at line 204 that downgrades whole-episode crashes to a truncated warning string, so a benchmark can \u0027complete\u0027 with most episodes silently dropped.",
+                            "benchmark/backtesting.py â€” metric key mismatch: simulator emits \u0027disruption_duration_steps\u0027 but ground truth uses \u0027disruption_duration_days\u0027, so duration is never compared; for suez/red_sea only 1 or 0 of 5 ground-truth metrics is ever simulated. compute_calibration_error also returns mean_relative_error_pct=0 with is_credible=false for empty metrics â€” the harness cannot support its own docstring claim (\u0027Proves the environment reflects reality\u0027).",
+                            ".github/workflows-disabled/ci.yml.disabled:74 â€” `from v3_arcadia.utils.conformal_smoke_check import ...` is a stale pre-reorg import (dir is versions/v3_arcadia); masked by continue-on-error, would fail even if CI were re-enabled.",
+                            "CI disabled entirely with no documented reason; the claimed \u0027requires Ollama+GPU\u0027 rationale is false for tests/ â€” I ran the full suite locally: 176 pass in 140s on CPU with no network, no Ollama. Disabling CI is exactly why the R4 path regression shipped unnoticed.",
+                            "tests/test_upgrades.py:186 test_cascade_injected_on_prolonged_offline â€” entire assertion body is inside `if downstream_wh:`; if graph topology changes the test silently asserts nothing.",
+                            "benchmark/statistics.py wilcoxon effect_size formula is wrong (see fakeInventory) â€” any README p-value/effect-size footnotes derived from it are unreliable."
+                        ],
+    "localModelDeps":  [
+                           "tests/test_ollama_finetuning_stack.py â†’ scripts/verify_ollama_finetuning_stack.py: asserts existence/content of Ollama Modelfiles rl/lora/Modelfile, .v2, .v3, .v4, versions/v4_arcadia_live/features/Modelfile.analyst_v5, and local wrapper Modelfiles for qwen25-14b-local, qwen25-coder-local, mistral-nemo-local, deepseek-r1-local-q4 (versions/v3_arcadia/00_emergence/*.Modelfile). NOTE: it is explicitly offline â€” string/grep checks only, never calls Ollama.",
+                           "scripts/verify_ollama_finetuning_stack.py also pins bitsandbytes NF4 QLoRA (rl/lora/finetune.py), GGUF Q4_K_M quantization receipts (versions/v3_arcadia/results/R1_VERIFIED.json), and OLLAMA_MAX_LOADED_MODELS VRAM discipline (rl/lora/create_ollama_model.py).",
+                           "tests/receipts/ollama_v5_vs_frontier.json â€” receipt of a live run of local Ollama model \u0027supplymind-analyst:v5\u0027 judged against 6 OpenRouter frontier models.",
+                           "tests/receipts/lora_unsloth_train.json and lora_merge_verify.json â€” Unsloth LoRA training / merge receipts (local GPU training artifacts).",
+                           "benchmark/results/RAG_V2_BENCHMARK.json â€” provenance states embeddings from \u0027nomic-embed-text (768-d Ollama)\u0027.",
+                           "benchmark/run_full_benchmark.py â€” loads local torch checkpoints rl/checkpoints/{bc_best,iql_best,cql_best,td3bc_best,qrdqn_best_*}.pt (weights_only=False)."
+                       ],
+    "externalServices":  [
+                             "None called live by benchmark/ or tests/ at runtime â€” the 184-test suite runs fully offline (verified by local run).",
+                             "Receipts document past live calls: tests/receipts/api_keys_live_proof.json (OpenRouter chat/completions gpt-4o-mini, api.eia.gov petroleum, NASA FIRMS csv, Global Fishing Watch 4wings â€” GFW actually 503\u0027d), tests/receipts/openrouter_liveness.json, tests/receipts/ollama_v5_vs_frontier.json (OpenRouter free-tier judges: gpt-oss-120b, gemma-4, glm-4.5-air, minimax-m2.5, nemotron-3).",
+                             ".github/workflows/deploy-hf-space.yml uploads tests/** to HuggingFace Space Shaurya-Noodle/Supplymind and smoke-tests https://shaurya-noodle-supplymind.hf.space/health."
+                         ],
+    "couplings":  [
+                      "tests/* â†’ repo-root modules via sys.path.insert(0, PROJECT_ROOT): models.py, server/app.py (imports app, env, AND private _sessions), server/supply_environment.py, server/engine/{graph,disruptions,financial,rewards,monte_carlo}.py, server/tasks/registry.py â€” moving tests/ or server/ breaks all of these.",
+                      "tests/test_engine.py:36 â†’ server/data/graphs/easy_graph.json and server/data/disruptions/easy_scenarios.json (hardcoded relative to PROJECT_ROOT).",
+                      "tests/test_openenv_compliance.py:72 â†’ openenv.yaml at repo root.",
+                      "tests/test_reward_hacking_adversarial.py â†’ POST /analyst/grade in server/app.py â†’ versions/v3_arcadia/results/R4_DANGEROUS_V2.json (path currently BROKEN in app.py:789,880 as \u0027v3_arcadia/...\u0027).",
+                      "tests/test_ollama_finetuning_stack.py â†’ scripts/verify_ollama_finetuning_stack.py â†’ ~30 pinned paths across rl/lora/**, rl/data/lora_training_data.json (must be exactly 225 records), versions/v3_arcadia/{00_emergence,40_granite,70_provider,results}/**, versions/v4_arcadia_live/features/Modelfile.analyst_v5, versions/v5_phoenix/roll_integration/** (preference_pairs.jsonl must be exactly 21 lines) â€” ANY reorg of rl/ or versions/ breaks this test.",
+                      "benchmark/run_benchmark.py â†’ import rl (gym env registration, SupplyMind-*-v1 ids), server.supply_environment, root-level scripted_agent.py.",
+                      "benchmark/run_full_benchmark.py â†’ rl.gym_env (SupplyMindGymnasiumEnv, ACTION_TYPES), rl.distributional.qr_dqn, rl.offline.baselines, models, scripted_agent, rl/checkpoints/*.pt, and hardcoded os.chdir(\u0027c:/Users/Dell/Desktop/Sleep-Token\u0027).",
+                      "Inbound writers to benchmark/results/: rl/fast_engine/benchmark.py (fast_mc_benchmark.json), versions/v3_arcadia/train_v3_block{1,2,4}*.py (V3_BLOCK*.json), _dump/scripts_legacy/legacy/* (FINAL_RESULTS, GRAND_BENCHMARK_V2, STATS_V2, PAIRWISE_WILCOXON_V2, FRAGILITY_FIXES, backtesting_results, statistical_tests).",
+                      "notebooks/03_reproducing_benchmarks.ipynb â†’ from benchmark.backtesting import simulate_crisis, compute_calibration_error, HISTORICAL_CRISES.",
+                      "tests/test_ollama_finetuning_stack.py runs scripts/verify_ollama_finetuning_stack.py as a subprocess with sys.executable, cwd=ROOT.",
+                      ".github/workflows/deploy-hf-space.yml push-paths include tests/** and scripts/** (test changes trigger HF deploys); ci.yml.disabled expects pytest tests/ plus rl and server imports to work on Ubuntu CPU."
+                  ],
+    "mustFix":  [
+                    "Fix the stale reorg path in server/app.py:789 and :880 (\u0027v3_arcadia\u0027 â†’ \u0027versions/v3_arcadia\u0027) â€” this alone un-breaks the 8 failing adversarial reward tests and makes the committed adversarial_reward_audit.json receipt reproducible again.",
+                    "Re-enable CI for tests/: the suite is CPU-only, offline, 140s. The \u0027Ollama+GPU\u0027 excuse only applies to fine-tuning experiments, not these tests. Without CI, regressions like the R4 path bug ship silently.",
+                    "Delete or truthfully regenerate benchmark/results/ablation_results.csv and rip out the scripted-placeholder fallback in run_benchmark.py:88-90 and ablation.py:76-77. An \u0027ablation\u0027 where 7 configurations are the same agent is disqualifying-grade fake evidence for a hackathon judged on authenticity.",
+                    "Delete the three hardcoded figure generators in visualize.py (benchmark table fallback rows, ablation scores list, radar values) or rewrite them to read only real result files and fail loudly when absent.",
+                    "Fix tests/test_openenv_compliance.py:190 always-true assertion (assert ... or True) and the 200-or-422 tolerance at :142 â€” make compliance tests actually falsifiable.",
+                    "Fix benchmark/statistics.py: it crashes on missing benchmark_results.csv (generator exiled to _dump), and its effect-size formula is mathematically wrong.",
+                    "Fix backtesting.py: align metric keys (duration_steps vs duration_days), simulate the metrics the ground truth actually defines, and either achieve credible calibration or delete the \u0027proves the environment reflects reality\u0027 docstring â€” the committed output already says is_credible=false 3/3.",
+                    "Remove os.chdir hardcoded absolute Windows path in run_full_benchmark.py:12 and hoist checkpoint loading out of the per-step agent functions.",
+                    "Either load benchmark/crisis_library/*.json in backtesting.py (they contain the exact ground truth it hand-duplicates) or delete the directory â€” right now it exists only to be cited in FINAL_SUBMIT feature inventories.",
+                    "Correct tests/receipts/api_keys_live_proof.json labeling (GFW was 503, not 200) and stop counting collected tests as \u0027green\u0027 in test_suite_grand_total.json."
+                ],
+    "salvage":  "Split decision. tests/ â€” KEEP with minor refactor: this is real, well-designed test engineering (grader discrimination, seed determinism, adversarial reward audit, verified sha256 receipts) and it demonstrably catches real bugs; fix the two theater assertions and the conditional-body cascade test. benchmark/ â€” REBUILD or CUT: backtesting.py, statistics.py, run_benchmark.py are salvageable skeletons but every committed \u0027result\u0027 they stand behind is either placeholder-derived (ablation_results.csv), self-refuting (backtesting_results.json), or orphaned from generators now in _dump; visualize.py\u0027s fabricated figures must be deleted outright before any judge sees them. crisis_library/ is good curated data â€” wire it in or drop it."
+}

@@ -1,0 +1,142 @@
+﻿{
+    "subsystem":  "legacy (versions/ + vendor/ + _dump/)",
+    "purpose":  "Three-generation archive of the OpenEnv 2026 hackathon build: versions/v3_arcadia (29.5GB â€” training scripts for 12 phases, result JSONs, 491MB RL checkpoints, 28.7GB of local GGUF LLM quants, a full llama.cpp build), versions/v4_arcadia_live (22MB â€” live geopolitical realtime pipeline, crisis library, autoresearch experiments), versions/v5_phoenix (2.1GB â€” arena, counterfactual twin, wordle_env, ROLL/DPO integration, receipts framework, plus an 869MB committed-to-disk virtualenv). vendor/ROLL is an untracked full copy of Alibaba\u0027s ROLL RL framework (141.8MB, 902 files) used only for a DPO path that never trained. _dump/ is a quarantine of pre-reorg legacy copies plus one-shot reorg/deploy scripts. Critically, this is NOT actually legacy: root server/app.py, 23 scripts, tests, dashboard, rl/lora, Dockerfile.damocles and docker-compose all import from or path-reference versions/ at runtime (102 references across 27 live files).",
+    "verdict":  "This \"legacy\" tree is a load-bearing archive wearing a museum label. The genuinely good news: the work inside is largely real â€” real training logs (including honestly-recorded failures), real result JSONs with per-judge caches, an ONNX bundle, and FAILURE_TABLE.md is a model of honest engineering record-keeping. The bad news is severe. First, the flagship \"grade-A reproducibility receipts\" story is materially false on disk: 14 of 20 receipts in versions/v5_phoenix/receipts_v2 are unexecuted stubs (actual: \u003cpending-first-run\u003e, match: false, exit_code: -1) covering the exact headline numbers the README table promises receipts for (mxbai P@1 0.9622, Krippendorff Î±, +26.77% masking lift, GCN MAE), and their reproduce commands use the pre-reorg module path `v3_arcadia.40_granite.*` which is both stale and unimportable (digit-leading package names) â€” they cannot ever run as written. Second, PREPRINT_V5.md\u0027s abstract claims \"a DPO-fine-tuned Qwen-2.5-3B judge\" that never existed: every DPO training attempt crashed (documented in PHOENIX_PUSH_REPORT Â§3.1 and train_gpu.log\u0027s AttributeError). Third, the twin receipt PHOENIX_PUSH_REPORT celebrates as match=True sits on disk with exit_code: -9, match: false. Fourth, 31+ GB of the 32GB is local-only bloat (GGUF quants, llama.cpp build, a virtualenv inside the repo tree, a 1.16GB transitions.npz) that has already forced HF-Space deploy contortions. Fifth, live production code is deeply entangled with directories named like an attic. The archive is honest in its diaries and dishonest in its headlines.",
+    "score":  3.5,
+    "fakeInventory":  [
+                          {
+                              "file":  "versions/v5_phoenix/receipts_v2/R5_GRANITE_mxbai_P1.receipt.yaml",
+                              "line":  15,
+                              "kind":  "stub",
+                              "issue":  "14 of 20 \u0027grade-A\u0027 receipts are unexecuted stubs while README_V5_OPENENV_FIRST.md line 64 claims \u0027Top 15 headline results (every one has a one-bash-command receipt)\u0027 and line 84 claims \u002720 receipts live\u0027. Affected: R3_TimesFM, R4_Krippendorff, R4_Cohen_kappa, R5_BEIR, R5_mxbai_MRR, R5_mxbai_P1, R6_AquaRegia, R6_GCN, R6_MaskingAblation, V4_Live_Brent, V4_SPOF, V4_STACKING, V4_Tests_Total, V5_Twin.",
+                              "evidence":  "actual: \u003cpending-first-run\u003e\\nexit_code: -1\\n...\\nmatch: false"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/docs/PREPRINT_V5.md",
+                              "line":  28,
+                              "kind":  "fake_ai_output",
+                              "issue":  "Abstract claims a DPO-fine-tuned Qwen-2.5-3B judge exists; DPO training never completed â€” 4 crashes documented in PHOENIX_PUSH_REPORT.md Â§3.1 and experiments/dpo_judge_v1/train_gpu.log ends in AttributeError: module \u0027torch\u0027 has no attribute \u0027float8_e8m0fnu\u0027. Â§16 admits \u0027unverified\u0027 but the abstract asserts the capability.",
+                              "evidence":  "v5 adds three substantial capabilities: (1) a DPO-fine-tuned Qwen-2.5-3B judge"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/receipts_v2/V5_Twin_savings_gt_zero.receipt.yaml",
+                              "line":  9,
+                              "kind":  "stub",
+                              "issue":  "PHOENIX_PUSH_REPORT.md line 70 lists this receipt as âœ… match=True with $135.5M savings; the on-disk receipt records the process killed (exit -9) and match: false. Doc claim and artifact disagree.",
+                              "evidence":  "actual: [twin] wrote \\tmp\\twin.json\\nexit_code: -9\\n...match: false"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/receipts_v2/R5_GRANITE_mxbai_P1.receipt.yaml",
+                              "line":  3,
+                              "kind":  "dead_ui",
+                              "issue":  "Receipt reproduce commands use pre-reorg module path \u0027v3_arcadia.40_granite.r5_rag_beast\u0027 â€” stale after the phase4 rename to versions/, and unimportable anyway (Python packages can\u0027t start with digits). The \u0027one-bash-command receipt\u0027 promise is unexecutable as shipped.",
+                              "evidence":  "command: python -m v3_arcadia.40_granite.r5_rag_beast --pipeline mxbai_bi"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/realtime_v5/replay_cache_latest.json",
+                              "kind":  "mock_data",
+                              "issue":  "Frozen replay cache mounted live at /replay by root server/app.py line 239; FORCE_REPLAY=1 serves canned 2026-04-22 Hormuz responses on \u0027live\u0027 endpoints. Documented as an offline fallback, but it is a canned-data path wired into the production app.",
+                              "evidence":  "README_V5_OPENENV_FIRST.md: \u0027FORCE_REPLAY=1 + ?replay=1 fallback keeps the live demo working without venue Wi-Fi\u0027"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/experiments/arena/leaderboard.json",
+                              "kind":  "hardcoded",
+                              "issue":  "Arena leaderboard is pre-seeded from v3\u0027s R6_EUCLIDIAN.json rather than re-run; scripts/bootstrap_leaderboard.py writes it from archived results. Documented as a limitation, but leaderboard \u0027baselines ready\u0027 receipt counts rows of a hand-assembled file.",
+                              "evidence":  "README_V5_OPENENV_FIRST.md: \u0027Arena baselines are pre-seeded from R6_EUCLIDIAN.json ... Re-running them ... takes ~3 hours.\u0027"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/rap_xc/train.py",
+                              "line":  447,
+                              "kind":  "synthetic",
+                              "issue":  "Labeled synthetic smoke-train path generates random-normal transitions; artifacts transitions_synth.npz (16.3MB) and rapxc_synth.pt (12MB) sit beside the real transitions.npz/rapxc.pt in experiments/rap_xc_v1 â€” honest labeling, but easy to confuse with real artifacts.",
+                              "evidence":  "def smoke_train_synthetic(n_synth: int = 1000): \"\"\"Fast synthetic train cycle...\"\"\" rng.standard_normal((n_synth, cfg_model.state_dim))"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/docs/PREPRINT_V5.md",
+                              "line":  274,
+                              "kind":  "stub",
+                              "issue":  "The receipts framework has an explicit mode to commit receipts without running them â€” which is exactly the state 14/20 receipts are in.",
+                              "evidence":  "`--stub` emits stubs for commit without running (useful when environment isn\u0027t ready)"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/docs/PREPRINT_V5.md",
+                              "line":  22,
+                              "kind":  "hardcoded",
+                              "issue":  "Headline \u0027Krippendorff Î± = 0.750\u0027 is the cherry-picked 2-judge sub-panel; the raw 3-judge panel scored Î± = 0.210 (recorded in _dump/FAILURE_TABLE.md line 40). Disclosed in fine print elsewhere but presented as the headline agreement number.",
+                              "evidence":  "graded by a 3-judge LLM panel (Krippendorff Î± = 0.750 on a 2-judge sub-panel)"
+                          },
+                          {
+                              "file":  "_dump/_ci_runs.json",
+                              "line":  1,
+                              "kind":  "placeholder",
+                              "issue":  "Untracked 3-byte file containing only a UTF-8 BOM â€” a dead output of a failed CI-runs query; pure junk.",
+                              "evidence":  "od -c: 357 273 277 (EF BB BF, nothing else)"
+                          }
+                      ],
+    "deadCode":  [
+                     "_dump/ entirely (233 files, 210 git-tracked): benchmark_legacy, challenges_legacy, dashboard_legacy, data_legacy (9.9MB xlsx), demo_legacy, final_submit_obsolete, root_legacy, scripts_legacy (55 files), vendor_legacy (a copy of obra/superpowers-main). Zero live-code references (grep for \u0027_dump\u0027 in server/scripts/tests/rl only hits pydantic .model_dump false positives). Quarantine already served its purpose â€” delete from git.",
+                     "_dump/_phase4c_rewrite.py, _phase4c_pass2/3/4.py, _scan_refs.py: one-shot reorg-rewrite scripts for the phase-4 dir rename (v3_arcadia-\u003eversions/v3_arcadia, ShAuRyA_Phoenix-\u003eversions/v5_phoenix, ROLL-main/ROLL-main-\u003evendor/ROLL). Spent; keep only as history if desired.",
+                     "_dump/_hf_cleanup.py: one-time HF Space storage cleanup (deletes old-layout paths from Shaurya-Noodle/Supplymind space). Spent.",
+                     "_dump/_hf_deploy_test.py: local rehearsal of the CI deploy step, superseded by .github/workflows/deploy-hf-space.yml which duplicates its ignore_patterns. Spent.",
+                     "_dump/_ci_runs.json: 3-byte BOM-only file, no content.",
+                     "vendor/ROLL (141.8MB, 902 files, untracked): full Alibaba ROLL checkout. No live code imports it; only referenced by versions/v5_phoenix/roll_integration docs and the .venv-roll editable install, both serving the DPO path that never trained. Delete or replace with a pinned submodule reference.",
+                     "versions/v5_phoenix/.venv-roll (869MB, 22,925 files â€” 84% of versions/\u0027 file count): a virtualenv living inside the repo tree. Gitignored but on-disk bloat.",
+                     "versions/v3_arcadia/gguf_out (28.7GB) and versions/v3_arcadia/tools/llama.cpp (263MB build tree): local model weights + inference toolchain, gitignored, unused by any current live endpoint.",
+                     "versions/v3_arcadia/00_emergence..95_arcadia numbered phase dirs: digit-leading names make them unimportable as Python packages; they are one-shot training scripts, historical only (their outputs in results/ and checkpoints/ are the live artifacts).",
+                     "versions/v5_phoenix/experiments/rap_xc_v1/transitions.npz (1.16GB) + synth twins: already excluded from HF deploy by CI ignore patterns; only scripts/calibrate_conformal_from_harvest.py and generate_hackathon_plots.py read them (offline analysis, not runtime)."
+                 ],
+    "brokenOrSuspect":  [
+                            "All 14 stub receipts in versions/v5_phoenix/receipts_v2/*.receipt.yaml carry commands with the pre-reorg module root (e.g. \u0027python -m v3_arcadia.40_granite.r5_rag_beast\u0027) â€” broken by the phase4 rename AND inherently unimportable (packages starting with digits). The paired reproduce.sh scripts inherit the same breakage.",
+                            "versions/v5_phoenix/experiments/dpo_judge_v1/train_gpu.log ends in crash: AttributeError: module \u0027torch\u0027 has no attribute \u0027float8_e8m0fnu\u0027 (peft/torch version skew); train_real.log ends amid \u0027None of the inputs have requires_grad=True. Gradients will be None\u0027 â€” i.e., even the run that didn\u0027t crash was likely training nothing. The DPO judge claimed in PREPRINT_V5.md never materialized.",
+                            "versions/v5_phoenix/receipts_v2/V5_Twin_savings_gt_zero.receipt.yaml: exit_code: -9 (killed), match: false â€” contradicts PHOENIX_PUSH_REPORT.md Â§1.5 which lists it as âœ… with $135.5M.",
+                            "versions/v5_phoenix/README.md and docs/README_V5_OPENENV_FIRST.md quick-starts instruct \u0027uvicorn versions.v5_phoenix.server.phoenix_app:app\u0027 â€” the live entrypoint is now root server/app.py which itself mounts the v5 routers; docs are stale relative to the current layout.",
+                            "PHOENIX_PUSH_REPORT.md Â§3.6: the 5 API keys (FRED_API_KEY, NEWS_API_KEY, WANDB_API_KEY, HF_TOKEN, NOAA_TOKEN) were pasted into a conversation log and the report itself says \u0027treat them as compromised... Rotate all 5 after the hackathon regardless.\u0027 Verify rotation actually happened before the Qualcomm event.",
+                            "PHOENIX_PUSH_REPORT.md Â§3.2: \u0027from roll.pipeline.dpo import DPOPipeline\u0027 ImportError acknowledged and never fixed â€” versions/v5_phoenix/roll_integration/dpo_judge/train_dpo_roll.py is known-broken.",
+                            "server/app.py line 1543 builds a path \u0027.../versions/v4_arcadia_live/...\u0027 via Path(__file__).parent.parent â€” any future move of server/ or versions/ silently breaks the FRED cache fallback.",
+                            "roll_integration/INSTALL.md uses mixed-separator relative paths (\u0027pip install -e ..\\\\vendor/ROLL/[hf]\u0027) that resolve incorrectly from the documented working directories."
+                        ],
+    "localModelDeps":  [
+                           "versions/v3_arcadia/gguf_out/: 4 local GGUF Q4_K_M quants â€” qwen25-coder-14b (8.37GB), qwen25-14b (8.37GB), mistral-nemo (6.96GB), deepseek-r1 (4.36GB) â€” plus deepseek-r1-q4.Modelfile (Ollama). This is the physical judge panel behind all R4 results.",
+                           "versions/v3_arcadia/tools/llama.cpp/: full llama.cpp source + Windows Release build (common.lib 32MB, llama.lib 13MB, server bundle) â€” local inference toolchain.",
+                           "versions/v3_arcadia/results/R4_DANGEROUS_V2_judge_qwen25-14b-local.json and R4_DANGEROUS_V2_judge_mistral-nemo-local.json: cached outputs proving judging ran on local models.",
+                           "versions/v5_phoenix/.venv-roll/: local transformers/trl/peft/bitsandbytes env; PHOENIX_PUSH_REPORT documents local Qwen-2.5-1.5B HF download into cache for DPO attempts.",
+                           "versions/v4_arcadia_live/features/Modelfile.analyst_v5: Ollama Modelfile consumed by LIVE code at rl/lora/create_ollama_model.py line 48 â€” a current-code Ollama dependency routed through the legacy tree.",
+                           "versions/v3_arcadia/train_v3_block3_llm.py + 30_dangerous/ phase scripts: local GGUF LLM training/eval blocks.",
+                           "PREPRINT_V5.md Â§2 declares the entire stack \u002713 SOTA, all local\u0027 (Chronos-Bolt, TimesFM-2, BGE-M3, mxbai, Snowflake-Arctic, TabPFN-v2, Qwen-2.5-VL-7B, DeepSeek-R1-Q4, etc.) â€” the archive\u0027s headline results are inseparable from local weights.",
+                           "Root-level coupling note: ollama-modelfiles-backup/ at repo root and scripts/ollama_v5_vs_frontier.py, scripts/verify_ollama_finetuning_stack.py, tests/test_ollama_finetuning_stack.py all bridge live code to this legacy local-model stack."
+                       ],
+    "externalServices":  [
+                             "Hugging Face Hub: _dump/_hf_cleanup.py and _dump/_hf_deploy_test.py call HfApi against space \u0027Shaurya-Noodle/Supplymind\u0027 using HF_TOKEN; mirrored by .github/workflows/deploy-hf-space.yml which uploads most of versions/ to the Space.",
+                             "NewsAPI, GDELT, FRED, USGS, NOAA, MarineTraffic: consumed by versions/v4_arcadia_live/realtime/sources* (keys: NEWS_API_KEY, FRED_API_KEY, NOAA_TOKEN), per PREPRINT_V5.md Â§8 and PHOENIX_PUSH_REPORT Â§3.6.",
+                             "OpenRouter: versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py (frontier judge panel calls).",
+                             "Weights \u0026 Biases: WANDB_API_KEY named in PHOENIX_PUSH_REPORT Â§3.6.",
+                             "GitHub (gh CLI): PHOENIX_PUSH_REPORT Â§2 documents 4 upstream PR branches to meta-pytorch/openenv, alibaba/ROLL, obra/superpowers-marketplace living in ~/Desktop/upstream-workdirs/ (outside this repo, push status unverified)."
+                         ],
+    "couplings":  [
+                      "server/app.py lines 162-239: runtime imports versions.v4_arcadia_live.realtime.{hormuz_endpoint,hormuz_war_room_router,port_imagery_router} and mounts versions.v5_phoenix.{wordle_env.router,arena.router (/arena),counterfactual_twin.router (/twin),realtime_v5.replay_adapter (/replay)}.",
+                      "server/app.py lines 1120-1219: imports versions.v4_arcadia_live.realtime.{demo_orchestrator,orchestrator_v2}, versions.v4_arcadia_live.scenarios.library_v2_search, versions.v5_phoenix.counterfactual_v2.platinum; line 1543 filesystem path into versions/v4_arcadia_live.",
+                      "server/app.py lines 842-1350: hardcoded data paths versions/v3_arcadia/results/R4_DANGEROUS_V2.json and R4_FRONTIER_PANEL_V2.json (scenario + frontier replay sources).",
+                      "server/openenv_mcp_wrapper.py lines 142-153: imports versions.v4_arcadia_live.realtime.{store,crisis_library}.",
+                      "23 live scripts reference versions/: bootstrap_leaderboard.py (reads v3 R6_EUCLIDIAN.json/R6_ALGO_COMPARISON.json, writes v5 experiments/arena/leaderboard.json), calibrate_conformal_from_harvest.py (imports versions.v5_phoenix.action_v2.conformal; reads rap_xc_v1/transitions.npz; writes action_v2/conformal_calibrated.pt), crisis_library/cook_v2.py (writes v4 scenarios/crisis_library_v2.{json,faiss,_emb.npz}), export_all_onnx.py (writes v3 checkpoints/onnx_bundle), final_*/pass20-28 scripts (import versions.v5_phoenix.wordle_env.env), generate_hackathon_plots.py (torch.load v5 rap_xc_v1/rapxc.pt), ollama_v5_vs_frontier.py (v4 scenario JSONs), compute_panel_agreement.py, compute_cross_corpus_alpha.py, validate_*, verify_ollama_finetuning_stack.py, push_to_hf_space*.py, run_frontier_judge_panel.py.",
+                      "rl/lora/create_ollama_model.py line 48 -\u003e versions/v4_arcadia_live/features/Modelfile.analyst_v5.",
+                      "dashboard/app.py lines 6-10: shim pointing users to run versions/v3_arcadia/85_infinite_baths/dashboard.py via streamlit.",
+                      "tests/test_ollama_finetuning_stack.py references versions/ paths.",
+                      "Dockerfile.damocles lines 21-24: COPYs versions/v3_arcadia/90_damocles/, checkpoints/granite/corpus_chunks.pkl, checkpoints/gethsemane/ppo_easy_typhoon_response.onnx; docker-compose.yml lines 49-50 mounts v3 checkpoints read-only.",
+                      ".github/workflows/deploy-hf-space.yml lines 16, 78-87: triggers on versions/v3_arcadia/** and enumerates versions/** ignore patterns â€” any dir rename must update this file or the HF deploy breaks/bloats.",
+                      "vendor/ROLL \u003c- referenced only from versions/v5_phoenix/roll_integration/{INSTALL.md,dpo_judge/train_dpo_roll.py,trl_fallback/README.md} and the .venv-roll editable install (\u0027pip install -e ... vendor/ROLL\u0027). No live-code import. Safe to remove with the roll_integration path.",
+                      "_dump/ \u003c- zero inbound references from live code (verified; only pydantic .model_dump false positives).",
+                      "server/integrated_agent.py line 258 cites versions/v3_arcadia/checkpoints/provider_gcn/ as its cascade-source provenance string."
+                  ],
+    "mustFix":  [
+                    "Promote the load-bearing modules out of \u0027legacy\u0027: versions/v4_arcadia_live/realtime+scenarios and versions/v5_phoenix/{arena,counterfactual_twin,counterfactual_v2,wordle_env,action_v2,realtime_v5} are live production code imported by server/app.py. Move them into a real package (e.g. supplymind/) and update all 102 references across 27 live files plus Dockerfile.damocles, docker-compose.yml, and deploy-hf-space.yml in the same change.",
+                    "Fix or delete the 14 stub receipts in versions/v5_phoenix/receipts_v2: either execute each with corrected commands (versions.v3_arcadia paths are unimportable â€” the reproduce commands need rewriting against real script paths) or remove the \u0027every headline has a receipt\u0027 claim from every README/PREPRINT. Shipping match:false receipts under a \u0027grade-A reproducibility\u0027 banner is a judge-facing integrity bomb.",
+                    "Strike or substantiate the PREPRINT_V5.md DPO-judge claim: no fine-tuned judge exists (all training runs crashed or trained with None gradients). Either train it for real or remove it from the abstract and README \u0027What\u0027s unique to v5\u0027 list.",
+                    "Reconcile V5_Twin_savings_gt_zero: rerun the twin receipt to completion (current: exit -9, match:false) before repeating the $135.5M number anywhere.",
+                    "Delete _dump/ from git (210 tracked files) and delete vendor/ROLL from disk (141.8MB, needed only by the dead DPO path); if ROLL integration is ever revived, pin it as a submodule or requirements entry instead of a vendored copy.",
+                    "Reclaim ~31GB local disk: versions/v3_arcadia/gguf_out (28.7GB), v5 .venv-roll (869MB), v3 tools/llama.cpp (263MB), rap_xc_v1 npz files (1.19GB). Move to external storage; these already forced HF-Space 1GB-cap workarounds in CI.",
+                    "Confirm the 5 API keys flagged compromised in PHOENIX_PUSH_REPORT.md Â§3.6 were actually rotated (FRED_API_KEY, NEWS_API_KEY, WANDB_API_KEY, HF_TOKEN, NOAA_TOKEN).",
+                    "Decide the local-model question explicitly: R4 judge results, rl/lora, and ollama scripts all depend on GGUF/Ollama local weights routed through versions/. For a \u0027no local weights\u0027 posture, migrate the judge panel to OpenRouter and archive the GGUF evidence as static citations; for a Qualcomm on-device story, keep them but document them as first-class, not legacy.",
+                    "Fix the stale quick-start docs (versions/v5_phoenix/README.md, docs/README_V5_OPENENV_FIRST.md) that point at versions.v5_phoenix.server.phoenix_app instead of the current root server/app.py entrypoint."
+                ],
+    "salvage":  "Refactor, not archive â€” because it cannot be archived as-is. The 493 git-tracked files in versions/ split cleanly in two: (1) live modules the root server imports every boot (v4 realtime pipeline, v5 arena/twin/wordle_env/action_v2/replay) which must be promoted out of versions/ into the main package; and (2) genuine evidence artifacts (v3 results/*.json â€” the actual source of every headline number, R4 judge caches, ONNX bundle, checkpoints/gethsemane ONNX used by Dockerfile.damocles, the honest logs and FAILURE_TABLE lineage) which should be kept as a read-only results/archive directory. Everything else is delete: the 28.7GB gguf_out + llama.cpp + .venv-roll local bloat (gitignored, external-drive material), vendor/ROLL (unused by live code), and _dump/ in its entirety (210 tracked files, zero inbound references). The receipts_v2 framework is worth keeping only if the 14 stubs are executed or culled â€” in its current state it actively damages credibility."
+}

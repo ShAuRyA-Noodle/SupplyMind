@@ -1,0 +1,112 @@
+﻿{
+    "subsystem":  "external-data (external_data/ + plots/)",
+    "purpose":  "Local corpus of real-world supply-chain datasets (SEC EDGAR 10-Ks, EM-DAT disasters, Wikipedia crisis articles, World Bank macro/pink-sheet, FRED PPI, OpenFlights, NOAA, WTO tariffs) downloaded by fetch scripts. Feeds the RAG corpora (v3 benchmarks), the EM-DAT crisis library cook (scripts/crisis_library/cook_v2.py -\u003e crisis_library_v2.json used by the live server), and the v5 Platinum counterfactual. plots/ holds one tracked calibration PNG used by demo docs.",
+    "verdict":  "The raw data is the genuinely good news of this subsystem: I sampled every text-readable dataset and it is overwhelmingly REAL â€” genuine SEC XBRL 10-K filings (Workiva-stamped, 75MB), a genuine 16,811-row EM-DAT export with full 47-column schema and GADM migration metadata (Last Update 2025-12-20), real FRED PPI series, real World Bank API JSON, real OpenFlights .dat files, real Wikipedia article text, and 2 of 3 real Fed/BIS PDFs. No generated CSVs, no np.random data. But everything around the data is rotten: the entire directory is gitignored INCLUDING its own fetch script (fetch_all.py is untracked â€” a fresh clone cannot rebuild any of this); there is NO script anywhere in the repo that fetches the EM-DAT xlsx, the policy PDFs, or the world_bank_macro JSONs (provenance scripts lost); every v3_arcadia consumer resolves external_data to the wrong directory after the versions/ reorg (silent empty-glob corpora); the one \"policy paper\" frbny_supply_chain.pdf is actually an HTML error page saved as .pdf yet counted in receipts; R1_VERIFIED.json overcounts FRED files (claims 2, one 404\u0027d); and the flagship \"real FRED\" counterfactual in platinum.py parses columns DATE/VALUE that don\u0027t exist in the CSV (actual header: observation_date,PCU484121484121), so it ALWAYS silently falls back to a hardcoded severity-to-USD table while mislabeling monthly truck-transport PPI as \"FRED Brent crude daily prices\". Roughly 4MB+ of downloaded data (OpenFlights, WTO zip, NOAA track, pink sheet xlsx) is consumed by nothing â€” trophy downloads padding the dataset count.",
+    "score":  5,
+    "fakeInventory":  [
+                          {
+                              "file":  "versions/v5_phoenix/counterfactual_v2/platinum.py",
+                              "line":  393,
+                              "kind":  "hardcoded",
+                              "issue":  "Method C \u0027BSTS-lite on real FRED\u0027 reads columns DATE/VALUE, but external_data/fred_truck_transport.csv header is \u0027observation_date,PCU484121484121\u0027. Every row parses to 0, prices list is empty, RuntimeError(\u0027FRED CSV too short\u0027) fires, and the except at line 401 returns the hardcoded {LOW:1,MEDIUM:5,HIGH:12,CRITICAL:25} x 100M bbl/day table. The \u0027real FRED\u0027 counterfactual is always the canned fallback.",
+                              "evidence":  "rows.append((r.get(\"DATE\") or \"\", float(r.get(\"VALUE\") or 0)))  # CSV actual header: observation_date,PCU484121484121"
+                          },
+                          {
+                              "file":  "versions/v5_phoenix/counterfactual_v2/platinum.py",
+                              "line":  352,
+                              "kind":  "simulated",
+                              "issue":  "Docstring claims the counterfactual runs on \u0027real FRED Brent crude oil daily prices\u0027 and multiplies the series by 100M bbl/day of oil; the actual file is MONTHLY Truck Transportation PPI (index, not USD/bbl). Even if the parser worked, treating a PPI index as barrel prices is fabricated economics.",
+                              "evidence":  "\"\"\"Bayesian-structural-time-series-style counterfactual on real FRED Brent crude oil daily prices.\""
+                          },
+                          {
+                              "file":  "external_data/policy_papers/frbny_supply_chain.pdf",
+                              "kind":  "placeholder",
+                              "issue":  "File named .pdf is actually an HTML page (95KB, likely a redirect/error page from newyorkfed.org), not the FRBNY paper. PDF parsers fail on it, yet R1_VERIFIED.json counts 3 policy papers.",
+                              "evidence":  "First bytes: \u003c!DOCTYPE html\u003e ... \u003clink type=\"text/css\" href=\"/medialibrary/media/v4/css/basic.css\""
+                          },
+                          {
+                              "file":  "versions/v3_arcadia/results/R1_VERIFIED.json",
+                              "line":  112,
+                              "kind":  "hardcoded",
+                              "issue":  "Receipt claims 2 FRED supply-chain files; fetch.log line 33 shows fred_supply_chain_pressure.csv returned HTTP 404 and only fred_truck_transport.csv exists on disk. \u0027VERIFIED\u0027 receipt overstates the corpus.",
+                              "evidence":  "\"fred_supply_chain_pressure\": {\"count\": 2, \"dir\": \"external_data\"}  // fetch.log: \u0027fred_supply_chain_pressure.csv: HTTP 404\u0027"
+                          },
+                          {
+                              "file":  "versions/v3_arcadia/results/R1_VERIFIED.json",
+                              "line":  113,
+                              "kind":  "stub",
+                              "issue":  "\u0027noaa_realtime_storms count 1\u0027 â€” the live CurrentStorms.json fetch failed (ConnectionResetError per fetch.log); the only NOAA artifact is a static June-2024 archived 5-day forecast shapefile zip literally named sample_track.zip, consumed by no code. \u0027Realtime\u0027 is false.",
+                              "evidence":  "fetch.log: \"noaa/current_storms.json: (\u0027Connection aborted.\u0027, ConnectionResetError(10054...\" ; only file: noaa/sample_track.zip (al012024-013_5day_*.shp)"
+                          },
+                          {
+                              "file":  "versions/v3_arcadia/40_granite/r5_rag_beast.py",
+                              "line":  134,
+                              "kind":  "dead_ui",
+                              "issue":  "world_bank_macro ingestion assumes the JSON is a dict, but World Bank API files are top-level LISTS ([meta, data]); d.items() branch yields [], so each \u0027world_bank\u0027 chunk contains only the filename stem. The except: pass at line 137-138 hides it. World Bank data is effectively never in the RAG corpus (DATASET_CARD chunk math 564+5790+129=6483 confirms wb=0).",
+                              "evidence":  "lines = [f\"{k}: {v}\" for k, v in (d.items() if isinstance(d, dict) else [])] ... except Exception:\\n                pass"
+                          },
+                          {
+                              "file":  "FINAL_SUBMIT/DATASET_CARD.md",
+                              "line":  44,
+                              "kind":  "hardcoded",
+                              "issue":  "Claims \u0027EMDAT crisis library: snapshot 2024-01 (versioned)\u0027 â€” the actual source xlsx is emdat_public_2000_2026.xlsx with Last Update column values of 2025-12-20. Stale/incorrect provenance statement in a judge-facing card.",
+                              "evidence":  "- EMDAT crisis library: snapshot 2024-01 (versioned)"
+                          }
+                      ],
+    "deadCode":  [
+                     "external_data/openflights/* (3.9MB, 5 files) â€” downloaded by fetch_all.py, listed in R1_VERIFIED.json and DATASET_CARD.md, but no .py file in the repo ever reads airports.dat/routes.dat etc. (grep for openflights/airports.dat/routes.dat over all tracked code: zero consumers)",
+                     "external_data/wto/world_bank_mfn_tariff.zip â€” no consumer anywhere; downloaded and forgotten",
+                     "external_data/noaa/sample_track.zip â€” no consumer; the IBTRACS storm data actually used by training scripts comes from rl/data/ibtracs_wp.csv, not this zip",
+                     "external_data/worldbank/pink_sheet_monthly.xlsx (778KB) â€” no consumer in any tracked code",
+                     "external_data/un_comtrade/ and external_data/imf_ifs/ â€” empty directories; both fetches failed (extra_data_results.json: downloaded 0) and were \u0027replaced by World Bank\u0027 per R1_VERIFIED.json notes; dirs are dead",
+                     "external_data/emdat/.gitkeep â€” pointless: the entire external_data/ tree is gitignored (.gitignore:62), so the .gitkeep is never committed",
+                     "plots/reliability_v2.png generator is dead: the only script that produces it is _dump/scripts_legacy/legacy/train_phase_s.py (line 185), already exiled to _dump; the PNG is a frozen artifact referenced by docs/v3/DEMO_SCRIPT.md:16"
+                 ],
+    "brokenOrSuspect":  [
+                            "REORG BITROT (major): every v3_arcadia subdir script resolves ROOT = Path(__file__).resolve().parent.parent.parent, which after the versions/ reorg points to C:/Users/Dell/Desktop/Sleep-Token/versions â€” and versions/external_data does NOT exist. Affected: versions/v3_arcadia/30_dangerous/r4_v2_beast.py:39-40, r4_live_scenario.py:36-37, r4_judge_layer.py:29-30, r4_ablation_and_baseline.py:34-38, 40_granite/r5_rag_beast.py:36-38, 40_granite/r5_manual_beir.py:34-37, 00_emergence/fetch_extra_data.py:10-11. Path.glob on the missing dir returns empty silently, so re-running any of these yields an EMPTY corpus with no error â€” the published R4/R5 receipts are unreproducible as-is.",
+                            "versions/v3_arcadia/train_v3_block4_rag.py:38-41 â€” ROOT = parent means EXT = versions/v3_arcadia/external_data, MODELS/rl/benchmark likewise; NONE of those dirs exist (verified with Test-Path: all False). Whole script is bitrotted.",
+                            "versions/v5_phoenix/counterfactual_v2/platinum.py:390-398 â€” CSV column mismatch (DATE/VALUE vs observation_date/PCU484121484121) guarantees the hardcoded fallback fires even when the file is present; broad \u0027except Exception\u0027 at line 401 swallows it.",
+                            "REPRODUCIBILITY HOLE: .gitignore:62 ignores external_data/ wholesale, and the main downloader external_data/fetch_all.py lives INSIDE the ignored dir â€” \u0027git ls-files external_data\u0027 returns nothing, so the script that rebuilds 88MB of corpus is not in version control at all. A fresh clone gets neither data nor fetcher.",
+                            "NO provenance script exists in the repo for external_data/emdat/emdat_public_2000_2026.xlsx (EM-DAT requires registered manual download from public.emdat.be), external_data/policy_papers/*.pdf, or external_data/world_bank_macro/*.json â€” grep for api.worldbank.org / frbsf / emdat fetchers finds only readers, never writers. If the local disk dies, provenance is unrecoverable.",
+                            "Wikipedia fetch got 26/32 articles; the 6 misses include the most crisis-relevant titles (COVID-19_supply_chain_crisis, 2024_Baltimore_bridge_collapse, Panama_Canal_drought_2023, Global_supply_chain_issues, Russia-Ukraine economic impact) â€” likely bad title strings; nobody retried.",
+                            "Personal email hardcoded as User-Agent in both fetch scripts (external_data/fetch_all.py:27 and versions/v3_arcadia/00_emergence/fetch_extra_data.py:14: \u0027paneermomos10@gmail.com\u0027) â€” not a secret, required by SEC UA policy, but it is a personal address baked into code."
+                        ],
+    "localModelDeps":  [
+                           "None in this subsystem. fetch scripts use only requests + wikipediaapi. (scripts/crisis_library/cook_v2.py, the main EM-DAT consumer, embeds with a local sentence-transformers model to build the FAISS index, but that file is outside this scope â€” flagging for the RAG/library auditor.)"
+                       ],
+    "externalServices":  [
+                             "SEC EDGAR (data.sec.gov submissions JSON + www.sec.gov/Archives document downloads) â€” external_data/fetch_all.py:88,103; 20/20 real 10-Ks on disk",
+                             "FRED CSV endpoint (fred.stlouisfed.org/graph/fredgraph.csv?id=PCU484121484121) â€” fetch_all.py:146-147; GLBLALSCMINDX 404s",
+                             "GitHub raw (jpatokal/openflights) â€” fetch_all.py:160",
+                             "World Bank API (api.worldbank.org tariff zip; thedocs.worldbank.org pink sheet xlsx) â€” fetch_all.py:183,215",
+                             "UN Comtrade public preview (comtradeapi.un.org) â€” fetch_all.py:186 and fetch_extra_data.py:46; both FAILED (needs subscription key)",
+                             "IMF datamapper API (imf.org/external/datamapper/api/v1) â€” fetch_extra_data.py:74; returned empty, 0 files",
+                             "NOAA NHC (nhc.noaa.gov CurrentStorms.json + gis archive zip) â€” fetch_all.py:201-202; live JSON failed",
+                             "Wikipedia via wikipedia-api pip package â€” versions/v3_arcadia/00_emergence/fetch_extra_data.py:98-101; 26 real articles",
+                             "GAO (gao.gov/assets PDFs) â€” fetch_all.py:124-130; all 7 returned HTTP 403, zero GAO data despite the source being listed in the script docstring",
+                             "EM-DAT (public.emdat.be, registered manual download â€” cited in cook_v2.py:197 raw_url; no fetch script exists)"
+                         ],
+    "couplings":  [
+                      "scripts/crisis_library/cook_v2.py:32 -\u003e external_data/emdat/emdat_public_2000_2026.xlsx (path CORRECT via parents[2]); outputs versions/v4_arcadia_live/scenarios/crisis_library_v2.{json,faiss,_emb.npz} consumed by server/app.py, versions/v4_arcadia_live/realtime/demo_orchestrator.py, versions/v4_arcadia_live/scenarios/library_v2_search.py, scripts/compute_cross_corpus_alpha.py, scripts/ollama_v5_vs_frontier.py",
+                      "versions/v5_phoenix/counterfactual_v2/platinum.py:365 -\u003e REPO_ROOT/external_data/fred_truck_transport.csv (path CORRECT via parents[3]; parsing broken)",
+                      "versions/v3_arcadia/{30_dangerous/r4_*.py, 40_granite/r5_rag_beast.py, 40_granite/r5_manual_beir.py, 00_emergence/fetch_extra_data.py} -\u003e ROOT/external_data where ROOT=parent^3 = versions/ (BROKEN â€” off by one level since the versions/ reorg)",
+                      "versions/v3_arcadia/train_v3_block4_rag.py:41 -\u003e ROOT/external_data where ROOT = versions/v3_arcadia (BROKEN)",
+                      ".gitignore:62 \u0027external_data/\u0027 â€” whole subsystem untracked, including external_data/fetch_all.py, fetch.log, fetch_results.json, extra_data_results.json",
+                      ".github/workflows/deploy-hf-space.yml:75 and scripts/push_to_hf_space.py:51 / push_to_hf_space_minimal.py:91 exclude \u0027external_data/**\u0027 from the HF Space â€” the deployed server must never read external_data at runtime (it doesn\u0027t; it reads the cooked crisis_library_v2.json instead)",
+                      "docs/v3/DEMO_SCRIPT.md:16 -\u003e plots/reliability_v2.png (tracked); generator _dump/scripts_legacy/legacy/train_phase_s.py:185 writes to PLOTS/reliability_v2.png",
+                      "docs/v3/FINAL_DEMO.md:243 documents \u0027external_data/sec_10k/*.html (75 MB of filings, in .gitignore)\u0027",
+                      "FINAL_SUBMIT/DATASET_CARD.md:26,32 and versions/v3_arcadia/results/R1_VERIFIED.json:108-119 make judge-facing claims about this directory\u0027s contents"
+                  ],
+    "mustFix":  [
+                    "Move external_data/fetch_all.py and versions/v3_arcadia/00_emergence/fetch_extra_data.py into a tracked scripts/data/ location, fix their output paths to repo-root external_data, and commit them â€” right now the corpus is unrebuildable from a clone",
+                    "Write/commit provenance fetchers (or a documented manual-download README with URLs + checksums) for the three orphaned datasets: emdat xlsx, policy_papers PDFs, world_bank_macro JSONs",
+                    "Fix platinum.py method_c_bsts_lite: parse the real headers (observation_date / PCU484121484121) or download an actual daily Brent series (FRED DCOILBRENTEU), and stop labeling truck-transport PPI as barrel prices â€” today the \u0027real FRED counterfactual\u0027 is 100% the hardcoded fallback table",
+                    "Fix ROOT resolution in all v3_arcadia scripts (parents count off by one after the versions/ reorg) or add a find-repo-root helper; silent empty-glob corpora make the published R4/R5 receipts unreproducible",
+                    "Delete frbny_supply_chain.pdf (HTML error page) or re-fetch the real FRBNY GSCPI paper; correct R1_VERIFIED.json counts (policy papers usable = 2, fred = 1, noaa is a static archive not realtime)",
+                    "Fix r5_rag_beast.py world_bank_macro ingestion (World Bank JSON is [meta, rows] list, not dict) and remove the except:pass that hides the zero-content chunks",
+                    "Either wire OpenFlights/WTO/pink-sheet/NOAA data into an actual feature or delete them and stop listing them in DATASET_CARD.md / R1_VERIFIED.json as corpus assets; delete empty un_comtrade/ and imf_ifs/ dirs",
+                    "Correct DATASET_CARD.md EM-DAT snapshot claim (says 2024-01; file is 2000-2026 with 2025-12-20 last-update stamps)",
+                    "Retry the 6 failed Wikipedia titles (COVID supply chain crisis, Baltimore bridge, Panama drought, etc.) â€” they are the most demo-relevant crisis articles and are silently missing"
+                ],
+    "salvage":  "Keep the data, refactor the plumbing. The datasets themselves are the real thing â€” verified genuine SEC EDGAR filings, a genuine registered EM-DAT export (16,811 rows, exactly matching cook_v2.py\u0027s claim), real FRED/World Bank/Wikipedia/OpenFlights content â€” and the EM-DAT -\u003e crisis_library_v2 pipeline with deterministic severity tiers is a legitimately strong, no-LLM ground-truth asset worth showcasing. But the acquisition layer must be rebuilt: tracked fetch scripts with correct paths, provenance for the three orphaned datasets, deletion of the four never-consumed downloads and the fake FRBNY PDF, and corrected receipt counts. plots/reliability_v2.png: keep as-is (real artifact) but note its generator lives in _dump."
+}

@@ -1,0 +1,293 @@
+﻿{
+    "subsystem":  "scripts",
+    "purpose":  "Operational/automation layer for the hackathon submission: an OpenRouter async client + live LLM judge panels (frontier + local Ollama), real REINFORCE/Wordle training runs, EMDAT crisis-library cooking with real embeddings, live HF-Space rollouts, live API-key proofs (EIA/FRED/NASA FIRMS/NewsAPI/NOAA/GFW/W\u0026B), CI-style claim verifiers (run_all.py, check_benchmarks.py), HF Space deploy scripts, and a long tail of \"pass20â€“pass28\" receipt-generator scripts plus 7 one-shot notebook patchers that mass-produce sha256-stamped JSON \"receipts\" and plots for judges.",
+    "verdict":  "This directory is two subsystems wearing one trenchcoat. Roughly a third is genuinely good engineering: openrouter_client.py is a properly rate-limited, key-hygienic async client; cook_v2.py builds a real 1500-event EMDAT library with real embeddings and deterministic severity rules; final_real_reinforce_wordle_v2.py and pass23/pass27-B/pass28-J run real gradient-update training with unusually honest masking-vs-learning ablations; pass26/27/28 live HF-Space rollouts and pass28 K1-K3 FRED/NewsAPI/NOAA ingests are verifiably live. But the other two-thirds is a receipt factory that repeatedly violates the owner\u0027s own \"no synthetic, no fabrication\" rule while loudly claiming to honor it: hardcoded RAP-XC eval stats presented as \"recorded\" data, Wilcoxon p-values of 1e-18 manufactured by sorting two independent synthetic samples and calling them \"paired\", conformal-coverage receipts computed on pure rng.normal noise labeled \"split_conformal_NLL_vovk2005\", a fabricated ascending reward curve logged to W\u0026B as \"live_dashboard_proof\", an ONNX bundle shipping untrained random-weight models, an adversarial \"gauntlet\" that tests a copy of the defense logic inlined in the test itself, a receipt patcher that unconditionally sets key_authenticated=True, and a hand-crafted \"concrete trajectory\" whose Wordle feedback is factually wrong. On top of that, the two scripts that were supposed to be the judge-facing verification gates (run_all.py, check_benchmarks.py) plus 4 more are dead from the phase4 versions/ rename â€” check_benchmarks.py silently exits 0 with every check skipped, the worst possible failure mode for a regression guard. The real work here is drowning in evidence-inflation theater that would be fatal if a judge diffed any receipt against its generator.",
+    "score":  3,
+    "fakeInventory":  [
+                          {
+                              "file":  "scripts/bootstrap_leaderboard.py",
+                              "line":  186,
+                              "kind":  "hardcoded",
+                              "issue":  "RAP-XC headline eval numbers are hardcoded literals presented as \u0027recorded eval numbers captured during pass-7\u0027; no source file exists, and per-episode arrays for ALL agents are then synthesized from truncated normals",
+                              "evidence":  "rap_xc_recorded = { \"easy_typhoon_response\": {\"n\": 100, \"mean\": 1.221, ... \"hard_cascading_crisis\": {\"n\": 100, \"mean\": 2.901"
+                          },
+                          {
+                              "file":  "scripts/bootstrap_leaderboard.py",
+                              "line":  331,
+                              "kind":  "synthetic",
+                              "issue":  "\u0027paired\u0027 bootstrap pairs two independently synthesized samples by sorting them (quantile-rank alignment), guaranteeing near-zero variance differences and fabricated significance",
+                              "evidence":  "a_arr = np.sort(a_arr); b_arr = np.sort(b_arr); mean_diff, ci_lo, ci_hi, p_val, n_paired = paired_bootstrap_diff("
+                          },
+                          {
+                              "file":  "scripts/wilcoxon_pairwise_leaderboard.py",
+                              "line":  90,
+                              "kind":  "synthetic",
+                              "issue":  "Wilcoxon signed-rank run on sorted-aligned reconstructed normal samples â€” the p~1e-18 values this produces are statistically meaningless and feed generate_hackathon_plots + README claims",
+                              "evidence":  "arr_a = np.sort(arrays[a]); arr_b = np.sort(arrays[b]); ... stat, pval = wilcoxon(arr_a, arr_b"
+                          },
+                          {
+                              "file":  "scripts/generate_hackathon_plots.py",
+                              "line":  140,
+                              "kind":  "hardcoded",
+                              "issue":  "headline stats baked into plot annotation text rather than computed from data (and derived from the fabricated bootstrap/wilcoxon receipts)",
+                              "evidence":  "\"Wilcoxon p = 3.9e-18 (Cohen d = +2.73)\\n\" \"Bootstrap mean Î” = +0.228, CI95 [+0.198, +0.257]\\n\""
+                          },
+                          {
+                              "file":  "scripts/export_all_onnx.py",
+                              "line":  84,
+                              "kind":  "fake_ai_output",
+                              "issue":  "exports a freshly-initialized (untrained, random-weight) GCN into the judge-facing ONNX bundle as the \u0027GCN arrival-time regressor\u0027; Ridge stacker likewise fit on rng dummy data",
+                              "evidence":  "# Export a freshly-initialized GCN ... The weights don\u0027t need to be the trained ones here because the ONNX manifest is a capability demonstration"
+                          },
+                          {
+                              "file":  "scripts/final_adversarial_20suite.py",
+                              "line":  119,
+                              "kind":  "simulated",
+                              "issue":  "the \u002720-attack gauntlet\u0027 reimplements the format/dictionary gates inside the test harness instead of calling the real env, so PASS is guaranteed by construction; only _score_guess is real",
+                              "evidence":  "if not (len(normalized) == 5 and normalized.isalpha() and normalized.isascii()): return {\"blocked\": True, ... \"passed_to_engine\": False}"
+                          },
+                          {
+                              "file":  "scripts/final_adversarial_20suite.py",
+                              "line":  178,
+                              "kind":  "simulated",
+                              "issue":  "attack #12 (solved-word repeat) never executes anything â€” outcome including reward is hardcoded",
+                              "evidence":  "first_reward = 1.0  # solve bonus ... return {\"blocked\": True, \"reward\": first_reward, \"reason\": \"episode_done\""
+                          },
+                          {
+                              "file":  "scripts/pass22_full_squeeze.py",
+                              "line":  522,
+                              "kind":  "fake_ai_output",
+                              "issue":  "3 of the 4 \u0027causal counterfactual methods\u0027 (synthetic control, BSTS, SCM do-calculus) are literal hardcoded numbers dressed as method outputs; the 4th is np.random.normal draws; receipt even brags the 18% deviation was \u0027kept on purpose\u0027",
+                              "evidence":  "sc_estimate = 250  # constructed from peer countries\u0027 growth path ... bsts_estimate = 263 ... scm_estimate = 285  # Pearl-style intervention on TSMC root node"
+                          },
+                          {
+                              "file":  "scripts/pass22_full_squeeze.py",
+                              "line":  665,
+                              "kind":  "hardcoded",
+                              "issue":  "master audit summary\u0027s \u0027features demonstrated\u0027 count is arithmetic on constants, not measured",
+                              "evidence":  "\"features_now_demonstrated\": 222 + 14,  # 14 new sub-receipts"
+                          },
+                          {
+                              "file":  "scripts/pass22_full_squeeze.py",
+                              "line":  258,
+                              "kind":  "mock_data",
+                              "issue":  "federated J2/J3/J4 receipts claim provenance \u0027source_module: rl/federated/fedavg.py\u0027 but the numbers come from an inline toy 1-parameter regression that never touches that module",
+                              "evidence":  "\"source_module\": \"rl/federated/fedavg.py\" (data from inline `grad = -2 * np.mean(client_x[c] * ...)`)"
+                          },
+                          {
+                              "file":  "scripts/pass26_real_evidence_expansion.py",
+                              "line":  274,
+                              "kind":  "fake_ai_output",
+                              "issue":  "\u0027process supervision concrete trajectory walkthrough\u0027 receipt is a hand-crafted trace whose Wordle feedback is factually wrong (guess \u0027about\u0027 vs target \u0027brain\u0027: \u0027b\u0027 at pos1 should be yellow, they wrote gray; \u0027o\u0027 at pos2 should be gray, they wrote yellow)",
+                              "evidence":  "# Hand-crafted 4-guess solve to illustrate ... {\"step\": 1, \"guess\": \"about\", \"feedback\": [\"yellow\", \"gray\", \"yellow\", \"gray\", \"gray\"]"
+                          },
+                          {
+                              "file":  "scripts/pass26_real_evidence_expansion.py",
+                              "line":  435,
+                              "kind":  "hardcoded",
+                              "issue":  "SUBMIT_PRECHECK adversarial-defense check hardcodes ok=True and discards the n_blocked it just computed",
+                              "evidence":  "\"ok\": True,  # 19/19 from receipt content"
+                          },
+                          {
+                              "file":  "scripts/pass27_killshot.py",
+                              "line":  678,
+                              "kind":  "synthetic",
+                              "issue":  "\u0027conformal_tight_v3_full_payload\u0027 receipt computes coverage on pure Gaussian random numbers while labeling the method as model-NLL split conformal",
+                              "evidence":  "# Use 16K NLLs (Vovk 2005 split conformal): synthetic but properly-distributed\\n nlls_calib = rng.normal(0.5, 0.3, n_calib)"
+                          },
+                          {
+                              "file":  "scripts/pass27_killshot.py",
+                              "line":  657,
+                              "kind":  "hardcoded",
+                              "issue":  "block F retroactively patches api_keys_live_proof.json setting key_authenticated=True unconditionally, regardless of what the original call returned",
+                              "evidence":  "gfw[\"key_authenticated\"] = True"
+                          },
+                          {
+                              "file":  "scripts/pass27_killshot.py",
+                              "line":  725,
+                              "kind":  "placeholder",
+                              "issue":  "judge pitch doc written with a literal unfilled placeholder and hardcoded stat claims",
+                              "evidence":  "\"If Hormuz closes tomorrow, India loses INR X-trillion in 30 days.\""
+                          },
+                          {
+                              "file":  "scripts/pass28_keys_ingest.py",
+                              "line":  229,
+                              "kind":  "fake_ai_output",
+                              "issue":  "logs a fabricated, formula-generated ascending reward curve to Weights \u0026 Biases and stamps the receipt \u0027live_dashboard_proof\u0027 â€” the W\u0026B dashboard shows fake training",
+                              "evidence":  "wandb.log({\"reward\": 0.5 + 0.4 * (i / 20), \"loss\": 1.0 - 0.6 * (i / 20), \"win_rate\": min(1.0, 0.1 + 0.045 * i)}"
+                          },
+                          {
+                              "file":  "scripts/pass28_K4_wandb_retry.py",
+                              "line":  73,
+                              "kind":  "fake_ai_output",
+                              "issue":  "same fabricated W\u0026B curve, retried with a Windows service workaround",
+                              "evidence":  "wandb.log({\"reward\": 0.5 + 0.4 * (i / 20), \"loss\": 1.0 - 0.6 * (i / 20)"
+                          },
+                          {
+                              "file":  "scripts/pass28_killshot_v2.py",
+                              "line":  601,
+                              "kind":  "mock_data",
+                              "issue":  "\u0027cross_env_transfer_matrix_v2\u0027 receipt claims policy_trained_on=\u0027Wordle (REINFORCE 1500 ep)\u0027 but the policy is a fresh untrained net and all three env featurizers are rng.normal noise (self-labeled Mock)",
+                              "evidence":  "def featurize_supplymind() -\u003e np.ndarray:\\n    \\\"\\\"\\\"Mock: 188-dim feature from supply-chain state.\\\"\\\"\\\"\\n    return rng.normal(0, 1, 188)"
+                          },
+                          {
+                              "file":  "scripts/pass28_killshot_v2.py",
+                              "line":  499,
+                              "kind":  "synthetic",
+                              "issue":  "\u0027conformal_32k_recal\u0027 â€” again Gaussian noise labeled as model-NLL split conformal",
+                              "evidence":  "nlls_calib = rng.normal(0.5, 0.3, n_calib).clip(0, None) ... \"method\": \"split_conformal_NLL_vovk2005\""
+                          },
+                          {
+                              "file":  "scripts/pass28_killshot_v2.py",
+                              "line":  452,
+                              "kind":  "simulated",
+                              "issue":  "prompt-injection gauntlet counts every non-crashing call as \u0027safe\u0027 in both branches, so blocked_pct is 100% by construction; combined totals also hardcode \u002719 blocked\u0027",
+                              "evidence":  "if isinstance(ret, dict) and \"ok\" in ret: inj_results[\"n_safe\"] += 1 else: inj_results[\"n_safe\"] += 1  # still didn\u0027t crash"
+                          },
+                          {
+                              "file":  "scripts/pass28_killshot_v2.py",
+                              "line":  660,
+                              "kind":  "hardcoded",
+                              "issue":  "\u0027license audit\u0027 is a static hand-typed list of (package, license) pairs, no package metadata is inspected",
+                              "evidence":  "deps = [(\"torch\", \"BSD-3-Clause\"), (\"numpy\", \"BSD-3-Clause\"), ..."
+                          },
+                          {
+                              "file":  "scripts/final_validation_bundle.py",
+                              "line":  107,
+                              "kind":  "synthetic",
+                              "issue":  "\u0027cross-env transfer\u0027 receipt: the \u0027SupplyMind state\u0027 is 3 hand-set values in a 130-dim vector with an invented letterâ†’SKU mapping; \u0027transfer_demonstrated\u0027 triggers on any entropy drop \u003e0.001",
+                              "evidence":  "sm_state_feats[4 * 26 + 0] = 1.0  # severity-4 SKU-A high alert"
+                          },
+                          {
+                              "file":  "scripts/final_validation_bundle.py",
+                              "line":  201,
+                              "kind":  "simulated",
+                              "issue":  "\u0027ablation matrix\u0027 removes reward-shaping terms under a RANDOM policy â€” removing solve_bonus reduces return by definition; circular, no trained system ablated",
+                              "evidence":  "# Random policy on tier-0 baseline (so ablation effects isolate reward shape)"
+                          },
+                          {
+                              "file":  "scripts/pass20_grand_final.py",
+                              "line":  91,
+                              "kind":  "synthetic",
+                              "issue":  "Wilcoxon signed-rank \u0027paired\u0027 by sorting two independent samples â€” self-described as \u0027honest pairing\u0027; header claims \u0027No synthetic\u0027",
+                              "evidence":  "# Pair by sorted-quantile rank for honest pairing across runs\\n t_sorted = sorted(trained[:n_pair]); u_sorted = sorted(untrained[:n_pair])"
+                          },
+                          {
+                              "file":  "scripts/pass20_grand_final.py",
+                              "line":  236,
+                              "kind":  "simulated",
+                              "issue":  "\u0027tier3_generalization\u0027 receipt never evaluates the trained policy at tier 3 â€” all reported solve rates come from untrained null policies with masking, despite the trained run being computed and discarded",
+                              "evidence":  "null_50 = W(50); null_returns_50 = _rollout_policy(null_50, ... ) ... \"solve_rate_at_50_words_with_mask\": round(null_solve_50, 4)"
+                          },
+                          {
+                              "file":  "scripts/patch_nb13_v5_pivot.py",
+                              "line":  55,
+                              "kind":  "hardcoded",
+                              "issue":  "notebook patcher bakes unverified headline claims into judge-facing notebook markdown",
+                              "evidence":  "| **3** | REINFORCE Wordle 1500-ep Â· 8% â†’ 100% Â· p=2.71eâ»Â¹â¸ Â· d=4.28 | ... 269-attack adversarial defense gauntlet | 100% blocked"
+                          },
+                          {
+                              "file":  "scripts/validate_ensemble_brent.py",
+                              "line":  33,
+                              "kind":  "synthetic",
+                              "issue":  "the \u00278/8 within Â±30%\u0027 Brent backtest runs on a synthetic sinusoid+AR(1) price history misleadingly described as \u0027Real-style\u0027; pass28 K1 later fetched real FRED history precisely because of this (L9)",
+                              "evidence":  "\"\"\"Real-style 200-day Brent history anchored at the documented pre-event price. Uses Â±8% sinusoidal seasonal + AR(1) noise\"\"\""
+                          },
+                          {
+                              "file":  "scripts/final_conformal_multilevel.py",
+                              "line":  123,
+                              "kind":  "synthetic",
+                              "issue":  "conformal \u0027expert\u0027 is a uniform-random valid pick, and the header admits the calibration signal is \u0027synthetic-but-realistic\u0027; coverage guarantee is trivially satisfied by exchangeability regardless of model quality",
+                              "evidence":  "# Expert = uniform random among valid candidates (oracle baseline)"
+                          },
+                          {
+                              "file":  "scripts/check_benchmarks.py",
+                              "line":  44,
+                              "kind":  "dead_ui",
+                              "issue":  "CI regression guard silently prints [SKIP] for every missing file (all files are missing due to broken path) and exits 0 â€” vacuous PASS",
+                              "evidence":  "if not fp.exists(): print(f\"[SKIP] {fname} not present\"); continue ... print(\"\\n[PASS] All benchmarks meet their v3.0-arcadia floor.\")"
+                          }
+                      ],
+    "deadCode":  [
+                     "scripts/patch_nb13.py, patch_nb13_v2.py, _v3.py, _v4.py, _v5_pivot.py, _v6_final.py, _v7_final_polish.py â€” 7 accumulated one-shot notebook patchers for notebooks/13_MASTER_HACKATHON_FINAL.ipynb; already applied, kept anyway, and even shipped to the HF Space via push_to_hf_space_minimal.py allowlist (\u0027scripts/patch_nb13*.py\u0027); they also use cwd-relative Path(\u0027notebooks/...\u0027) so they only work from repo root",
+                     "scripts/final_real_reinforce_wordle.py â€” v1, superseded by final_real_reinforce_wordle_v2.py (v2 header says \u0027V1 hit 36% solve\u0027)",
+                     "scripts/bootstrap_leaderboard.py + scripts/wilcoxon_pairwise_leaderboard.py â€” broken paths AND explicitly superseded by pass27_killshot.py block B, whose receipt says \u0027supersedes: bootstrap_leaderboard.json (sufficient-stats reconstruction)\u0027",
+                     "scripts/check_benchmarks.py â€” its only consumer, .github/workflows-disabled/benchmark-regression.yml.disabled, is disabled; the script is also path-broken",
+                     "scripts/build_pitch_html.py â€” input demo/PITCH_DECK.md does not exist (demo/ contains only DEMO_VIDEO_SCRIPT.md)",
+                     "scripts/push_to_hf_space.py â€” superseded by push_to_hf_space_minimal.py and the CI deploy workflow; full-repo upload would exceed the 1GB Space cap the recent commits fought with",
+                     "scripts/final_conformal_multilevel.py â€” superseded twice over by pass20 conformal_tight_v3 and pass27/pass28 conformal blocks",
+                     "scripts/pass20_grand_final.py, pass22_full_squeeze.py, pass26_real_evidence_expansion.py â€” one-shot receipt generators for past \u0027passes\u0027; their outputs are committed, the scripts have no ongoing role",
+                     "scripts/__pycache__/ â€” stale compiled artifacts (calibrate_conformal_from_harvest, validate_war_room) sitting in the tree"
+                 ],
+    "brokenOrSuspect":  [
+                            "scripts/run_all.py:20 â€” R = ROOT/\u0027v3_arcadia\u0027/\u0027results\u0027 but phase4 (commit b0d5248) moved everything to versions/v3_arcadia; all 14 judge-verification checks report \u0027MISSING file\u0027 and the advertised one-command verification (also referenced in scripts/reproduce.md) exits 1",
+                            "scripts/check_benchmarks.py:17 â€” same broken path, but fails OPEN: every floor is [SKIP]ped and it exits 0 (\u0027All benchmarks meet their floor\u0027)",
+                            "scripts/bootstrap_leaderboard.py:43-44 â€” EUCLIDIAN/ALGO_COMP point at ROOT/\u0027v3_arcadia\u0027/results â†’ FileNotFoundError at runtime",
+                            "scripts/compute_panel_agreement.py:21-22 â€” R4_PATH/PANEL_JSON broken (ROOT/\u0027v3_arcadia\u0027) â†’ crash in _load_local_r4()",
+                            "scripts/run_frontier_judge_panel.py:43-44 â€” R4_PATH/OUT_PATH broken the same way; the live-panel tool can no longer load scenarios or write its committed output",
+                            "scripts/export_all_onnx.py:36,38,45 â€” output/input checkpoint paths broken (ROOT/\u0027v3_arcadia\u0027), plus stale import \u0027from v3_arcadia._70_provider.r6_gnn_arrival_time import ArrivalGCN\u0027 silently swallowed by except",
+                            "scripts/build_pitch_html.py:13 â€” reads demo/PITCH_DECK.md which does not exist",
+                            "scripts/release_assets.sh â€” uploads demo/PITCH_DECK.md (missing, error swallowed by \u0027|| true\u0027); release notes still claim \u0027Krippendorff Î± = 0.750\u0027 which scripts/compute_panel_agreement.py\u0027s own docstring admits \u0027was actually mean_conf, not Î±\u0027",
+                            "scripts/push_to_hf_space.py:13 â€” comment \u0027# SCRUBBED ï¿½ set HF_TOKEN env var\u0027 strongly implies an HF token was previously committed in this file; history should be scrubbed/rotated",
+                            "scripts/generate_hackathon_plots.py:52,85 â€” torch.load(..., weights_only=False) on rapxc.pt (arbitrary-pickle execution surface, ironic given verify_ollama_finetuning_stack checks for CVE-2025-32434 mitigations elsewhere)",
+                            "scripts/pass23_colab_local_smoke.py:344 â€” scipy wilcoxon \u0027paired\u0027 test applied to two eval runs with different seed bases (10000 vs 20000); pairs are unrelated episodes, test is invalid (effect is real but the p-value isn\u0027t)",
+                            "scripts/final_validation_bundle.py:385-397 + pass20 stage D â€” GFW status 422/503 counted as ok=True (\u0027key validated\u0027); pass27 block F then hardcodes key_authenticated=True on top",
+                            "Multiple scripts hand-parse .env (final_validation_bundle, pass20, pass27_scenario_extractor, pass28_keys_ingest, pass28_K4, openrouter_client) â€” 6 divergent copies of the same loader"
+                        ],
+    "localModelDeps":  [
+                           "Ollama @ http://127.0.0.1:11434 / localhost:11434 â€” scripts/ollama_v5_vs_frontier.py (supplymind-analyst:v5), scripts/pass28_killshot_v2.py (qwen2.5:14b, deepseek-r1-local-q4:latest, mistral-nemo-local:latest, supplymind-analyst:v5, gemma4:e4b-it-bf16, qwen25-coder-local:latest)",
+                           "scripts/verify_ollama_finetuning_stack.py â€” verifies committed Modelfiles for 4 local wrapper models (versions/v3_arcadia/00_emergence/*.Modelfile) + versions/v4_arcadia_live/features/Modelfile.analyst_v5 (offline string checks only)",
+                           "scripts/crisis_library/cook_v2.py â€” SentenceTransformer(\u0027mixedbread-ai/mxbai-embed-large-v1\u0027) local weights download + faiss index build",
+                           "scripts/verify_lora_merge.py â€” transformers local load of Qwen/Qwen2.5-1.5B-Instruct + peft adapter from rl/checkpoints/lora*/ (falls back to honest \u0027no_adapter_found\u0027 receipt)",
+                           "scripts/generate_hackathon_plots.py â€” torch.load of versions/v5_phoenix/experiments/rap_xc_v1/rapxc.pt (weights_only=False)",
+                           "scripts/calibrate_conformal_from_harvest.py â€” loads versions/v5_phoenix/experiments/rap_xc_v1/transitions.npz, trains small torch MLP locally",
+                           "scripts/reproduce.md â€” documents requirement for Ollama with DeepSeek/Qwen-14B/Mistral-Nemo/Qwen-Coder + 150GB of foundation models for full R4 reproduction",
+                           "pass27_reasoning_gym_alt_env.py + patch_nb13* â€” reasoning_gym package (local dataset generation, no weights)"
+                       ],
+    "externalServices":  [
+                             "OpenRouter (https://openrouter.ai/api/v1) â€” scripts/openrouter_client.py (shared client, OPENROUTER_API_KEY), run_frontier_judge_panel.py, compute_cross_corpus_alpha.py, ollama_v5_vs_frontier.py, verify_openrouter_models.py, pass27_scenario_extractor.py, final_validation_bundle.py, pass20_grand_final.py, pass22_full_squeeze.py",
+                             "EIA (api.eia.gov/v2/petroleum) â€” final_validation_bundle.py, pass20_grand_final.py, pass22_full_squeeze.py (EIA_API_KEY)",
+                             "FRED (api.stlouisfed.org, DCOILBRENTEU) â€” pass28_keys_ingest.py K1 (FRED_API_KEY)",
+                             "NASA FIRMS (firms.modaps.eosdis.nasa.gov) â€” final_validation_bundle.py, pass20_grand_final.py (NASA_FIRMS_MAP_KEY)",
+                             "Global Fishing Watch (gateway.api.globalfishingwatch.org/v3) â€” final_validation_bundle.py, pass20 (GFW_API_TOKEN)",
+                             "NewsAPI (newsapi.org/v2/everything) â€” pass28_keys_ingest.py K2 (NEWS_API_KEY)",
+                             "NOAA CDO (ncdc.noaa.gov/cdo-web/api/v2) â€” pass28_keys_ingest.py K3 (NOAA_TOKEN)",
+                             "Weights \u0026 Biases â€” pass28_keys_ingest.py K4 + pass28_K4_wandb_retry.py (WANDB_API_KEY; NOTE: logs fabricated metrics)",
+                             "HuggingFace Hub/Space â€” push_to_hf_space.py, push_to_hf_space_minimal.py (HF_TOKEN, repo Shaurya-Noodle/Supplymind); live env rollouts against https://shaurya-noodle-supplymind.hf.space in pass26/pass27-A/pass28-C",
+                             "GitHub Releases via gh CLI â€” release_assets.sh",
+                             "Keyless smokes (pass22 U14): GDELT, USGS earthquakes, OSM Nominatim, World Bank, Wikipedia REST, HackerNews Firebase"
+                         ],
+    "couplings":  [
+                      "scripts.openrouter_client imported by run_frontier_judge_panel.py, compute_cross_corpus_alpha.py, ollama_v5_vs_frontier.py, verify_openrouter_models.py (via sys.path.insert(ROOT))",
+                      "versions.v5_phoenix.wordle_env.env (WORD_LIST, WORD_SET, _score_guess) imported by final_adversarial_20suite.py, final_conformal_multilevel.py, final_real_reinforce_wordle.py, final_real_reinforce_wordle_v2.py, final_validation_bundle.py, pass20_grand_final.py",
+                      "versions.v5_phoenix.action_v2.conformal.calibrate_conformal imported by calibrate_conformal_from_harvest.py (writes back to versions/v5_phoenix/action_v2/conformal_calibrated.pt)",
+                      "versions.v5_phoenix.forecast_v2.ensemble_brent.ensemble_forecast imported by validate_ensemble_brent.py",
+                      "versions.v4_arcadia_live.realtime.hormuz_war_room_router imported by validate_war_room.py",
+                      "server.openenv_mcp_wrapper.SupplyMindMCP imported by pass27_killshot.py block D and pass28_killshot_v2.py block D",
+                      "scripts.final_real_reinforce_wordle_v2 (encode_state, compute_valid_mask, run_v2, _rollout_policy) imported by final_conformal_multilevel.py and pass20_grand_final.py",
+                      "pass23_colab_local_smoke imported as a module (importlib after sys.path.insert(ROOT/\u0027scripts\u0027)) by pass27_killshot.py and pass28_killshot_v2.py â€” renaming pass23 breaks pass27/28",
+                      "Data paths: versions/v4_arcadia_live/scenarios/{crisis_library_v2.json,.faiss,_emb.npz,iran_israel_hormuz_2024_2026.json} (cook_v2 writes; compute_cross_corpus_alpha, ollama_v5_vs_frontier, validate_war_room, validate_ensemble_brent read); versions/v5_phoenix/experiments/rap_xc_v1/{transitions.npz,rapxc.pt}; versions/v5_phoenix/experiments/arena/leaderboard.json; external_data/emdat/emdat_public_2000_2026.xlsx",
+                      "Receipt sinks: tests/receipts/*.json(.sha256) and FINAL_SUBMIT/receipts/ + FINAL_SUBMIT/plots/ (written by ~20 scripts; generate_hackathon_plots.py READS tests/receipts/{bootstrap_leaderboard,wilcoxon_pairwise_leaderboard,conformal_calibration,ensemble_brent_validation}.json â€” so the plot pipeline depends on the fabricated-receipt scripts)",
+                      "STALE pre-phase4 paths (ROOT/\u0027v3_arcadia\u0027 instead of versions/v3_arcadia): run_all.py, check_benchmarks.py, bootstrap_leaderboard.py, compute_panel_agreement.py, run_frontier_judge_panel.py, export_all_onnx.py",
+                      "patch_nb13*.py mutate notebooks/13_MASTER_HACKATHON_FINAL.ipynb via cwd-relative path",
+                      "tests/test_ollama_finetuning_stack.py runs scripts/verify_ollama_finetuning_stack.py as subprocess; scripts/__pycache__ shows calibrate_conformal_from_harvest and validate_war_room have been imported as modules",
+                      "Caches/logs at repo root: .openrouter_cache/ (read by compute_panel_agreement, written by run_frontier_judge_panel), .openrouter_usage.jsonl (both gitignored)",
+                      ".env manually parsed by 6 scripts; .github/workflows/deploy-hf-space.yml triggers on scripts/** changes"
+                  ],
+    "mustFix":  [
+                    "Fix the 6 phase4-broken paths (run_all.py, check_benchmarks.py, bootstrap_leaderboard.py, compute_panel_agreement.py, run_frontier_judge_panel.py, export_all_onnx.py): ROOT/\u0027v3_arcadia\u0027 â†’ ROOT/\u0027versions\u0027/\u0027v3_arcadia\u0027. run_all.py is the advertised judge-verification entrypoint in reproduce.md and currently fails 14/14.",
+                    "Make check_benchmarks.py fail CLOSED: a missing benchmark file must be a FAILURE, not a [SKIP]+exit 0; then re-enable the disabled workflow.",
+                    "Delete the fabricated-statistics chain: bootstrap_leaderboard.py (hardcoded RAP-XC stats + sorted-\u0027paired\u0027 bootstrap), wilcoxon_pairwise_leaderboard.py (sorted-pair Wilcoxon), and every receipt/plot they produced (tests/receipts/bootstrap_leaderboard.json, wilcoxon_pairwise_leaderboard.json, FINAL_SUBMIT plots quoting p=3.9e-18 / d=+2.73). pass27 block B already provides the honest replacement.",
+                    "Delete or truthfully relabel the fake conformal receipts (pass27 block G, pass28 block E â€” Gaussian noise labeled model-NLL) and keep only calibrate_conformal_from_harvest.py (real transitions) as the conformal evidence.",
+                    "Delete the fabricated W\u0026B runs and the two scripts that generate them (pass28 K4 + pass28_K4_wandb_retry.py), or rewire them to log an actual training loop\u0027s metrics; a judge opening the W\u0026B project sees a synthetic curve labeled \u0027live_dashboard_proof\u0027.",
+                    "Rewrite final_adversarial_20suite.py to attack the real env\u0027s step()/gates instead of an inline copy of the validation logic, and remove the hardcoded attack #12 outcome; same for the always-pass counters in pass27 block D and pass28 block D.",
+                    "Fix or delete pass26 process_supervision_concrete (its hand-written Wordle feedback is objectively wrong) and pass28 block F which plots those wrong numbers; generate the trace by actually running _score_guess.",
+                    "Remove pass22 u17\u0027s hardcoded \u0027synthetic control / BSTS / do-calculus\u0027 estimates and pass28 block G\u0027s mock featurizers + false \u0027policy_trained_on\u0027 claim â€” these are the exact fabrication pattern the owner banned.",
+                    "Remove pass26 submit_precheck M8 hardcoded ok=True and pass27 block F\u0027s unconditional key_authenticated=True patch; stop mutating already-published receipts after the fact.",
+                    "Fix export_all_onnx.py to export the actual trained GCN/ridge weights or drop those entries from the bundle; shipping random-weight ONNX as named models is indefensible.",
+                    "Purge push_to_hf_space.py token history (the \u0027# SCRUBBED\u0027 marker implies HF_TOKEN was once committed â€” rotate the token, verify git history is clean).",
+                    "Consolidate: one shared .env loader, one shared receipt-writer; delete the 7 patch_nb13*.py one-shots (and remove them from the HF Space allowlist), delete superseded final_real_reinforce_wordle.py v1, final_conformal_multilevel.py, push_to_hf_space.py, pass20/22/26 one-shots, and scripts/__pycache__.",
+                    "Update release_assets.sh notes: drop the retracted Î±=0.750 claim and the missing PITCH_DECK.md upload."
+                ],
+    "salvage":  "Refactor, aggressively. Keep and promote the ~14 genuinely real tools: openrouter_client.py, run_frontier_judge_panel.py (path-fixed), compute_cross_corpus_alpha.py, compute_panel_agreement.py (path-fixed), ollama_v5_vs_frontier.py, verify_openrouter_models.py, crisis_library/cook_v2.py, calibrate_conformal_from_harvest.py, validate_war_room.py, final_real_reinforce_wordle_v2.py, pass23_colab_local_smoke.py, the live-rollout/live-ingest blocks of pass26/27/28 (A/B/C/J, K1-K3), verify_lora_merge.py, verify_ollama_finetuning_stack.py, push_to_hf_space_minimal.py, and reproduce.md. Delete the receipt-factory scaffolding (pass20/22 receipt fabrications, fake conformal blocks, fake W\u0026B loggers, patch_nb13 series, superseded v1 scripts) and regenerate every downstream receipt/plot from the honest paths only. The live-API and real-training core is strong enough to stand on its own for the Qualcomm hackathon; the fabricated-evidence layer is the single biggest risk of disqualification and must be excised, not patched."
+}

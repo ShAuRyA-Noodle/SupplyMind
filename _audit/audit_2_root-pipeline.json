@@ -1,0 +1,124 @@
+﻿{
+    "subsystem":  "root-pipeline",
+    "purpose":  "Core entry points and build system for the SupplyMind OpenEnv environment: baseline.py (LLM agent calling an OpenAI-compatible endpoint against the in-process env), inference.py (competition-spec HTTP-client agent emitting [START]/[STEP]/[END] lines), scripted_agent.py (deterministic rule-based baseline), models.py (pydantic action/observation contract), openenv.yaml (env manifest), plus Dockerfile (main API), Dockerfile.dashboard (Streamlit), Dockerfile.damocles (v3 model-serving API), docker-compose.yml, Makefile, requirements*.txt, pyproject.toml.",
+    "verdict":  "Split personality. The Python entry-point half is genuinely real and works: I executed scripted_agent.py end-to-end (easy 0.7711, medium 0.6962, hard 0.6715) and a reset/step smoke test â€” no mock data, no canned LLM output, real retries, clean pydantic contract, valid manifest. The build-system half is bitrotted theater: the Damocles container cannot even start (uvicorn module path is stale from the phase4 versions/ rename â†’ ModuleNotFoundError crash loop), and even if it started, /rag and /forecast crash on a broken ROOT-relative path (resolves to versions/models/ which doesn\u0027t exist), /rl/act needs sb3 + a .zip checkpoint that the image deliberately excludes (it copies an .onnx the app never loads), and /assess hard-requires an Ollama daemon at 127.0.0.1:11434 that isn\u0027t in the image â€” so 4 of 5 advertised endpoints of that service are dead on arrival. docker-compose sets DEMO_MODE=true/OFFLINE_MODE=true on all three services but no production code reads either var â€” placebo switches whose stated intent (\"no live API calls\") also contradicts the everything-live mandate. The main Dockerfile\u0027s COPY . . plus a .dockerignore that ignores none of models/ (9.9 GB), versions/ (31.6 GB), or rl/ (0.9 GB) makes the \"slim production image\" a ~43 GB build in practice. Dockerfile.dashboard ships a dashboard whose own docstring says DEPRECATED. The Makefile promises 9 health probes but has 8, tags v4.0-final-submit on a v6.0 repo, and its benchmark target depends on local Ollama. pip install . is broken because pyproject\u0027s packages.find can never pick up top-level models.py/baseline.py that server.app imports. Two of three compose services are fake-alive at best.",
+    "score":  4.5,
+    "fakeInventory":  [
+                          {
+                              "file":  "docker-compose.yml",
+                              "line":  12,
+                              "kind":  "placeholder",
+                              "issue":  "DEMO_MODE=true and OFFLINE_MODE=true set on all three services, but no production code consumes these vars (repo-wide grep: only a docstring in dashboard/crisis_ingestion.py and a test that checks OFFLINE_MODE==\u00271\u0027, not \u0027true\u0027). Placebo config; its stated intent per .env.example (\u0027forces deterministic scenarios (no live API calls)\u0027) also contradicts the everything-live mandate.",
+                              "evidence":  "environment:\n      - DEMO_MODE=true\n      - OFFLINE_MODE=true"
+                          },
+                          {
+                              "file":  "Dockerfile.damocles",
+                              "line":  23,
+                              "kind":  "placeholder",
+                              "issue":  "Comment claims embeddings are \u0027fetched via env\u0027 as an alternative to a runtime mount, but versions/v3_arcadia/90_damocles/app.py has no fetch code â€” _load_rag() does a bare np.load that hard-crashes if the .npy is absent.",
+                              "evidence":  "# Embeddings loaded lazily from cached .npy (mounted at runtime or fetched via env)"
+                          },
+                          {
+                              "file":  "Dockerfile.damocles",
+                              "line":  24,
+                              "kind":  "dead_ui",
+                              "issue":  "Image copies ppo_easy_typhoon_response.onnx, but the deployed app never loads any ONNX (zero \u0027onnx\u0027 references in 90_damocles/app.py); _load_rl() instead needs ppo_easy_typhoon_response.zip via sb3_contrib.MaskablePPO â€” the .zip is not copied and requirements-damocles.txt deliberately excludes sb3 (\u0027Excludes training-only deps (sb3...)\u0027). /rl/act always returns 503 in the container.",
+                              "evidence":  "COPY versions/v3_arcadia/checkpoints/gethsemane/ppo_easy_typhoon_response.onnx ..."
+                          },
+                          {
+                              "file":  "Makefile",
+                              "line":  60,
+                              "kind":  "hardcoded",
+                              "issue":  "make submit bakes headline benchmark claims into the tag message as hardcoded strings, and tags v4.0-final-submit although the repo is already at v6.0-genesis (README badge bumped in commit ef10f56) â€” stale, self-congratulatory metadata.",
+                              "evidence":  "git tag -a v4.0-final-submit -m \"SupplyMind final submit Â· 100% war-room backtest Â· 100% ensemble Brent Â· 0.9001 conformal\""
+                          },
+                          {
+                              "file":  "baseline.py",
+                              "line":  117,
+                              "kind":  "hardcoded",
+                              "issue":  "TASK_HINTS leak the ground-truth solution of each benchmark task into the \u0027baseline\u0027 LLM\u0027s system prompt (exact disruption, exact priority order, budget percentages, \u0027activate backup supplier for TSMC\u0027). The reported baseline score partly measures a scripted walkthrough, not the LLM\u0027s supply-chain reasoning. Same block duplicated in inference.py:155.",
+                              "evidence":  "\"easy_typhoon_response\": \"\"\"... Priority: activate backup supplier for TSMC, then increase safety stock at warehouses ...\"\"\""
+                          },
+                          {
+                              "file":  "baseline.py",
+                              "line":  469,
+                              "kind":  "dead_ui",
+                              "issue":  "BASELINE_SEEDS = [42, 99, 7] with comment \u0027Run 3 seeds per task to showcase episode variation\u0027, but run_all_baselines only ever uses BASELINE_SEEDS[0] â€” the 3-seed claim is decorative.",
+                              "evidence":  "BASELINE_SEEDS = [42, 99, 7]  # Run 3 seeds per task ... / run_task(env, task_id, client, seed=BASELINE_SEEDS[0])"
+                          },
+                          {
+                              "file":  "Dockerfile.dashboard",
+                              "line":  23,
+                              "kind":  "dead_ui",
+                              "issue":  "The compose \u0027dashboard\u0027 service builds and serves dashboard/app.py, whose own docstring says it is the DEPRECATED v2 dashboard \u0027kept for reference and v2 reproducibility only\u0027 (canonical is versions/v3_arcadia/85_infinite_baths/dashboard.py). Shipping a self-declared deprecated UI as a compose service.",
+                              "evidence":  "CMD [\"streamlit\", \"run\", \"dashboard/app.py\", ...]  vs dashboard/app.py: \u0027âš ï¸  DEPRECATION NOTICE (v3.0-arcadia)\u0027"
+                          },
+                          {
+                              "file":  "requirements-damocles.txt",
+                              "line":  23,
+                              "kind":  "hardcoded",
+                              "issue":  "pickle-mixin\u003e=1.0.2 listed \u0027For /rag corpus loading\u0027 â€” pickle is Python stdlib; pickle-mixin is an unrelated PyPI package the app never imports. Cargo-cult dependency.",
+                              "evidence":  "# For /rag corpus loading\npickle-mixin\u003e=1.0.2"
+                          }
+                      ],
+    "deadCode":  [
+                     "inference.py:41 â€” LOCAL_IMAGE_NAME = os.getenv(\"LOCAL_IMAGE_NAME\") is read and never used anywhere in the file (leftover from a from_docker_image() plan).",
+                     "baseline.py:469 â€” BASELINE_SEEDS[1:] ([99, 7]) never used; only seed 42 is run.",
+                     "Dockerfile.dashboard:12 â€” COPY requirements-rl.txt into the image but it is never pip-installed (only requirements.txt + streamlit + plotly are).",
+                     "Dockerfile.damocles:24 â€” copied ppo_easy_typhoon_response.onnx is never loaded by the deployed app (app loads the .zip via sb3, which is excluded).",
+                     "docker-compose.yml:12,29,46 â€” DEMO_MODE/OFFLINE_MODE env vars consumed by no production code.",
+                     "baseline.py vs inference.py â€” ~350 lines of duplicated system prompt, TASK_HINTS, _clean_json_quirks, _extract_json, parse_action, format_observation; two divergent copies of the same agent (baseline.py already drifted: extra array-handling in _extract_json, different retry counts 3 vs 5)."
+                 ],
+    "brokenOrSuspect":  [
+                            "Dockerfile.damocles:32 â€” CMD [\"uvicorn\", \"v3_arcadia.90_damocles.app:app\", ...] but code is copied to /app/versions/v3_arcadia/90_damocles/ with WORKDIR /app; module path lacks the \u0027versions.\u0027 prefix â†’ ModuleNotFoundError, container crash-loops on start. COPY lines were updated for the phase4 versions/ rename (commit b0d5248) but the CMD (and the docstring in 90_damocles/app.py:11) were not.",
+                            "versions/v3_arcadia/90_damocles/app.py:28 (deployed by Dockerfile.damocles, in-scope coupling) â€” ROOT = Path(__file__).resolve().parent.parent.parent resolves to versions/, so ROOT/\"models\"/mxbai-embed-large and ROOT/\"models\"/chronos-bolt-base point at versions/models/... which does not exist (weights live at repo-root models/). /rag and /forecast crash on first call both locally and in the container; the compose mount ./models/...:/app/models/... lands at the wrong place too. Classic reorg bitrot.",
+                            "Dockerfile + .dockerignore â€” COPY . . with .dockerignore excluding none of models/ (9,914 MB), versions/ (31,612 MB), rl/ (950 MB), _dump/, FINAL_SUBMIT/: docker build context is ~43 GB and the \u0027slim production image\u0027 bakes all weights in. Effectively unbuildable/undeployable as written; compose then redundantly volume-mounts rl/checkpoints and rl/data on top of the baked copies.",
+                            "versions/v3_arcadia/90_damocles/app.py:32,170 â€” /assess hard-depends on Ollama at http://127.0.0.1:11434; no Ollama exists inside the container â†’ raise HTTPException(503, \"Ollama not reachable\") always. 4 of the 5 endpoints the Dockerfile header advertises (/assess, /forecast, /rag, /rl/act) cannot work in the shipped image.",
+                            "pyproject.toml:70-72 â€” [tool.setuptools.packages.find] include = [\"server*\", \"models*\", \"baseline*\", ...] cannot discover top-level single-file modules models.py and baseline.py (find only discovers packages), so pip install . produces a dist where server/app.py:33 \u0027from models import SupplyMindAction\u0027 and app.py:592 \u0027from baseline import run_all_baselines\u0027 fail; the declared console script server = \"server.app:main\" is broken when installed. Also \u0027models*\u0027 name-collides with the 9.9 GB root models/ weights directory â€” a landmine for any reorg.",
+                            "requirements.txt vs pyproject.toml â€” pyproject declares openenv-core\u003e=0.2.3 as a hard dependency but requirements.txt (what Dockerfile installs) omits it; server/app.py:614-618 swallows the ImportError with \u0027pass\u0027, so the Docker image silently ships without the /ws and /mcp OpenEnv endpoints (try/except-pass hiding degraded functionality).",
+                            "Makefile:13 vs 27-35 â€” help claims \u0027curl all 9 master-card health probes\u0027; only 8 curls exist. Makefile:48 benchmark step requires local Ollama (scripts/ollama_v5_vs_frontier.py). Makefile:19-21 install uses \u0027. .venv/bin/activate\u0027 (POSIX-only) on a Windows-primary repo.",
+                            "baseline.py:48-49 â€” default pair API_BASE_URL=https://router.huggingface.co/v1 with MODEL=\u0027gpt-4o\u0027 is incoherent: HF router does not serve gpt-4o, so running with documented defaults (\u0027HF_TOKEN=hf_... python baseline.py\u0027) fails every LLM call and silently degrades to do_nothing for the whole episode (get_action\u0027s catch-all returns do_nothing).",
+                            "inference.py:413 â€” \u0027except (json.JSONDecodeError, Exception)\u0027: redundant tuple, catch-all masking parse bugs (logged, but still over-broad).",
+                            "docker-compose.yml:1 â€” \u0027version: \"3.8\"\u0027 key is obsolete in Compose v2 (warning noise); minor."
+                        ],
+    "localModelDeps":  [
+                           "requirements-rl.txt:34 â€” ollama\u003e=0.1.0 (\u0027LLM explainability (local)\u0027); also sentence-transformers, transformers (Decision Transformer backbone), chromadb â€” local-weight stack.",
+                           "requirements-damocles.txt â€” sentence-transformers + torch to load local mxbai-embed-large weights; chronos-forecasting to load local models/chronos-bolt-base weights; onnxruntime for local PPO policy.",
+                           "Dockerfile.damocles:25 â€” COPY models/mxbai-embed-large/ into the image (local safetensors ~1.3 GB; the folder also contains gguf/, onnx/, openvino/ variants).",
+                           "docker-compose.yml:49-52 â€” damocles service mounts ./models/mxbai-embed-large and ./models/chronos-bolt-base plus versions/v3_arcadia/checkpoints/{granite,gethsemane} as read-only volumes.",
+                           "versions/v3_arcadia/90_damocles/app.py:32 â€” OLLAMA_URL = http://127.0.0.1:11434/api/chat; /assess judges default to [\u0027qwen25-14b-local\u0027,\u0027mistral-nemo-local\u0027] (deployed by in-scope Dockerfile.damocles).",
+                           "Makefile:48 â€” make benchmark runs scripts/ollama_v5_vs_frontier.py (local Ollama required).",
+                           "Local weights inventory (binary, not read): models/chronos-bolt-base, models/mxbai-embed-large, models/tabpfn-v2-reg, models/timesfm-2 â€” 9,914 MB total; versions/ tree 31,612 MB; rl/ 950 MB incl. rl/checkpoints (a2c_easy.zip, ppo_*.zip/.onnx, autoresearch_*.pt)."
+                       ],
+    "externalServices":  [
+                             "OpenAI-compatible chat-completions API via env API_BASE_URL (default https://router.huggingface.co/v1), auth HF_TOKEN / API_KEY / OPENAI_API_KEY â€” baseline.py:48,555 and inference.py:38-40,631 (client.chat.completions.create). Real calls, real retry/backoff; no canned responses.",
+                             "SupplyMind environment server over HTTP at ENV_URL (default http://localhost:8000) â€” inference.py SupplyMindHTTPClient POST /reset, /step, /grader.",
+                             ".env.example declares (names only): FRED_API_KEY (FRED), NEWS_API_KEY (NewsAPI), WANDB_API_KEY (W\u0026B), HF_TOKEN (Hugging Face), NOAA_TOKEN (NOAA); comment notes GDELT/USGS/MarineTraffic are keyless. No secrets found committed in any in-scope file.",
+                             "Makefile test-master/test-warroom curl the local FastAPI server endpoints (/health, /demo/master, /demo/hormuz-war-room, /arena/health, /phoenix/status, /replay/health, /live/health)."
+                         ],
+    "couplings":  [
+                      "baseline.py:34,609 and scripted_agent.py:29-30 import top-level models.py and server.supply_environment.SupplyMindEnvironment â€” moving baseline.py/models.py breaks server/app.py:33 (\u0027from models import SupplyMindAction\u0027) and app.py:592 (\u0027from baseline import run_all_baselines\u0027, the /baseline endpoint).",
+                      "models.py (root module) name-collides with root models/ directory (9.9 GB weights) â€” any reorg touching either must resolve this collision; pyproject packages.find \u0027models*\u0027 pattern is already ambiguous.",
+                      "openenv.yaml: app: server.app:app, port 8000; endpoint list must stay in sync with server/app.py routes (/reset /step /state /tasks /grader /baseline /health).",
+                      "Dockerfile: CMD uvicorn server.app:app; healthcheck GET /health; COPY . . means it implicitly depends on repo layout of server/, models.py, baseline.py.",
+                      "Dockerfile.dashboard: CMD streamlit run dashboard/app.py; dashboard/app.py in turn reads phase JSONs via _PROJECT_ROOT = parent.parent (repo root) â€” layout-sensitive.",
+                      "Dockerfile.damocles: COPY versions/v3_arcadia/90_damocles/, versions/v3_arcadia/checkpoints/granite/corpus_chunks.pkl, versions/v3_arcadia/checkpoints/gethsemane/ppo_easy_typhoon_response.onnx, models/mxbai-embed-large/; CMD module path v3_arcadia.90_damocles.app:app (stale, missing \u0027versions.\u0027 prefix); 90_damocles/app.py resolves everything from ROOT = parent^3 (=versions/) â€” both fragile to reorg.",
+                      "docker-compose.yml volume mounts: ./rl/checkpoints, ./rl/data (api+dashboard), ./versions/v3_arcadia/checkpoints/{granite,gethsemane}, ./models/{mxbai-embed-large,chronos-bolt-base} (damocles); dashboard depends_on api healthy, API_URL=http://api:8000.",
+                      "Makefile targets shell out to scripts/calibrate_conformal_from_harvest.py, scripts/validate_ensemble_brent.py, scripts/validate_war_room.py, scripts/bootstrap_leaderboard.py, scripts/ollama_v5_vs_frontier.py (all exist), reference FINAL_SUBMIT/DEMO_SCRIPT_90S.md (exists) and tests/receipts/ (exists), and probe routes mounted from versions/v4_arcadia_live/realtime/hormuz_war_room_router.py (/demo/master, /demo/hormuz-war-room) and versions/v5_phoenix/* (/arena, /replay, /live via server/app.py:161-239).",
+                      "pyproject console script server = server.app:main (exists, server/app.py:1660); pyproject declares openenv-core which server/openenv_adapter.py and server/openenv_mcp_wrapper.py import (guarded).",
+                      "inference.py drives the server\u0027s /reset /step /grader HTTP contract â€” changing observation/action field names in models.py or server responses breaks its dict-based parsing silently (it uses .get() everywhere)."
+                  ],
+    "mustFix":  [
+                    "Fix Dockerfile.damocles CMD to \u0027uvicorn versions.v3_arcadia.90_damocles.app:app\u0027 (or restructure to an importable package name without the leading digit) â€” the container currently cannot start at all.",
+                    "Fix ROOT/model-path resolution in versions/v3_arcadia/90_damocles/app.py (ROOT/\u0027models\u0027 â†’ repo-root models/) or pass model paths via env vars; today /rag and /forecast are broken everywhere. Then decide: either ship sb3 + the .zip checkpoint for /rl/act, or port /rl/act to the .onnx it already copies (onnxruntime is already in requirements-damocles.txt).",
+                    "Add models/, versions/, rl/, _dump/, FINAL_SUBMIT/, tests/receipts/ to .dockerignore (or switch to explicit COPY of server/, models.py, baseline.py, openenv.yaml) â€” a 43 GB build context makes every Dockerfile in the repo unusable.",
+                    "Delete or implement DEMO_MODE/OFFLINE_MODE: either wire them into server code with real behavior or remove them from docker-compose.yml and .env.example; as-is they are placebo switches, and \u0027demo mode\u0027 semantics conflict with the no-canned-data mandate anyway.",
+                    "Fix pyproject packaging: use py-modules = [\u0027models\u0027, \u0027baseline\u0027] (or move both into the server package) so pip install . actually works; rename one of models.py / models/ to kill the collision before the reorg agent moves anything.",
+                    "Deduplicate baseline.py and inference.py (shared prompt/parsing/formatting module) â€” they have already drifted (retry counts, JSON extraction).",
+                    "Decide whether TASK_HINTS (ground-truth solutions in the baseline prompt) is acceptable for the Qualcomm hackathon; for an honest baseline, report scores both with and without hints, or strip them.",
+                    "Update Makefile: point dashboard/submit targets at current version (v6.0), fix the \u00279 probes\u0027 claim, drop or gate the Ollama-dependent benchmark step, and either fix the incoherent gpt-4o + HF-router defaults in baseline.py/inference.py or make MODEL_NAME mandatory.",
+                    "Point Dockerfile.dashboard at the canonical dashboard (versions/v3_arcadia/85_infinite_baths/dashboard.py) or delete the service; remove the uninstalled requirements-rl.txt COPY.",
+                    "Add openenv-core to requirements.txt (or consciously document that the Docker image drops /ws and /mcp) and remove the silent except-ImportError-pass; remove pickle-mixin from requirements-damocles.txt and LOCAL_IMAGE_NAME from inference.py."
+                ],
+    "salvage":  "Refactor. Keep as-is: models.py, scripted_agent.py, openenv.yaml, and the core of baseline.py/inference.py â€” these are real, verified working (live end-to-end run scored 0.77/0.70/0.67 with zero API keys via the scripted agent), and the LLM path makes genuine API calls with honest failure handling. Refactor: merge the baseline/inference duplication, fix pyproject packaging, fix the models.py-vs-models/ name collision. Rebuild: Dockerfile.damocles (unstartable), docker-compose.yml (placebo env vars, 2 of 3 services broken/deprecated), .dockerignore (43 GB context), and the stale v4-era Makefile. Nothing in scope deserves deletion outright except the placebo DEMO_MODE/OFFLINE_MODE wiring and the dead deps/vars."
+}
