@@ -15,7 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from models import SupplyMindAction, ActionResult, DisruptionSignal, SupplierStatus
+from supplymind.contracts import SupplyMindAction, ActionResult, DisruptionSignal, SupplierStatus
 
 if TYPE_CHECKING:
     from server.engine.graph import SupplyChainGraph

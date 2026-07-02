@@ -8,7 +8,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from versions.v4_arcadia_live.features.qwen_vl_port_imagery import (
+from supplymind.warroom.features.qwen_vl_port_imagery import (
     PORT_ANCHORS, assess_port_image, run_all_ports, synthesize_sample_image,
 )
 

@@ -518,7 +518,7 @@ def block_28f_process_super_plot() -> dict:
     # uniform-episode credit. No hardcoded credit values.
     import sys
     sys.path.insert(0, str(ROOT))
-    from versions.v5_phoenix.wordle_env.env import _score_guess
+    from supplymind.phoenix.wordle_env.env import _score_guess
 
     target = "brain"
     guesses = ["stare", "cloud", "brink", "brain"]  # ends on the solving word

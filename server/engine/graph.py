@@ -15,7 +15,7 @@ from typing import Any
 
 import networkx as nx
 
-from models import SupplyMindAction, ActionResult, SupplierStatus
+from supplymind.contracts import SupplyMindAction, ActionResult, SupplierStatus
 
 
 # ──────────────────────────────────────────────

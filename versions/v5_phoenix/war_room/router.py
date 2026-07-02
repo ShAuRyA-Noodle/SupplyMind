@@ -100,7 +100,7 @@ def war_room(req: WarRoomRequest):
             source_type="live_api" if not live["served_from_replay"] else "internal_artifact",
             publisher="NewsAPI + FRED" if not live["served_from_replay"] else "versions/v5_phoenix replay_cache",
             url=("https://newsapi.org/, https://fred.stlouisfed.org/" if not live["served_from_replay"]
-                 else "versions/v5_phoenix/realtime_v5/replay_cache_latest.json"),
+                 else "supplymind/phoenix/realtime_v5/replay_cache_latest.json"),
         ).to_dict(),
     }
 

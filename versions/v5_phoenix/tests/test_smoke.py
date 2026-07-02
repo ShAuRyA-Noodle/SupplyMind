@@ -93,7 +93,7 @@ def test_receipt_framework_importable():
 
 def test_arena_leaderboard_importable():
     sys.path.insert(0, str(ROOT))
-    from versions.v5_phoenix.arena import leaderboard
+    from supplymind.phoenix.arena import leaderboard
     b = leaderboard.rebuild()
     assert b["n_baselines"] >= 6
     assert any(r["policy_name"].startswith("MaskablePPO") for r in b["rows"])
@@ -101,7 +101,7 @@ def test_arena_leaderboard_importable():
 
 def test_arena_runner_importable():
     sys.path.insert(0, str(ROOT))
-    from versions.v5_phoenix.arena import runner  # noqa: F401
+    from supplymind.phoenix.arena import runner  # noqa: F401
     # Just check the module compiles; running takes GPU + trained policy
     assert hasattr(runner, "evaluate_policy")
     assert hasattr(runner, "TaskResult")
@@ -110,7 +110,7 @@ def test_arena_runner_importable():
 
 def test_twin_importable():
     sys.path.insert(0, str(ROOT))
-    from versions.v5_phoenix.counterfactual_twin import twin  # noqa: F401
+    from supplymind.phoenix.counterfactual_twin import twin  # noqa: F401
     assert hasattr(twin, "run_twin")
     assert hasattr(twin, "TwinReport")
 
@@ -141,7 +141,7 @@ def test_reward_bridge_importable_without_roll():
 
 def test_replay_adapter_status():
     sys.path.insert(0, str(ROOT))
-    from versions.v5_phoenix.realtime_v5 import replay_adapter
+    from supplymind.phoenix.realtime_v5 import replay_adapter
     s = replay_adapter.status()
     assert s["cache_exists"] is True
     assert s["n_events"] >= 8

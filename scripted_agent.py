@@ -26,7 +26,7 @@ import logging
 import time
 from typing import Any
 
-from models import SupplyMindAction, SupplyMindObservation
+from supplymind.contracts import SupplyMindAction, SupplyMindObservation
 from server.supply_environment import SupplyMindEnvironment
 
 logger = logging.getLogger(__name__)

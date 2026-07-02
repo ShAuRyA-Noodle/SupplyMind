@@ -1,9 +1,9 @@
 """phoenix_app.py — Phoenix v5 FastAPI entry point.
 
 Imports v4's `server.app:app` (frozen — no edits), then mounts:
-    /arena     (versions.v5_phoenix.arena.router)
-    /twin      (versions.v5_phoenix.counterfactual_twin.router)
-    /replay    (versions.v5_phoenix.realtime_v5.replay_adapter)
+    /arena     (supplymind.phoenix.arena.router)
+    /twin      (supplymind.phoenix.counterfactual_twin.router)
+    /replay    (supplymind.phoenix.realtime_v5.replay_adapter)
     /phoenix   (status + version metadata)
 
 Run:
@@ -52,9 +52,9 @@ def _try_mount(path: str, import_path: str, attr: str = "router") -> bool:
 
 
 # Mount v5 routers
-_arena_ok = _try_mount("/arena", "versions.v5_phoenix.arena.router")
-_twin_ok = _try_mount("/twin", "versions.v5_phoenix.counterfactual_twin.router")
-_replay_ok = _try_mount("/replay", "versions.v5_phoenix.realtime_v5.replay_adapter")
+_arena_ok = _try_mount("/arena", "supplymind.phoenix.arena.router")
+_twin_ok = _try_mount("/twin", "supplymind.phoenix.counterfactual_twin.router")
+_replay_ok = _try_mount("/replay", "supplymind.phoenix.realtime_v5.replay_adapter")
 _war_room_ok = _try_mount("/demo", "versions.v5_phoenix.war_room.router")
 
 

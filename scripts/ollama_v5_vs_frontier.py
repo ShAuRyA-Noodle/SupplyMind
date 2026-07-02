@@ -39,7 +39,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.openrouter_client import OpenRouterClient  # noqa: E402
+from supplymind.llm.client import OpenRouterClient  # noqa: E402
 
 logger = logging.getLogger("ollama_v5_vs_frontier")
 
@@ -62,8 +62,8 @@ FRONTIER_JUDGES = [
 RISK_ORDER = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
 INV_ORDER = {v: k for k, v in RISK_ORDER.items()}
 
-IRAN_PATH = ROOT / "versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json"
-V2_PATH = ROOT / "versions/v4_arcadia_live/scenarios/crisis_library_v2.json"
+IRAN_PATH = ROOT / "supplymind/warroom/scenarios/iran_israel_hormuz_2024_2026.json"
+V2_PATH = ROOT / "supplymind/warroom/scenarios/crisis_library_v2.json"
 RECEIPT_PATH = ROOT / "tests/receipts/ollama_v5_vs_frontier.json"
 
 SYSTEM_PROMPT = (

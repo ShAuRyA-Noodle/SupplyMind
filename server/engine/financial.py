@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from models import SupplyMindAction, FinancialSnapshot
+from supplymind.contracts import SupplyMindAction, FinancialSnapshot
 
 if TYPE_CHECKING:
     from server.engine.graph import SupplyChainGraph

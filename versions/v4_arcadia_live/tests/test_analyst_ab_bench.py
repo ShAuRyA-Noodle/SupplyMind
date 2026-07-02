@@ -8,7 +8,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from versions.v4_arcadia_live.features import analyst_ab_bench as ab
+from supplymind.warroom.features import analyst_ab_bench as ab
 
 
 def test_ten_scenarios_defined():
@@ -19,7 +19,7 @@ def test_ten_scenarios_defined():
 
 
 def test_modelfile_v5_exists_and_non_empty():
-    mf = PROJECT_ROOT / "versions/v4_arcadia_live" / "features" / "Modelfile.analyst_v5"
+    mf = PROJECT_ROOT / "supplymind" / "warroom" / "features" / "Modelfile.analyst_v5"
     assert mf.exists()
     content = mf.read_text(encoding="utf-8")
     # Must have at least 5 MESSAGE examples

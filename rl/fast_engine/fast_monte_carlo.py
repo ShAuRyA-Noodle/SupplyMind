@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from server.engine.graph import SupplyChainGraph
-    from models import DisruptionSignal
+    from supplymind.contracts import DisruptionSignal
 
 # Try to import and compile Numba — fall back cleanly if it fails
 FAST_MC_AVAILABLE = False

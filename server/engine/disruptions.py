@@ -14,7 +14,7 @@ import random
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from models import DisruptionSignal
+from supplymind.contracts import DisruptionSignal
 
 if TYPE_CHECKING:
     from server.engine.graph import SupplyChainGraph

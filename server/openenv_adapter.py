@@ -17,7 +17,7 @@ from uuid import uuid4
 from openenv.core import Environment
 from openenv.core.rubrics import TrajectoryRubric, RubricDict
 
-from models import SupplyMindAction, SupplyMindObservation, SupplyMindState
+from supplymind.contracts import SupplyMindAction, SupplyMindObservation, SupplyMindState
 from server.engine.simulation import SimulationEngine
 from server.tasks.registry import TaskRegistry, TaskDefinition
 from server.graders.grader import EpisodeGrader

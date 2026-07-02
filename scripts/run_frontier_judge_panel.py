@@ -36,7 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.openrouter_client import MODELS, OpenRouterClient, ModelSpec  # noqa: E402
+from supplymind.llm.client import MODELS, OpenRouterClient, ModelSpec  # noqa: E402
 
 logger = logging.getLogger(__name__)
 

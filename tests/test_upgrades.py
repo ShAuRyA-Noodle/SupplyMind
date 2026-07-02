@@ -9,7 +9,7 @@ Tests for the 5 major upgrades:
 
 import pytest
 
-from models import SupplyMindAction
+from supplymind.contracts import SupplyMindAction
 from server.supply_environment import SupplyMindEnvironment
 
 

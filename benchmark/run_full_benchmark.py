@@ -66,7 +66,7 @@ def eval_with_grade(agent_fn, task_id, seed):
         action_type = ACTION_TYPES[min(action_type_idx, 6)]
         target_node = node_ids[min(node_idx, len(node_ids) - 1)] if node_ids else None
 
-        from models import SupplyMindAction
+        from supplymind.contracts import SupplyMindAction
         if action_type == "do_nothing":
             sm_action = SupplyMindAction(action_type="do_nothing")
         elif action_type == "activate_backup_supplier":

@@ -143,8 +143,8 @@ V4_CARRYOVERS = [
     Receipt(
         claim_id="V4_SPOF_V2_F1",
         claim="SPOF detector v2 (articulation-point) mean F1 over easy/medium/hard graphs equals 1.000",
-        command="python -m versions.v4_arcadia_live.features.spof_v2 --graph all --save",
-        extraction='python -c "import json; print(json.load(open(r\\"versions/v4_arcadia_live/features/R6_SPOF_V2.json\\")).get(\\"summary\\",{}).get(\\"v2_mean_f1\\"))"',
+        command="python -m supplymind.warroom.features.spof_v2 --graph all --save",
+        extraction='python -c "import json; print(json.load(open(r\\"supplymind/warroom/features/R6_SPOF_V2.json\\")).get(\\"summary\\",{}).get(\\"v2_mean_f1\\"))"',
         expected="1.0",
         comparator="==",
     ),
@@ -152,15 +152,15 @@ V4_CARRYOVERS = [
         claim_id="V4_STACKING_V2_lift_vs_WV",
         claim="Proper stacking beats weighted-vote on the DataCo ensemble by only a negligible AUC "
               "margin (measured +0.0027 on a 0.98+ ceiling; asserts lift <= 0.01 = near-null)",
-        command="python -m versions.v4_arcadia_live.features.stacking_v2 --save",
-        extraction='python -c "import json; print(round(json.load(open(r\\"versions/v4_arcadia_live/features/R15_STACKING_V2.json\\")).get(\\"lift_stacking_vs_wv_auc\\",0),4))"',
+        command="python -m supplymind.warroom.features.stacking_v2 --save",
+        extraction='python -c "import json; print(round(json.load(open(r\\"supplymind/warroom/features/R15_STACKING_V2.json\\")).get(\\"lift_stacking_vs_wv_auc\\",0),4))"',
         expected="0.01",
         comparator="<=",
     ),
     Receipt(
         claim_id="V4_Live_Brent_202604",
         claim="FRED Brent polling returns a live value parseable as USD/bbl in the plausible $60-$250 band",
-        command="python -m versions.v4_arcadia_live.realtime.sources.fred_brent",
+        command="python -m supplymind.warroom.sources.fred_brent",
         extraction='python -c "import sys,re; out=sys.stdin.read(); m=re.search(r\\"(\\\\d+\\\\.\\\\d+)\\", out); print(m.group(1) if m else \\"\\")"',
         expected="60",
         comparator="in_range",
@@ -205,7 +205,7 @@ V5_NEW = [
     Receipt(
         claim_id="V5_Arena_baseline_leaderboard",
         claim="OpenEnv Arena leaderboard ships with 6 baseline rows (MaskablePPO at top)",
-        command="python -m versions.v5_phoenix.arena.leaderboard",
+        command="python -m supplymind.phoenix.arena.leaderboard",
         extraction='python -c "import json; b=json.load(open(r\\"versions/v5_phoenix/experiments/arena/leaderboard.json\\")); print(b[\\"n_baselines\\"], b[\\"rows\\"][0][\\"policy_name\\"])"',
         expected="6 MaskablePPO",
         comparator="regex",
@@ -215,7 +215,7 @@ V5_NEW = [
         claim_id="V5_Twin_savings_gt_zero",
         claim="Counterfactual Twin on severity=0.85 yields positive median $ saved vs no-action "
               "(measured +$135.5M savings on 20 rollouts, 2026-07-02)",
-        command='python -m versions.v5_phoenix.counterfactual_twin.twin --severity 0.85 --brent 123 --rollouts 20 --task easy_typhoon_response --out versions/v5_phoenix/experiments/twin/V5_receipt_run.json',
+        command='python -m supplymind.phoenix.counterfactual_twin.twin --severity 0.85 --brent 123 --rollouts 20 --task easy_typhoon_response --out versions/v5_phoenix/experiments/twin/V5_receipt_run.json',
         extraction='python -c "import json; print(json.load(open(r\\"versions/v5_phoenix/experiments/twin/V5_receipt_run.json\\", encoding=\\"utf-8\\")).get(\\"savings_vs_no_action_usd\\"))"',
         expected="0",
         comparator=">=",

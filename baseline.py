@@ -41,7 +41,7 @@ from typing import Any
 from openai import OpenAI
 
 from llm_agent_common import build_system_prompt, format_observation, parse_action
-from models import SupplyMindAction, SupplyMindObservation
+from supplymind.contracts import SupplyMindAction, SupplyMindObservation
 
 logger = logging.getLogger(__name__)
 

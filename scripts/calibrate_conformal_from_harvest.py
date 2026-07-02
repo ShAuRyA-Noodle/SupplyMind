@@ -28,13 +28,13 @@ _ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from versions.v5_phoenix.action_v2.conformal import calibrate_conformal
+from supplymind.phoenix.action_v2.conformal import calibrate_conformal
 
 logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 TRANS_NPZ = REPO_ROOT / "versions/v5_phoenix" / "experiments" / "rap_xc_v1" / "transitions.npz"
-OUT_PT = REPO_ROOT / "versions/v5_phoenix" / "action_v2" / "conformal_calibrated.pt"
+OUT_PT = REPO_ROOT / "supplymind" / "phoenix" / "action_v2" / "conformal_calibrated.pt"
 RECEIPT = REPO_ROOT / "tests" / "receipts" / "conformal_calibration.json"
 
 

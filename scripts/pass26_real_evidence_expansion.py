@@ -433,7 +433,7 @@ def process_supervision_concrete() -> dict:
     """
     import sys
     sys.path.insert(0, str(ROOT))
-    from versions.v5_phoenix.wordle_env.env import _score_guess
+    from supplymind.phoenix.wordle_env.env import _score_guess
 
     target = "brain"
     guesses = ["stare", "cloud", "brink", "brain"]  # ends on the solving word
@@ -444,7 +444,7 @@ def process_supervision_concrete() -> dict:
         tiles = [f.state for f in fb]          # REAL per-letter states
         n_g = sum(1 for f in fb if f.state == "green")
         n_y = sum(1 for f in fb if f.state == "yellow")
-        # Env reward shaping (versions/v5_phoenix/wordle_env/env.py):
+        # Env reward shaping (supplymind/phoenix/wordle_env/env.py):
         #   green_credit = 0.05*n_green, yellow_credit = 0.02*n_yellow,
         #   solve_bonus  = 1.0 / guess_index (earlier guess -> bigger reward).
         r = 0.05 * n_g + 0.02 * n_y
@@ -488,7 +488,7 @@ def process_supervision_concrete() -> dict:
         ),
         "honest_note": (
             "feedback tiles + solve bonus derived from "
-            "versions.v5_phoenix.wordle_env.env._score_guess (no hardcoded credit, "
+            "supplymind.phoenix.wordle_env.env._score_guess (no hardcoded credit, "
             "no fabricated variance-amplification headline). Honest replacement for "
             "the Wave-1-deleted hand-crafted trajectory (CLAIMS_LEDGER A4 STRUCK)."
         ),

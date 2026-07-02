@@ -103,11 +103,11 @@ versions/v5_phoenix/**/*.pyc
 versions/v5_phoenix/**/*.log
 versions/v5_phoenix/receipts_v2/*.stdout
 
-# v4 arcadia-live auto-generated state
-versions/v4_arcadia_live/realtime/events.db
-versions/v4_arcadia_live/realtime/events.db-journal
-versions/v4_arcadia_live/realtime/library_embeddings.pkl
-versions/v4_arcadia_live/realtime/vessel_snapshot_hormuz.json
+# war-room auto-generated state (promoted from versions/v4_arcadia_live/realtime in P0.3)
+supplymind/warroom/events.db
+supplymind/warroom/events.db-journal
+supplymind/warroom/library_embeddings.pkl
+supplymind/warroom/vessel_snapshot_hormuz.json
 versions/v4_arcadia_live/autoresearch/experiments/
 versions/v4_arcadia_live/autoresearch/stop_autoresearch.flag
 versions/v4_arcadia_live/autoresearch/candidate_train.py.bak

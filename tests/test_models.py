@@ -9,7 +9,7 @@ from __future__ import annotations
 import pytest
 from pydantic import ValidationError
 
-from models import (
+from supplymind.contracts import (
     DisruptionSignal,
     SupplierStatus,
     FinancialSnapshot,

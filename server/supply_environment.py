@@ -12,7 +12,7 @@ import hashlib
 from uuid import uuid4
 from typing import Optional
 
-from models import SupplyMindAction, SupplyMindObservation, SupplyMindState
+from supplymind.contracts import SupplyMindAction, SupplyMindObservation, SupplyMindState
 from server.engine.simulation import SimulationEngine
 from server.tasks.registry import TaskRegistry, TaskDefinition
 from server.graders.grader import EpisodeGrader
@@ -127,7 +127,7 @@ class SupplyMindEnvironment:
         if self._state.is_done:
             # Return the last observation with done=True instead of crashing.
             # This is graceful behavior: calling step() after done is a no-op.
-            from models import SupplyMindObservation, FinancialSnapshot, ActionResult
+            from supplymind.contracts import SupplyMindObservation, FinancialSnapshot, ActionResult
             return SupplyMindObservation(
                 current_day=self._state.step_count,
                 days_remaining=0,

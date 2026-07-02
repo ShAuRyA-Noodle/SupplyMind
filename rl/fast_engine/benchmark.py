@@ -41,7 +41,7 @@ def run_benchmark():
     env = SupplyMindEnvironment()
     env.reset(task_id="medium_multi_front", seed=42)
     # Step until we hit the active phase of a disruption
-    from models import SupplyMindAction
+    from supplymind.contracts import SupplyMindAction
     active_signals = []
     for _ in range(20):
         obs = env.step(SupplyMindAction(action_type="do_nothing"))
@@ -53,7 +53,7 @@ def run_benchmark():
 
     if not active_signals:
         print("Could not get active disruptions — creating synthetic for benchmark")
-        from models import DisruptionSignal
+        from supplymind.contracts import DisruptionSignal
         # Create a realistic synthetic for benchmarking only (not for saving)
         active_signals = [
             DisruptionSignal(

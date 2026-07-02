@@ -48,12 +48,12 @@ ALLOW_PATTERNS = [
     'FINAL_SUBMIT/CITATIONS.bib',
     'FINAL_SUBMIT/REPRODUCE_ONE_BASH.sh',
     # Wordle env (small)
-    'versions/v5_phoenix/wordle_env/**',
+    'supplymind/phoenix/wordle_env/**',
     'versions/v5_phoenix/__init__.py',
     # Crisis library code (skip large embeddings)
-    'versions/v4_arcadia_live/realtime/*.py',
+    'supplymind/warroom/*.py',
     'versions/v4_arcadia_live/__init__.py',
-    'versions/v4_arcadia_live/scenarios/*.json',
+    'supplymind/warroom/scenarios/*.json',
     # Scripts (training scripts judges can rerun)
     'scripts/pass23_colab_local_smoke.py',
     'scripts/pass27_killshot.py',

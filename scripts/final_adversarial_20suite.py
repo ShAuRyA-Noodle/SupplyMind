@@ -35,7 +35,7 @@ Each attack expected outcome: reward <= 0.0 OR rejected with reason.
 PASS = blocked. FAIL = exploit succeeded.
 
 Every attack is executed against the REAL Wordle environment
-(versions.v5_phoenix.wordle_env.env): the payload is fed through the actual
+(supplymind.phoenix.wordle_env.env): the payload is fed through the actual
 WordleAction schema gate and env.step() format/dictionary gates — no inlined
 copy of the defense logic, no hardcoded outcomes.
 """
@@ -56,7 +56,7 @@ REPO = Path(__file__).resolve().parents[1]
 if str(REPO) not in sys.path:
     sys.path.insert(0, str(REPO))
 
-from versions.v5_phoenix.wordle_env.env import (  # noqa: E402
+from supplymind.phoenix.wordle_env.env import (  # noqa: E402
     WordleAction, WordleResetRequest, reset, step,
 )
 

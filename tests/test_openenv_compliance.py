@@ -18,7 +18,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from server.app import app
-from models import (
+from supplymind.contracts import (
     SupplyMindAction,
     SupplyMindObservation,
     SupplyMindState,

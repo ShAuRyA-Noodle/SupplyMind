@@ -24,7 +24,7 @@ _PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(_PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(_PROJECT_ROOT))
 
-from models import SupplyMindAction, SupplyMindObservation
+from supplymind.contracts import SupplyMindAction, SupplyMindObservation
 from server.supply_environment import SupplyMindEnvironment
 
 # ---------------------------------------------------------------------------

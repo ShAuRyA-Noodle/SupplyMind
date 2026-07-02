@@ -20,6 +20,6 @@ Modules:
     atlas_loader.py     Load + validate the three curated JSONs.
     ranker.py           Severity-modulated ranker over the curated sectors.
     provenance.py       Build per-field _evidence drawers.
-    live_signals.py     Aggregator over versions/v4_arcadia_live/realtime/* sources.
+    live_signals.py     Aggregator over supplymind/warroom/* sources.
     router.py           FastAPI router mounted at /demo by phoenix_app.py.
 """

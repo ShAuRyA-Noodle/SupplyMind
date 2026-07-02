@@ -27,7 +27,7 @@ _ROOT = Path(__file__).resolve().parents[1]
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from models import SupplyMindAction
+from supplymind.contracts import SupplyMindAction
 from server.supply_environment import SupplyMindEnvironment
 
 logger = logging.getLogger(__name__)
@@ -157,7 +157,7 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
     def tool_sm_query_recent_events(self, hours: int = 24, limit: int = 10) -> dict:
         """Last N hours of ingested live events (NewsAPI/GDELT/USGS/FRED/etc.)."""
         try:
-            from versions.v4_arcadia_live.realtime import store
+            from supplymind.warroom import store
             import time
             rows = store.query_recent(since_unix=time.time() - hours * 3600,
                                         limit=limit)
@@ -168,7 +168,7 @@ class SupplyMindMCP(MCPEnvironment if _OPENENV else object):  # type: ignore
     def tool_sm_query_crisis_library(self, text: str, k: int = 3) -> dict:
         """RAG against 8 hand-curated Iran/Israel/Hormuz/Red-Sea events."""
         try:
-            from versions.v4_arcadia_live.realtime.crisis_library import find_analogs
+            from supplymind.warroom.crisis_library import find_analogs
             analogs = find_analogs(text, k=k)
             return {
                 "ok": True, "n_results": len(analogs),

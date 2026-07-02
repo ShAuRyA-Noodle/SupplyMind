@@ -12,7 +12,7 @@ interface that returns:
 
 When live APIs are unavailable (no key, rate limit, network down) we fall
 back to the offline replay cache produced by
-versions/v5_phoenix/realtime_v5/freeze_cache.py. The fallback path is visibly
+supplymind/phoenix/realtime_v5/freeze_cache.py. The fallback path is visibly
 marked in the response — judges can distinguish live from replayed.
 """
 from __future__ import annotations
@@ -52,7 +52,7 @@ def fetch_news_headlines(query: str, max_results: int = 5) -> list[dict]:
         logger.info("[war_room] NEWS_API_KEY not set; skipping NewsAPI")
         return []
     try:
-        from versions.v4_arcadia_live.realtime.sources.newsapi import fetch_recent
+        from supplymind.warroom.sources.newsapi import fetch_recent
         rows = fetch_recent(query=query, page_size=max_results)
         # Normalise — v4's newsapi.fetch_recent shape varies; coerce safely.
         out = []
@@ -80,7 +80,7 @@ def fetch_brent_usd() -> tuple[float | None, dict]:
             derivation="FRED_API_KEY not set; Brent price omitted from this run."
         ).to_dict()
     try:
-        from versions.v4_arcadia_live.realtime.sources.fred_brent import fetch_latest_brent
+        from supplymind.warroom.sources.fred_brent import fetch_latest_brent
         price, meta = fetch_latest_brent()
         if price is None:
             return None, provenance.Evidence(
@@ -101,7 +101,7 @@ def fetch_brent_usd() -> tuple[float | None, dict]:
 
 def load_replay_fallback() -> list[dict]:
     """Read the offline replay cache from realtime_v5/."""
-    cache_path = ROOT / "versions/v5_phoenix" / "realtime_v5" / "replay_cache_latest.json"
+    cache_path = ROOT / "supplymind" / "phoenix" / "realtime_v5" / "replay_cache_latest.json"
     if not cache_path.exists():
         return []
     import json

@@ -65,7 +65,7 @@ def run_checks() -> list[Check]:
         "v2": "rl/lora/Modelfile.v2",
         "v3": "rl/lora/Modelfile.v3",
         "v4": "rl/lora/Modelfile.v4",
-        "v5": "versions/v4_arcadia_live/features/Modelfile.analyst_v5",
+        "v5": "supplymind/warroom/features/Modelfile.analyst_v5",
     }
     for version, path in modelfiles.items():
         checks.append(Check(f"A.1.modelfile.{version}", _exists(path), path))
@@ -83,7 +83,7 @@ def run_checks() -> list[Check]:
     checks.append(Check(
         "A.1.v5.hard_negatives_and_calibration",
         _contains(
-            "versions/v4_arcadia_live/features/Modelfile.analyst_v5",
+            "supplymind/warroom/features/Modelfile.analyst_v5",
             "CALIBRATION RULES",
             "Not every news headline is CRITICAL",
             "LOW|MEDIUM|HIGH|CRITICAL",
@@ -93,12 +93,12 @@ def run_checks() -> list[Check]:
     ))
     checks.append(Check(
         "A.2.temperature_control",
-        _param("versions/v4_arcadia_live/features/Modelfile.analyst_v5", "temperature") in {"0.15", "0.1"},
+        _param("supplymind/warroom/features/Modelfile.analyst_v5", "temperature") in {"0.15", "0.1"},
         "v5 deterministic temperature is low",
     ))
     checks.append(Check(
         "A.2.context_window",
-        int(_param("versions/v4_arcadia_live/features/Modelfile.analyst_v5", "num_ctx") or "0") >= 16384,
+        int(_param("supplymind/warroom/features/Modelfile.analyst_v5", "num_ctx") or "0") >= 16384,
         "v5 num_ctx >= 16K; v4/v3 provide 8K+ context",
     ))
     checks.append(Check(

@@ -24,11 +24,11 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from scripts.openrouter_client import OpenRouterClient  # noqa: E402
+from supplymind.llm.client import OpenRouterClient  # noqa: E402
 
 logger = logging.getLogger(__name__)
 
-LIBRARY_JSON = ROOT / "versions/v4_arcadia_live" / "scenarios" / "crisis_library_v2.json"
+LIBRARY_JSON = ROOT / "supplymind" / "warroom" / "scenarios" / "crisis_library_v2.json"
 OUT_RECEIPT = ROOT / "tests" / "receipts" / "cross_corpus_alpha.json"
 CACHE_DIR = ROOT / ".openrouter_cache" / "cross_corpus"
 

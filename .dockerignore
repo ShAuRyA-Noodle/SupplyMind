@@ -34,11 +34,12 @@ rl/data/
 wandb/
 .openrouter_cache/
 
-# ── Legacy / staging trees (promoted into supplymind/ in P0.3) ───
-# NOTE: versions/ holds the war-room / phoenix routers, which are imported
-# by server/app.py behind graceful try/except no-ops. Excluding them keeps
-# the build context small; the affected endpoints degrade to logged no-ops
-# until P0.3 promotes those live modules into the installable package.
+# ── Legacy / historical trees ────────────────────────────────────
+# P0.3 DONE: the live war-room + phoenix modules were promoted OUT of versions/
+# into the installable supplymind/ package (which is NOT excluded, so it ships
+# in the image and server/app.py imports it directly). versions/ now holds only
+# historical material (v3_arcadia, v5 docs/experiments/receipts_v2/roll_integration/
+# rap_xc/gnn_v2) — safe to exclude from the runtime image.
 versions/
 _dump/
 FINAL_SUBMIT/

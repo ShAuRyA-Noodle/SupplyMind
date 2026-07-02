@@ -7,8 +7,8 @@ Usage:
     r = Receipt(
         claim_id="V4_SPOF_V2_F1",
         claim="SPOF detector v2 mean F1 over 3 graphs equals 1.000",
-        command="python -m versions.v4_arcadia_live.features.spof_v2 --graph all --save",
-        extraction="python -c \"import json;print(json.load(open('versions/v4_arcadia_live/features/R6_SPOF_V2.json'))['summary']['v2_mean_f1'])\"",
+        command="python -m supplymind.warroom.features.spof_v2 --graph all --save",
+        extraction="python -c \"import json;print(json.load(open('supplymind/warroom/features/R6_SPOF_V2.json'))['summary']['v2_mean_f1'])\"",
         expected="1.0",
         comparator="==",
     )

@@ -31,7 +31,7 @@ from pydantic import BaseModel, Field
 import json
 from pathlib import Path
 
-from models import SupplyMindAction
+from supplymind.contracts import SupplyMindAction
 from server.supply_environment import SupplyMindEnvironment
 
 
@@ -196,7 +196,7 @@ License: MIT · Author: ShAuRyA-Noodle · Built to be audited</p>
 # v4 arcadia-live — mount the /live/* router for realtime Hormuz / Iran / Israel /
 # Red Sea demo. Graceful no-op if v4 staging dir isn't present (keeps v3 clean).
 try:
-    from versions.v4_arcadia_live.realtime.hormuz_endpoint import router as _hormuz_router
+    from supplymind.warroom.hormuz_endpoint import router as _hormuz_router
     if _hormuz_router is not None:
         app.include_router(_hormuz_router, prefix="/live", tags=["live (v4)"])
         logger.info("mounted /live router (v4 arcadia-live)")
@@ -206,7 +206,7 @@ except Exception as _e:  # noqa: BLE001
 # v8 — Hormuz War Room demo (additive, isolated). Mounts at app root so routes
 # live at /demo/hormuz-war-room and /demo/hormuz-war-room/ui. Graceful no-op.
 try:
-    from versions.v4_arcadia_live.realtime.hormuz_war_room_router import router as _war_room_router
+    from supplymind.warroom.hormuz_war_room_router import router as _war_room_router
     if _war_room_router is not None:
         app.include_router(_war_room_router, tags=["war-room (v8)"])
         logger.info("mounted Hormuz War Room router (v8)")
@@ -215,7 +215,7 @@ except Exception as _e:  # noqa: BLE001
 
 # v11 — Qwen-VL port-imagery card. Mounts /demo/port-imagery POST. Graceful no-op.
 try:
-    from versions.v4_arcadia_live.realtime.port_imagery_router import router as _port_imagery_router
+    from supplymind.warroom.port_imagery_router import router as _port_imagery_router
     if _port_imagery_router is not None:
         app.include_router(_port_imagery_router, tags=["port-imagery (v11)"])
         logger.info("mounted port-imagery router (v11)")
@@ -224,7 +224,7 @@ except Exception as _e:  # noqa: BLE001
 
 # v15 — Wordle RLVR canonical demo (Meta OpenEnv x Scaler hackathon-guide bridge).
 try:
-    from versions.v5_phoenix.wordle_env.router import router as _wordle_router
+    from supplymind.phoenix.wordle_env.router import router as _wordle_router
     if _wordle_router is not None:
         app.include_router(_wordle_router, tags=["wordle (v15)"])
         logger.info("mounted Wordle RLVR router (v15)")
@@ -271,9 +271,9 @@ def _mount_phoenix(prefix: str, module_path: str, tag: str) -> None:
         logger.info("mounted %s degraded-health stub", prefix)
 
 
-_mount_phoenix("/arena", "versions.v5_phoenix.arena.router", "arena (v5)")
-_mount_phoenix("/twin", "versions.v5_phoenix.counterfactual_twin.router", "twin (v5)")
-_mount_phoenix("/replay", "versions.v5_phoenix.realtime_v5.replay_adapter", "replay (v5)")
+_mount_phoenix("/arena", "supplymind.phoenix.arena.router", "arena (v5)")
+_mount_phoenix("/twin", "supplymind.phoenix.counterfactual_twin.router", "twin (v5)")
+_mount_phoenix("/replay", "supplymind.phoenix.realtime_v5.replay_adapter", "replay (v5)")
 
 
 # /phoenix/status — introspection endpoint
@@ -370,7 +370,7 @@ async def schema() -> dict:
 
     Required by the OpenEnv runtime validation contract.
     """
-    from models import SupplyMindObservation, SupplyMindState
+    from supplymind.contracts import SupplyMindObservation, SupplyMindState
 
     return {
         "action": SupplyMindAction.model_json_schema(),
@@ -1258,7 +1258,7 @@ async def demo_recent_disaster(req: RecentDisasterRequest) -> dict:
     1500-event EMDAT library v2, runs the 4-method Platinum counterfactual,
     and returns a structured action plan.
     """
-    from versions.v4_arcadia_live.realtime.demo_orchestrator import run_demo
+    from supplymind.warroom.demo_orchestrator import run_demo
     return run_demo(
         fan_out_timeout_s=req.fan_out_timeout_s,
         library_top_k=req.library_top_k,
@@ -1285,7 +1285,7 @@ async def library_v2_search(req: LibrarySearchRequest) -> dict:
     no hand-set tiers.
     """
     try:
-        from versions.v4_arcadia_live.scenarios.library_v2_search import search
+        from supplymind.warroom.scenarios.library_v2_search import search
         matches = search(req.query, top_k=req.top_k)
         return {
             "query": req.query, "n_matches": len(matches),
@@ -1327,7 +1327,7 @@ async def counterfactual_platinum(req: PlatinumRequest) -> dict:
     No magic constants. No 80% cap. Every assumption surfaced in `extra`.
     Paper-anchor calibration list included.
     """
-    from versions.v5_phoenix.counterfactual_v2.platinum import estimate_savings
+    from supplymind.phoenix.counterfactual_v2.platinum import estimate_savings
     return estimate_savings(
         target_event_id=req.target_event_id,
         task_id=req.task_id,
@@ -1357,7 +1357,7 @@ async def live_intel_fan_out(timeout_s: float = 45.0,
     No synthetic substitution. Each source independent — failures don't
     block successes. Per-source counts surfaced in `summary.n_events_per_source`.
     """
-    from versions.v4_arcadia_live.realtime.orchestrator_v2 import fan_out_all
+    from supplymind.warroom.orchestrator_v2 import fan_out_all
     result = fan_out_all(timeout_s=timeout_s, parallel=parallel)
     return FanOutResponse(**result)
 

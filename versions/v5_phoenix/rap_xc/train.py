@@ -122,7 +122,7 @@ def harvest_trajectories(
 
     if library_search is None:
         try:
-            from versions.v4_arcadia_live.scenarios.library_v2_search import search as library_search
+            from supplymind.warroom.scenarios.library_v2_search import search as library_search
         except ImportError:
             logger.warning("[harvest] library v2 not cooked; using zero retrieval")
             library_search = lambda q, k: []  # noqa: E731
@@ -188,7 +188,7 @@ def harvest_trajectories(
 
             # Convert dict -> SupplyMindAction pydantic object before stepping
             try:
-                from models import SupplyMindAction
+                from supplymind.contracts import SupplyMindAction
                 # Filter dict to only the fields SupplyMindAction accepts
                 valid_keys = SupplyMindAction.model_fields.keys()
                 clean = {k: v for k, v in action_dict.items() if k in valid_keys}
@@ -197,7 +197,7 @@ def harvest_trajectories(
                 action_obj = SupplyMindAction(**clean)
             except Exception as e:  # noqa: BLE001
                 logger.debug("[harvest] action build failed (%s); using do_nothing", e)
-                from models import SupplyMindAction
+                from supplymind.contracts import SupplyMindAction
                 action_obj = SupplyMindAction(action_type="do_nothing")
 
             try:

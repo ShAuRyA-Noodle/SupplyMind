@@ -16,7 +16,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from versions.v4_arcadia_live.realtime import crisis_library, hormuz_endpoint, store
+from supplymind.warroom import crisis_library, hormuz_endpoint, store
 
 
 # -------------------------------------------------------------------
@@ -152,7 +152,7 @@ def test_store_init_and_query():
 
 def _env_loaded() -> bool:
     """Ensure .env is loaded once so keys are in os.environ."""
-    from versions.v4_arcadia_live.realtime import ingestor
+    from supplymind.warroom import ingestor
     ingestor._load_dotenv_if_available()
     return bool(os.environ.get("NEWS_API_KEY") or os.environ.get("FRED_API_KEY"))
 
@@ -173,7 +173,7 @@ OFFLINE = os.environ.get("OFFLINE_MODE") == "1"
 @pytest.mark.skipif(OFFLINE or not _env_loaded(),
                     reason="live ingestion needs NEWS_API_KEY / FRED_API_KEY in .env")
 def test_live_ingestion_cycle():
-    from versions.v4_arcadia_live.realtime import ingestor
+    from supplymind.warroom import ingestor
     result = ingestor.ingest_once(lookback_minutes=1440, skip=("marinetraffic",))
     assert result["fetched"] > 0, "expected some live events"
 

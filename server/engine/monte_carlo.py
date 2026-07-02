@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from models import DisruptionSignal
+from supplymind.contracts import DisruptionSignal
 
 if TYPE_CHECKING:
     from server.engine.graph import SupplyChainGraph

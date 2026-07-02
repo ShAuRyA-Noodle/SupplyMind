@@ -24,7 +24,7 @@ def test_ollama_finetuning_stack_verifier_passes() -> None:
 
 
 def test_v5_modelfile_requires_calibrated_strict_json() -> None:
-    text = (ROOT / "versions/v4_arcadia_live/features/Modelfile.analyst_v5").read_text(
+    text = (ROOT / "supplymind/warroom/features/Modelfile.analyst_v5").read_text(
         encoding="utf-8"
     )
     assert "Not every news headline is CRITICAL" in text

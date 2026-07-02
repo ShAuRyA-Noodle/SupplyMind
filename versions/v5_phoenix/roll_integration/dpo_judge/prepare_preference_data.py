@@ -1,7 +1,7 @@
 """prepare_preference_data.py — build DPO preference pairs from crisis scenarios.
 
 Input: the v4 real-crisis library at
-    versions/v4_arcadia_live/scenarios/iran_israel_hormuz_2024_2026.json
+    supplymind/warroom/scenarios/iran_israel_hormuz_2024_2026.json
     versions/v3_arcadia/results/R4_DANGEROUS_V2.json                    # hand-labeled GT
     versions/v3_arcadia/results/R4_DANGEROUS_V2_judge_deepseek-r1.json  # weak judge (30.8% GT acc)
     versions/v3_arcadia/results/R4_DANGEROUS_V2_judge_mistral-nemo.json # strong judge (69.2%)
@@ -29,7 +29,7 @@ from typing import Any
 logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[4]
-LIVE_CRISES_PATH = ROOT / "versions/v4_arcadia_live" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
+LIVE_CRISES_PATH = ROOT / "supplymind" / "warroom" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
 R4_GT_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
 R4_DEEPSEEK_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_judge_deepseek-r1.json"
 R4_MISTRAL_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_judge_mistral-nemo.json"
