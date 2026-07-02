@@ -1,5 +1,7 @@
 # SupplyMind v2.0 — Demo Script (3-minute walkthrough)
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 ## Scene 1 — Data integration (30s)
 Open `rl/data/real_unified_v2_meta.json`. Show 180,519 transitions fused from 8 real sources.
 Read: _"We fuse DataCo Kaggle, NOAA IBTRACS storms, USGS earthquakes, FRED commodities, World Bank WGI, leading-indicator taxonomy, and DataCo access logs into a single 408-dim state vector. 88.6% of transitions are genuine multi-step trajectories built from customer order history."_

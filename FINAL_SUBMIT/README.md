@@ -1,5 +1,7 @@
 # SupplyMind — Final Submit
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Meta PyTorch × Scaler OpenEnv Hackathon Finals 2026 · Bangalore · 800 teams**
 
 A retrieval-augmented RL agent for global supply-chain risk, evaluated against 8 documented historical events with 100% risk-band accuracy and 100% Brent ±30%, on an OpenEnv-compliant environment with 20 live data sources, 13 verified foundation models, 25 frontier judges, and split-conformal action safety with 0.9001 empirical coverage.

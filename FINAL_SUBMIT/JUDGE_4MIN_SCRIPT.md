@@ -1,11 +1,13 @@
 # Judge Pitch — 4-minute script (exact words)
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Setting**: laptop open to `http://localhost:8000/master`. Side terminal ready.
 
 ---
 
 ## 0:00–0:20 — HOOK
-> "We trained an RL agent on a real-world supply-chain environment with 40 live company nodes, then validated improvement at p = 3.9 × 10⁻¹⁸ Wilcoxon. Most teams will show grid-worlds. We're showing trained models, real data, and statistical proof."
+> "We trained an RL agent on a real-world supply-chain environment with 40 live company nodes, then validated improvement at p = [STRUCK] Wilcoxon. Most teams will show grid-worlds. We're showing trained models, real data, and statistical proof."
 
 *(Click → master dashboard loads, Wilcoxon panel visible.)*
 

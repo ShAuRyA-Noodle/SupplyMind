@@ -1,5 +1,7 @@
 # Model Card — SupplyMind RL Agents
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 ## Overview
 - **Project**: SupplyMind (OpenEnv India 2026 Hackathon Theme #3 Professional Tasks)
 - **Latest commit**: `dcb3e19` (pass 19) + pass 20 grand-final
@@ -29,7 +31,7 @@
 
 ## Headline metrics (RAP-XC)
 - Hard task mean reward: **+2.83** (CI95 [+2.68, +2.96])
-- Wilcoxon vs MaskablePPO-v3: **p = 3.9 × 10⁻¹⁸**, Cohen's d **+2.73**
+- Wilcoxon vs MaskablePPO-v3: **p = [STRUCK]**, Cohen's d **+2.73**
 - BC loss reduction: **96%** (5.624 → 0.233 in 17.77s on RTX 4080 bf16)
 
 ## Limitations

@@ -1,5 +1,9 @@
 # SupplyMind — Comparison to Public Benchmarks
 
+<!-- TODO(P2.2): fabrication cleanup. Corrections 2026-07-02: the "α=0.750" headline is a 2-judge
+     sub-panel (raw 3-judge α=0.210 — both now stated); Snowflake and BGE-reranker rows are
+     UNVERIFIED because those model dirs are absent on disk (audit_7). -->
+
 SupplyMind's v3.0-arcadia results evaluated against the best-known public benchmark in each discipline. We report **honest positioning**: where we match, where we lead on our domain, and where broader benchmarks would be needed for definitive claims.
 
 ---
@@ -65,7 +69,7 @@ SupplyMind's v3.0-arcadia results evaluated against the best-known public benchm
 | Pipeline ablation | Single pipeline | 8 pipelines side-by-side |
 | Reranker regime analysis | Absent | **Easy vs Hard Pareto** published |
 
-**Our headline**: mxbai-embed-large bi-encoder P@1 = **0.962**, MRR = 0.978 on precise queries; reranker earns **+5pp P@1 on hard queries** where bi-encoder drops to 0.70.
+**Our headline**: mxbai-embed-large bi-encoder P@1 = **0.962**, MRR = 0.978 on precise queries. *(The "reranker earns +5pp P@1 on hard queries" claim is [UNVERIFIED] — `models/bge-reranker-v2-m3` does not exist on disk, so the reranker path is a dead fallback today; audit_7.)*
 
 **Positioning**: We use **the same public-SOTA embedders** (mxbai + BGE-M3 + Snowflake + BGE-reranker) and report **more granular** per-query-type metrics than a standard MTEB submission. Our novel contribution: the **precise-vs-hard regime split** that shows *when* rerankers help (not just average lift).
 
@@ -77,9 +81,11 @@ SupplyMind's v3.0-arcadia results evaluated against the best-known public benchm
 |---|---|---|---|
 | mxbai-embed-large-v1 | 0.960 | 1.000 | 0.386 |
 | bge-m3 | 0.968 | 1.000 | 0.357 |
-| **snowflake-arctic-l** | **0.971** | 1.000 | 0.348 |
+| ~~snowflake-arctic-l~~ | ~~0.971~~ **[UNVERIFIED]** | — | 0.348 |
 
-All 3 substantially exceed their public NFCorpus numbers on this in-domain task — confirms the embedders are not overfitting to medical benchmarks.
+mxbai and BGE-M3 exceed their public NFCorpus numbers on this in-domain task. **The Snowflake row
+is [UNVERIFIED]** — `models/snowflake-arctic-embed-l` does not exist on disk (audit_7), so this
+result is not currently reproducible.
 
 ---
 
@@ -165,9 +171,9 @@ All 3 substantially exceed their public NFCorpus numbers on this in-domain task 
 | Calibration | ❌ | ✅ ECE per judge |
 | Parse success | Not reported | **100%** via 2-pass DeepSeek extraction |
 
-**Our headlines**:
-- 2-judge panel (Qwen+Mistral) **α = 0.750** (strong agreement)
-- Cohen weighted κ(Qwen, Mistral) = 0.747 (matches best observed in MT-Bench)
+**Our headlines** *(corrected — state the full ladder, not the cherry-picked sub-panel)*:
+- **Raw 3-judge panel α = 0.210** (weak); 2-judge (Qwen+Mistral) sub-panel α = 0.750. Reporting only the 0.750 was cherry-picking — both are now shown.
+- Cohen weighted κ(Qwen, Mistral) = 0.747
 - Majority-vote accuracy 69.2% vs ground truth
 - Panel Pareto: 3-judge = best accuracy (diverges DeepSeek catches some); 2-judge = best consensus; rubric = fast baseline
 

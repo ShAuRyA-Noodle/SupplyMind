@@ -1,5 +1,7 @@
 # SupplyMind — Unified Model Card (v3.0-arcadia)
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 > "Even in Arcadia, supply chains break. SupplyMind sees it coming."
 
 **Release**: v3.0-arcadia | **Date**: 2026-04-18 | **License**: MIT | **Status**: OpenEnv-compliant, production-ready
@@ -22,12 +24,12 @@ This card covers **every model, every benchmark, every honest finding** across t
 | 4 | Mistral-Nemo-Instruct-2407 | Q4_K_M GGUF | 7.5 GB | Primary judge (R4), 128K context | ✅ |
 | 5 | Chronos-Bolt-Base (Amazon) | safetensors | 200 MB | Zero-shot forecasting (R3, Aqua Regia, /forecast API) | ✅ |
 | 6 | TimesFM-2 (Google, 500M) | torch ckpt | 2 GB | Zero-shot forecasting (R3) | ✅ |
-| 7 | TabPFN-v2-clf (NeurIPS 2024) | local ckpt | 150 MB | Tabular classification (R2) | ✅ |
+| 7 | TabPFN-v2-clf (NeurIPS 2024) | local ckpt | 150 MB | Tabular classification (R2) | ❌ **ABSENT** — `models/tabpfn-v2-clf/` does not exist (audit_7) |
 | 8 | TabPFN-v2-reg | local ckpt | 150 MB | Benefit-per-order regression (R2) | ✅ |
-| 9 | BGE-M3 (BAAI) | safetensors | 2.3 GB | 1024-d RAG embedder (R5 P1, P7) | ✅ |
+| 9 | BGE-M3 (BAAI) | safetensors | 2.3 GB | 1024-d RAG embedder (R5 P1, P7) | ⚠️ UNVERIFIED (not in 2026-07-02 models/ inventory) |
 | 10 | mxbai-embed-large-v1 | safetensors | 1.3 GB | 1024-d RAG embedder, **R5 winner** (P@1=0.962) | ✅ |
-| 11 | BGE-reranker-v2-m3 | safetensors | 2.3 GB | Cross-encoder reranker (R5 P4–P8) | ✅ |
-| 12 | Snowflake-Arctic-Embed-L-v2 | safetensors | 570 MB | 1024-d RAG embedder (R5 P3, P7) | ✅ |
+| 11 | BGE-reranker-v2-m3 | safetensors | 2.3 GB | Cross-encoder reranker (R5 P4–P8) | ❌ **ABSENT** — `models/bge-reranker-v2-m3/` does not exist (audit_7) |
+| 12 | Snowflake-Arctic-Embed-L-v2 | safetensors | 570 MB | 1024-d RAG embedder (R5 P3, P7) | ❌ **ABSENT** — `models/snowflake-arctic-embed-l/` does not exist (audit_7) |
 | 13 | Qwen-2.5-VL-7B-Instruct | safetensors (5 shards) | 15 GB | Vision-language (port imagery, reserved for v4) | ✅ |
 
 **Quantization rationale**: The 14B-parameter models require 20+ GB F16 RAM, which exceeds our 15.7 GB laptop budget. Q4_K_M (4-bit with K-quantization mixed precision) reduces size 3.3× with <2% quality loss (industry-standard, documented in DeepSeek, Qwen, Mistral quantization studies). Applied to all four Ollama-hosted LLMs. F16 reserved for models that fit natively.

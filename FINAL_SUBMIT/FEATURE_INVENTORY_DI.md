@@ -1,5 +1,7 @@
 # SupplyMind Feature Inventory · Sections D-I
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). Each row links to a file or a JSON receipt that proves the claim.
 
 **Note:** receipts named `R*_*.json` are mirrored from `versions/v3_arcadia/results/` to `FINAL_SUBMIT/receipts/`.
@@ -42,7 +44,7 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 | 23 | allow_tf32=True | ✅ | `rl/train_ppo.py:40`, `rl/uncertainty.py`, `rl/gnn/tgn.py` |
 | 24 | 5 seeds × 20 episodes evaluation | ✅ | `rl/leaderboard.py`, `rl/real_world_benchmark.py` |
 | 25 | Bootstrap CI95 per agent | ✅ | `tests/receipts/bootstrap_leaderboard.json` (pass-10) |
-| 26 | Wilcoxon p<1e-50 pairwise | 🆕 | `tests/receipts/wilcoxon_pairwise_leaderboard.json` (pass-12); RAP-XC vs MaskablePPO p=3.9e-18, MaskablePPO vs scripted p=6.77e-149 (well below 1e-50) |
+| 26 | Wilcoxon p<1e-50 pairwise | 🆕 | `tests/receipts/wilcoxon_pairwise_leaderboard.json` (pass-12); RAP-XC vs MaskablePPO p=[STRUCK], MaskablePPO vs scripted p=6.77e-149 (well below 1e-50) |
 
 ### D.3 · Specialist Router · 6 bullets
 
@@ -254,7 +256,7 @@ Bullet-by-bullet status across the 4 sections D, E, F, G, H, I (~140 bullets). E
 | # | Artifact | Path |
 |---|---|---|
 | 1 | Wilcoxon pairwise leaderboard | `scripts/wilcoxon_pairwise_leaderboard.py` + `tests/receipts/wilcoxon_pairwise_leaderboard.json` |
-| 2 | RAP-XC vs MaskablePPO Wilcoxon p=3.9e-18 (Cohen d=+2.728) — all 3 tasks | receipt JSON |
+| 2 | RAP-XC vs MaskablePPO Wilcoxon p=[STRUCK] (Cohen d=+2.728) — all 3 tasks | receipt JSON |
 | 3 | Most significant pair: MaskablePPO vs scripted_baseline p=6.77e-149 (well below user's 1e-50 claim) | same |
 | 4 | 16 v3_arcadia receipts mirrored to `FINAL_SUBMIT/receipts/` | dir |
 | 5 | Cross-verified: ECE=0.0229 ✅, ONNX 4 errors ✅, Optuna value=0.376 ✅, 50/50 explainer ✅, P@1=0.962 mxbai win ✅, P@3 0.925→0.862 reranker hurt ✅, GNN MAE +48/+49/+64% ✅ | individual receipts |

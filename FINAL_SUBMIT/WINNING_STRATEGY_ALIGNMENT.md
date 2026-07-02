@@ -1,5 +1,7 @@
 # WINNING STRATEGY ALIGNMENT — every line of host tip mapped to our build
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Host winning tip (literal)**:
 
 > *"If you use small models and iterate on training runs, you have a way higher chance of winning than struggling to get a huge model into memory with a 1 or a few successful runs. Focus on the quality of your envs, reward signals, use qlora, budget your available compute."*
@@ -103,7 +105,7 @@ Line-level credit assignment with **2735× variance amplification** over uniform
 - 19 reward-hack attacks (Skalse 2022 + Krakovna 2020 + Pan 2022 patterns)
 - 210 MCP fuzz attacks (6 tools × 10 categories × 35 inputs)
 - 40 prompt-injection attacks (jndi / format-string / null-byte / unicode-bidi)
-- **269 / 269 = 100% blocked, 0 uncaught exceptions**
+- **[STRUCK] = 100% blocked, 0 uncaught exceptions**
 
 Reward signal richness rivals or exceeds typical published RL benchmarks.
 
@@ -184,7 +186,7 @@ We satisfy RLVE with adaptive curriculum controller:
 | Small models | ✅ | Qwen2.5-0.5B default + bigger as options |
 | Iterate training runs | ✅ | 28 passes + 5-run sweep + 3 REINFORCE versions + 4 curriculum tiers + 9 algos = **53 iterations documented** |
 | Env quality | ✅ | 280 actions × 64-dim × 9 APIs × 1500 RAG events |
-| Reward signal quality | ✅ | 4 independent verifiers + 269/269 attacks blocked + Lightman 2023 process supervision |
+| Reward signal quality | ✅ | 4 independent verifiers + [STRUCK] attacks blocked + Lightman 2023 process supervision |
 | QLoRA | ✅ | Unsloth 4-bit + LoRA r=16 (with rank ablation) + safe merged_16bit |
 | Budget compute | ✅ | $0 free Colab T4 default 30 min |
 | Multiple verifiers | ✅ bonus | 4 independent verifier streams |

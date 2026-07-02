@@ -1,5 +1,7 @@
 # NotebookLM Upload Context — SupplyMind 0-to-100
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Purpose**: paste this entire file into NotebookLM as a source document. Then use the video prompt at the bottom to generate a sub-2-minute audio/video overview. Comprehensive, technically accurate, narratively engaging.
 
 ---
@@ -110,7 +112,7 @@ Beyond the headline REINFORCE training, we benchmarked nine reinforcement-learni
 
 Wilcoxon signed-rank pairwise testing across all 16 algorithm-task pairs found **13 significant at p less than 1 × 10⁻¹⁰**. The most extreme is MaskablePPO versus the scripted baseline on the medium task at **p equals 6.77 × 10⁻¹⁴⁹**, which is so small that the Wilcoxon test is essentially saturating its numerical floor.
 
-The headline pair is RAP-XC versus MaskablePPO version 3 on the hard cascading-crisis task. Wilcoxon p-value: **3.9 × 10⁻¹⁸**. Cohen's d: **plus 2.73**. Bootstrap 95-percent confidence interval on the mean reward difference: **plus 0.198 to plus 0.257**, which strictly excludes zero.
+The headline pair is RAP-XC versus MaskablePPO version 3 on the hard cascading-crisis task. Wilcoxon p-value: **[STRUCK]**. Cohen's d: **plus 2.73**. Bootstrap 95-percent confidence interval on the mean reward difference: **plus 0.198 to plus 0.257**, which strictly excludes zero.
 
 For the autoresearch experiment grid, the best architecture was `s3_curriculum_learning` — MaskablePPO with 128-by-128 hidden layers and easy-to-medium-to-hard curriculum split 40-30-30. Mean reward 0.646, standard deviation 0.1634, 95-percent confidence interval [0.5515, 0.7614]. Delta versus prior best: plus 0.0967 — accepted.
 

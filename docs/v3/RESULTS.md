@@ -1,6 +1,15 @@
 # SupplyMind v3.0-arcadia — Results (one page)
 
-> Every number here is reproducible from the committed JSON in `versions/v3_arcadia/results/` with one `jq` or `python` command. No synthetic substitution anywhere in the pipeline.
+<!-- TODO(P1.3/P2.2): under fabrication cleanup. The v3 RAG / GNN / masking / conformal numbers
+     here trace to real committed JSON in versions/v3_arcadia/results/. Two corrections applied
+     2026-07-02: (a) the "α=0.750" headline is a cherry-picked 2-judge sub-panel — the raw
+     3-judge α is 0.210, now stated alongside; (b) the Snowflake row is not currently reproducible
+     because models/snowflake-arctic-embed-l does not exist on disk (audit_7). -->
+
+> Numbers here trace to committed JSON in `versions/v3_arcadia/results/`. **Correction (2026-07-02):**
+> the agreement headline previously showed only the flattering 2-judge α; the full ladder is now
+> shown (raw 3-judge α = 0.210, 2-judge sub-panel α = 0.750). Rows dependent on absent model dirs
+> (Snowflake) are flagged UNVERIFIED.
 
 ---
 
@@ -8,10 +17,10 @@
 
 | # | Metric | Value | Evidence |
 |---|---|---|---|
-| 1 | **RAG nDCG@10** (26 real Wiki crisis × 20 SC queries, out-of-domain) | **0.971** (Snowflake) / 0.968 (BGE-M3) / 0.960 (mxbai) | `R5_BEIR_MANUAL.json` |
+| 1 | **RAG nDCG@10** (26 real Wiki crisis × 20 SC queries, out-of-domain) | 0.968 (BGE-M3) / 0.960 (mxbai); ~~0.971 (Snowflake)~~ **[UNVERIFIED — snowflake model dir absent]** | `R5_BEIR_MANUAL.json` |
 | 2 | **RAG P@1 on precise queries** (6,483-chunk real corpus) | **0.962** (mxbai bi-encoder) | `R5_GRANITE.json` |
 | 3 | **RAG MRR on precise queries** | **0.978** | `R5_GRANITE.json` |
-| 4 | **LLM 2-judge Krippendorff α (ordinal)** on 26 crisis scenarios | **0.750** | `R4_DANGEROUS_V2_ABLATION.json` |
+| 4 | **LLM Krippendorff α (ordinal)** on 26 crisis scenarios | **raw 3-judge = 0.210** · 2-judge (Qwen×Mistral) sub-panel = 0.750 *(state both — the 2-judge number alone is cherry-picked)* | `R4_DANGEROUS_V2_ABLATION.json` |
 | 5 | **Cohen weighted κ (Qwen-14B × Mistral-Nemo)** | **0.747** | `R4_DANGEROUS_V2_ABLATION.json` |
 | 6 | **Per-horizon split-conformal deviation** from 95% nominal (WTI oil) | **0.024** (pooled: 0.112 → 4.7× tighter) | `R6_AQUA_REGIA_V2.json` |
 | 7 | **MaskablePPO lift vs plain PPO** (isolated, 100k steps, 50 eval eps) | **+26.8%** easy / **+15.1%** hard, invalid 13.6 → **0 structurally** | `R6_GETHSEMANE_MASKING_ABLATION_ALLTASKS.json` |
@@ -24,7 +33,7 @@
 
 ## One-line infrastructure summary
 
-- **13 foundation models** locally (mxbai / BGE-M3 / Snowflake / BGE-reranker / Chronos-Bolt / TimesFM-2 / TabPFN-v2 clf+reg / Qwen-2.5-14B / Qwen-Coder-14B / Qwen-VL-7B / DeepSeek-R1-7B / Mistral-Nemo)
+- **Foundation models** (NOTE: 3 of the "13" are ABSENT on disk — `snowflake-arctic-embed-l`, `bge-reranker-v2-m3`, `tabpfn-v2-clf` — audit_7): mxbai / BGE-M3 / Chronos-Bolt / TimesFM-2 / TabPFN-v2-reg present; Qwen/DeepSeek/Mistral LLMs are Ollama/GGUF-hosted, not `models/` dirs
 - **261,175 real data points** across 8 sources (DataCo 180,519 / NOAA IBTRACS 243,495 / FRED 17,679 × 12 / USGS live / WB WGI 214×6×24 / SEC 10-K / Wikipedia / WB Macro)
 - **173 tests passing** in 2m14s (19 formal OpenEnv-compliance)
 - **9 RL algorithms** implemented (MaskablePPO / PPO / BC / CQL / IQL / TD3+BC / QR-DQN / Decision Transformer / FedAvg) + custom 3-layer GCN in pure PyTorch
@@ -45,8 +54,9 @@ jq '.our_results."snowflake-arctic-l"."mean_ndcg@10"' versions/v3_arcadia/result
 # 2. P@1 = 0.962
 jq '.pipelines.P2_mxbai_bi.p1' versions/v3_arcadia/results/R5_GRANITE.json
 
-# 3. Krippendorff α = 0.750
+# 3. Krippendorff α — report BOTH the raw 3-judge (0.210) and the 2-judge sub-panel (0.750)
 jq '.agreement_primary_panel.krippendorff_alpha_ordinal' versions/v3_arcadia/results/R4_DANGEROUS_V2_ABLATION.json
+# (the 2-judge sub-panel value alone is cherry-picked — always cite the 3-judge 0.210 with it)
 
 # 4. Per-horizon conformal dev = 0.024
 jq '.results.DCOILWTICO."conf_0.95".per_horizon.ARIMA.dev_from_nominal' versions/v3_arcadia/results/R6_AQUA_REGIA_V2.json
@@ -85,7 +95,7 @@ Every block ships committed artifacts (JSON + plot + checkpoint + test).
 2. **Breadth + depth in a single repo.** 13 foundation models, 9 RL algorithms, custom GCN, conformal intervals, LLM judging, tabular SOTA — all with publishable benchmarks.
 3. **Real data only.** 261,175 points from 8 public authoritative sources. Every claim traceable to its primary record.
 4. **Every number defensible.** Drop the committed JSON into any reviewer's machine, re-run the 3-line verify — same answer every time.
-5. **Published reproducibility challenge.** `challenges/R4_RUBRIC_CHALLENGE.md` invites anyone to beat the 2-judge α = 0.750.
+5. **Published reproducibility challenge.** `challenges/R4_RUBRIC_CHALLENGE.md` invites anyone to beat the 2-judge sub-panel α = 0.750 (raw 3-judge α = 0.210).
 
 ---
 

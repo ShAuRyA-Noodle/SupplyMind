@@ -1,11 +1,16 @@
 #!/usr/bin/env bash
-# REPRODUCE_ONE_BASH.sh — regenerate every receipt in one shot.
+# REPRODUCE_ONE_BASH.sh — regenerate receipts in one shot.
 #
 # Usage:   bash FINAL_SUBMIT/REPRODUCE_ONE_BASH.sh
 # Time:    ~3-5 minutes on CPU (no GPU required)
 # Output:  tests/receipts/*.json + FINAL_SUBMIT/receipts/*.json
 #
-# Per OpenEnv hackathon §"Reproducibility": one command, all receipts.
+# TODO(P1.4/P2.2): under cleanup. Some steps below invoke scripts the audit flagged:
+#   - final_real_reinforce_wordle.py (v1) was DELETED; use *_v2.py.
+#   - final_adversarial_20suite.py re-implements the gates inline (PASS guaranteed by
+#     construction) — its "blocked" counts are UNVERIFIED until rewritten to hit the real env.
+#   - final_validation_bundle.py contains fabricated cross-env / ablation blocks.
+# The canonical verifier is `python scripts/run_all.py`. See FINAL_SUBMIT/CLAIMS_LEDGER.md.
 
 set -e
 cd "$(dirname "$0")/.."
@@ -25,15 +30,16 @@ echo "[3/8] OpenEnv MCP compliance ..."
 python server/openenv_mcp_wrapper.py
 
 echo
-echo "[4/8] REAL REINFORCE training (190% improvement) ..."
-python scripts/final_real_reinforce_wordle.py --episodes 1600 --batch 16
+echo "[4/8] REAL REINFORCE training (v2; improvement figure being re-verified) ..."
+python scripts/final_real_reinforce_wordle_v2.py --episodes 1600 --batch 16
 
 echo
-echo "[5/8] 20-attack adversarial reward-hack gauntlet ..."
+echo "[5/8] 20-attack adversarial reward-hack gauntlet (UNVERIFIED: inline gates, being rewritten) ..."
 python scripts/final_adversarial_20suite.py
 
 echo
 echo "[6/8] Cross-env transfer + process supervision + ablations + API keys ..."
+echo "      (UNVERIFIED: this bundle contains fabricated cross-env/ablation blocks — audit_5)"
 python scripts/final_validation_bundle.py
 
 echo

@@ -1,5 +1,7 @@
 # SupplyMind — Master Audit & Upgrade Plan
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Purpose**: This document cross-references **every point** from your audit directive → specific planned action. Nothing skipped, nothing missed, all explicit.
 
 **Principle**: Every item must become **world-class, real-world-aligned, real-user-authenticated, zero-synthetic**. Negative findings must be **improved** (not just reframed). Everything below A+ gets promoted to S/A+ or the feature is completed.

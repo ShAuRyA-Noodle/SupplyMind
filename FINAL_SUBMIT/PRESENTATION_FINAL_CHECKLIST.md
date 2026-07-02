@@ -1,5 +1,7 @@
 # PRESENTATION FINAL CHECKLIST — every minimum requirement verified
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 Cross-reference against the brutal hackathon doc Part 5 (Minimum Submission Requirements) + Final Checklist. Every line below has an on-disk anchor.
 
 ---
@@ -87,7 +89,7 @@ Score estimate: **26/30** (recorded video is the only gap).
 Anchors:
 - `wordle_real_reinforce_v2_curve.json` — REINFORCE v2 95.5–97% solve, Cohen d 5.13
 - `pass23_colab_local_smoke.json` — Colab notebook proof: 10% → 100% solve, Wilcoxon p=1.87e-34
-- `bootstrap_leaderboard.json` — RAP-XC vs MaskablePPO Wilcoxon p=3.9e-18
+- `bootstrap_leaderboard.json` — RAP-XC vs MaskablePPO Wilcoxon p=[STRUCK]
 - `v2_inferential_stats.json` — bootstrap CI95 [2.66, 3.96] on Cohen's d
 - `statistical_power_analysis.json` — minimum detectable d=0.28 at n=200, observed 18× larger
 - `plots/colab_reproduction.png` — same-axes baseline vs trained per Part 16 plot rules

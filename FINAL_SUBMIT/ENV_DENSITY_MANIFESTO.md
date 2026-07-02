@@ -1,5 +1,7 @@
 # SUPPLYMIND ENVIRONMENT DENSITY MANIFESTO
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 This document audits **every observation feature, every action, every reward component** that the SupplyMind OpenEnv environment exposes. Goal: prove this is the densest hackathon submission, not by claim but by enumeration.
 
 **Comparison baseline**: typical hackathon entries use Wordle (1 word target, 6 guesses, 1 reward), Sokoban (grid + box positions), or grid-world (4 actions, 1 reward). SupplyMind has **20+ live data sources, 280 actions, 7-component reward, 64-dim engineered state, 1500-token natural-language summary, 4 anti-hack defense layers, 3 difficulty tiers, dual rule-and-LLM verifier**.

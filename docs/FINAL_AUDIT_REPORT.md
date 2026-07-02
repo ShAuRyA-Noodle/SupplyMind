@@ -1,5 +1,7 @@
 # FINAL AUDIT REPORT — SupplyMind v5.0-phoenix
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 *Generated 2026-04-24 covering passes 1-5 against 3 independent judge-criterion documents (OpenEnv hackathon self-serve guide, 58-row FAQ, 90-row third-party audit).*
 
 This report answers one question for every finalist judge: **"is this claim true and where's the evidence?"** Every row below is diff-able against a commit hash or a committed JSON receipt.

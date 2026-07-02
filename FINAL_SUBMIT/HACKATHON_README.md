@@ -1,5 +1,7 @@
 # SupplyMind · OpenEnv India 2026 Hackathon submission
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Theme 3 · Professional Tasks** · real APIs · partially observable · persistent world model
 
 > *"Even in Arcadia, disruptions happen."*  
@@ -73,7 +75,7 @@ Honest baseline = **0.86**, strictly > every attack. Receipt: [`adversarial_rewa
 
 ![Before/after](plots/before_after.png)
 
-> **RAP-XC beats MaskablePPO-v3 on hard_cascading_crisis · Wilcoxon p=3.9e-18, Cohen d=+2.73.** Bootstrap CI95 [+0.198, +0.257] strictly excludes zero.
+> **RAP-XC beats MaskablePPO-v3 on hard_cascading_crisis · Wilcoxon p=[STRUCK], Cohen d=+2.73.** Bootstrap CI95 [+0.198, +0.257] strictly excludes zero.
 
 ### 3.4 9-agent leaderboard across 3 difficulty tiers
 
@@ -181,7 +183,7 @@ Reproduces in ~3 min via `python scripts/final_real_reinforce_wordle_v2.py --epi
 > | masked_random_info_aware | 100% | +0.773 |
 > | REINFORCE_trained_argmax | **100%** | **+0.762** |
 >
-> - Wilcoxon paired one-sided greater p = **2.71 × 10⁻¹⁸**
+> - Wilcoxon paired one-sided greater p = **[STRUCK]**
 > - Cohen's d REINFORCE vs random = **+4.28** (very large)
 > - Bootstrap CI95 paired diff [+0.812, +0.928], strictly excludes zero
 > - Honest finding: action masking is dominant signal on small pool — REINFORCE marginal lift shows up in median guess count (3 vs 4)
@@ -251,7 +253,7 @@ python scripts/calibrate_conformal_from_harvest.py    # 0.9001 coverage receipt
 python scripts/validate_war_room.py                    # 100/100/100/100/100% backtest
 python scripts/validate_ensemble_brent.py              # 8/8 within ±30%
 python scripts/bootstrap_leaderboard.py                # 9-agent CI95
-python scripts/wilcoxon_pairwise_leaderboard.py        # p=3.9e-18
+python scripts/wilcoxon_pairwise_leaderboard.py        # p=[STRUCK]
 python scripts/generate_hackathon_plots.py             # all 7 plots
 ```
 
@@ -337,7 +339,7 @@ Every claim above maps to a sha256-anchored receipt:
 
 | Claim | Receipt |
 |---|---|
-| RAP-XC vs MaskablePPO p=3.9e-18 | `wilcoxon_pairwise_leaderboard.json` |
+| RAP-XC vs MaskablePPO p=[STRUCK] | `wilcoxon_pairwise_leaderboard.json` |
 | Bootstrap CI95 leaderboard | `bootstrap_leaderboard.json` |
 | Conformal 0.9001 coverage | `conformal_calibration.json` |
 | Cross-corpus α 0.5436 | `cross_corpus_alpha.json` |
@@ -393,7 +395,7 @@ Every claim above maps to a sha256-anchored receipt:
 
 ## 10 · One-line pitch
 
-> **SupplyMind: a retrieval-augmented RL agent that conditions on a 1500-event EMDAT corpus via FAISS cross-attention, with 25-judge ensemble distilled into action-logit priors, against a 4-method causal counterfactual ensemble (paired-bootstrap MC + synthetic control + ARIMA-BSTS + SCM do-calculus) calibrated to 6 published economic-impact anchors, on an OpenEnv-compliant supply-chain RL environment with 20 real-data live sources, evaluated against 9 RL/IL baselines with paired-bootstrap CI95 + Wilcoxon p=3.9e-18, with hierarchical-intent + split-conformal action selection (0.9001 empirical coverage), heterogeneous-temporal GAT cascade prediction (+12.15% MAE vs GCN baseline), Chronos-Bolt + TimesFM-2 + TabPFN-v2 ensemble forecaster (3.32% median Brent backtest error on 8 documented events), all running locally on a 12 GB GPU with zero synthetic substitution.**
+> **SupplyMind: a retrieval-augmented RL agent that conditions on a 1500-event EMDAT corpus via FAISS cross-attention, with 25-judge ensemble distilled into action-logit priors, against a 4-method causal counterfactual ensemble (paired-bootstrap MC + synthetic control + ARIMA-BSTS + SCM do-calculus) calibrated to 6 published economic-impact anchors, on an OpenEnv-compliant supply-chain RL environment with 20 real-data live sources, evaluated against 9 RL/IL baselines with paired-bootstrap CI95 + Wilcoxon p=[STRUCK], with hierarchical-intent + split-conformal action selection (0.9001 empirical coverage), heterogeneous-temporal GAT cascade prediction (+12.15% MAE vs GCN baseline), Chronos-Bolt + TimesFM-2 + TabPFN-v2 ensemble forecaster (3.32% median Brent backtest error on 8 documented events), all running locally on a 12 GB GPU with zero synthetic substitution.**
 
 ---
 

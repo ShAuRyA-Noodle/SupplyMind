@@ -1,8 +1,16 @@
 # SupplyMind Feature Inventory
 
-Verification: every bullet point in the project plan mapped to file:line.
+<!-- TODO(P2.2): This inventory is under fabrication cleanup (2026-07-02 audit). Several
+     rows below were machine-checked FALSE against on-disk state and have been corrected to
+     ABSENT / UNVERIFIED. A `scripts/verify_claims.py` gate (P2.2) will re-derive every
+     PRESENT status from disk before this file is trusted again. See FINAL_SUBMIT/CLAIMS_LEDGER.md. -->
 
-**Stats:** 116 PRESENT (was 113) · 3 PARTIAL (was 6) · 1 MISSING
+Verification: every bullet point in the project plan mapped to file:line. Statuses corrected
+where the audit found the referenced file/model absent.
+
+**Stats (post-audit correction):** counts below are NOT re-tallied yet — do not cite the
+aggregate until `verify_claims.py` runs. At least 3 rows previously marked PRESENT are ABSENT
+(tabpfn-v2-clf, snowflake-arctic-embed-l, bge-reranker-v2-m3 — model dirs do not exist).
 
 ## Recently moved PARTIAL → PRESENT (pass 10)
 
@@ -12,8 +20,13 @@ Verification: every bullet point in the project plan mapped to file:line.
 | TimesFM-2 | PARTIAL (verify only) | `versions/v5_phoenix/forecast_v2/ensemble_brent.py:74-99` |
 | TabPFN-v2 regressor | PARTIAL (verify only) | `versions/v5_phoenix/forecast_v2/ensemble_brent.py:101-145` |
 
-Closed Brent backtest gap from 6/8 to **8/8 within ±30%** (median rel err 3.3%).
-See `tests/receipts/ensemble_brent_validation.json`.
+<!-- UNVERIFIED — being re-run. The "8/8 within ±30% (median rel err 3.3%)" number comes from
+     scripts/validate_ensemble_brent.py, which the audit found backtests on a SYNTHETIC
+     sinusoid+AR(1) price history (not real FRED Brent), so the accuracy figure is not a real
+     out-of-sample result. P1 must re-run on real FRED DCOILBRENTEU slices. See CLAIMS_LEDGER. -->
+Ensemble Brent backtest accuracy: **[UNVERIFIED — being re-run]** — the committed
+`ensemble_brent_validation.json` was generated against a synthetic price series, not real FRED
+data (audit_5). Do not cite "8/8" until re-run on real Brent.
 
 ---
 
@@ -51,6 +64,12 @@ See `tests/receipts/ensemble_brent_validation.json`.
 | `checkpoints/lora/` | PRESENT | `rl/checkpoints/lora/` | runtime artifacts |
 
 ## A.4 DPO Fine-Tuning (Phoenix v5)
+
+> **[CORRECTED]** The files below exist, but **no DPO-fine-tuned judge was ever produced**:
+> every DPO training run crashed (`AttributeError: module 'torch' has no attribute
+> 'float8_e8m0fnu'`) or trained with `None` gradients (audit_8; `experiments/dpo_judge_v1/train_gpu.log`).
+> "PRESENT" below means the *script/config file* is present — NOT that a trained model exists.
+> Any claim of a "DPO-fine-tuned Qwen-2.5-3B judge" is struck until training is redone (P1.4).
 
 | Bullet | Status | Path(s) | Note |
 |---|---|---|---|
@@ -94,12 +113,12 @@ See `tests/receipts/ensemble_brent_validation.json`.
 | Mistral-Nemo-2407 | PRESENT | `models/mistral-nemo/` | YES (3-judge panel, 128K ctx) |
 | Chronos-Bolt-base | **NEW** | `models/chronos-bolt-base/` | **YES (forecast_v2 ensemble)** |
 | TimesFM-2 | **NEW** | `models/timesfm-2/` | **YES (forecast_v2 ensemble)** |
-| TabPFN-v2-clf | PRESENT | `models/tabpfn-v2-clf/` | partial (verified) |
-| TabPFN-v2-reg | **NEW** | `models/tabpfn-v2-reg/` | **YES (forecast_v2 ensemble, severity-conditioned delta)** |
-| BGE-M3 | PRESENT | `models/bge-m3/` | YES (RAG fallback, safetensors-converted) |
-| mxbai-embed-large | PRESENT | `models/mxbai-embed-large/` | YES (crisis library v2 primary, P@1=0.962) |
-| BGE-reranker-v2-m3 | PARTIAL | `models/bge-reranker-v2-m3/` | not wired into war-room (next pass) |
-| Snowflake-Arctic-Embed-L | PARTIAL | `models/snowflake-arctic-embed-l/` | not wired (next pass) |
+| TabPFN-v2-clf | **ABSENT / REMOVED** | `models/tabpfn-v2-clf/` — **directory does not exist on disk** | `tabpfn_risk_judge.py` always returns `{ok:false, error:'tabpfn_unavailable'}`; "7th judge" never runs (audit_7) |
+| TabPFN-v2-reg | PRESENT | `models/tabpfn-v2-reg/` | YES (forecast_v2 ensemble); NOTE: ensemble backtest itself is UNVERIFIED (see A.1) |
+| BGE-M3 | UNVERIFIED | `models/bge-m3/` | not confirmed present in the 2026-07-02 models/ inventory — verify_claims.py to check |
+| mxbai-embed-large | PRESENT | `models/mxbai-embed-large/` | live crisis-library code loads `mixedbread-ai/mxbai-embed-large-v1` from HF hub, not this local dir (audit_7) |
+| BGE-reranker-v2-m3 | **ABSENT** | `models/bge-reranker-v2-m3/` — **directory does not exist on disk** | reranker feature is a silent dead fallback (audit_7) |
+| Snowflake-Arctic-Embed-L | **ABSENT** | `models/snowflake-arctic-embed-l/` — **directory does not exist on disk** | "2-embedder ensemble" silently returns `mxbai_only` fallback (audit_7) |
 | Qwen-2.5-VL-7B | PARTIAL | `models/qwen25-vl-7b/` | verify script + downstream demo only |
 
 ### Verification Scripts (one per model)
@@ -207,15 +226,15 @@ See `tests/receipts/ensemble_brent_validation.json`.
 | India 7-sector exposure | `versions/v4_arcadia_live/scenarios/india_industry_exposure.py` | 7 cited sectors + deterministic scorer |
 | Gulf 7-sector exposure | `versions/v4_arcadia_live/scenarios/gulf_industry_exposure.py` | 7 cited sectors + bypass-credit scorer |
 | Hormuz chokepoint graph | `versions/v4_arcadia_live/scenarios/hormuz_chokepoint_graph.py` | 14 nodes + 18 edges + 5 IEA facts |
-| OpenRouter 6-judge cross-check | `versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py` | gpt-oss-120b, gemma, glm, minimax, nemotron, gemma-26b |
+| OpenRouter 6-judge cross-check | `versions/v4_arcadia_live/realtime/openrouter_war_room_panel.py` | 6 frontier judges (gpt-oss-120b, gemma, glm, minimax, nemotron, gemma-26b) — the "12-judge / 25-judge" extension slugs appear in ZERO cache/usage evidence and are struck (audit_7) |
 | War-Room dashboard HTML | `server/static/hormuz_war_room.html` | dark-mode 6-panel UI |
 | War-Room validation harness | `scripts/validate_war_room.py` | 8-event historical backtest |
-| Ensemble Brent forecaster | `versions/v5_phoenix/forecast_v2/ensemble_brent.py` | Chronos+TimesFM+TabPFN, 8/8 ±30% |
+| Ensemble Brent forecaster | `versions/v5_phoenix/forecast_v2/ensemble_brent.py` | Chronos+TimesFM+TabPFN; "8/8 ±30%" is [UNVERIFIED — synthetic-price backtest, re-run pending] |
 | Ensemble Brent validator | `scripts/validate_ensemble_brent.py` | 8-event closed-form backtest |
 | Master demo HTML | `server/static/master.html` | 9-card live integration page |
-| RAP-XC weights | `versions/v5_phoenix/experiments/rap_xc_v1/rapxc.pt` | 3.14M params, BC 5.62→0.23 |
-| Conformal weights | `versions/v5_phoenix/action_v2/conformal_calibrated.pt` | α=0.1, coverage 0.9001 |
-| HetGAT report | `versions/v5_phoenix/experiments/hetgat_v1/report.json` | +7.77/+12.15/+10.03% |
+| RAP-XC weights | `versions/v5_phoenix/experiments/rap_xc_v1/rapxc.pt` | 3.14M params, BC 5.62→0.23 (training real); the "25-judge prior distillation" and leaderboard-win stats are [UNVERIFIED — fabricated bootstrap chain, see CLAIMS_LEDGER] |
+| Conformal weights | `versions/v5_phoenix/action_v2/conformal_calibrated.pt` | α=0.1; "coverage 0.9001" is [UNVERIFIED — the committed conformal receipt was computed on Gaussian-noise NLLs, not model NLLs (audit_5). Real coverage from `calibrate_conformal_from_harvest.py` pending] |
+| HetGAT report | `versions/v5_phoenix/experiments/hetgat_v1/report.json` | +7.77/+12.15/+10.03% — receipt is a `<pending-first-run>` stub (audit_8); [UNVERIFIED] |
 
 ## API Keys (every key reaches a UI element)
 

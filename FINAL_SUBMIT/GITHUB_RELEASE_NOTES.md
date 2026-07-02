@@ -1,5 +1,7 @@
 # GitHub Release — paste this into the Release web UI
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Repo**: https://github.com/ShAuRyA-Noodle/Sleep-Token
 **Steps**:
 1. Go to https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/new
@@ -31,7 +33,7 @@ SupplyMind v4.0 — OpenEnv India 2026 Hackathon Finals submission
 | 1 | **Wordle solve rate** (REINFORCE v2) | **97.0%** |
 | 2 | **Cohen's d** (trained vs null random) | **4.41–5.13** range |
 | 3 | **Wilcoxon p-value** (REINFORCE v2 paired) | **6.6 × 10⁻³⁵** |
-| 4 | **Wilcoxon p-value** (RAP-XC vs MaskablePPO-v3) | **3.9 × 10⁻¹⁸** |
+| 4 | **Wilcoxon p-value** (RAP-XC vs MaskablePPO-v3) | **[STRUCK]** |
 | 5 | **Conformal coverage** (Vovk 2005) | **0.9544 / 0.92 / 0.81** at α=0.05/0.10/0.20 |
 | 6 | **Reward-hack attacks blocked** | **19 / 19** (0% false-positive) |
 | 7 | **Live API keys validated** | **4 / 4** (OPENROUTER, EIA, NASA_FIRMS, GFW) |
@@ -52,7 +54,7 @@ SupplyMind v4.0 — OpenEnv India 2026 Hackathon Finals submission
 
 - **Forecasting**: TFT 513,534 steps / Chronos+TimesFM+TabPFN ensemble (8/8 events within ±30%, median 3.32% rel error)
 
-- **Statistical proof**: Wilcoxon p=3.9e-18 RAP-XC vs MaskablePPO · Cohen's d +2.73 · paired bootstrap CI95 [+0.198, +0.257]
+- **Statistical proof**: Wilcoxon p=[STRUCK] RAP-XC vs MaskablePPO · Cohen's d +2.73 · paired bootstrap CI95 [+0.198, +0.257]
 
 - **HuggingFace Space LIVE**: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind (stage RUNNING, 22 endpoints, /health 200 OK)
 

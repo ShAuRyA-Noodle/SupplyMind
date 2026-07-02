@@ -1,9 +1,14 @@
 # Dataset Card — SupplyMind data sources
 
+<!-- TODO(P1.6): provenance layer under repair. EM-DAT snapshot date, FRED file count, NOAA
+     "realtime" label, and the OpenRouter judge count were corrected on 2026-07-02 against the
+     audit. De-listed datasets (openflights / WTO tariff zip / World Bank pink sheet / NOAA
+     sample_track.zip) were downloaded but consumed by no code and have been removed. -->
+
 ## Live data (real APIs, fetched on demand)
 | Source | What | Endpoint | Auth | Receipt |
 |--------|------|----------|------|---------|
-| OpenRouter | LLM-judge ensemble (12 frontier + 3 local Ollama) | `openrouter.ai/api/v1/chat/completions` | API key | `openrouter_liveness.json` |
+| OpenRouter | LLM-judge panel (**6 frontier** evidenced in cache/usage logs + 3 local Ollama) | `openrouter.ai/api/v1/chat/completions` | API key | `openrouter_liveness.json` (**shows 4/14 OK — being regenerated**) |
 | EIA | Crude / fuel spot prices | `api.eia.gov/v2/petroleum/pri/spt` | API key | `api_keys_live_proof.json` |
 | NASA FIRMS | Active fire incidents (24h, MODIS NRT) | `firms.modaps.eosdis.nasa.gov/api/area/csv` | MAP key | `chained_live_demo.json` |
 | GFW | Vessel positions (Hormuz / Red Sea) | `gateway.api.globalfishingwatch.org/v3/4wings/stats` | Bearer token | `chained_live_demo.json` |
@@ -11,7 +16,8 @@
 | GDELT | Global event database | `api.gdeltproject.org/api/v2` | none | event store |
 | USGS | Earthquakes (real-time) | `earthquake.usgs.gov/fdsnws/event/1/query` | none | event store |
 | FRED | Macro indicators | `api.stlouisfed.org/fred/series/observations` | API key | event store |
-| NOAA NDBC | Maritime weather | `www.ndbc.noaa.gov/data/realtime2` | none | NOAA benchmark |
+| NOAA NDBC | Maritime weather (live buoy feed) | `www.ndbc.noaa.gov/data/realtime2` | none | NOAA benchmark |
+| NOAA NHC (static) | Storm track archive — **static June-2024 shapefile zip, NOT realtime**; live `CurrentStorms.json` fetch failed (ConnectionReset). Consumed by no code. | `nhc.noaa.gov` gis archive | none | — |
 | NASA EONET | Natural events | `eonet.gsfc.nasa.gov/api/v3/events` | none | event store |
 | MarineTraffic | AIS vessel data | per-fleet API | partial | fallback to GFW |
 | WHO DON | Disease outbreaks | `www.who.int/emergencies/disease-outbreak-news` | RSS | event store |
@@ -29,7 +35,7 @@
 | Real company nodes | 40 nodes | TSMC/Samsung/Toyota etc with real coords | `data/companies_real.json` |
 | Wordle dictionary | 102 words | 5-letter common words (tier-0 baseline) | `versions/v5_phoenix/wordle_env/env.py` |
 | Wordle tier 1+ | +200/+150/+80 words | RLVE expansion tiers | `rlve_curriculum.py` |
-| RAG corpus | 6,483 chunks | wiki_crisis 564 + sec_10k 5790 + policy 129 | `R5_GRANITE.json` |
+| RAG corpus | 6,483 chunks | wiki_crisis 564 + sec_10k 5790 + policy 129 (World Bank macro contributed **0** chunks — ingestion bug silently dropped it; one "policy paper" `frbny_supply_chain.pdf` is an HTML error page, not a PDF — audit_6) | `R5_GRANITE.json` |
 | Conformal calibration NLLs | 5,696 (v2) / 16,000 (v3) | nonconformity scores | `conformal_*.json` |
 
 ## Splits
@@ -41,15 +47,16 @@
 
 ## Data freshness
 - Live APIs: queried at request time (no caching beyond 1h TTL in `realtime/store.py`)
-- EMDAT crisis library: snapshot 2024-01 (versioned)
+- EM-DAT crisis library: **`emdat_public_2000_2026.xlsx` — a 2000–2026 export (16,811 rows), `Last Update` column stamped 2025-12-20** (corrected from the earlier "snapshot 2024-01" claim, which was wrong)
+- FRED supply-chain files: **1 file on disk** (`fred_truck_transport.csv`); the second (`fred_supply_chain_pressure.csv`) returned HTTP 404 and does not exist (R1_VERIFIED.json's count of 2 was wrong)
 - Real company coords: snapshot 2024-Q3
 
 ## Data quality / honest caveats
 - NewsAPI free tier: 100 req/day cap
 - OpenRouter free models: rate-limit 429 on Gemma occasionally
-- GFW: query refinement needed for clean 200 (currently `key authenticated`)
-- BGE-rerank fails on Windows due to paging file; fallback to FAISS top-K passthrough
-- Some user-claimed numbers reconciled exact: TFT 513,534 ✓, TFT 90,602 ✓, NOAA 60.07% ✓, F1 1.0/0.987/0.964 ✓
+- GFW: **last live probe returned HTTP 503** (not authenticated 200); the `api_keys_live_proof.json` receipt that counted it as `ok:true` is being regenerated honestly (audit_3)
+- BGE-reranker: **`models/bge-reranker-v2-m3/` does not exist on disk** — the reranker feature is a silent dead fallback, not a Windows paging issue (audit_7)
+- De-listed downloads (consumed by no code, removed from corpus claims): OpenFlights `.dat` files, WTO tariff zip, World Bank pink-sheet xlsx, NOAA `sample_track.zip`, empty `un_comtrade/` and `imf_ifs/` dirs (audit_6)
 
 ## License
 Live API data subject to each provider's TOS. Static EMDAT library: research use. Wordle dictionary: public domain. SEC EDGAR: public domain.

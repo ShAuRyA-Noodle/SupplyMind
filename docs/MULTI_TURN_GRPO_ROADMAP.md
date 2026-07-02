@@ -1,5 +1,7 @@
 # Multi-turn GRPO with stepwise rewards — roadmap
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Status:** v1 ships single-turn GRPO against `/analyst/grade`. Multi-turn stepwise is scoped here and intentionally **not shipped** for the 2026-04-25/26 finals. This document exists so a judge reading the self-serve FAQ §59.6 (the acknowledged Unsloth gap on multi-turn GRPO with stepwise rewards) can see we understood the gap, have a concrete design, and consciously chose to ship single-turn first.
 
 ## What the FAQ flagged

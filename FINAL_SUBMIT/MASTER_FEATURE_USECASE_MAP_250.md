@@ -1,5 +1,7 @@
 # MASTER FEATURE → USECASE → FILE → RECEIPT MAP (250 features)
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Audit promise**: every feature listed has a real file path AND a real receipt OR live demo. Zero synthetic. Zero stub.
 
 Sections A through BB + RL/RLVR/RLVE knowledge alignment.
@@ -51,7 +53,7 @@ Receipt: `adversarial_20_attack_gauntlet.json` (sha 082a3c57…)
 | # | Feature | File | Use case | Receipt |
 |---|---------|------|----------|---------|
 | D1 | RAP-XC (curriculum + replay) | `rl/algos/rap_xc.py` | flagship trained agent | `arena_leaderboard.json` |
-| D2 | MaskablePPO-v3 | `rl/algos/maskable_ppo_v3.py` | published baseline | wilcoxon p=3.9e-18 |
+| D2 | MaskablePPO-v3 | `rl/algos/maskable_ppo_v3.py` | published baseline | wilcoxon p=[STRUCK] |
 | D3 | MaskablePPO-v2 | `rl/algos/maskable_ppo_v2.py` | second baseline | leaderboard |
 | D4 | RecurrentPPO | `rl/train_rl_baselines.py` | partial-obs handling | `rl_baselines_standalone.json` |
 | D5 | A2C | `rl/train_rl_baselines.py` | discrete-action baseline | same |
@@ -87,7 +89,7 @@ Receipt: `adversarial_20_attack_gauntlet.json` (sha 082a3c57…)
 | F1 | Conformal action filter | `rl/conformal_filter.py` | Vovk 2005 dist-free coverage | `conformal_calibration.json` (0.9001 empirical) |
 | F2 | MC-Dropout | `forecasting/mc_dropout_v2.py` | epistemic uncertainty | `mc_dropout_v2.json` |
 | F3 | Calibration check | `forecasting/calibration.py` | Kuleshov 2018 | `R2_SHAP_FAIRNESS_CALIBRATION.json` |
-| F4 | Wilcoxon signed-rank | `tests/wilcoxon_pairwise.py` | non-param hypothesis test | p=3.9e-18 |
+| F4 | Wilcoxon signed-rank | `tests/wilcoxon_pairwise.py` | non-param hypothesis test | p=[STRUCK] |
 | F5 | Bootstrap CI95 | `tests/bootstrap.py` | non-param CIs | `bootstrap_leaderboard.json` |
 | F6 | Cohen's d effect size | `tests/effect_size.py` | d=+2.73 | wilcoxon receipt |
 | F7 | Multi-arm Brent ensemble | `ensemble_brent.py` | weight optimization | `ensemble_brent_validation.json` |
@@ -203,7 +205,7 @@ U1 phoenix_v5_receipts_INDEX.json (consolidated).
 V1 FastAPI server / V2 SSE event stream / V3 master.html dashboard / V4 ONNX bundle / V5 Docker container / V6 openenv.yaml / V7 HF Space ready / V8 wand-style logs.
 
 ## W. STATS — 5 features
-W1 Wilcoxon p=3.9e-18 / W2 Cohen d=+2.73 / W3 Bootstrap CI95 / W4 conformal 0.9001 coverage / W5 cross-corpus α=0.358.
+W1 Wilcoxon p=[STRUCK] / W2 Cohen d=+2.73 / W3 Bootstrap CI95 / W4 conformal 0.9001 coverage / W5 cross-corpus α=0.358.
 
 ## X. REAL DATA — many
 X1 TSMC coords / X2 Samsung coords / X3 Toyota / X4 NewsAPI / X5 GDELT / X6 USGS quakes / X7 EIA prices / X8 NASA FIRMS fires / X9 GFW vessels / X10 FRED macro.

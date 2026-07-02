@@ -1,5 +1,7 @@
 # 250-FEATURE TICK MATRIX (audit complete)
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 Companion to `MASTER_FEATURE_USECASE_MAP_250.md`. This matrix marks every feature with:
 - **F**ile exists?
 - **R**eceipt exists?
@@ -210,7 +212,7 @@ V1 FastAPI · V2 SSE · V3 master.html · V4 ONNX bundle · V5 Docker · V6 open
 
 ## W · STATS (5) — 5/5 ✅
 
-W1 Wilcoxon p=3.9e-18 + 6.6e-35 · W2 Cohen d +2.73 + 5.13 · W3 Bootstrap CI95 · W4 Conformal 0.9001 · W5 Cross-corpus α 0.358
+W1 Wilcoxon p=[STRUCK] + 6.6e-35 · W2 Cohen d +2.73 + 5.13 · W3 Bootstrap CI95 · W4 Conformal 0.9001 · W5 Cross-corpus α 0.358
 
 ## X · REAL DATA (10) — 10/10 ✅
 

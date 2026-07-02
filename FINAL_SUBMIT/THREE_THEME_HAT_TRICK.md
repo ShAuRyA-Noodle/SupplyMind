@@ -1,5 +1,7 @@
 # THREE-THEME HAT-TRICK — single submission, all 3 hackathon themes
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 Hackathon rules: pick ONE theme. Most teams will pick one and build narrowly. **SupplyMind hits all three.** This document maps how.
 
 The strategic insight: a real supply-chain disruption already involves multiple agents (Theme 1), a long planning horizon (Theme 2), and real tool-use (Theme 3). Building it once gets all three for free.
@@ -49,7 +51,7 @@ The strategic insight: a real supply-chain disruption already involves multiple 
 |---|---|---|
 | 60-step horizon | `openenv.yaml: hard_cascading_crisis` | tightest budget $10M for 4 concurrent disruptions |
 | Cascading dependency graph | `gnn/world_model_v2.py` | HetGAT v1, F1=0.964 on hard tier |
-| Sparse end-of-episode signal | `bootstrap_leaderboard.json` | RAP-XC vs MaskablePPO Wilcoxon p=3.9e-18 |
+| Sparse end-of-episode signal | `bootstrap_leaderboard.json` | RAP-XC vs MaskablePPO Wilcoxon p=[STRUCK] |
 | Recovery from early mistakes | `world_model_v2_rollout.json` | $178.68M saved (48% reduction) on 30-day F2 cascading crisis |
 | Curriculum (4-tier RLVE) | `rlve_curriculum_smoke.json` | tier-bumps tracked, target win-rate band 0.45-0.75 |
 | Process supervision (line-level credit) | `process_supervision.json` | variance amplification 2735× vs uniform-episode credit |

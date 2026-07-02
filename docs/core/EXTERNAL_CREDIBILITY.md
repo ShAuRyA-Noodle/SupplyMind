@@ -81,7 +81,11 @@ We cannot get a fresh endorsement before the hackathon submission closes. Instea
 > — **RewardBench** (Lambert et al. 2024, Allen Institute for AI).
 > Source: https://arxiv.org/abs/2403.13787
 
-Our **α = 0.750** on the 2-judge panel (Qwen-14B + Mistral-Nemo) is consistent with published inter-LLM-judge agreement on similar tasks.
+Our agreement result must be stated as the full ladder, not the flattering slice: **raw 3-judge
+panel Krippendorff α = 0.210** (weak), rising to **α = 0.750 only on the 2-judge (Qwen-14B +
+Mistral-Nemo) sub-panel**. The 2-judge sub-panel is consistent with published inter-LLM-judge
+agreement; the 3-judge number is not, and we report both (correction 2026-07-02 — earlier drafts
+cited only 0.750).
 
 ---
 

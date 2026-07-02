@@ -1,5 +1,7 @@
 # Judge FAQ — 30 anticipated questions, pre-answered
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 ---
 
 ### 1. "Is this OpenEnv compliant?"
@@ -24,7 +26,7 @@ RLVE per Procaccia §22-23. 4 tiers (100/300/450/530 words). BUMP at win-rate �
 8: REINFORCE / RAP-XC / MaskablePPO-v2 / MaskablePPO-v3 / RecurrentPPO / A2C / SAC-Discrete / CQL. Receipts each.
 
 ### 8. "Statistical significance of improvement?"
-Wilcoxon signed-rank p = 3.9 × 10⁻¹⁸ for RAP-XC vs MaskablePPO-v3. Cohen's d = +2.73 (very large). Bootstrap 95% CI separation. Receipt: `wilcoxon_pairwise_leaderboard.json`.
+Wilcoxon signed-rank p = [STRUCK] for RAP-XC vs MaskablePPO-v3. Cohen's d = +2.73 (very large). Bootstrap 95% CI separation. Receipt: `wilcoxon_pairwise_leaderboard.json`.
 
 ### 9. "Is the 0.9001 conformal coverage real?"
 Yes. Vovk 2005 split-conformal, target α=0.10. Empirical coverage 0.9001 over held-out validation. Receipt: `conformal_calibration.json`. Plot: `conformal_coverage.png`.
@@ -95,7 +97,7 @@ Pairwise Wilcoxon p-values for all 8 algos. Color-coded heatmap. RAP-XC dominate
 - 20/20 reward-hack defense (literature-grade)
 - 50+ sha256 receipts
 - 4/4 API keys live
-- Wilcoxon p=3.9e-18 (no other team has this)
+- Wilcoxon p=[STRUCK] (no other team has this)
 - Aligned to all 4 judging criteria 100%
 
 ---

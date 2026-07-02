@@ -1,5 +1,7 @@
 # SupplyMind — Slide Deck (8 slides for Bangalore in-person pitch)
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 Convert via:  `pandoc SLIDE_DECK.md -t pptx -o SupplyMind.pptx`
 or use as speaker notes for screen-share.
 
@@ -34,7 +36,7 @@ or use as speaker notes for screen-share.
 |----------|-------|
 | Wordle solve rate (REINFORCE v2) | **95.5%** |
 | Cohen's d trained vs null random | **5.133** |
-| Wilcoxon p-value (RAP-XC vs MaskablePPO) | **3.9 × 10⁻¹⁸** |
+| Wilcoxon p-value (RAP-XC vs MaskablePPO) | **[STRUCK]** |
 | Conformal coverage (Vovk 2005, multi-level) | **0.954 / 0.92 / 0.81** at α=0.05/0.10/0.20 |
 | Reward-hack attacks blocked | **19 / 19** |
 | Live API keys validated | **4 / 4** |
@@ -105,7 +107,7 @@ Most teams show 1-3 ad-hoc reward checks. We tested 20 patterns from the literat
 |-----------|--------|----------|
 | Innovation | 40% | 2 envs · 8 algos · adaptive curriculum · dual verifier · process supervision |
 | Storytelling | 30% | Real curves · 90s video · 4-min script · master dashboard |
-| Reward improvement | 20% | 95.5% solve · d=5.133 · p=3.9e-18 |
+| Reward improvement | 20% | 95.5% solve · d=5.133 · p=[STRUCK] |
 | Pipeline | 10% | OpenEnv-compliant · one-bash reproducible |
 
 **Two environments. Eight algorithms. Sixty-two sha-stamped receipts. Zero synthetic.**

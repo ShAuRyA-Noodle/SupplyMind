@@ -1,6 +1,22 @@
 # Reproduce SupplyMind from a fresh checkout
 
+<!-- TODO(P1.4/P2.2): This reproduce guide is being re-verified post-cleanup. Some scripts it
+     referenced were fabrication-chain tools and have been DELETED (bootstrap_leaderboard.py,
+     wilcoxon_pairwise_leaderboard.py). The canonical judge-facing verifier is
+     `scripts/run_all.py` (path fix in flight). Steps flagged below are UNVERIFIED until re-run. -->
+
 Tested on Windows 11 + RTX 4080 (12 GB) + 15.7 GB RAM, and Ubuntu 22.04 + RTX 4090.
+
+## Canonical verifier
+
+```bash
+python scripts/run_all.py     # the single judge-facing verification entrypoint
+```
+
+> NOTE (2026-07-02): `run_all.py` currently reports MISSING for several files because of a
+> pre-reorg path bug (`ROOT/'v3_arcadia'` → should be `ROOT/'versions'/'v3_arcadia'`). That fix
+> is in flight in the scripts wave; until it lands, treat individual-script reproduction below as
+> the source of truth and expect some receipts to be flagged UNVERIFIED.
 
 ## 5-command quick start
 
@@ -38,24 +54,27 @@ GFW_API_TOKEN=...
 
 ## Foundation models (~50 GB total)
 
-The 13 foundation models live under `models/`. They are NOT shipped with the repo (too large). To download:
+The local models live under `models/`. They are NOT shipped with the repo (gitignored, too large).
 
-```bash
-bash scripts/download_models.sh    # ~50 GB, ~30 min on 1 Gbps
-```
-
-This pulls from local Ollama for the LLMs and HuggingFace for the embedders/forecasters. If you skip this, the demo still works in degraded mode — the master page LEDs will show amber for /phoenix/status.
+> **NOTE:** `scripts/download_models.sh` does **not exist** — this step is pending a real fetcher
+> (P1.6). On disk today `models/` holds only chronos-bolt-base, timesfm-2, tabpfn-v2-reg and one
+> mxbai copy. Three model dirs that docs previously referenced — `tabpfn-v2-clf`,
+> `snowflake-arctic-embed-l`, `bge-reranker-v2-m3` — **do not exist**, and the LLMs are served via
+> Ollama/GGUF, not as HF dirs under `models/`. Embedders download `mxbai-embed-large-v1` from the
+> HF hub at runtime. If you skip local models, the demo runs in degraded mode.
 
 ## Reproducing every receipt
 
 ```bash
-# 1. Conformal calibration (real harvest, ~3 min)
+# 1. Conformal calibration (real harvest, ~3 min) — REAL; this is the honest conformal path
 python scripts/calibrate_conformal_from_harvest.py
 
-# 2. Cross-corpus Krippendorff α (~1 hour with rate limits)
+# 2. Cross-corpus Krippendorff α (~1 hour with rate limits) — reads .openrouter_cache
 python scripts/compute_cross_corpus_alpha.py
 
 # 3. Ensemble Brent backtest (~2 min)
+#    [UNVERIFIED] validate_ensemble_brent.py backtests on a SYNTHETIC price series, not real
+#    FRED Brent — the "8/8" number is not real. Pending re-run on real DCOILBRENTEU (P1.6).
 python scripts/validate_ensemble_brent.py
 
 # 4. War-Room historical backtest (~2 min)
@@ -63,20 +82,22 @@ python scripts/validate_war_room.py
 # OR via HTTP:
 curl -X POST http://127.0.0.1:8000/demo/hormuz-war-room/validate
 
-# 5. Bootstrap CI95 leaderboard (~5 sec)
-python scripts/bootstrap_leaderboard.py
+# 5. [REMOVED] scripts/bootstrap_leaderboard.py + wilcoxon_pairwise_leaderboard.py were DELETED
+#    (sorted-"paired" tests producing fabricated p-values). A real paired-by-seed leaderboard on
+#    the trained checkpoints is pending (P1.3). Do not cite p=[STRUCK] / d=+2.73.
 
 # 6. Ollama v5 vs frontier (~3 min)
 python scripts/ollama_v5_vs_frontier.py
 
-# 7. HetGAT all 3 graphs (~30 min on RTX 4080)
+# 7. HetGAT all 3 graphs (~30 min on RTX 4080) — receipt currently a stub; UNVERIFIED
 python -m versions.v5_phoenix.gnn_v2.train_hetgat --graph all --epochs 200
 
-# 8. RAP-XC training on harvested transitions (~20 sec on RTX 4080)
+# 8. RAP-XC training on harvested transitions (~20 sec on RTX 4080) — training is real
 python -c "from versions.v5_phoenix.rap_xc.train import train_rapxc; train_rapxc()"
 ```
 
-All produce JSON receipts at `tests/receipts/*.json`.
+Receipts land under `tests/receipts/*.json`. Any receipt with `match: false`, `exit_code: -1`,
+or a stale module path is UNVERIFIED and is being re-run (see CLAIMS_LEDGER.md).
 
 ## One-shot: `make` everything
 

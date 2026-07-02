@@ -1,5 +1,7 @@
 # PASS 28 HYPERMODE FINAL — Ollama + Pro Colab + new keys
 
+> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+
 **Constraints honored**:
 - ❌ NO OpenRouter spend (saved for final eval)
 - ✅ LOCAL Ollama 14B judge panel (qwen2.5:14b + supplymind-analyst:v5 + deepseek-r1 + mistral-nemo + gemma4 + qwen25-coder) — NO downgrade per user spec
@@ -73,7 +75,7 @@
 | Live API keys verified | 5/9 | **9/9** (5 prior + FRED + NewsAPI + NOAA + WandB key validated) |
 | Live data sources | 14/20 | **17/20** (+FRED, +NewsAPI, +NOAA — all 200 OK) |
 | Adversarial defense | 19+210=229 | **19+210+40=269** total attacks blocked (Tier 1 28.D combined gauntlet) |
-| 250-feature individual demonstration | 245/250 = 98.0% | **248/250 = 99.2%** (post Tier 1 completion) |
+| 250-feature individual demonstration | 245/250 = 98.0% | **[STRUCK] = 99.2%** (post Tier 1 completion) |
 
 ---
 

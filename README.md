@@ -17,51 +17,58 @@ tags:
 
 # 🏆 OpenEnv India 2026 Submission
 
-**📓 Master training notebook (run on free Colab T4 in ~30 min)**: [notebooks/13_MASTER_HACKATHON_FINAL.ipynb](notebooks/13_MASTER_HACKATHON_FINAL.ipynb)
+<!-- TODO(P1.5): notebook 13 currently contains a SyntaxError in §7 and has zero executed
+     outputs — it has never run end-to-end. Being surgically cleaned + executed. -->
+**📓 Master training notebook** (⚠️ being cleaned + executed — currently has an unrun §7): [notebooks/13_MASTER_HACKATHON_FINAL.ipynb](notebooks/13_MASTER_HACKATHON_FINAL.ipynb)
 
 **🎬 90-second demo video**: https://www.youtube.com/watch?v=0Jy78rg_0BQ
 
-**📚 Blog (live-demo walkthrough)**: [FINAL_SUBMIT/blog.md](FINAL_SUBMIT/blog.md)
+**📚 Blog (live-demo walkthrough)**: [FINAL_SUBMIT/Blog.MD](FINAL_SUBMIT/Blog.MD)
 
-**📜 128 sha256-stamped training receipts**: [browse FINAL_SUBMIT/receipts/](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/tree/main/FINAL_SUBMIT/receipts) · [GitHub mirror](https://github.com/ShAuRyA-Noodle/Sleep-Token/tree/main/FINAL_SUBMIT/receipts)
+**📜 sha256-stamped receipts** (⚠️ under audit — a subset were flagged fabricated/stubbed on 2026-07-02 and are being re-run; see [CLAIMS_LEDGER](FINAL_SUBMIT/CLAIMS_LEDGER.md)): [browse FINAL_SUBMIT/receipts/](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/tree/main/FINAL_SUBMIT/receipts) · [GitHub mirror](https://github.com/ShAuRyA-Noodle/Sleep-Token/tree/main/FINAL_SUBMIT/receipts)
 
 **📊 13 axis-labeled reward + loss plots**: [browse FINAL_SUBMIT/plots/](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind/tree/main/FINAL_SUBMIT/plots) · [GitHub mirror](https://github.com/ShAuRyA-Noodle/Sleep-Token/tree/main/FINAL_SUBMIT/plots)
 
 **🗺 250-feature use-case map**: [FINAL_SUBMIT/MASTER_FEATURE_USECASE_MAP_250.md](FINAL_SUBMIT/MASTER_FEATURE_USECASE_MAP_250.md) · audit matrix [FINAL_SUBMIT/FEATURE_AUDIT_TICK_MATRIX_250.md](FINAL_SUBMIT/FEATURE_AUDIT_TICK_MATRIX_250.md)
 
-### Headline metrics from canonical run
-- Wordle REINFORCE 100% solve rate
-- Wilcoxon paired one-sided greater p = **9.39 × 10⁻³⁵**
-- Cohen d = **+4.77** (very large)
-- Adversarial defense: **257/257 = 100% blocked**
-- HF Space rollout: 20/20 steps 200 OK · FRED real Brent: 8/8 historical events
-- Wallclock: **4.4 minutes on free Colab CPU** / 36 min on T4 full
+<!-- TODO(P1.x): Headline metrics below are UNDER RE-RUN after the 2026-07-02 audit found the
+     generators fabricated (sorted-"paired" Wilcoxon, rigged attack gauntlet, hardcoded stats).
+     Do NOT cite these until regenerated. See FINAL_SUBMIT/CLAIMS_LEDGER.md. -->
+### Headline metrics — [UNVERIFIED, being re-run]
+- Wordle REINFORCE training is real; the **"100% solve rate"** and the p-value / Cohen-d headlines
+  (quoted inconsistently across docs as 9.39e-35 / [STRUCK] / 1.87e-34 — a fabrication red flag) are
+  **struck** pending an honest paired-by-seed re-run. The notebooks carry zero executed outputs.
+- ~~Adversarial defense 257/257 = 100% blocked~~ — **STRUCK**: the gauntlet counted every
+  non-crashing call as "safe" and added attacks as a constant; 100% was guaranteed by construction.
+- HF Space rollout: 20/20 steps 200 OK *(live rollout is real)* · FRED real Brent ingest is real
+  (pass28 K1); the ensemble Brent **"8/8"** backtest is [UNVERIFIED — synthetic price series].
 
 ### Theme hat-trick
 - Theme 1 Multi-Agent: F2 Apple/Samsung/Toyota + K2-K6 sub-receipts
-- Theme 2 Long-Horizon: 60-step hard_cascading_crisis + GNN cascade + process supervision 2735× var amp
-- Theme 3 Professional (PRIMARY): 9 LIVE keyed APIs + 1500-event EMDAT corpus + 7-second Hormuz war-room demo
+- Theme 2 Long-Horizon: 60-step hard_cascading_crisis + GNN cascade *(the "process supervision 2735× var amp" figure is [STRUCK — hardcoded demo trajectory, audit_4/audit_5])*
+- Theme 3 Professional (PRIMARY): 9 LIVE keyed APIs + 1500-event EMDAT corpus + Hormuz war-room demo
 
 ---
 
 # SupplyMind v3.0-arcadia
 
 **OpenEnv-compliant supply-chain risk management.**
-**13 local SOTA foundation models + 18-model OpenRouter frontier panel.**
-**20-source real-data fan-out:** NewsAPI / GDELT / USGS / FRED / MarineTraffic / WHO / NOAA NDBC + Tides / NASA EONET + FIRMS / EIA / GFW / SEC EDGAR / CISA KEV / HackerNews / Wikipedia pageviews / World Bank / OFAC / GDELT-Conflict / GDELT-Humanitarian — verified live 2026-04-25, 391 events / fan-out / sub-90s.
-**275 passing tests** (277 collected; 2 live tests skipped unless API keys are present).
-**1500-event auto-cooked crisis library v2** from real EMDAT (16,812 disasters 2000-2026, deterministic-rule severity from real death/damage/affected counts), mxbai-embed-large 1024-dim FAISS HNSW.
-**4-method Platinum counterfactual** (paired-bootstrap MC + synthetic-control donor weighting + BSTS-lite ARIMA + SCM do-calculus proxy) cross-method consensus, calibrated against **6 published economic-impact anchors** (Suez 2021 $9.6B/day · Tohoku 2011 $235B · Katrina 2005 $200B · Fukushima 2011 $187B · COVID-chip 2020-23 $500B+ · Texas freeze 2021 $130B). Method-B Tohoku replication: $276B point vs published $235B, **within 18%, inside CI95**.
-**RAP-XC novel 9th leaderboard agent** (Retrieval-Augmented Policy with Crisis-Conditioned Cross-Attention) — 3.14M params, FAISS retrieval over 1500-event library + 25-judge prior distillation, expected +15-35% relative on hard_cascading_crisis.
-**Heterogeneous Temporal GAT** replaces v1 GCN — edge-type-conditional attention + GRU temporal gating across 4 node types × 4 edge types.
-**Hierarchical + Conformal action lift** — 4-intent strategic layer × split-conformal filter with `P[expert ∈ accepted] ≥ 1-α` coverage guarantee.
-**End-to-end live demo** at `POST /demo/recent-disaster` — 24-48h disaster pick → library v2 match → multi-layer offline-heuristic severity → Platinum counterfactual → action plan, all in <90s, all real signals.
-**Zero synthetic substitution anywhere in the data or reward path.** Every number traces to a public URL or a committed JSON receipt.
+**Local foundation models** (Chronos-Bolt, TimesFM-2, TabPFN-v2-reg, mxbai) + **OpenRouter frontier judge panel — 6 judges evidenced** in cache/usage logs (the registry lists ~18 slugs but the committed liveness proof shows only 4/14 OK, and the "12-/25-judge" extension slugs have zero execution evidence — being pruned; audit_7).
+**20-source real-data fan-out:** NewsAPI / GDELT / USGS / FRED / MarineTraffic / WHO / NOAA NDBC + Tides / NASA EONET + FIRMS / EIA / GFW / SEC EDGAR / CISA KEV / HackerNews / Wikipedia pageviews / World Bank / OFAC / GDELT-Conflict / GDELT-Humanitarian.
+**176 passing tests** (184 total; 8 adversarial tests currently fail on a stale reorg path, fix in flight — the earlier "275 passing" was collected-not-passed inflation; audit_3).
+**1500-event auto-cooked crisis library v2** from real EM-DAT (**16,811** rows 2000-2026, last-update 2025-12-20; deterministic-rule severity from real death/damage/affected counts), mxbai-embed-large 1024-dim FAISS HNSW. *(This EM-DAT → crisis-library pipeline is a genuine, no-LLM asset.)*
+<!-- STRUCK: the "4-method Platinum counterfactual" ran no causal methods — 3 of 4 estimates are
+     hardcoded literals, the 4th is np.random.normal draws (audit_4/audit_5). -->
+~~**4-method Platinum counterfactual**~~ **[STRUCK]** — the audit found 3 of the 4 "methods" are hardcoded literals and the 4th is `np.random.normal()`; the "$276B Tohoku replication, within 18%" is a hand-set anchor, not a computed result. The 6 published economic anchors ($9.6B/day Suez, $235B Tohoku, etc.) are real citations, but the "replication" is struck.
+**RAP-XC agent** (Retrieval-Augmented Policy with Crisis-Conditioned Cross-Attention) — 3.14M params, real BC training; the "25-judge prior distillation" and "+15-35% leaderboard win" claims are [UNVERIFIED — from the deleted fabricated bootstrap chain].
+**Heterogeneous Temporal GAT** — edge-type-conditional attention + GRU temporal gating *(receipt currently a `<pending-first-run>` stub; UNVERIFIED)*.
+**Hierarchical + Conformal action lift** — split-conformal filter with `P[expert ∈ accepted] ≥ 1-α`; the committed "0.9001 coverage" number is [UNVERIFIED — computed on Gaussian-noise NLLs, not model NLLs; audit_5].
+**Zero synthetic substitution in the data or reward path** — this is the *goal*; the 2026-07-02 audit found violations in the receipts/benchmark layer that are being removed (see [FINAL_SUBMIT/HONEST_LIMITATIONS.md](FINAL_SUBMIT/HONEST_LIMITATIONS.md) §0 and [CLAIMS_LEDGER.md](FINAL_SUBMIT/CLAIMS_LEDGER.md)).
 
 [![OpenEnv](https://img.shields.io/badge/OpenEnv-compliant-blue)](https://github.com/meta-llama/open-env)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-275%20passing-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-176%20passing%20%2F%20184-yellow)](tests/)
 [![Real Data](https://img.shields.io/badge/real%20data-261K%20points-orange)](rl/data/)
 [![Release](https://img.shields.io/badge/release-v6.0--genesis-purple)](https://github.com/ShAuRyA-Noodle/Sleep-Token/releases/tag/v6.0-genesis)
 
@@ -146,8 +153,8 @@ Full results page: [`docs/v3/RESULTS.md`](docs/v3/RESULTS.md) — every number r
 | **Emergence** | R1 | 13 SOTA foundation models verified, Qwen-VL downstream |
 | **Caramel** | R2 | TabPFN-v2 + XGB + LGB + CAT tabular SOTA with SHAP/fairness/calibration |
 | **Past Self** | R3 | Chronos-Bolt + TimesFM-2 + ARIMA + Prophet + Bates-Granger stacking + TFT cross-ref |
-| **Dangerous** | R4 | 3-judge LLM panel (DeepSeek-R1 + Qwen-14B + Mistral-Nemo) — 26 scenarios × α=0.75 |
-| **Granite** | R5 | 8 RAG pipelines, 6,483-chunk real corpus, mxbai P@1=0.962, reranker +5pp on hard |
+| **Dangerous** | R4 | 3-judge LLM panel (DeepSeek-R1 + Qwen-14B + Mistral-Nemo) — 26 scenarios, **raw 3-judge α=0.210** (2-judge sub-panel 0.750) |
+| **Granite** | R5 | 8 RAG pipelines, 6,483-chunk real corpus, mxbai P@1=0.962; ~~reranker +5pp on hard~~ [UNVERIFIED — reranker model dir absent] |
 | **Gethsemane** | R6-α | MaskablePPO — +26.8% reward from action masking, 0 invalid actions, ONNX-exported |
 | **Euclidian** | R6-β | 8,100-ep bootstrap CI95, non-overlapping vs random/greedy on all 3 tasks |
 | **Provider** | R6-γ | Custom 3-layer GCN; +48–64% arrival-time MAE reduction vs MLP |
@@ -160,8 +167,8 @@ Full results page: [`docs/v3/RESULTS.md`](docs/v3/RESULTS.md) — every number r
 
 | Layer | Tech | Headline metric |
 |---|---|---|
-| **LLM risk panel** | DeepSeek-R1-Q4 + Qwen-2.5-14B + Mistral-Nemo + Qwen-Coder critic | 100% parse rate on 26 real crisis scenarios, α≈0.75 on 2-judge consensus, 69.2% majority-vote vs ground truth |
-| **RAG** | BGE-M3 + mxbai + Snowflake + BGE-reranker + HyDE | mxbai bi-encoder **P@1=0.962, MRR=0.978** on 6,483-chunk corpus |
+| **LLM risk panel** | DeepSeek-R1-Q4 + Qwen-2.5-14B + Mistral-Nemo + Qwen-Coder critic | 100% parse rate on 26 real crisis scenarios; **raw 3-judge α=0.210** (2-judge sub-panel 0.750); 69.2% majority-vote vs ground truth |
+| **RAG** | mxbai + BGE-M3 + HyDE (~~Snowflake~~/~~BGE-reranker~~ model dirs absent — audit_7) | mxbai bi-encoder **P@1=0.962, MRR=0.978** on 6,483-chunk corpus |
 | **Forecasting** | Chronos-Bolt + TimesFM-2 + ARIMA + Prophet + Bates-Granger stacking | 20-fold rolling-origin backtest, PICP@80 near-nominal (0.77–0.89) on 8 FRED targets |
 | **RL** | MaskablePPO on 408-dim obs, MultiDiscrete[7,40] action space | PPO_v3 beats random + greedy on all 3 tasks; 8,100-episode bootstrap CI95 non-overlapping; zero constraint violations |
 | **GNN** | Custom 3-layer GCN in pure PyTorch | +30pp F1 vs direct-neighbors baseline on 40-node supply-chain graph |
@@ -205,7 +212,11 @@ Full phase log: [`versions/v3_arcadia/95_arcadia/README.md`](versions/v3_arcadia
   (Ollama)    + reranker        + 80+ v1/v2 agents        + stacking
 ```
 
-All 13 foundation models run **locally** via Ollama (LLMs, Q4_K_M) or Python (embedders, forecasters, TabPFN, GNN). **Zero API dependency at inference.**
+Local models run via Ollama (LLMs, Q4_K_M) or Python (forecasters, TabPFN, GNN). **NOTE:** 3 of the
+advertised "13" model dirs are absent on disk (`snowflake-arctic-embed-l`, `bge-reranker-v2-m3`,
+`tabpfn-v2-clf`); the embedder ensemble downloads `mxbai-embed-large-v1` from the HF hub at runtime,
+and the OpenRouter judge panel is a network dependency — so "zero API dependency at inference" is
+aspirational, not literally true today (audit_7).
 
 ---
 
@@ -216,7 +227,8 @@ All 13 foundation models run **locally** via Ollama (LLMs, Q4_K_M) or Python (em
 git clone https://github.com/ShAuRyA-Noodle/Sleep-Token.git supplymind && cd supplymind
 pip install -r requirements.txt
 
-# 2. Run 154 tests (1m 47s on CPU)
+# 2. Run the test suite (~140s on CPU; 176 pass / 184 — 8 adversarial tests fail on a stale
+#    reorg path that is being fixed)
 pytest tests/ -q
 
 # 3. Start OpenEnv server
@@ -640,4 +652,4 @@ MIT
 | BC_v1 | 0.0875 | [0.084, 0.091] | 0.7045 | 0.1128 |
 | CQL_v1 | 0.0675 | [0.065, 0.070] | 0.7176 | 0.0964 |
 
-See `docs/v3/EXECUTIVE_SUMMARY.md` for the full report and `_dump/FAILURE_TABLE.md` for deferred items.
+See `docs/v3/EXECUTIVE_SUMMARY.md` for the full report. *(The `_dump/FAILURE_TABLE.md` deferred-items lineage was moved during the `_dump/` cleanup — pointer pending; do not link until restored.)*
