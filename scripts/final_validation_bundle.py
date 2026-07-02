@@ -1,12 +1,26 @@
-"""final_validation_bundle.py — combined validation receipts for final submit.
+"""final_validation_bundle.py — live-API validation receipt for final submit.
 
-Produces 3 receipts in one execution:
-  1. process_supervision.json      — line-level credit assignment per RL guide §9
-  2. ablation_matrix.json          — drop each component, measure metric drop
-  3. api_keys_live_proof.json      — 4 keys (OPENROUTER, EIA, NASA_FIRMS, GFW)
+Produces 1 receipt in one execution:
+  1. api_keys_live_proof.json      — 4 keys (OPENROUTER, EIA, NASA_FIRMS, GFW)
                                        each makes a real call, hash response
 
-Each receipt mirrored to FINAL_SUBMIT/receipts/ + sha256 stamped.
+The receipt is mirrored to FINAL_SUBMIT/receipts/ + sha256 stamped.
+
+REMOVED (Wave-4 leftovers sweep, 2026-07-02): two fabricated blocks that this
+bundle used to emit were deleted, per CLAUDE.md §0 (zero fakes):
+  - process_supervision()  — a hand-crafted 4/5-guess Wordle trajectory with a
+    hardcoded uniform baseline, published as a "2735x variance amplification"
+    headline (CLAIMS_LEDGER A4, STRUCK). Its receipt was retired by the Wave-3
+    evidence-refresh pass; the honest replacement is
+    scripts/pass28_killshot_v2.py block 28.F (real _score_guess per-step credit
+    → pass28_F_process_super_plot.json).
+  - ablation_matrix()      — a "leave-one-out reward ablation" run with a RANDOM
+    policy, so ablating reward components never changed the policy's behaviour
+    (every trial reported the same 0.27 solve rate). It was theater, not a real
+    component ablation; a genuine ablation trains QR-DQN variants (REBUILD_BACKLOG
+    R3, P1.3). Block + its stale receipt purged here.
+(The former cross_env_transfer block was already removed in an earlier pass; its
+receipt is on the RERUN_QUEUE permanently-retired list — feature was fabricated.)
 """
 from __future__ import annotations
 
@@ -26,135 +40,7 @@ if str(REPO) not in sys.path:
 
 
 # ---------------------------------------------------------------------------
-# 1. PROCESS SUPERVISION (line-level credit, RL guide §9)
-# ---------------------------------------------------------------------------
-
-def process_supervision() -> dict:
-    """Demonstrate line-by-line / step-by-step credit assignment over a
-    Wordle episode, vs. naive episode-level reward."""
-    from versions.v5_phoenix.wordle_env.env import _score_guess
-    target = "brain"
-    trace = [
-        # (guess, intent_label)
-        ("about", "explore_vowels"),
-        ("crane", "narrow_consonants"),
-        ("braid", "test_b_r_a_i"),
-        ("brawn", "swap_d_for_n"),
-        ("brain", "exact_solve"),
-    ]
-    # Naive: episode reward applied uniformly to all steps (sparse, miscredits early random guesses)
-    final_reward = 1.0  # solve
-    naive_credit = [final_reward / len(trace)] * len(trace)
-
-    # Process supervision: per-step shaped reward using info gain from feedback
-    process_credit = []
-    for i, (g, _intent) in enumerate(trace):
-        fb = _score_guess(g, target)
-        n_g = sum(1 for f in fb if f.state == "green")
-        n_y = sum(1 for f in fb if f.state == "yellow")
-        step_r = 0.05 * n_g + 0.02 * n_y
-        if g == target:
-            step_r += 1.0 * (1.0 + (5 - i) * 0.05)
-        process_credit.append(round(step_r, 4))
-
-    # Variance reduction: process_credit should have higher variance + sharper
-    # peaks at solve step → better credit assignment
-    import statistics
-    naive_var = statistics.variance(naive_credit)
-    process_var = statistics.variance(process_credit)
-
-    return {
-        "framework": "RL guide §9 + §6 + Lightman 2023 'Let's Verify Step by Step'",
-        "trace": [{"step": i + 1, "guess": g.upper(), "intent": intent,
-                    "naive_credit": round(naive_credit[i], 4),
-                    "process_credit": process_credit[i]}
-                   for i, (g, intent) in enumerate(trace)],
-        "naive_variance": round(naive_var, 4),
-        "process_variance": round(process_var, 4),
-        "variance_amplification": round(process_var / max(0.0001, naive_var), 2),
-        "credit_localization": (
-            "process supervision concentrates credit at the solve step "
-            f"({max(process_credit):.3f} vs naive {max(naive_credit):.3f}) "
-            "→ correct attribution of which actions caused success"
-        ),
-    }
-
-
-# ---------------------------------------------------------------------------
-# 3. ABLATION MATRIX (drop component, measure)
-# ---------------------------------------------------------------------------
-
-def ablation_matrix() -> dict:
-    """Run 6 ablations on Wordle reward shaping.
-    Each ablation runs 100 episodes with one component removed, measures
-    mean episode return + solve rate."""
-    from versions.v5_phoenix.wordle_env.env import _score_guess, WORD_LIST
-    import random
-
-    def trial(disable: str, n_eps: int = 100, seed: int = 0) -> dict:
-        rng = random.Random(seed)
-        rewards, solves = [], 0
-        for _ in range(n_eps):
-            # Random policy on tier-0 baseline (so ablation effects isolate reward shape)
-            target = rng.choice(WORD_LIST[:20])
-            ep_r = 0.0
-            solved = False
-            for guess_i in range(6):
-                guess = rng.choice(WORD_LIST[:20])
-                fb = _score_guess(guess, target)
-                n_g = sum(1 for f in fb if f.state == "green")
-                n_y = sum(1 for f in fb if f.state == "yellow")
-                step_r = 0.0
-                if disable != "green_credit":
-                    step_r += 0.05 * n_g
-                if disable != "yellow_credit":
-                    step_r += 0.02 * n_y
-                if guess == target:
-                    if disable != "solve_bonus":
-                        step_r += 1.0
-                    if disable != "guess_count_bonus":
-                        step_r += (5 - guess_i) * 0.05
-                    solved = True
-                ep_r += step_r
-                if solved:
-                    break
-            if not solved and disable != "timeout_penalty":
-                ep_r -= 0.2
-            if solved:
-                solves += 1
-            rewards.append(ep_r)
-        return {
-            "disabled": disable,
-            "mean_return": round(sum(rewards) / len(rewards), 4),
-            "solve_rate": round(solves / n_eps, 4),
-            "n_episodes": n_eps,
-        }
-
-    components = ["none", "green_credit", "yellow_credit", "solve_bonus",
-                    "guess_count_bonus", "timeout_penalty"]
-    results = [trial(c) for c in components]
-    baseline = results[0]
-    for r in results[1:]:
-        r["delta_mean_return"] = round(r["mean_return"] - baseline["mean_return"], 4)
-        r["pct_change"] = round(100 * r["delta_mean_return"] /
-                                 max(0.001, abs(baseline["mean_return"])), 2)
-
-    return {
-        "framework": "leave-one-out reward ablation per RL guide §7-8",
-        "n_episodes_per_trial": 100,
-        "baseline": baseline,
-        "ablations": results[1:],
-        "ranked_by_impact": sorted(results[1:],
-                                     key=lambda x: -abs(x["delta_mean_return"])),
-        "insight": (
-            "components ranked by metric drop when removed reveal which"
-            " reward signals are load-bearing"
-        ),
-    }
-
-
-# ---------------------------------------------------------------------------
-# 4. LIVE API KEY UTILIZATION PROOF
+# LIVE API KEY UTILIZATION PROOF
 # ---------------------------------------------------------------------------
 
 def api_keys_live_proof() -> dict:
@@ -307,24 +193,11 @@ def main() -> dict:
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     summary = {}
 
-    logger.info("[1/3] process supervision ...")
-    r2 = process_supervision()
-    summary["process_supervision_sha"] = save("process_supervision", r2)
-
-    logger.info("[2/3] ablation matrix ...")
-    r3 = ablation_matrix()
-    summary["ablation_matrix_sha"] = save("ablation_matrix", r3)
-
-    logger.info("[3/3] api keys live proof ...")
+    logger.info("[1/1] api keys live proof ...")
     r4 = api_keys_live_proof()
     summary["api_keys_live_sha"] = save("api_keys_live_proof", r4)
 
     summary["headlines"] = {
-        "process_var_amplification": r2.get("variance_amplification"),
-        "ablation_largest_drop": (
-            r3.get("ranked_by_impact", [{}])[0].get("disabled"),
-            r3.get("ranked_by_impact", [{}])[0].get("delta_mean_return"),
-        ),
         "n_keys_ok": r4.get("n_keys_ok_200"),
         "n_keys_total": len(r4.get("keys", {})),
     }

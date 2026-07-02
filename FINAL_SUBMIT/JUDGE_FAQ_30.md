@@ -38,10 +38,10 @@ Yes. Vovk 2005 split-conformal, target α=0.10. Empirical coverage 0.9001 over h
 Two environments. Wordle = canonical RLVR mini-env (judges' familiar reference). SupplyMind = Theme #3 Professional Tasks: 40 real company nodes (TSMC, Samsung), 280 actions, $5-15M budgets, real disruption replay (Tohoku $276B replicated).
 
 ### 12. "Show process supervision."
-RL guide §9. Line-level credit assignment vs naive uniform credit. Variance amplification 2735× — credit concentrated at solve step instead of smeared uniformly. Receipt: `process_supervision.json`.
+RL guide §9. Line-level credit assignment vs naive uniform credit, scored with the env's real `_score_guess`: credit concentrated at the decisive solve step instead of smeared uniformly (~2.8× on the `BRAIN` example). The old "2735× variance amplification" headline was STRUCK (hardcoded demo, A4). Receipts: `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json`.
 
 ### 13. "Cross-env transfer?"
-Same state→action primitive on Wordle and SupplyMind. Wordle-trained policy sharpens entropy on SupplyMind state encoding (transfer_ratio > 1). Receipt: `cross_env_transfer.json`.
+**[STRUCK — REBUILD_BACKLOG R13]** The cross-env "transfer ratio" came from `cross_env_transfer.json`, which used random featurizers and an invented letter→SKU mapping (fabricated, deleted). A real transfer experiment needs genuine observation encoders; no transfer number may be cited today.
 
 ### 14. "Ablations?"
 6 leave-one-out trials. Largest impact: removing green_credit drops mean return by -0.459 (-92%). Yellow_credit, solve_bonus, guess_count_bonus, timeout_penalty all ranked. Receipt: `ablation_matrix.json`.
@@ -86,7 +86,7 @@ Apple-Samsung-Toyota F2 negotiation. Theme #1 alignment. Receipt: `F2_multi_agen
 LoRA merge per RL guide §16. Adapter-keep + float-merge + Unsloth merged_16bit options. Receipt: `lora_merge_verify.json`.
 
 ### 28. "What's wilcoxon_grid.png?"
-Pairwise Wilcoxon p-values for all 8 algos. Color-coded heatmap. RAP-XC dominates.
+**STRUCK (CLAIMS_LEDGER A1).** It was a pairwise-Wilcoxon heatmap, but its p-values came from the fabricated pairwise-leaderboard receipt (sorted synthetic samples); the plot and receipt were deleted. A valid paired-by-seed re-run is pending (P1.3).
 
 ### 29. "Honest limitations?"
 `HONEST_LIMITATIONS.md`. Single-machine training, GFW endpoint refinement pending, Wordle uses 102-word baseline (full English dict in tier-3). No claim to SOTA on any individual sub-task; the contribution is **end-to-end pipeline rigor**.

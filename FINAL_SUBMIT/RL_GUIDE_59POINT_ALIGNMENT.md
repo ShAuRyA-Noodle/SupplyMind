@@ -40,7 +40,7 @@ Each of the 59 hackathon-guide points → which file implements it → which rec
 
 ## §9. Process supervision
 **File**: `scripts/final_validation_bundle.py:process_supervision`
-**Receipt**: `process_supervision.json` — variance amplification 2735×.
+**Receipt**: `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json` — real `_score_guess` per-step credit (old `process_supervision.json` "2735× variance amplification" headline STRUCK, A4).
 
 ## §10. Right stack
 **File**: TRL 0.12 + PEFT 0.19 + Unsloth scaffold (`rl/lora/finetune_unsloth.py`)

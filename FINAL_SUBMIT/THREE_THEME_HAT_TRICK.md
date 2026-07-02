@@ -29,7 +29,7 @@ The strategic insight: a real supply-chain disruption already involves multiple 
 | Coalition reward shaping | `pass22_K6_coalition_reward.json` | Apple+Samsung bid-floor coalition, penalty -0.1 |
 | Real-world anchor | F2 receipt | 2021 chip shortage P&L dynamics |
 
-**Plus**: federated learning across 3 simulated companies (Apple/Samsung/Toyota silos) sharing model parameters not data, with differential-privacy noise protection. Receipts: `pass22_J2_dp_noise.json`, `pass22_J3_fedavg.json`, `pass22_J4_cross_silo.json`.
+**Plus**: federated learning is a **rebuild item** (REBUILD_BACKLOG R12) — the old `pass22_J2_dp_noise.json` / `pass22_J3_fedavg.json` / `pass22_J4_cross_silo.json` receipts were inline toy regressions with false provenance and were **deleted**. Real FedAvg (split DataCo by market region into K clients, aggregate, report the real delta) is pending.
 
 **This is genuine multi-agent.** Agents have distinct strategies, distinct annual procurement budgets ($87B/$62B/$45B), distinct risk profiles, and they actually compete against each other for a finite resource.
 
@@ -54,9 +54,9 @@ The strategic insight: a real supply-chain disruption already involves multiple 
 | Sparse end-of-episode signal | ❌ STRUCK — fabricated leaderboard receipt deleted (CLAIMS_LEDGER A1) | RAP-XC vs MaskablePPO significance STRUCK; re-run pending (P1.3) |
 | Recovery from early mistakes | `world_model_v2_rollout.json` | $178.68M saved (48% reduction) on 30-day F2 cascading crisis |
 | Curriculum (4-tier RLVE) | `rlve_curriculum_smoke.json` | tier-bumps tracked, target win-rate band 0.45-0.75 |
-| Process supervision (line-level credit) | `process_supervision.json` | variance amplification 2735× vs uniform-episode credit |
+| Process supervision (line-level credit) | `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json` | real `_score_guess` per-step credit (~2.8× on `BRAIN`; old 2735× headline STRUCK, A4) |
 | State tracking beyond context | `gnn/world_model_v2.py` | persistent supplier-graph state across all 60 steps |
-| 4-method causal counterfactual replay | `pass22_I6_counterfactual_standalone.json` | Tohoku 2011 pooled estimate $268.2B vs anchor $235B, CI95 covers truth |
+| 4-method causal counterfactual replay | **STRUCK (A6)** — `pass22_I6_counterfactual_standalone.json` deleted | 3/4 "methods" were hardcoded literals + 1 `np.random`; real 4-method causal pending (REBUILD_BACKLOG R6) |
 
 **This is genuine long-horizon planning.** A wrong action at step 5 propagates through the GNN cascade model and is no longer recoverable by step 30.
 
@@ -119,7 +119,7 @@ If a judge weights breadth over depth, the hat-trick wins. If a judge weights si
 | Theme | One-line claim |
 |---|---|
 | **Theme 1** | "Apple/Samsung/Toyota compete for TSMC backup capacity in a real-world chip-shortage simulation with sealed-bid clearing, theory-of-mind priors, and coalition penalties." |
-| **Theme 2** | "60-step hard cascading crisis with 4 chained disruptions, sparse end-of-episode reward, GNN-modeled supplier graph, and process-supervision line-level credit (Lightman 2023, 2735× variance amplification)." |
+| **Theme 2** | "60-step hard cascading crisis with 4 chained disruptions, sparse end-of-episode reward, GNN-modeled supplier graph, and process-supervision line-level credit (Lightman 2023; real `_score_guess` per-step credit, old 2735× headline STRUCK, A4)." |
 | **Theme 3** | "9 live data sources (4 keyed + 5 keyless 200 OK), 1500-event EMDAT RAG corpus, 4-method causal counterfactual ensemble calibrated to 6 published economic-impact anchors, end-to-end Hormuz war-room demo in 7 seconds with sha256-replayable provenance." |
 
 End hat-trick.

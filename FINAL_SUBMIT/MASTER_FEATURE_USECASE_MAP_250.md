@@ -34,7 +34,7 @@ Sections A through BB + RL/RLVR/RLVE knowledge alignment.
 | B5 | Solve bonus + step-count bonus | `versions/v5_phoenix/wordle_env/env.py` | richer signal | ablation_matrix.json |
 | B6 | Green credit | env.py | per-letter success | ablation: -0.459 if removed |
 | B7 | Yellow credit | env.py | partial info credit | ablation: small drop if removed |
-| B8 | Process supervision (line-level) | `scripts/final_validation_bundle.py:process_supervision` | RL guide §9 Lightman 2023 | `process_supervision.json` (var amp 2735×) |
+| B8 | Process supervision (line-level) | `scripts/pass26_real_evidence_expansion.py:process_supervision_concrete` | RL guide §9 Lightman 2023 | `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json` (real `_score_guess`; old 2735× STRUCK, A4) |
 | B9 | Dual-verifier composite | `versions/v5_phoenix/wordle_env/dual_verifier.py` | rule × (0.5 + 0.5×model) | `dual_verifier_smoke.json` |
 | B10 | Disagreement alarm | `dual_verifier.py:DISAGREEMENT_THRESHOLD` | §43 anti-hacking monitoring | rolling alarm 0.30 |
 | B11 | Ablation receipts (5 components) | `final_validation_bundle.py` | leave-one-out analysis | `ablation_matrix.json` |
@@ -129,7 +129,7 @@ Receipt: `adversarial_20_attack_gauntlet.json` (sha 082a3c57…)
 | I5 | Plain-English explainer | `server/explainer.py` | judge-readable rationales | tool_sm_explain_disruption |
 | I6 | Counterfactual ensemble (4-method) | `causal/counterfactual.py` | Tohoku $276B replication | war_room_validation receipt |
 | I7 | Conformal coverage plot | `FINAL_SUBMIT/plots/conformal_coverage.png` | UQ visualization | png |
-| I8 | Wilcoxon grid plot | `FINAL_SUBMIT/plots/wilcoxon_grid.png` | algo comparison | png |
+| I8 | Wilcoxon grid plot | STRUCK (A1) | algo comparison | `wilcoxon_grid.png` deleted — came from fabricated pairwise-leaderboard receipt |
 
 ## J. FEDERATED — 4 features
 | # | Feature | File | Use case | Receipt |
@@ -185,7 +185,7 @@ Receipts: each indexed, similarity score, `crisis_library.py` returns analogs.
 P1 Optuna CQL / P2 SHAP CQL / P3 PointLevel stacking / P4 specialist router → all in receipts above.
 
 ## Q. TRAINED ANALYSIS — 6 features
-Q1 reward_curve plot / Q2 loss_components / Q3 before_after / Q4 algo_leaderboard / Q5 wilcoxon_grid / Q6 conformal_coverage / Q7 brent_backtest / Q8 real_reinforce_curve
+Q1 reward_curve plot / Q2 loss_components / Q6 conformal_coverage / Q7 brent_backtest / Q8 real_reinforce_curve *(before_after / algo_leaderboard / wilcoxon_grid STRUCK — fabricated leaderboard, A1; deleted)*
 
 All in `FINAL_SUBMIT/plots/`.
 
@@ -214,7 +214,7 @@ X1 TSMC coords / X2 Samsung coords / X3 Toyota / X4 NewsAPI / X5 GDELT / X6 USGS
 Y1 HACKATHON_README / Y2 ARCHITECTURE / Y3 BENCHMARK_REPORT / Y4 DEMO_SCRIPT_90S / Y5 FEATURE_INVENTORY (all variants) / Y6 HONEST_LIMITATIONS / Y7 PITCH_DECK / Y8 README / Y9 REPRODUCE / Y10 MASTER_FEATURE_USECASE_MAP_250 (this) / Y11 JUDGE_FAQ_30 / Y12 JUDGE_4MIN_SCRIPT.
 
 ## Z. PLOTS — 8 PNGs
-Z1 reward_curve / Z2 loss_components / Z3 before_after / Z4 algo_leaderboard / Z5 wilcoxon_grid / Z6 conformal_coverage / Z7 brent_backtest / Z8 real_reinforce_curve.
+Z1 reward_curve / Z2 loss_components / Z6 conformal_coverage / Z7 brent_backtest / Z8 real_reinforce_curve *(before_after / algo_leaderboard / wilcoxon_grid STRUCK — A1; deleted)*.
 
 ## AA. TRICKS / ENGINEERING — 10
 AA1 sha256-stamped receipts / AA2 mirrored receipt copies / AA3 deterministic seeds / AA4 wall-clock metering / AA5 graceful fallback (BGE Win) / AA6 entropy-bonus anti-collapse / AA7 advantage normalization / AA8 EMA baseline / AA9 grad clip 1.0 / AA10 multi-tier curriculum.
@@ -235,7 +235,7 @@ AA1 sha256-stamped receipts / AA2 mirrored receipt copies / AA3 deterministic se
 | §6 | task simplicity | Tier-0 curriculum | rlve_curriculum_smoke.json |
 | §7 | reward design | 7-component shaped | rewards.py |
 | §8 | reward hacking | 20-attack gauntlet | adversarial_20_attack_gauntlet.json |
-| §9 | process supervision | line-level credit | process_supervision.json (var amp 2735×) |
+| §9 | process supervision | line-level credit | pass26_process_supervision_concrete.json + pass28_F_process_super_plot.json (real `_score_guess`; old 2735× STRUCK, A4) |
 | §10 | training stack | TRL 0.12 + PEFT 0.19 | lora_unsloth_train.json |
 | §11 | GRPO/RLVR | REINFORCE + dual verifier | wordle + dual_verifier |
 | §12 | inference speed | Unsloth scaffold + TRL | finetune_unsloth.py |
@@ -266,13 +266,13 @@ API keys utilized: **4/4** (OPENROUTER, EIA, NASA_FIRMS, GFW) — `api_keys_live
 
 | # | Feature | File | Use case | Receipt |
 |---|---------|------|----------|---------|
-| CC1 | Wilcoxon paired test on REINFORCE v2 | `scripts/pass20_grand_final.py` | inferential significance | `v2_inferential_stats.json` (p=6.6e-35) |
+| CC1 | Wilcoxon paired test on REINFORCE v2 | `scripts/pass27_killshot.py` block B | inferential significance | `pass27_B_real_episodic_bootstrap.json` (real paired arrays; old `v2_inferential_stats.json` p-value RERUN-PENDING, A2) |
 | CC2 | Bootstrap CI95 on Cohen's d | same | uncertainty around d=5.133 | CI [2.66, 3.96] |
-| CC3 | Statistical power analysis | same | n required for detection | `statistical_power_analysis.json` |
-| CC4 | Tier-3 generalization (50-100 words) | same | OOD eval | `tier3_generalization.json` (89% @ 50) |
-| CC5 | Tighter conformal v3 (16K NLLs) | same | bigger calib | `conformal_tight_v3.json` |
+| CC3 | Statistical power analysis | same | n required for detection | RERUN-PENDING (A2) — `statistical_power_analysis.json` deleted; recompute from `pass27_B_real_episodic_bootstrap.json` |
+| CC4 | Tier-3 generalization (50-100 words) | `scripts/pass27_killshot.py` block C | OOD eval | `pass27_C_tier3_degradation.json` (honest OOD scaling; old `tier3_generalization.json` deleted, B7 bug) |
+| CC5 | Conformal calibration | `scripts/calibrate_conformal_from_harvest.py` | real NLL split-conformal | RERUN-PENDING (A5) — `conformal_tight_v3.json` deleted (noise-NLL); real path `conformal_calibration.json` |
 | CC6 | Chained live demo (4 APIs + REINFORCE + war room) | same | end-to-end orchestration | `chained_live_demo.json` (6/6 stages 7s) |
-| CC7 | Master pass-20 audit summary | same | meta-receipt index | `master_audit_summary_pass20.json` |
+| CC7 | Master audit summary | — | meta-receipt index | DELETED (hardcoded 248-of-250 count, D9); regenerate via `scripts/verify_claims.py` (P2.2) |
 
 ## DD. JUDGE-READY ARTIFACTS — 9 docs (pass-20)
 

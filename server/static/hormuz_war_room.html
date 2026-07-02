@@ -282,14 +282,10 @@
         </div>
         <div class="flex flex-col gap-1">
           <label class="text-xs font-semibold uppercase tracking-wider text-[var(--fg-2)] help"
-                 data-tip="OPENROUTER FRONTIER PANEL — checks our verdict against independent frontier LLMs.&#10;&#10;6-judge: GPT-OSS-120B, Gemma-4-31B, GLM-4.5, MiniMax-M2.5, Nemotron-3-Super-120B, Gemma-4-26B.&#10;12-judge (expand): adds DeepSeek-V3.5, Qwen-3-235B, Llama-4-405B, Mistral-Large-3, Grok-4-mini, Claude-Haiku-4.5.&#10;&#10;Returns Krippendorff α agreement coefficient. Higher α = panels agree, more confidence.">OpenRouter</label>
+                 data-tip="OPENROUTER FRONTIER PANEL — checks our verdict against independent frontier LLMs.&#10;&#10;6-judge: GPT-OSS-120B, Gemma-4-31B, GLM-4.5, MiniMax-M2.5, Nemotron-3-Super-120B, Gemma-4-26B.&#10;&#10;Returns Krippendorff α agreement coefficient. Higher α = panels agree, more confidence.">OpenRouter</label>
           <label class="inline-flex items-center gap-2 cursor-pointer">
             <input id="enable-openrouter" type="checkbox" class="w-4 h-4 accent-[var(--cyan)]">
             <span class="text-xs text-[var(--fg-1)]">6-judge panel<br>(+~60s, free)</span>
-          </label>
-          <label class="inline-flex items-center gap-2 cursor-pointer mt-1">
-            <input id="expand-12-judges" type="checkbox" class="w-4 h-4 accent-[var(--violet)]">
-            <span class="text-xs text-[var(--fg-1)]">12-judge expand<br>(+~120s)</span>
           </label>
         </div>
         <div class="flex flex-col gap-1">
@@ -1258,7 +1254,6 @@
       enable_llm_judges: true,
       include_recent_signals: true,
       enable_openrouter_panel: $("#enable-openrouter").checked,
-      expand_to_12_judges: $("#expand-12-judges").checked,
       enable_specialist_judges: true,
       scenario_focus: $("#enable-reliance").checked ? "reliance_full_supplychain" : "default",
     };

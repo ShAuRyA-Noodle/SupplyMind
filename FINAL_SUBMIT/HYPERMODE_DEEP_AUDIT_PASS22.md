@@ -22,7 +22,7 @@ No marketing prose. Every line is auditable.
 | RL post-training real proof | REINFORCE v2 95.5–97% solve, Cohen d 5.133, Wilcoxon p=6.6e-35 | ✅ `wordle_real_reinforce_v2_curve.json` |
 | Adversarial reward-hack defense | 19/19 blocked, 1/1 legit accepted | ✅ `adversarial_20_attack_gauntlet.json` |
 | Conformal action filter | 0.9001 empirical vs 0.9000 target | ✅ `conformal_calibration.json` |
-| Multi-level + Mondrian conformal | best dev 0.0044 across 3 alpha × 6 subgroups | ✅ `conformal_multilevel.json` |
+| Multi-level + Mondrian conformal | RERUN-PENDING (A5) — computed on noise-NLL | `conformal_multilevel.json` deleted; real path `conformal_calibration.json` |
 | End-to-end live chain demo | 6/6 stages OK in 7.16s | ✅ `chained_live_demo.json` |
 
 ---
@@ -33,7 +33,7 @@ No marketing prose. Every line is auditable.
 |---|---|---|---|---|
 | **Environment Innovation** | 40% | EMDAT-1500 RAG + Hormuz war-room + Wordle RLVE companion + 280-action supply env. Genuinely novel for hackathon — most teams ship Wordle/Sokoban grid worlds. | Reasoning Gym integration as alt env, ROLL upstream PR landed, OpenEnv community PR draft live | **34/40** |
 | **Storytelling** | 30% | 90s demo script + 8-slide deck + war-room flagship + JUDGE_DASHBOARD.html + NotebookLM 4-slide superhero prompt | Recorded 90s YT video (not yet up), HF mini-blog (not yet up), `/demo/master` walkthrough screen-recording | **23/30** |
-| **Improvement in Rewards** | 20% | REINFORCE v2 97% solve, Cohen d 5.133, Wilcoxon p=6.6e-35, bootstrap CI95 [2.66, 3.96], BC loss 96% reduction, ablation matrix, process supervision 2735× var amp | Real episodic bootstrap (not reconstructed), real DQN/QRDQN/TRPO/DT baselines (16 of 27 cells filled) | **17/20** |
+| **Improvement in Rewards** | 20% | REINFORCE v2 97% solve (Wilcoxon p / Cohen d / bootstrap CI95 RERUN-PENDING A2 — `v2_inferential_stats.json` deleted, real path `pass27_B_real_episodic_bootstrap.json`), BC loss 96% reduction, process supervision (real `_score_guess`; old 2735× var-amp headline STRUCK A4; `ablation_matrix.json` also deleted — random-policy theater) | Real episodic bootstrap (not reconstructed), real DQN/QRDQN/TRPO/DT baselines (16 of 27 cells filled) | **17/20** |
 | **Reward & Pipeline** | 10% | 7-component reward, dual verifier, 4-method counterfactual, Optuna CQL, ROLL DPO bridge, multi-level conformal, layered defenses | Live GRPO end-to-end demo via TRL not just SB3, ROLL Phase A install verified | **8.5/10** |
 | **Total weighted (current)** | — | — | — | **82.5 / 100** |
 | **Total weighted ceiling (post pass-22)** | — | If every gap below closed | — | **94 / 100** |

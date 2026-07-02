@@ -30,7 +30,7 @@ This is where we are deeply aligned. Iteration evidence at FIVE distinct levels:
 
 ### Level 1 — 28 documented passes (project-level iteration)
 Pass 1 through Pass 28. Each pass adds receipts. Each pass has its own audit doc. Visible in:
-- `master_audit_summary_pass{20-28}_*.json` (pass-level receipts)
+- ~~`master_audit_summary_pass{20-28}_*.json`~~ — **STRUCK (D9)**: hardcoded 248-of-250 count; deleted, regenerate via `scripts/verify_claims.py` (P2.2)
 - `PASS{22-28}_HYPERMODE_FINAL.md` (pass-level audit docs)
 - 128 sha256-stamped JSON receipts on disk
 
@@ -99,7 +99,7 @@ Revenue 35% + Stockout 25% + Proactive 15% + Cost 10% + Health 5% + SLA 5% + Unn
 `r_final = r_rule × (0.5 + 0.5 × r_model)` with rolling disagreement alarm at threshold 0.30. Rule = 7-component + format gates. Model = 6-judge LOCAL Ollama 14B panel (Spearman ρ = 0.901 inter-judge agreement).
 
 ### Layer 3 — Process supervision (Lightman 2023)
-Line-level credit assignment with **2735× variance amplification** over uniform-episode credit. Concentrates credit at the actual decisive step.
+Line-level credit assignment scored with the env's real `_score_guess`. Concentrates credit at the actual decisive step (~2.8× on the `BRAIN` example; the old **2735× variance amplification** headline was STRUCK — hardcoded demo, CLAIMS_LEDGER A4).
 
 ### Layer 4 — adversarial gauntlet: 174/174 real executed attacks (STRUCK "269" overcount, A3)
 - 19 reward-hack attacks (Skalse 2022 + Krakovna 2020 + Pan 2022 patterns)

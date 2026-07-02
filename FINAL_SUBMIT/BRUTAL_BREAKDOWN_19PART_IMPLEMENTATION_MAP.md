@@ -35,7 +35,7 @@ All 5 stack components present.
 | Theme | Required | Status | Anchor |
 |---|---|---|---|
 | **Theme 1 — Multi-Agent** | optional pick | covered as bonus | F2 Apple-Samsung-Toyota + 5 K-receipts + federated J1-J4. See [`THREE_THEME_HAT_TRICK.md`](THREE_THEME_HAT_TRICK.md) §1 |
-| **Theme 2 — Long-Horizon** | optional pick | covered as bonus | 60-step hard cascading + GNN world model + process supervision 2735× var amp. See `THREE_THEME_HAT_TRICK.md` §2 |
+| **Theme 2 — Long-Horizon** | optional pick | covered as bonus | 60-step hard cascading + GNN world model + process supervision (real `_score_guess` per-step credit; old 2735× var-amp headline STRUCK, A4). See `THREE_THEME_HAT_TRICK.md` §2 |
 | **Theme 3 — Professional Tasks** | **PRIMARY** | primary fit | 9 live APIs + EMDAT-1500 RAG + war-room 7s demo + 4-method counterfactual. See `THREE_THEME_HAT_TRICK.md` §3 |
 
 Innovation lift: hat-trick on all 3 themes from a single env vs typical entries that pick 1.
@@ -127,7 +127,7 @@ Plus FastAPI wrapper at `server.app:app`. Deployable both locally (uvicorn) and 
 | 0 | 5 words (Wordle) / 12 nodes (env) | 30 steps | nb 08 cell 7 + `openenv.yaml:easy_typhoon_response` |
 | 1 | 10 words / 25 nodes | 45 steps | nb 08 + `medium_multi_front` |
 | 2 | 20 words / 40 nodes | 60 steps | nb 08 + `hard_cascading_crisis` |
-| 3 | full dict (50/100 words) | n/a | tier-3 OOD eval `tier3_generalization.json` |
+| 3 | full dict (50/100 words) | n/a | tier-3 OOD eval `pass27_C_tier3_degradation.json` (old `tier3_generalization.json` deleted, B7 bug) |
 
 Adaptive RLVE controller: BUMP at win-rate ≥ 0.85 (proven in pass-23 smoke: tier 0→1 at ep 16, tier 1→2 at ep 32). Receipt: `rlve_curriculum_smoke.json`.
 
@@ -140,7 +140,7 @@ Adaptive RLVE controller: BUMP at win-rate ≥ 0.85 (proven in pass-23 smoke: ti
 | Mode | Implementation | Anchor |
 |---|---|---|
 | Outcome supervision | Episode-end win/lose binary + cumulative reward | `wordle_env/env.py:grade()` |
-| Process supervision | Line-level credit per-letter (green +0.05, yellow +0.02), per Lightman 2023 | `process_supervision.json` (var amp 2735× vs uniform-episode credit) |
+| Process supervision | Line-level credit per-letter (green +0.05, yellow +0.02), per Lightman 2023 | `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json` (real `_score_guess`; old 2735× var-amp headline STRUCK, A4) |
 
 **Hackathon sweet spot per Part 10:** "outcome-based verification PLUS lightweight process checks" — exactly what we do.
 
@@ -205,7 +205,7 @@ URL: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind. Receipt: `pass25_h
 
 | Demo step | Implementation |
 |---|---|
-| Show baseline failing | `plots/colab_reproduction.png` left bar (random uniform 10% solve) + `plots/before_after.png` |
+| Show baseline failing | `plots/colab_reproduction.png` left bar (random uniform 10% solve) *(before_after.png STRUCK — from fabricated leaderboard, A1)* |
 | Show reward/verifier output | `dual_verifier_smoke.json` + 4-component reward breakdown in env step `info` field |
 | Show trained model winning | `plots/colab_reproduction.png` right bar (REINFORCE 100% solve) |
 | Show measurable improvement | Wilcoxon p=1.87e-34, Cohen d=3.89, +855% reward, +90pp solve |
@@ -301,6 +301,6 @@ URL: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind. Receipt: `pass25_h
 
 The one ⏳ remaining: recorded YouTube video (user owns, NotebookLM-generated). The slide deck + judge dashboard + 4-min script cover that submission requirement in the meantime.
 
-Receipt of this audit: `master_audit_summary_pass25_v6_FINAL.json`.
+Receipt of this audit: DELETED — the `master_audit_summary_pass*` receipts hardcoded a 248-of-250 count (D9); regenerate via `scripts/verify_claims.py` (P2.2).
 
 End mapping.

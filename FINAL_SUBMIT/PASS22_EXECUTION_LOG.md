@@ -147,18 +147,18 @@ FINAL_SUBMIT/receipts/
 ├── pass22_K4_mixed_coop_comp.json
 ├── pass22_K5_communication_channel.json
 ├── pass22_K6_coalition_reward.json
-├── pass22_J2_dp_noise.json
-├── pass22_J3_fedavg.json
-├── pass22_J4_cross_silo.json
+├── pass22_J2_dp_noise.json          # DELETED (inline toy / false provenance; R12)
+├── pass22_J3_fedavg.json            # DELETED (inline toy regression; R12)
+├── pass22_J4_cross_silo.json        # DELETED (inline toy; R12)
 ├── pass22_F9_quantile_regression.json
 ├── pass22_M_keyless_data_smokes.json
-├── pass22_G2_bge_rerank_quality.json
-├── pass22_I6_counterfactual_standalone.json
+├── pass22_G2_bge_rerank_quality.json  # DELETED (BGE reranker absent, B3)
+├── pass22_I6_counterfactual_standalone.json  # DELETED (3/4 methods hardcoded, A6)
 ├── pass22_D15_D18_baseline_grid_queued.json
 └── pass22_api_freshness.json
 ```
 
-Plus refreshed: `master_audit_summary_pass22_v2.json`.
+Plus refreshed: `master_audit_summary_pass22_v2.json` — later **DELETED** (hardcoded 248-of-250 count, D9); regenerate via `scripts/verify_claims.py` (P2.2).
 
 ---
 

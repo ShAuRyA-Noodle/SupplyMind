@@ -369,7 +369,18 @@ def load_learned_reward():
         from rl.checkpoint_security import safe_pickle_load
         model_obj = safe_pickle_load(FIN_MODEL)
         return model_obj["model"]
+    except RuntimeError:
+        # safe_pickle_load raises RuntimeError ONLY on an integrity failure:
+        # unknown-provenance (not in the trusted manifest) or a SHA-256 mismatch
+        # (checkpoint tampered/regenerated). That is a security event, not a soft
+        # "model absent" condition — fail loud (CLAUDE.md §0.3). Downgrading it to
+        # a warning + silent None would let a poisoned pickle be quietly skipped
+        # and the buffer built on the unvetted direct-benefit fallback as if
+        # nothing was wrong. Re-raise so the caller aborts.
+        raise
     except Exception as e:
+        # Benign absence (model not trained yet / file missing) -> soft fallback
+        # to the direct Benefit field. Integrity failures are re-raised above.
         log.warning(f"Could not load financial_impact model: {e}; using direct benefit field")
         return None
 

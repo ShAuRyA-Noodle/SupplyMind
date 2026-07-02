@@ -4,9 +4,6 @@
 #   - `version:` key            — obsolete in Compose v2 (warning noise).
 #   - DEMO_MODE / OFFLINE_MODE  — placebo env vars no production code reads,
 #                                 and "demo mode" contradicts the everything-live mandate.
-#   - `dashboard` service       — built the DEPRECATED Streamlit dashboard/app.py
-#                                 (self-declared deprecated). The war room is served by
-#                                 the api service's static files (server/static/).
 #   - `damocles` service        — its container could not start (stale uvicorn module
 #                                 path) and 4/5 endpoints were dead on arrival.
 #                                 POINTER: the Damocles endpoints (/assess, /forecast,

@@ -146,8 +146,8 @@ Time-discounted: `r_t × max(0.3, 1.0 - step_fraction × 0.7)` — rewards earli
 ### 3.4 Process supervision (line-level credit)
 
 Per RL guide §9 Lightman 2023 "Let's Verify Step by Step":
-- Variance amplification 2735× vs uniform-episode credit
-- Receipt: `process_supervision.json`
+- Per-step (process) vs uniform-episode credit from the real `_score_guess` (~2.8× on the `BRAIN` example; old 2735× var-amp headline STRUCK, A4)
+- Receipts: `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json` (old `process_supervision.json` deleted, A4)
 - Concentrates credit at the actual decision step that caused the win
 
 ---

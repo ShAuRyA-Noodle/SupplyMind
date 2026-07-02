@@ -88,7 +88,7 @@ The single-level conformal calibration was performed on 8,000 real harvested tra
 
 We extended this to a **multi-level** conformal framework adding three improvements over the standard approach. First, three α levels simultaneously: 0.05, 0.10, and 0.20, with empirical coverages of 0.9544, 0.92, and 0.8126 respectively. Second, a Mondrian extension per Vovk and Gammerman 2003 that computes per-guess-number conditional coverage across six subgroups. Third, an Adaptive Prediction Set extension per Romano, Sesia, and Candès' 2020 NeurIPS paper.
 
-The receipt `conformal_multilevel.json` shows a best deviation of **0.0044** at α equal to 0.05, and all three levels are conservative-valid — meaning empirical coverage equals or exceeds target coverage, which is the safe direction.
+The multi-level conformal deviation figures were **RERUN-PENDING (CLAIMS_LEDGER A5)**: the `conformal_multilevel.json` receipt was computed on `rng.normal()` noise labelled model-NLL and was deleted. The real split-conformal path is `scripts/calibrate_conformal_from_harvest.py` → `conformal_calibration.json`; do not cite a deviation number until it is regenerated on real harvested NLLs.
 
 Beyond conformal, we maintain Monte-Carlo dropout uncertainty per Gal and Ghahramani 2016, with an Expected Calibration Error of **0.0229** on the full action distribution and **0.0215** on action-type — well below the 0.05 calibration-good threshold.
 

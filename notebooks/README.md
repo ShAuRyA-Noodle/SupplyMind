@@ -31,8 +31,9 @@ advertised one-click path works in both environments.
 | `11_REAL_DATA_INGEST.ipynb` | Real keyed API ingest (FRED/NewsAPI/NOAA/ACLED/Exa/HF). The fabricated K4 W&B curve was removed; the real ingest also lives in nb13 §10. |
 | `12_FRED_BRENT_REFIT.ipynb` | Brent refit — relabeled honestly as a **naive statistical baseline** (the earlier "Chronos+TimesFM+TabPFN ensemble" claim was false); superseded by nb13 §11. |
 
-**Note on `07_HACKATHON_TRAINING.ipynb`:** its cell-17 submission summary still contains
-unverified headline statistics (e.g. `p=3.9e-18`, `Cohen d=+2.73`, `median 3.32% rel err`)
-inherited from the old `bootstrap_leaderboard`/`wilcoxon_pairwise_leaderboard` receipts. These
-must be reconciled or struck during the docs wave; the notebook is archived and superseded in
-the meantime.
+**Note on `07_HACKATHON_TRAINING.ipynb`:** its submission-summary cells inherited unverified
+headline statistics (a fabricated Wilcoxon p-value / Cohen's d / relative-error figure) from the
+deleted `bootstrap_leaderboard` / `wilcoxon_pairwise_leaderboard` receipts (CLAIMS_LEDGER A1).
+Those were **struck in place** during the Wave-3 docs pass — cells 0/11/12/17 now carry
+`[ARCHIVED/UNVERIFIED]` banners and no longer print the fabricated numbers. The notebook is
+archived and superseded by `13_MASTER_HACKATHON_FINAL.ipynb` regardless.

@@ -53,10 +53,9 @@ rl = [
     "mlflow>=2.10.0",
     "wandb>=0.16.0",
 ]
-dashboard = [
-    "streamlit>=1.32.0",
-    "plotly>=5.18.0",
-]
+# NOTE: the `dashboard` extra (streamlit + plotly) was removed — the Streamlit
+# `dashboard/` app is deleted (CLAUDE.md §3.1). The one dashboard is the war
+# room, served as static files by the `server` app; it needs no extra deps.
 
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
@@ -77,4 +76,4 @@ py-modules = ["models", "baseline", "client", "scripted_agent", "inference", "ll
 
 [tool.setuptools.packages.find]
 include = ["server*", "rl*", "benchmark*"]
-exclude = ["tests*", "dashboard*"]
+exclude = ["tests*"]

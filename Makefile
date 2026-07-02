@@ -61,7 +61,11 @@ benchmark-local:
 	$(PYTHON) scripts/calibrate_conformal_from_harvest.py
 	$(PYTHON) scripts/validate_ensemble_brent.py
 	$(PYTHON) scripts/validate_war_room.py
-	$(PYTHON) scripts/bootstrap_leaderboard.py
+	# bootstrap_leaderboard.py was DELETED (sorted-'paired' Wilcoxon on synthesized
+	# samples -> fabricated significance, CLAIMS_LEDGER A1). The honest replacement is
+	# real per-episode paired stats in scripts/pass27_killshot.py block B
+	# (-> pass27_B_real_episodic_bootstrap.json); run that instead of this target's
+	# deleted script.
 	$(PYTHON) scripts/ollama_v5_vs_frontier.py   # requires local Ollama daemon
 	@echo "[i] All receipts in tests/receipts/*.json"
 

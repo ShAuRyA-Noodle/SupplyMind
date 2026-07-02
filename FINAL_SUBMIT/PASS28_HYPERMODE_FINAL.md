@@ -20,9 +20,9 @@
 | 28.B | 6-judge LOCAL Ollama panel (qwen2.5:14b + 5 others, all 14B class) | `pass28_B_six_judge_panel.json` | (running with full 14B per user spec — no compromise) |
 | 28.C | Live HF Space hard tier 60-step rollout | `pass28_C_hard_tier_rollout.json` | (running) |
 | 28.D | Combined attack gauntlet — **STRUCK** "269" overcount → honest 174/174 real executed (nb13 §1, A3) | `pass28_D_combined_attack_gauntlet.json` | (running) |
-| 28.E | Conformal 32K calibration (target dev <0.001) | `pass28_E_conformal_32k.json` | (running) |
+| 28.E | Conformal 32K calibration | `pass28_E_conformal_32k.json` — **RERUN-PENDING (A5)**, deleted (noise-NLL); real path `conformal_calibration.json` |
 | 28.F | Process supervision per-step credit PNG | `pass28_F_process_super_plot.json` + `plots/process_supervision_step_credit.png` | (running) |
-| 28.G | Cross-env transfer matrix (Wordle ↔ Reasoning Gym ↔ SupplyMind) | `pass28_G_cross_env_transfer.json` | (running) |
+| 28.G | Cross-env transfer matrix | `pass28_G_cross_env_transfer.json` — **STRUCK**, deleted (fabricated featurizers / invented letter→SKU); real encoders pending (R13) |
 | 28.I | License audit (MIT/Apache/BSD compatibility 21 deps) | `pass28_I_license_audit.json` | (running) |
 | 28.J | REINFORCE longer training 3000 ep, 384-hidden net → ≥97% deterministic | `pass28_J_reinforce_longer.json` | (running) |
 
@@ -33,7 +33,7 @@
 | K1 | FRED_API_KEY | `pass28_K1_fred_brent_real.json` | **8/8 historical events with REAL DCOILBRENTEU 200d pre-event obs**. Closes L9 (synthetic Brent pre-history) |
 | K2 | NEWS_API_KEY | `pass28_K2_newsapi_live_ingest.json` | **5/5 queries successful**. Hormuz: 18,660 articles, top recent on Iran war + Indonesia Malacca commentary. Closes G4 |
 | K3 | NOAA_TOKEN | `pass28_K3_noaa_cdo_live.json` | **3/3 endpoints 200 OK** (datasets, locationcategories, datatypes). Closes M typhoon-response data gap |
-| K4 | WANDB_API_KEY | `pass28_K4_wandb_smoke.json` | Login successful (shauryapunj404). Init validation issue with newer wandb Settings API — works on Colab. Honest disclosure in receipt. |
+| K4 | WANDB_API_KEY | `pass28_K4_wandb_smoke.json` — **STRUCK/deleted** (held a fabricated reward curve) | Key valid (login OK); regenerate only from a real training loop's metrics (P2.4 / R15). |
 
 ### 1.3 Pro Colab notebooks (5 ready for user execution)
 

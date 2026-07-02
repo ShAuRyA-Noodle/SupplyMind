@@ -258,7 +258,10 @@ def algorithm_efficiency_receipt() -> dict:
         "evidence_chain": [
             "pass23_colab_local_smoke.json (CPU REINFORCE 100% solve)",
             "wordle_real_reinforce_v2_curve.json (production REINFORCE v2 95.5-97% solve)",
-            "v2_inferential_stats.json (Wilcoxon p=6.6e-35, Cohen d CI95)",
+            # v2_inferential_stats.json was DELETED (Wave-3 evidence-refresh: it held
+            # sorted-'paired' Wilcoxon stats on synthesized samples — CLAIMS_LEDGER A1/A2).
+            # Honest replacement = real per-episode paired arrays:
+            "pass27_B_real_episodic_bootstrap.json (real per-episode paired stats)",
         ],
     }
 
@@ -414,6 +417,85 @@ def trl_config_validation() -> dict:
 
 
 # ---------------------------------------------------------------------------
+# 6 — Process-supervision per-step credit (REAL _score_guess trajectory)
+# ---------------------------------------------------------------------------
+def process_supervision_concrete() -> dict:
+    """Process-supervision per-step credit over a REAL Wordle solve trajectory.
+
+    Honest replacement for the Wave-1-deleted hand-crafted trajectory, whose
+    Wordle feedback was factually wrong and which published a fabricated
+    "2735x variance amplification" headline (CLAIMS_LEDGER A4, STRUCK).
+
+    Every step's feedback tiles AND its solve bonus are derived from the env's
+    real ``_score_guess`` + reward shaping — no hardcoded tiles, no hardcoded
+    credit, no fabricated variance-amplification number. Mirrors the honest
+    pattern in ``scripts/pass28_killshot_v2.py`` block 28.F.
+    """
+    import sys
+    sys.path.insert(0, str(ROOT))
+    from versions.v5_phoenix.wordle_env.env import _score_guess
+
+    target = "brain"
+    guesses = ["stare", "cloud", "brink", "brain"]  # ends on the solving word
+    trace = []
+    process_credit = []
+    for i, g in enumerate(guesses):
+        fb = _score_guess(g, target)
+        tiles = [f.state for f in fb]          # REAL per-letter states
+        n_g = sum(1 for f in fb if f.state == "green")
+        n_y = sum(1 for f in fb if f.state == "yellow")
+        # Env reward shaping (versions/v5_phoenix/wordle_env/env.py):
+        #   green_credit = 0.05*n_green, yellow_credit = 0.02*n_yellow,
+        #   solve_bonus  = 1.0 / guess_index (earlier guess -> bigger reward).
+        r = 0.05 * n_g + 0.02 * n_y
+        solved = (g == target)
+        if solved:
+            r += 1.0 / (i + 1)                 # real solve bonus; guess_idx = i+1
+        process_credit.append(round(r, 4))
+        trace.append({
+            "step": i + 1,
+            "guess": g.upper(),
+            "feedback": tiles,
+            "n_green": n_g,
+            "n_yellow": n_y,
+            "solved": solved,
+            "process_credit": round(r, 4),
+        })
+
+    total_reward = round(sum(process_credit), 4)
+    uniform_credit = [round(total_reward / len(guesses), 4)] * len(guesses)
+    for i, t in enumerate(trace):
+        t["uniform_credit"] = uniform_credit[i]
+    denom = uniform_credit[-1] if uniform_credit[-1] else None
+    decisive_amp = round(process_credit[-1] / denom, 4) if denom else None
+
+    return {
+        "name": "pass26_process_supervision_concrete",
+        "framework": (
+            "process supervision (Lightman 2023 'Let's Verify Step by Step') — "
+            "per-step credit from the env's real _score_guess + reward shaping"
+        ),
+        "target": target,
+        "trace": trace,
+        "process_credit": process_credit,
+        "uniform_credit": uniform_credit,
+        "total_episode_reward": total_reward,
+        "decisive_step_amplification": decisive_amp,
+        "interpretation": (
+            "process supervision concentrates credit on the decisive solving step "
+            f"(step {len(guesses)} '{guesses[-1].upper()}' green-locks all letters); "
+            "uniform-episode credit smears the same total flat across every step"
+        ),
+        "honest_note": (
+            "feedback tiles + solve bonus derived from "
+            "versions.v5_phoenix.wordle_env.env._score_guess (no hardcoded credit, "
+            "no fabricated variance-amplification headline). Honest replacement for "
+            "the Wave-1-deleted hand-crafted trajectory (CLAIMS_LEDGER A4 STRUCK)."
+        ),
+    }
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 def main():
@@ -422,7 +504,7 @@ def main():
     print("=" * 70)
 
     # 1
-    print("\n[1/5] Live SupplyMind rollout against HF Space...")
+    print("\n[1/6] Live SupplyMind rollout against HF Space...")
     rollout = live_supplymind_rollout()
     out, sha = _write("pass26_live_supplymind_rollout.json", rollout)
     plot_path = plot_supplymind_curve(rollout)
@@ -433,14 +515,14 @@ def main():
         print(f"  plot: {plot_path}")
 
     # 2
-    print("\n[2/5] Algorithm efficiency receipt...")
+    print("\n[2/6] Algorithm efficiency receipt...")
     eff = algorithm_efficiency_receipt()
     out, sha = _write("pass26_algorithm_efficiency.json", eff)
     print(f"  receipt: {out}  sha={sha[:24]}")
     print(f"  headline solve rate: {eff['headline']['actual_solve_rate_pct']}%")
 
     # 3
-    print("\n[3/4] SUBMIT_PRECHECK...")
+    print("\n[3/6] SUBMIT_PRECHECK...")
     precheck = submit_precheck()
     out, sha = _write("pass26_submit_precheck.json", precheck)
     print(f"  receipt: {out}  sha={sha[:24]}")
@@ -450,15 +532,26 @@ def main():
         print(f"    {flag} {c['id']}")
 
     # 4
-    print("\n[4/4] TRL config validation...")
+    print("\n[4/6] TRL config validation...")
     trl = trl_config_validation()
     out, sha = _write("pass26_trl_config_validation.json", trl)
     print(f"  receipt: {out}  sha={sha[:24]}")
     print(f"  config_valid: {trl.get('config_valid')}")
     print(f"  required_args_missing: {trl.get('required_args_missing')}")
 
+    # 5
+    print("\n[5/6] Process-supervision per-step credit (REAL _score_guess)...")
+    psc = process_supervision_concrete()
+    out, sha = _write("pass26_process_supervision_concrete.json", psc)
+    print(f"  receipt: {out}  sha={sha[:24]}")
+    for t in psc["trace"]:
+        print(f"    step {t['step']} {t['guess']} feedback={t['feedback']} "
+              f"green={t['n_green']} yellow={t['n_yellow']} "
+              f"process_credit={t['process_credit']} uniform={t['uniform_credit']}")
+    print(f"  decisive_step_amplification: {psc['decisive_step_amplification']}x")
+
     print("\n" + "=" * 70)
-    print("PASS 26 complete — 4 new receipts + 1 new plot")
+    print("PASS 26 complete — 5 new receipts + 1 new plot")
     print("=" * 70)
 
 

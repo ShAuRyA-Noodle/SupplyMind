@@ -41,7 +41,7 @@ Cross-reference against the brutal hackathon doc Part 5 (Minimum Submission Requ
 | Real training run (not simulated) | ✅ | `pass23_colab_local_smoke.json` (10% → 100% solve, Wilcoxon p=1.87e-34, Cohen d=3.89, 9.8s wall-clock) |
 | Reward plots exist, axes labeled | ✅ | `plots/colab_reproduction.png` x="episode" y="reward / win rate" + axis labels in `loss_components.png`, `reward_curve.png` etc |
 | Loss plots exist | ✅ | `plots/loss_components.png` (4-component BC + CQL + V + KL) |
-| Baseline vs trained comparison | ✅ | `plots/before_after.png` + `plots/colab_reproduction.png` (right panel, same axes) |
+| Baseline vs trained comparison | ⚠️ | `plots/colab_reproduction.png` (right panel) — `before_after.png` STRUCK (A1), from fabricated leaderboard, deleted |
 | Plots committed to repo (not just notebook) | ✅ | 11 PNGs in `FINAL_SUBMIT/plots/` |
 | Plots embedded in README with captions | ✅ | `HACKATHON_README.md` §3.1-3.17 with one-line captions each |
 
@@ -67,7 +67,7 @@ Anchors:
 - `ENV_DENSITY_MANIFESTO.md` — 280 actions, 64-dim state, 1500-token NL summary, 9 live sources, 7-component reward, 4 anti-hack layers, dual verifier, 4-tier curriculum
 - `THREE_THEME_HAT_TRICK.md` — single env hits Theme 1 + 2 + 3
 - `pass22_K2..K6_*.json` — multi-agent sub-features
-- `process_supervision.json` — Lightman 2023 line-level credit (2735× var amp)
+- `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json` — Lightman 2023 line-level credit from the real `_score_guess` (old 2735× var-amp headline STRUCK, A4)
 - `conformal_calibration.json` — Vovk 2005 provable safety (0.9001)
 
 Score estimate: **36/40** (was 32/40 pre pass-22; +4 for env density manifesto + 3-theme hat-trick).
@@ -90,8 +90,8 @@ Anchors:
 - `wordle_real_reinforce_v2_curve.json` — REINFORCE v2 95.5–97% solve, Cohen d 5.13
 - `pass23_colab_local_smoke.json` — Colab notebook proof: 10% → 100% solve, Wilcoxon p=1.87e-34
 - ❌ STRUCK — the bootstrap-CI leaderboard receipt was fabricated + deleted (CLAIMS_LEDGER A1); RAP-XC vs MaskablePPO significance pending valid re-run (P1.3)
-- `v2_inferential_stats.json` — bootstrap CI95 [2.66, 3.96] on Cohen's d
-- `statistical_power_analysis.json` — minimum detectable d=0.28 at n=200, observed 18× larger
+- RERUN-PENDING (A2) — `v2_inferential_stats.json` deleted; real paired arrays in `pass27_B_real_episodic_bootstrap.json`
+- RERUN-PENDING (A2) — `statistical_power_analysis.json` deleted; recompute from `pass27_B_real_episodic_bootstrap.json`
 - `plots/colab_reproduction.png` — same-axes baseline vs trained per Part 16 plot rules
 
 Score estimate: **20/20** (ceiling — real curve, real stats, same-axes plot).

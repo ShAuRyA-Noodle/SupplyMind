@@ -73,31 +73,21 @@ Honest baseline = **0.86**, strictly > every attack. Receipt: [`adversarial_rewa
 
 ### 3.3 RAP-XC vs MaskablePPO-v3 vs scripted (paired bootstrap CI95)
 
-![Before/after](plots/before_after.png)
-
-> **[STRUCK — CLAIMS_LEDGER A1]** The RAP-XC vs MaskablePPO-v3 Wilcoxon significance (p / Cohen's d) and bootstrap CI95 shown here were fabricated from sorted synthetic samples; the generator scripts were deleted. A valid paired-by-seed benchmark re-run is pending (P1.3) before any of these numbers may be cited.
+> **[STRUCK — CLAIMS_LEDGER A1]** The RAP-XC vs MaskablePPO-v3 Wilcoxon significance (p / Cohen's d) and bootstrap CI95 that this section showed were fabricated from sorted synthetic samples; the generator scripts and the `before_after.png` plot were deleted. A valid paired-by-seed benchmark re-run is pending (P1.3) before any of these numbers may be cited.
 
 ### 3.4 9-agent leaderboard across 3 difficulty tiers
 
-![Leaderboard](plots/algo_leaderboard.png)
-
-> RAP-XC wins on all 3 tasks. MaskablePPO close on easy, but RAP-XC dominates as horizon lengthens (medium 45d → hard 60d).
+> **[STRUCK — CLAIMS_LEDGER A1]** The 9-agent leaderboard and its `algo_leaderboard.png` plot were generated from the fabricated leaderboard receipt (deleted). The real 10-agent × 3-task × ≥20-seed benchmark is pending (P1.3 / REBUILD_BACKLOG R2); no ranking may be cited until it lands.
 
 ### 3.5 Wilcoxon pairwise heatmap
 
-![Wilcoxon](plots/wilcoxon_grid.png)
-
-> **[STRUCK — CLAIMS_LEDGER A1]** The "most-significant pair" (p=6.77e-149) and "13/16 pairs significant" summary came from the fabricated pairwise-leaderboard receipt (sorted synthetic samples; deleted). Valid paired-by-seed re-run pending (P1.3).
+> **[STRUCK — CLAIMS_LEDGER A1]** The "most-significant pair" and "13/16 pairs significant" summary and its `wilcoxon_grid.png` plot came from the fabricated pairwise-leaderboard receipt (sorted synthetic samples; deleted). Valid paired-by-seed re-run pending (P1.3).
 
 ### 3.6 Conformal action filter (Vovk 2005) — multi-level + Mondrian
 
 ![Conformal](plots/conformal_coverage.png)
 
-> Single-level: empirical coverage **0.9001** vs target 0.9000 — within 1e-4. Calibrated on 8000 real harvest rows. Provable safety: `P[expert action ∈ accepted set] ≥ 1−α`.
-
-![Conformal multi-level](plots/conformal_multilevel.png)
-
-> **Multi-level extension (NEW)**: 3 α levels [0.05 / 0.10 / 0.20] + Mondrian per-guess-number conditional coverage (Vovk 2003). Best deviation **0.0044** (α=0.05 → empirical 0.9544 vs target 0.95). All levels conservative-valid (empirical ≥ target). 5,696 calibration scores · 1,425 test scores · 6 Mondrian subgroups. Receipt: [`conformal_multilevel.json`](receipts/conformal_multilevel.json).
+> **[RERUN-PENDING — CLAIMS_LEDGER A5]** The single-level coverage headline and its multi-level/Mondrian extension (`conformal_multilevel.json`, `conformal_multilevel.png`, `conformal_tight_v3.json`) were computed on `rng.normal()` noise labelled model-NLL, and were deleted. The real split-conformal path is `scripts/calibrate_conformal_from_harvest.py` → `conformal_calibration.json` (real harvested trajectories); regenerate before citing any coverage number.
 
 ### 3.7 Ensemble Brent backtest (Chronos+TimesFM+TabPFN)
 
@@ -122,15 +112,15 @@ Reproduces in ~3 min via `python scripts/final_real_reinforce_wordle_v2.py --epi
 
 ### 3.10 Cross-environment transfer (Wordle → SupplyMind)
 
-> Wordle-trained policy's state→action primitive ALSO sharpens entropy on SupplyMind state encoding. **Transfer ratio 1.30** (entropy drop on SM ≥ entropy drop on Wordle). Inductive bias is portable. Receipt: [`cross_env_transfer.json`](receipts/cross_env_transfer.json).
+> **[STRUCK — RERUN_QUEUE retired / REBUILD_BACKLOG R13]** The "transfer ratio" headline came from `cross_env_transfer.json` / `pass28_G_cross_env_transfer.json`, which used random featurizers and an invented letter→SKU mapping — the feature was fabricated and both receipts were deleted. A real transfer experiment needs genuine observation encoders (REBUILD_BACKLOG R13); no transfer number may be cited today.
 
 ### 3.11 Process supervision vs naive credit (RL guide §9)
 
-> Line-level credit assignment per Lightman (2023) "Let's Verify Step by Step". **Variance amplification 2735×** vs naive uniform-episode credit. Process supervision concentrates credit at the actual solve step. Receipt: [`process_supervision.json`](receipts/process_supervision.json).
+> Line-level credit assignment per Lightman (2023) "Let's Verify Step by Step". The old **"variance amplification" headline was STRUCK** (CLAIMS_LEDGER A4 — hand-crafted trajectory with a hardcoded receipt value and factually wrong Wordle feedback). The honest replacement scores a real solve trajectory with the env's actual `_score_guess`: on the `BRAIN` example, process supervision concentrates ~2.8× more credit on the decisive solve step than uniform-episode credit. Receipts: [`pass26_process_supervision_concrete.json`](receipts/pass26_process_supervision_concrete.json) + [`pass28_F_process_super_plot.json`](receipts/pass28_F_process_super_plot.json).
 
 ### 3.12 Reward-component ablation matrix
 
-> Leave-one-out ablation across 5 reward components. Largest impact: removing **green_credit drops mean return by -0.459** (-92%). Each component's load-bearing weight quantified. Receipt: [`ablation_matrix.json`](receipts/ablation_matrix.json).
+> **[STRUCK]** The `ablation_matrix.json` receipt ran a *random* policy, so removing a reward component never changed the policy's behaviour (every trial reported the same solve rate) — it was theater, not a real component ablation, and was deleted. A genuine ablation trains QR-DQN variants (±CVaR / ±real-data buffer / ±uncertainty head) — pending (P1.3 / REBUILD_BACKLOG R3).
 
 ### 3.13 4/4 API keys live-validated
 
@@ -138,19 +128,15 @@ Reproduces in ~3 min via `python scripts/final_real_reinforce_wordle_v2.py --epi
 
 ### 3.14 Wilcoxon + Bootstrap Cohen's d CI95 (REINFORCE v2)
 
-> **Wilcoxon paired signed-rank p = 6.6 × 10⁻³⁵** for trained-v2 vs null random. **Bootstrap CI95 on Cohen's d: [2.66, 3.96]** (n=2000 resamples) — strictly excludes zero. Point estimate from main eval: **5.133**. Receipt: [`v2_inferential_stats.json`](receipts/v2_inferential_stats.json).
+> **[RERUN-PENDING — CLAIMS_LEDGER A2]** The Wilcoxon p-value, bootstrap Cohen's-d CI95 and point estimate here came from `v2_inferential_stats.json`, whose numbers were inconsistent across docs and never actually executed (the notebooks have zero committed outputs); the receipt was deleted. The real path is per-episode paired arrays — [`pass27_B_real_episodic_bootstrap.json`](receipts/pass27_B_real_episodic_bootstrap.json). Re-run before citing.
 
 ### 3.15 Statistical power analysis
 
-> At our actual n=200 per group, minimum detectable Cohen's d at 80% power: **0.28**. Our observed d=5.133 is **18.3× larger** than detection threshold. Statistical power ≈ 1.0. Receipt: [`statistical_power_analysis.json`](receipts/statistical_power_analysis.json).
+> **[RERUN-PENDING — CLAIMS_LEDGER A2]** The power-analysis figures depended on the same fabricated effect-size point estimate above; `statistical_power_analysis.json` was deleted. Recompute from the real paired arrays in `pass27_B_real_episodic_bootstrap.json` once the effect size is re-established.
 
 ### 3.16 Tier-3 generalization (out-of-distribution)
 
-> REINFORCE v2 trained on 20-word pool · evaluated with **action masking** on:
-> - 20 words: ~92% solve
-> - 50 words: **89% solve**
-> - 100 words: ~80% solve
-> Honest scaling: pool size grows → solve rate degrades gracefully. Action masking is the constraint solver. Receipt: [`tier3_generalization.json`](receipts/tier3_generalization.json).
+> The `tier3_generalization.json` receipt had a bug (its 50-word and 100-word solve rates were identical, so it did not show real OOD degradation) and was deleted. The honest OOD-scaling replacement is [`pass27_C_tier3_degradation.json`](receipts/pass27_C_tier3_degradation.json) (train on 20-word pool, evaluate on 20/50/100/200-word pools); cite its numbers, not the old fixed percentages.
 
 ### 3.17a Foolproof Colab notebook · proven runnable end-to-end (NEW pass 23)
 
@@ -364,16 +350,16 @@ Every claim above maps to a sha256-anchored receipt:
 | 261 tests | `test_suite_grand_total.json` |
 | **Real REINFORCE 190% improvement** | `wordle_real_reinforce_curve.json` |
 | **20/20 adversarial blocked** | `adversarial_20_attack_gauntlet.json` |
-| **Cross-env transfer 1.30 ratio** | `cross_env_transfer.json` |
-| **Process supervision 2735× var amp** | `process_supervision.json` |
-| **5-component ablation matrix** | `ablation_matrix.json` |
+| ~~Cross-env transfer ratio~~ | **STRUCK** — `cross_env_transfer.json` deleted (fabricated featurizers); REBUILD_BACKLOG R13 |
+| Process supervision (real _score_guess) | `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json` (old 2735× STRUCK, A4) |
+| ~~5-component ablation matrix~~ | **STRUCK** — `ablation_matrix.json` deleted (random-policy theater); real ablation P1.3 / R3 |
 | **4/4 API keys live** | `api_keys_live_proof.json` |
 | **REINFORCE v2 95.5% solve · Cohen's d 5.133** | `wordle_real_reinforce_v2_curve.json` |
-| **Multi-level conformal best dev 0.0044** | `conformal_multilevel.json` |
-| **Wilcoxon p=6.6e-35 + bootstrap d CI95 [2.66, 3.96]** | `v2_inferential_stats.json` |
-| **Statistical power analysis (n=200 detects d≥0.28 @ 80% power)** | `statistical_power_analysis.json` |
-| **Tier-3 generalization (50-word pool: 89% solve)** | `tier3_generalization.json` |
-| **Tighter conformal v3 (16K NLLs)** | `conformal_tight_v3.json` |
+| ~~Multi-level conformal best dev~~ | **RERUN-PENDING (A5)** — `conformal_multilevel.json` deleted (noise-NLL); real path `conformal_calibration.json` |
+| ~~Wilcoxon p + bootstrap d CI95~~ | **RERUN-PENDING (A2)** — `v2_inferential_stats.json` deleted; real `pass27_B_real_episodic_bootstrap.json` |
+| ~~Statistical power analysis~~ | **RERUN-PENDING (A2)** — `statistical_power_analysis.json` deleted |
+| Tier-3 generalization (honest OOD) | `pass27_C_tier3_degradation.json` (old `tier3_generalization.json` deleted, B7 bug) |
+| ~~Tighter conformal v3~~ | **RERUN-PENDING (A5)** — `conformal_tight_v3.json` deleted (noise-NLL) |
 | **Chained live demo (4 APIs + REINFORCE + war room in 7 sec)** | `chained_live_demo.json` |
 
 ---

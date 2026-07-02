@@ -1,0 +1,89 @@
+{
+  "name": "pass26_process_supervision_concrete",
+  "framework": "process supervision (Lightman 2023 'Let's Verify Step by Step') \u2014 per-step credit from the env's real _score_guess + reward shaping",
+  "target": "brain",
+  "trace": [
+    {
+      "step": 1,
+      "guess": "STARE",
+      "feedback": [
+        "gray",
+        "gray",
+        "green",
+        "yellow",
+        "gray"
+      ],
+      "n_green": 1,
+      "n_yellow": 1,
+      "solved": false,
+      "process_credit": 0.07,
+      "uniform_credit": 0.1775
+    },
+    {
+      "step": 2,
+      "guess": "CLOUD",
+      "feedback": [
+        "gray",
+        "gray",
+        "gray",
+        "gray",
+        "gray"
+      ],
+      "n_green": 0,
+      "n_yellow": 0,
+      "solved": false,
+      "process_credit": 0.0,
+      "uniform_credit": 0.1775
+    },
+    {
+      "step": 3,
+      "guess": "BRINK",
+      "feedback": [
+        "green",
+        "green",
+        "yellow",
+        "yellow",
+        "gray"
+      ],
+      "n_green": 2,
+      "n_yellow": 2,
+      "solved": false,
+      "process_credit": 0.14,
+      "uniform_credit": 0.1775
+    },
+    {
+      "step": 4,
+      "guess": "BRAIN",
+      "feedback": [
+        "green",
+        "green",
+        "green",
+        "green",
+        "green"
+      ],
+      "n_green": 5,
+      "n_yellow": 0,
+      "solved": true,
+      "process_credit": 0.5,
+      "uniform_credit": 0.1775
+    }
+  ],
+  "process_credit": [
+    0.07,
+    0.0,
+    0.14,
+    0.5
+  ],
+  "uniform_credit": [
+    0.1775,
+    0.1775,
+    0.1775,
+    0.1775
+  ],
+  "total_episode_reward": 0.71,
+  "decisive_step_amplification": 2.8169,
+  "interpretation": "process supervision concentrates credit on the decisive solving step (step 4 'BRAIN' green-locks all letters); uniform-episode credit smears the same total flat across every step",
+  "honest_note": "feedback tiles + solve bonus derived from versions.v5_phoenix.wordle_env.env._score_guess (no hardcoded credit, no fabricated variance-amplification headline). Honest replacement for the Wave-1-deleted hand-crafted trajectory (CLAIMS_LEDGER A4 STRUCK).",
+  "_pass": 26,
+  "_generated_at_utc": "2026-07-02T14:06:41Z"
+}

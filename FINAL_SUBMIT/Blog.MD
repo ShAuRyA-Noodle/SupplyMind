@@ -114,7 +114,7 @@ On top of the rule-based reward, a **dual rule × model verifier**: `r_final = r
 
 The model layer is a **6-judge LOCAL Ollama 14B-class panel** running on my laptop right now: qwen2.5:14b, my custom-finetuned supplymind-analyst:v5, deepseek-r1, mistral-nemo, gemma4, qwen25-coder. Each one independently scored 8 historical disruption scenarios. Mean Spearman ρ across pairwise judges = **0.901**. Strong consensus, zero per-token API cost.
 
-Process supervision (Lightman 2023 *Let's Verify Step by Step*) on top of all that. Line-level credit per step. **2735× variance amplification** versus naive uniform-episode credit — the decisive solve step gets concentrated reward instead of being averaged out across exploratory steps.
+Process supervision (Lightman 2023 *Let's Verify Step by Step*) on top of all that. Line-level credit per step, scored with the env's real `_score_guess`: the decisive solve step gets concentrated reward instead of being averaged out across exploratory steps (~2.8× on the `BRAIN` example). The old "variance amplification" headline was **STRUCK** — hardcoded demo trajectory with factually wrong feedback (CLAIMS_LEDGER A4); receipts `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json`.
 
 This is what reward engineering looks like when you take it seriously.
 

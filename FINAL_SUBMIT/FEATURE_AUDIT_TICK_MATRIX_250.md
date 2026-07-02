@@ -188,7 +188,7 @@ P1 Optuna CQL ✅ · P2 SHAP CQL ✅ · P3 PointLevel stacking ✅ · P4 Special
 
 ## Q · TRAINED ANALYSIS PLOTS (8) — 8/8 ✅
 
-Q1–Q8 reward_curve, loss_components, before_after, algo_leaderboard, wilcoxon_grid, conformal_coverage, brent_backtest, real_reinforce_curve
+Q1–Q8 reward_curve, loss_components, conformal_coverage, brent_backtest, real_reinforce_curve *(before_after / algo_leaderboard / wilcoxon_grid STRUCK — fabricated leaderboard, A1; deleted)*
 
 ## R · TEST SUITE (1 meta-feature) — ✅
 
@@ -224,7 +224,7 @@ Y1 HACKATHON_README · Y2 ARCHITECTURE · Y3 BENCHMARK_REPORT · Y4 DEMO_SCRIPT_
 
 ## Z · PLOTS (10) — 10/10 ✅
 
-Z1 reward_curve · Z2 loss_components · Z3 before_after · Z4 algo_leaderboard · Z5 wilcoxon_grid · Z6 conformal_coverage · Z7 brent_backtest · Z8 real_reinforce_curve_v1 · Z9 real_reinforce_curve_v2 · Z10 conformal_multilevel
+Z1 reward_curve · Z2 loss_components · Z6 conformal_coverage · Z7 brent_backtest · Z8 real_reinforce_curve_v1 · Z9 real_reinforce_curve_v2 *(before_after / algo_leaderboard / wilcoxon_grid / conformal_multilevel plots STRUCK — A1/A5; deleted)*
 
 ## AA · ENGINEERING TRICKS (10) — 10/10 ✅
 

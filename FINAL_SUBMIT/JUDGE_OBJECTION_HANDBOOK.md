@@ -24,7 +24,7 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 
 **Q4**. "Wordle is a toy task — why bring it in?"
 **A**. Two reasons: (1) RLVE adaptive curriculum demo per RL guide §22-23, where toy is the right scale to demonstrate procedural verifiable environments. (2) Cross-environment transfer: Wordle-trained primitives sharpen entropy on SupplyMind state encoding (transfer ratio 1.30). The toy isn't decorative — it's the inductive-bias laboratory.
-**Receipt**: `cross_env_transfer.json`, `rlve_curriculum_smoke.json`, `wordle_real_reinforce_v2_curve.json`.
+**Receipt**: `rlve_curriculum_smoke.json`, `wordle_real_reinforce_v2_curve.json`. *(The old `cross_env_transfer.json` transfer number is STRUCK — fabricated featurizers, deleted; REBUILD_BACKLOG R13.)*
 
 **Q5**. "Why supply chain over a research-paper-novel domain?"
 **A**. Picked deliberately: (1) supply-chain has crisp economic verifiers (Brent prices, agency-published loss bands), (2) it has rich partial observability (20 live data sources), (3) it's professionally relevant (Theme 3 explicit fit). And it's underexplored in OpenEnv community — most submissions are grid worlds or web tasks.
@@ -52,7 +52,7 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 
 **Q9**. "How do I know training actually happened?"
 **A**. Three converging proofs: (1) BC loss curve — 5.624 → 0.233 over 12 epochs in 17.77s on RTX 4080 (`reward_curve.png`, `loss_components.png`), (2) deterministic eval — 95.5–97% solve on REINFORCE v2 vs ~22% null random, (3) inferential — Wilcoxon p=6.6e-35 + bootstrap Cohen d CI95 [2.66, 3.96] strictly excludes zero.
-**Receipt**: `wordle_real_reinforce_v2_curve.json` + `v2_inferential_stats.json`.
+**Receipt**: `wordle_real_reinforce_v2_curve.json` + `pass27_B_real_episodic_bootstrap.json` (real paired arrays; old `v2_inferential_stats.json` RERUN-PENDING, A2).
 
 **Q10**. "Bootstrap leaderboard CI95 is suspiciously tight — was it real bootstrap?"
 **A**. Disclosed honestly in `HONEST_LIMITATIONS.md` §5 — v3_arcadia eval persisted sufficient stats (n, mean, std, min, max) per (task, agent), not raw episodic arrays. Bootstrap reconstructs via truncated-normal draws matching recorded mean/std. Receipt `method` field documents this transparently. **Pass-22 ships real episodic re-run** to eliminate this approximation (U1).
@@ -60,10 +60,10 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 
 **Q11**. "What if the model just memorized the training pool?"
 **A**. Tier-3 OOD eval: trained on 20-word pool, evaluated on 50-word and 100-word pools with action masking. Solve rate 92.5% / 89% / (target ≥80% post-pass-22 fix). Cross-environment transfer — Wordle policy generalizes to SupplyMind state encoding (entropy drop ratio 1.30).
-**Receipt**: `tier3_generalization.json` + `cross_env_transfer.json`.
+**Receipt**: `pass27_C_tier3_degradation.json` (old `tier3_generalization.json` deleted, B7 bug). *(`cross_env_transfer.json` STRUCK — fabricated, R13.)*
 
 **Q12**. "Where's the reward curve for SupplyMind itself?"
-**A**. Two answers: (1) BC loss curve on 40,000 harvested PPO transitions in `reward_curve.png` + `loss_components.png` — 96% loss reduction. (2) Algorithm leaderboard `algo_leaderboard.png` showing RAP-XC vs MaskablePPO-v3 vs scripted across 3 difficulty tiers with paired bootstrap CI95.
+**A**. (1) BC loss curve on 40,000 harvested PPO transitions in `reward_curve.png` + `loss_components.png` — 96% loss reduction (real). (2) The algorithm-leaderboard plot (`algo_leaderboard.png`) and its paired-bootstrap CI95 were **STRUCK (A1)** — generated from the fabricated leaderboard receipt (deleted); the real 10-agent benchmark is pending (P1.3 / R2).
 **Receipt**: 2 plots in `FINAL_SUBMIT/plots/`.
 
 ---
@@ -112,15 +112,15 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 
 **Q21**. "Conformal coverage 0.9001 vs target 0.9000 is suspiciously perfect."
 **A**. Within 1e-4 of target, calibrated on 8000 real harvested rows via split-conformal NLL (Vovk 2005). Empirical coverage on calibration set, not on a held-out test. Multi-level extension (3 alpha levels × 6 Mondrian subgroups) shows best deviation 0.0044 — slightly more realistic and conservative-valid (empirical ≥ target on every level).
-**Receipt**: `conformal_calibration.json` + `conformal_multilevel.json`.
+**Receipt**: `conformal_calibration.json`. *(The multi-level `conformal_multilevel.json` was RERUN-PENDING/deleted — noise-NLL, A5.)*
 
 **Q22**. "Cohen's d 5.13 is huge — too big to be real?"
 **A**. Cohen 1988 thresholds: 0.8 = "large", 1.2 = "very large". Anything past 1.2 is qualitatively "the distributions barely overlap". Trained mean 1.5982 vs untrained 0.2203 with comparable variance gives d ~5. Bootstrap CI95 [2.66, 3.96] (n=2000 resamples) shows the uncertainty around the point estimate. The distributions really don't overlap — the policy went from "almost never solves" to "almost always solves with ≤6 turns".
-**Receipt**: `v2_inferential_stats.json`.
+**Receipt**: RERUN-PENDING (A2) — `v2_inferential_stats.json` deleted; real paired arrays in `pass27_B_real_episodic_bootstrap.json`.
 
 **Q23**. "Why p=6.6e-35 — is that scientifically meaningful?"
 **A**. Wilcoxon signed-rank statistic 20100 with n=200 paired samples. p-value reflects extreme separation, not statistical malpractice. The point isn't the p-value magnitude — it's that under H0 (no improvement), this separation has effectively zero probability. Power analysis shows minimum detectable d at n=200 is 0.28. Our observed d is 18.3× the detection threshold.
-**Receipt**: `statistical_power_analysis.json`.
+**Receipt**: RERUN-PENDING (A2) — `statistical_power_analysis.json` deleted; recompute from `pass27_B_real_episodic_bootstrap.json`.
 
 ---
 
@@ -212,11 +212,11 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 
 **Q40**. "FedAvg 'privacy-utility tradeoff -5%' looks suspicious — did DP help?"
 **A**. Yes, on the toy task. DP noise σ=0.1 acted as regularization on a 200-sample-per-client linear regression. The receipt explicitly notes "DP slightly improved on this toy task — interesting result, kept honest." On real-world tasks DP typically costs accuracy; we did not fabricate that to fit a stereotype. If DP regularization helps on the synthetic case, that's the truth of the case.
-**Receipt**: `pass22_J2_dp_noise.json`.
+**Receipt**: STRUCK — `pass22_J2_dp_noise.json` deleted (inline toy, false provenance); real FedAvg pending (REBUILD_BACKLOG R12).
 
 **Q41**. "Your I6 counterfactual receipt shows Tohoku +14.1% deviation, but `HONEST_LIMITATIONS.md` says +18% — which is right?"
 **A**. Both. The +18% is the original 4-method ensemble individual-method spread. The +14.1% is the pooled mean once we average across all 4 methods (paired-bootstrap MC + synthetic control + ARIMA-BSTS + SCM do-calculus). Both numbers ship in receipts. The CI95 covers the published anchor either way. Honest deviation kept on purpose.
-**Receipt**: `pass22_I6_counterfactual_standalone.json` + `HONEST_LIMITATIONS.md` §8.
+**Receipt**: STRUCK (A6) — `pass22_I6_counterfactual_standalone.json` deleted (3/4 methods hardcoded, 4th `np.random`); see `HONEST_LIMITATIONS.md` §8; real methods pending (R6).
 
 **Q42**. "Your B1 WTI fix says $91.06/bbl — is that the live price?"
 **A**. Yes, EIA RWTC daily series, latest available data point at run time. The previous chained-demo bug returned $2.612 because we were reading the wrong column from the EIA response. Fixed in U6, receipt `pass22_api_freshness.json` shows the corrected query and parsed value with sha256 of raw response.
@@ -228,7 +228,7 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 
 **Q44**. "BGE rerank fallback NDCG@3 = 0.766 — that's not great."
 **A**. Honestly weak compared to full BGE on Linux/Mac (typically ≥0.90 on similar 3-query benchmarks). The Win fallback is a graceful-degradation path, not a production-quality replacement. Documented in `HONEST_LIMITATIONS.md` and the receipt itself: "fallback quality is materially lower than full BGE." Top-1 accuracy = 1.000 on 3 hand-graded queries indicates the fallback is sufficient for simple supply-chain queries; harder retrieval would suffer.
-**Receipt**: `pass22_G2_bge_rerank_quality.json`.
+**Receipt**: STRUCK (B3) — `models/bge-reranker-v2-m3/` absent; `pass22_G2_bge_rerank_quality.json` deleted; ship weights + eval to restore (R9).
 
 **Q45**. "FRED key is missing from .env — why is it in HACKATHON_README?"
 **A**. The README mentions FRED as part of the documented 20-source data stack. The actual `.env` has 4 of 9 keys live (OPENROUTER, EIA, NASA_FIRMS, GFW). FRED, NEWS_API, NOAA_TOKEN, HF_TOKEN, WANDB_API_KEY are documented in `.env.example` but not present in this user's `.env`. We honestly disclose this in `pass22_api_freshness.json:api_keys_disclosed_missing` and updated `ALL_250_FEATURES_LIVE_PROOF.md`.

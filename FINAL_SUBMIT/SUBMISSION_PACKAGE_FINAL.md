@@ -59,7 +59,7 @@ This is THE submission. Print it, hand to judges, paste into HF Space descriptio
 | Cohen's d (REINFORCE vs random) | **+4.28** (very large) | same |
 | Bootstrap CI95 paired diff | **[+0.812, +0.928]** strictly excludes zero | same |
 | Wall-clock training time | **9.8s on CPU** | `pass23_colab_local_smoke.json` |
-| Conformal action coverage | **0.9012** vs 0.9000 target → dev 0.0012 | `pass27_G_conformal_v3_full.json` |
+| Conformal action coverage | **RERUN-PENDING (A5)** — `pass27_G_conformal_v3_full.json` deleted (noise-NLL) | real path `scripts/calibrate_conformal_from_harvest.py` → `conformal_calibration.json` |
 | Adversarial reward-hack defense | **STRUCK → honest 174/174 real executed attacks** (nb13 §1 re-count; the ~269-attack gauntlet total double-counted constants + unexecuted fuzz — CLAIMS_LEDGER A3) | gauntlet receipts under P1.4 audit |
 | Live API keys verified | **9/9** (5 keyed: OpenRouter/EIA/NASA/GFW/HF + 4 NEW: FRED/News/NOAA/WandB) | `pass28_K1-K4_*.json` |
 | FRED Brent real data | **8/8 historical events** with 200+ pre-event obs each | `pass28_K1_fred_brent_real.json` |
@@ -95,7 +95,7 @@ This is THE submission. Print it, hand to judges, paste into HF Space descriptio
 | **FRED_API_KEY** (NEW) | ✅ LIVE pass 28 | 8/8 historical events real Brent fetched | `pass28_K1_fred_brent_real.json` |
 | **NEWS_API_KEY** (NEW) | ✅ LIVE pass 28 | 5/5 queries returned 18,660 articles for Hormuz | `pass28_K2_newsapi_live_ingest.json` |
 | **NOAA_TOKEN** (NEW) | ✅ LIVE pass 28 | 3/3 endpoints 200 OK | `pass28_K3_noaa_cdo_live.json` |
-| **WANDB_API_KEY** (NEW) | ⚠️ key valid, Windows ServicePoll bug | retry on Colab (works there) | `pass28_K4_wandb_smoke.json` |
+| **WANDB_API_KEY** (NEW) | key valid, Windows ServicePoll bug | `pass28_K4_wandb_smoke.json` **STRUCK/deleted** (fabricated curve); regenerate from a real training loop (P2.4 / R15) | — |
 
 **Total: 9/9 keys present + 8/9 verified LIVE.**
 

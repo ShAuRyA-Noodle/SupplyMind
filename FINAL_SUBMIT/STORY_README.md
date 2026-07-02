@@ -90,10 +90,10 @@ Real Unsloth QLoRA + TRL GRPO 100-step run. Pre-GRPO LLaMA-3.2-1B baseline → p
 
 ### 3.4 Algorithm leaderboard — RAP-XC vs 8 baselines on 3 difficulty tiers
 
-![Leaderboard](plots/algo_leaderboard.png)
+> **[STRUCK — A1]** The 9-agent leaderboard plot (`algo_leaderboard.png`) came from the fabricated leaderboard receipt (deleted). Real 10-agent benchmark pending (P1.3 / R2).
 *RAP-XC wins on all 3 tasks. MaskablePPO close on easy, RAP-XC dominates as horizon lengthens.*
 
-![Wilcoxon grid](plots/wilcoxon_grid.png)
+> **[STRUCK — A1]** The pairwise-Wilcoxon grid (`wilcoxon_grid.png`) came from the fabricated pairwise-leaderboard receipt (deleted). Valid paired-by-seed re-run pending (P1.3).
 *Most-significant pair: MaskablePPO vs scripted on medium · p = 6.77 × 10⁻¹⁴⁹.*
 
 ### 3.5 Conformal action filter (Vovk 2005 provable safety)

@@ -66,11 +66,11 @@ All 11 plots in [`plots/`](plots/), all axis-labeled, all committed to disk:
 | [colab_reproduction.png](plots/colab_reproduction.png) | REINFORCE curve + same-axes baseline-vs-trained, 100% solve |
 | [reward_curve.png](plots/reward_curve.png) | RAP-XC BC loss 96% reduction in 17.77s on RTX 4080 |
 | [loss_components.png](plots/loss_components.png) | 4-component loss decomposition (BC + CQL + V + KL) |
-| [before_after.png](plots/before_after.png) | RAP-XC vs MaskablePPO-v3 paired-bootstrap CI95 |
-| [algo_leaderboard.png](plots/algo_leaderboard.png) | 9-agent leaderboard across 3 difficulty tiers |
+| ~~before_after.png~~ | **STRUCK (A1)** — RAP-XC vs MaskablePPO CI95 came from the fabricated leaderboard receipt (deleted); valid paired-by-seed re-run pending (P1.3) |
+| ~~algo_leaderboard.png~~ | **STRUCK (A1)** — 9-agent leaderboard came from the fabricated leaderboard receipt (deleted); real benchmark pending (P1.3 / R2) |
 | ~~wilcoxon_grid.png~~ | **STRUCK** — the pairwise-Wilcoxon plot + p-value came from the fabricated leaderboard receipt (deleted; CLAIMS_LEDGER A1); regenerating from a valid paired-by-seed run (P1.3) |
 | [conformal_coverage.png](plots/conformal_coverage.png) | Vovk 2005 conformal 0.9001 vs target 0.9000 |
-| [conformal_multilevel.png](plots/conformal_multilevel.png) | 3 α-levels × 6 Mondrian sub-groups, best dev 0.0044 |
+| ~~conformal_multilevel.png~~ | **RERUN-PENDING (A5)** — multi-level conformal computed on noise-NLL (deleted); real path `conformal_calibration.json` |
 | [brent_backtest.png](plots/brent_backtest.png) | 8/8 historical events ±30%, median 3.32% rel err |
 | [real_reinforce_curve.png](plots/real_reinforce_curve.png) | REINFORCE v1 baseline (superseded by v2) |
 | [real_reinforce_curve_v2.png](plots/real_reinforce_curve_v2.png) | REINFORCE v2 95.5–97% solve, Cohen d 5.13 |
@@ -85,7 +85,7 @@ Top-level receipts in `FINAL_SUBMIT/receipts/`:
 - [pass25_hf_space_deep_probe.json](receipts/pass25_hf_space_deep_probe.json) — 4/5 HF Space endpoints 200 OK
 
 ### Pass 24 (story-driven docs)
-- [master_audit_summary_pass24_v5_FINAL.json](receipts/master_audit_summary_pass24_v5_FINAL.json)
+- ~~master_audit_summary_pass24_v5_FINAL.json~~ — **STRUCK (D9)**, hardcoded 248-of-250 count; deleted, regenerate via `scripts/verify_claims.py` (P2.2)
 
 ### Pass 23 (foolproof Colab + OpenEnv compliance)
 - [pass23_colab_local_smoke.json](receipts/pass23_colab_local_smoke.json) — 100% solve, p=1.87e-34, d=3.89, 9.8s

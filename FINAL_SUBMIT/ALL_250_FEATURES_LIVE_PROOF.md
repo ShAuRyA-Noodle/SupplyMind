@@ -42,7 +42,7 @@ Status legend:
 | B5 | Solve+step bonus | `ablation_matrix.json` |
 | B6 | Green credit | ablation: -0.459 if removed |
 | B7 | Yellow credit | ablation: small drop if removed |
-| B8 | Process supervision | `process_supervision.json` (var amp 2735×) |
+| B8 | Process supervision | `pass26_process_supervision_concrete.json` + `pass28_F_process_super_plot.json` — real `_score_guess` per-step credit (old "variance amplification" headline STRUCK, CLAIMS_LEDGER A4) |
 | B9 | Dual-verifier composite | `dual_verifier_smoke.json` |
 | B10 | Disagreement alarm | `dual_verifier.py:DISAGREEMENT_THRESHOLD=0.30` |
 | B11 | Ablation receipts (5 components) | `ablation_matrix.json` |
@@ -112,7 +112,7 @@ C1 empty / C2 single-digit / C3 unicode-zero-width / C4 SQL-injection-string / C
 | F5 | Bootstrap CI95 | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) |
 | F6 | Cohen's d effect size | ❌ STRUCK — fabricated receipt deleted (CLAIMS_LEDGER A1) |
 | F7 | Multi-arm Brent ensemble | `ensemble_brent_validation.json` |
-| F8 | Coverage stress test | `conformal_multilevel.json` |
+| F8 | Coverage stress test | RERUN-PENDING (A5) — `conformal_multilevel.json` deleted (noise-NLL); real path `conformal_calibration.json` |
 | F9 | Quantile regression | 🟢 `pass22_F9_quantile_regression.json` (cov=0.812 vs target 0.80) |
 | F10 | Cross-corpus α metric | `cross_corpus_alpha.json` |
 
@@ -121,7 +121,7 @@ C1 empty / C2 single-digit / C3 unicode-zero-width / C4 SQL-injection-string / C
 | ID | Name | Receipt |
 |---|---|---|
 | G1 | FAISS index | `realtime/store.py` |
-| G2 | BGE-rerank Win-fallback | 🟢 `pass22_G2_bge_rerank_quality.json` (top-1=1.0, NDCG@3=0.766) |
+| G2 | BGE-rerank | STRUCK (B3) — `models/bge-reranker-v2-m3/` absent; `pass22_G2_bge_rerank_quality.json` deleted |
 | G3 | Crisis library 8 events | `crisis_library.py` |
 | G4 | NewsAPI live ingest | `news_ingest.py` (key not in env, OpenRouter substitute path live) |
 | G5 | GDELT integration | 🟢 `pass22_M_keyless_data_smokes.json` (M2 transient — honestly disclosed) |
@@ -142,18 +142,18 @@ H1 HetGAT v1 ✅ · H2 World model rollout v2 ✅ · H3 Node attention ✅ · H4
 | I3 | Stress explainer v2 | `explainer_stress_v2.json` |
 | I4 | SHAP fairness calibration | `R2_SHAP_FAIRNESS_CALIBRATION.json` |
 | I5 | Plain-English explainer | `server/explainer.py` |
-| I6 | Counterfactual ensemble | 🟢 `pass22_I6_counterfactual_standalone.json` (pooled=268B vs anchor=235B, CI95 covers truth) |
+| I6 | Counterfactual ensemble | STRUCK (A6) — 3 of 4 "methods" hardcoded literals + 1 `np.random`; `pass22_I6_counterfactual_standalone.json` deleted; real methods pending (R6) |
 | I7 | Conformal coverage plot | `plots/conformal_coverage.png` |
-| I8 | Wilcoxon grid plot | `plots/wilcoxon_grid.png` |
+| I8 | Wilcoxon grid plot | STRUCK (A1) — `wilcoxon_grid.png` deleted (fabricated pairwise-leaderboard receipt) |
 
 ## J · Federated (4) — 4/4 ✅
 
 | ID | Name | Receipt |
 |---|---|---|
 | J1 | Federated v2 metrics | `federated_v2_metrics.json` |
-| J2 | DP noise | 🟢 `pass22_J2_dp_noise.json` (no_dp_err=0.65, dp_err=0.62, tradeoff=-5%) |
-| J3 | FedAvg | 🟢 `pass22_J3_fedavg.json` (final_w=1.347, 20 rounds, 3 clients) |
-| J4 | Cross-silo simulation | 🟢 `pass22_J4_cross_silo.json` (heterogeneous noise levels handled) |
+| J2 | DP noise | STRUCK — inline toy with false provenance; `pass22_J2_dp_noise.json` deleted; real FedAvg pending (R12) |
+| J3 | FedAvg | STRUCK — inline toy regression, false provenance; `pass22_J3_fedavg.json` deleted; real FedAvg pending (R12) |
+| J4 | Cross-silo simulation | STRUCK — inline toy; `pass22_J4_cross_silo.json` deleted; real FedAvg pending (R12) |
 
 ## K · Multi-agent (6) — 6/6 ✅
 
@@ -213,7 +213,7 @@ P1 Optuna CQL · P2 SHAP CQL · P3 PointLevel stacking · P4 Specialist router
 
 ## Q · Trained analysis plots (10) — 10/10 ✅
 
-Q1 reward_curve · Q2 loss_components · Q3 before_after · Q4 algo_leaderboard · Q5 wilcoxon_grid · Q6 conformal_coverage · Q7 brent_backtest · Q8 real_reinforce_curve_v1 · Q9 real_reinforce_curve_v2 · Q10 conformal_multilevel
+Q1 reward_curve · Q2 loss_components · Q6 conformal_coverage · Q7 brent_backtest · Q8 real_reinforce_curve_v1 · Q9 real_reinforce_curve_v2 *(before_after / algo_leaderboard / wilcoxon_grid / conformal_multilevel plots STRUCK — from fabricated leaderboard + noise-NLL receipts, deleted; A1/A5)*
 
 ## R · Test suite (1) — ✅ 261 tests collected
 
