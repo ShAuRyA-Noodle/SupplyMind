@@ -1,22 +1,26 @@
 claim_id: R5_GRANITE_mxbai_MRR
-claim: mxbai-embed-large MRR on 53 precise queries equals 0.9780
-command: python -m v3_arcadia.40_granite.r5_rag_beast --pipeline mxbai_bi --out /tmp/r5_granite_mrr.json
+claim: mxbai-embed-large MRR on 53 precise queries equals 0.9780 (headline value committed in versions/v3_arcadia/results/R5_GRANITE_HARD.json)
+command: python versions/v3_arcadia/40_granite/r5_rag_beast.py --pipeline mxbai_bi --out /tmp/r5_granite_mrr.json
 extraction: python -c "import json; print(json.load(open(r\"/tmp/r5_granite_mrr.json\")).get(\"pipelines\",{}).get(\"P2_mxbai_bi\",{}).get(\"mrr\"))"
 expected: 0.9780
 comparator: ==
 expected_range: ''
 expected_regex: ''
-actual: <pending-first-run>
+actual: |
+  not_yet_run  -  requires: mxbai-embed-large embedder + the gitignored external_data RAG corpus; also a parent-count ROOT fix inside versions/v3_arcadia/40_granite/r5_rag_beast.py.
 exit_code: -1
 stdout_inline: ''
 stdout_sha256: ''
 stderr_tail: ''
 stdout_bytes: 0
 match: false
-comparator_note: ''
+comparator_note: not executed (blocked); see `requires`
 runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
+timestamp_utc: |
+  2026-07-02T13:35:51Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: ''
 platform: ''
 env_notes:
+status: not_yet_run
+requires: mxbai-embed-large embedder + the gitignored external_data RAG corpus; also a parent-count ROOT fix inside versions/v3_arcadia/40_granite/r5_rag_beast.py.

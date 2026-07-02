@@ -3,7 +3,7 @@
 # Claim:    Autoresearch loop accepted s3_curriculum_learning as final best (CI95 lower >= 0.55)
 # Expected: 's3_curriculum_learning' (==)
 # Hardware at last run: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
-# Runtime:  0.37s
+# Runtime:  0.38s
 set -euo pipefail
 echo "[V5_Autoresearch_best_experiment] command:"
 echo '> python -m versions.v5_phoenix.autoresearch_fixed.rebuild_state'

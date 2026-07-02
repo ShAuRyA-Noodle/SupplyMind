@@ -3,7 +3,7 @@
 # Claim:    OpenEnv Arena leaderboard ships with 6 baseline rows (MaskablePPO at top)
 # Expected: '6 MaskablePPO' (regex)
 # Hardware at last run: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
-# Runtime:  0.13s
+# Runtime:  0.15s
 set -euo pipefail
 echo "[V5_Arena_baseline_leaderboard] command:"
 echo '> python -m versions.v5_phoenix.arena.leaderboard'

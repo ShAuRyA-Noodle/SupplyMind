@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[4]
 ADAPTER_DIR = ROOT / "versions/v5_phoenix" / "experiments" / "dpo_judge_v1" / "adapter"
-R4_GT = ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+R4_GT = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
 OUT = ROOT / "versions/v5_phoenix" / "experiments" / "dpo_judge_v1" / "eval_delta.json"
 
 

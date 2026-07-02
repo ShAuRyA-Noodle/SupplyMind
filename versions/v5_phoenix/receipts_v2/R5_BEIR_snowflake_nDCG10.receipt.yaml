@@ -1,22 +1,26 @@
 claim_id: R5_BEIR_snowflake_nDCG10
 claim: Snowflake-Arctic-L nDCG@10 on 26 Wikipedia-crisis BEIR subset equals 0.971
-command: python -m v3_arcadia.40_granite.r5_manual_beir --out /tmp/r5_beir.json
+command: python versions/v3_arcadia/40_granite/r5_manual_beir.py --out /tmp/r5_beir.json
 extraction: python -c "import json; print(json.load(open(r\"/tmp/r5_beir.json\")).get(\"our_results\",{}).get(\"snowflake-arctic-l\",{}).get(\"mean_ndcg@10\"))"
 expected: 0.971
 comparator: ==
 expected_range: ''
 expected_regex: ''
-actual: <pending-first-run>
+actual: |
+  not_yet_run  -  requires: snowflake-arctic-embed-l weights  -  models/snowflake-arctic-embed-l is ABSENT on disk (audit_7). Ship the weights (or swap the embedder) before this can run.
 exit_code: -1
 stdout_inline: ''
 stdout_sha256: ''
 stderr_tail: ''
 stdout_bytes: 0
 match: false
-comparator_note: ''
+comparator_note: not executed (blocked); see `requires`
 runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
+timestamp_utc: |
+  2026-07-02T13:35:51Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: ''
 platform: ''
 env_notes:
+status: not_yet_run
+requires: snowflake-arctic-embed-l weights  -  models/snowflake-arctic-embed-l is ABSENT on disk (audit_7). Ship the weights (or swap the embedder) before this can run.

@@ -1,22 +1,26 @@
 claim_id: R6_MaskingAblation_easy_lift
-claim: MaskablePPO over PPO lift on easy_typhoon_response equals 26.77%
-command: python -m v3_arcadia.50_gethsemane.r6_unmasked_ablation --out /tmp/r6_mask.json
+claim: MaskablePPO over PPO lift on easy_typhoon_response equals 26.77% (committed in versions/v3_arcadia/results R6 masking ablation)
+command: python versions/v3_arcadia/50_gethsemane/r6_unmasked_ablation.py --out /tmp/r6_mask.json
 extraction: python -c "import json; print(round(100*(json.load(open(r\"/tmp/r6_mask.json\")).get(\"easy_typhoon_response\",{}).get(\"masking_lift_pct\",0)),2))"
 expected: 26.77
 comparator: ==
 expected_range: ''
 expected_regex: ''
-actual: <pending-first-run>
+actual: |
+  not_yet_run  -  requires: RL re-training of masked vs unmasked MaskablePPO (GPU-hours / long CPU run).
 exit_code: -1
 stdout_inline: ''
 stdout_sha256: ''
 stderr_tail: ''
 stdout_bytes: 0
 match: false
-comparator_note: ''
+comparator_note: not executed (blocked); see `requires`
 runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
+timestamp_utc: |
+  2026-07-02T13:35:51Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: ''
 platform: ''
 env_notes:
+status: not_yet_run
+requires: RL re-training of masked vs unmasked MaskablePPO (GPU-hours / long CPU run).

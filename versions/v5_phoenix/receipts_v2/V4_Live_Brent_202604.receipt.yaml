@@ -1,22 +1,26 @@
 claim_id: V4_Live_Brent_202604
-claim: FRED Brent polling returns a live April-2026 value parseable as USD/bbl
-command: python -m versions.v4_arcadia_live.realtime.sources.fred_brent --latest-only
-extraction: python -c "import sys; out=sys.stdin.read(); import re; m=re.search(r\"(\\d+\\.\\d+)\", out); print(m.group(1) if m else \"\")"
+claim: FRED Brent polling returns a live value parseable as USD/bbl in the plausible $60-$250 band
+command: python -m versions.v4_arcadia_live.realtime.sources.fred_brent
+extraction: python -c "import sys,re; out=sys.stdin.read(); m=re.search(r\"(\\d+\\.\\d+)\", out); print(m.group(1) if m else \"\")"
 expected: 60
 comparator: in_range
 expected_range: [60, 250]
 expected_regex: ''
-actual: <pending-first-run>
+actual: |
+  not_yet_run  -  requires: a live FRED_API_KEY. Not set in this environment (module logs 'FRED_API_KEY not set'); FRED key is flagged for rotation in versions/v5_phoenix/docs/PHOENIX_PUSH_REPORT.md sec. 3.6.
 exit_code: -1
 stdout_inline: ''
 stdout_sha256: ''
 stderr_tail: ''
 stdout_bytes: 0
 match: false
-comparator_note: ''
+comparator_note: not executed (blocked); see `requires`
 runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
+timestamp_utc: |
+  2026-07-02T13:37:10Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: ''
 platform: ''
 env_notes:
+status: not_yet_run
+requires: a live FRED_API_KEY. Not set in this environment (module logs 'FRED_API_KEY not set'); FRED key is flagged for rotation in versions/v5_phoenix/docs/PHOENIX_PUSH_REPORT.md sec. 3.6.

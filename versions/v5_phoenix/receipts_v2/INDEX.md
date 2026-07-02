@@ -2,25 +2,29 @@
 
 Total receipts: 20   |   v4 carryovers: 13   |   v5 new: 7
 
-| Claim ID | Expected | Match? | Command |
-|---|---|---|---|
-| [R5_GRANITE_mxbai_P1](R5_GRANITE_mxbai_P1.reproduce.sh) | `0.9622` | [pending] | `python -m v3_arcadia.40_granite.r5_rag_beast --pipeline mxbai_bi --out /tmp/r5_g...` |
-| [R5_GRANITE_mxbai_MRR](R5_GRANITE_mxbai_MRR.reproduce.sh) | `0.9780` | [pending] | `python -m v3_arcadia.40_granite.r5_rag_beast --pipeline mxbai_bi --out /tmp/r5_g...` |
-| [R5_BEIR_snowflake_nDCG10](R5_BEIR_snowflake_nDCG10.reproduce.sh) | `0.971` | [pending] | `python -m v3_arcadia.40_granite.r5_manual_beir --out /tmp/r5_beir.json...` |
-| [R4_2JUDGE_Krippendorff_alpha](R4_2JUDGE_Krippendorff_alpha.reproduce.sh) | `0.7499` | [pending] | `python -m v3_arcadia.30_dangerous.r4_ablation_and_baseline --out /tmp/r4_ab.json...` |
-| [R4_Cohen_kappa_QwenMistral](R4_Cohen_kappa_QwenMistral.reproduce.sh) | `0.747` | [pending] | `python -m v3_arcadia.30_dangerous.r4_ablation_and_baseline --out /tmp/r4_kappa.j...` |
-| [R6_MaskingAblation_easy_lift](R6_MaskingAblation_easy_lift.reproduce.sh) | `26.77` | [pending] | `python -m v3_arcadia.50_gethsemane.r6_unmasked_ablation --out /tmp/r6_mask.json...` |
-| [R6_GCN_easy_MAE_vs_MLP](R6_GCN_easy_MAE_vs_MLP.reproduce.sh) | `48.0247` | [pending] | `python -m v3_arcadia.70_provider.r6_gnn_arrival_time --out /tmp/r6_gnn.json...` |
-| [R6_AquaRegia_WTI_dev95](R6_AquaRegia_WTI_dev95.reproduce.sh) | `0.0238` | [pending] | `python -m v3_arcadia.80_aqua_regia.r6_per_horizon_conformal --out /tmp/r6_aqua.j...` |
-| [R3_TimesFM_CP_WTI_dev95](R3_TimesFM_CP_WTI_dev95.reproduce.sh) | `0.050` | [pending] | `python -m v3_arcadia.20_past_self.r3_timesfm_residual_quantile --out /tmp/r3_tfm...` |
-| [V4_SPOF_V2_F1](V4_SPOF_V2_F1.reproduce.sh) | `1.0` | [pending] | `python -m versions.v4_arcadia_live.features.spof_v2 --eval-all --out /tmp/spof.json...` |
-| [V4_STACKING_V2_lift_vs_WV](V4_STACKING_V2_lift_vs_WV.reproduce.sh) | `0.001` | [pending] | `python -m versions.v4_arcadia_live.features.stacking_v2 --out /tmp/stack.json...` |
-| [V4_Live_Brent_202604](V4_Live_Brent_202604.reproduce.sh) | `60` | [pending] | `python -m versions.v4_arcadia_live.realtime.sources.fred_brent --latest-only...` |
-| [V4_Tests_Total](V4_Tests_Total.reproduce.sh) | `249` | [pending] | `pytest tests/ versions/v4_arcadia_live/tests/ -q --tb=no...` |
-| [V5_Autoresearch_best_experiment](V5_Autoresearch_best_experiment.reproduce.sh) | `s3_curriculum_learning` | [pending] | `python -m versions.v5_phoenix.autoresearch_fixed.rebuild_state...` |
-| [V5_Autoresearch_CI95_lift](V5_Autoresearch_CI95_lift.reproduce.sh) | `0.05` | [pending] | `python -m versions.v5_phoenix.autoresearch_fixed.rebuild_state...` |
-| [V5_Arena_baseline_leaderboard](V5_Arena_baseline_leaderboard.reproduce.sh) | `6 MaskablePPO` | [pending] | `python -m versions.v5_phoenix.arena.leaderboard...` |
-| [V5_Twin_savings_gt_zero](V5_Twin_savings_gt_zero.reproduce.sh) | `0` | [pending] | `python -m versions.v5_phoenix.counterfactual_twin.twin --severity 0.85 --brent 123 -...` |
-| [V5_DPO_JUDGE_preference_pairs_built](V5_DPO_JUDGE_preference_pairs_built.reproduce.sh) | `20` | [pending] | `python -m versions.v5_phoenix.roll_integration.dpo_judge.prepare_preference_data...` |
-| [V5_Skill_pack_shipped](V5_Skill_pack_shipped.reproduce.sh) | `4` | [pending] | `ls versions/v5_phoenix/supplymind_skills/*/SKILL.md versions/v5_phoenix/supplymind_skill...` |
-| [V5_Phoenix_tests_green](V5_Phoenix_tests_green.reproduce.sh) | `passed` | [pending] | `pytest versions/v5_phoenix/tests/ -q --tb=no...` |
+Runnable (executed): 10   |   passing: 10   |   blocked (not_yet_run  -  see `requires`): 10
+
+Blocked receipts are NOT stubs: their command is the correct current-layout invocation and `requires` names exactly what is missing (local GGUF judges, an absent embedder, GPU-hours, or a live API key). Nothing is presented as passing that did not actually run.
+
+| Claim ID | Status | Expected | Actual | Match? |
+|---|---|---|---|---|
+| [R5_GRANITE_mxbai_P1](R5_GRANITE_mxbai_P1.reproduce.sh) | not_yet_run | `0.9622` | `not_yet_run  -  requires: mxbai-embed-large embedder + the g...` | blocked |
+| [R5_GRANITE_mxbai_MRR](R5_GRANITE_mxbai_MRR.reproduce.sh) | not_yet_run | `0.9780` | `not_yet_run  -  requires: mxbai-embed-large embedder + the g...` | blocked |
+| [R5_BEIR_snowflake_nDCG10](R5_BEIR_snowflake_nDCG10.reproduce.sh) | not_yet_run | `0.971` | `not_yet_run  -  requires: snowflake-arctic-embed-l weights  ...` | blocked |
+| [R4_2JUDGE_Krippendorff_alpha](R4_2JUDGE_Krippendorff_alpha.reproduce.sh) | not_yet_run | `0.7499` | `not_yet_run  -  requires: the local GGUF 3-judge panel via O...` | blocked |
+| [R4_Cohen_kappa_QwenMistral](R4_Cohen_kappa_QwenMistral.reproduce.sh) | not_yet_run | `0.747` | `not_yet_run  -  requires: the local GGUF 3-judge panel via O...` | blocked |
+| [R6_MaskingAblation_easy_lift](R6_MaskingAblation_easy_lift.reproduce.sh) | not_yet_run | `26.77` | `not_yet_run  -  requires: RL re-training of masked vs unmask...` | blocked |
+| [R6_GCN_easy_MAE_vs_MLP](R6_GCN_easy_MAE_vs_MLP.reproduce.sh) | not_yet_run | `48.0247` | `not_yet_run  -  requires: GCN + MLP training on the provider...` | blocked |
+| [R6_AquaRegia_WTI_dev95](R6_AquaRegia_WTI_dev95.reproduce.sh) | not_yet_run | `0.0238` | `not_yet_run  -  requires: the R3 forecast-residual stack (Ti...` | blocked |
+| [R3_TimesFM_CP_WTI_dev95](R3_TimesFM_CP_WTI_dev95.reproduce.sh) | not_yet_run | `0.050` | `not_yet_run  -  requires: TimesFM-2 local weights (models/ti...` | blocked |
+| [V4_SPOF_V2_F1](V4_SPOF_V2_F1.reproduce.sh) | ran | `1.0` | `1.0` | PASS |
+| [V4_STACKING_V2_lift_vs_WV](V4_STACKING_V2_lift_vs_WV.reproduce.sh) | ran | `0.01` | `0.0027` | PASS |
+| [V4_Live_Brent_202604](V4_Live_Brent_202604.reproduce.sh) | not_yet_run | `60` | `not_yet_run  -  requires: a live FRED_API_KEY. Not set in th...` | blocked |
+| [V4_Tests_Total](V4_Tests_Total.reproduce.sh) | ran | `261` | `261 passed` | PASS |
+| [V5_Autoresearch_best_experiment](V5_Autoresearch_best_experiment.reproduce.sh) | ran | `s3_curriculum_learning` | `s3_curriculum_learning` | PASS |
+| [V5_Autoresearch_CI95_lift](V5_Autoresearch_CI95_lift.reproduce.sh) | ran | `0.05` | `0.0967` | PASS |
+| [V5_Arena_baseline_leaderboard](V5_Arena_baseline_leaderboard.reproduce.sh) | ran | `6 MaskablePPO` | `6 MaskablePPO-v3 (ours)` | PASS |
+| [V5_Twin_savings_gt_zero](V5_Twin_savings_gt_zero.reproduce.sh) | ran | `0` | `135529200` | PASS |
+| [V5_DPO_JUDGE_preference_pairs_built](V5_DPO_JUDGE_preference_pairs_built.reproduce.sh) | ran | `20` | `21` | PASS |
+| [V5_Skill_pack_shipped](V5_Skill_pack_shipped.reproduce.sh) | ran | `4` | `4` | PASS |
+| [V5_Phoenix_tests_green](V5_Phoenix_tests_green.reproduce.sh) | ran | `passed` | `16 passed` | PASS |

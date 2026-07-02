@@ -1,22 +1,27 @@
 claim_id: R4_2JUDGE_Krippendorff_alpha
-claim: 2-judge (Qwen-14B + Mistral-Nemo) Krippendorff ordinal alpha on 26 scenarios equals 0.7499
-command: python -m v3_arcadia.30_dangerous.r4_ablation_and_baseline --out /tmp/r4_ab.json
+claim: 2-judge (Qwen-14B + Mistral-Nemo) Krippendorff ordinal alpha on 26 scenarios equals 0.7499 (the raw 3-judge alpha is only 0.210  -  see versions/v3_arcadia/results/R4_DANGEROUS_V2_REPORT.md)
+command: python versions/v3_arcadia/30_dangerous/r4_ablation_and_baseline.py --out /tmp/r4_ab.json
 extraction: python -c "import json; print(json.load(open(r\"/tmp/r4_ab.json\")).get(\"agreement_primary_panel\",{}).get(\"krippendorff_alpha_ordinal\"))"
 expected: 0.7499
 comparator: ==
 expected_range: ''
 expected_regex: ''
-actual: <pending-first-run>
+actual: |
+  not_yet_run  -  requires: the local GGUF 3-judge panel via Ollama (deepseek-r1, qwen2.5:14b, mistral-nemo). No OpenRouter equivalent and OPENROUTER_API_KEY is revoked. Cached per-judge outputs live in versions/v3_arcadia/results/R4_DANGEROUS_V2*.json.
 exit_code: -1
 stdout_inline: ''
 stdout_sha256: ''
 stderr_tail: ''
 stdout_bytes: 0
 match: false
-comparator_note: ''
+comparator_note: not executed (blocked); see `requires`
 runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
+timestamp_utc: |
+  2026-07-02T13:35:51Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: ''
 platform: ''
 env_notes:
+status: not_yet_run
+requires: |
+  the local GGUF 3-judge panel via Ollama (deepseek-r1, qwen2.5:14b, mistral-nemo). No OpenRouter equivalent and OPENROUTER_API_KEY is revoked. Cached per-judge outputs live in versions/v3_arcadia/results/R4_DANGEROUS_V2*.json.

@@ -1,23 +1,27 @@
 claim_id: R3_TimesFM_CP_WTI_dev95
 claim: |
-  TimesFM residual-conformal on WTI at 95%: |coverage - nominal| = 0.050
-command: python -m v3_arcadia.20_past_self.r3_timesfm_residual_quantile --out /tmp/r3_tfm.json
+  TimesFM residual-conformal on WTI at 95%: |coverage - nominal| = 0.050 (committed in versions/v3_arcadia/results R3 artifacts)
+command: python versions/v3_arcadia/20_past_self/r3_timesfm_residual_quantile.py --out /tmp/r3_tfm.json
 extraction: python -c "import json; print(round(abs(json.load(open(r\"/tmp/r3_tfm.json\")).get(\"DCOILWTICO\",{}).get(\"conformal_coverage_dev_95\",0)),3))"
 expected: 0.050
 comparator: ==
 expected_range: ''
 expected_regex: ''
-actual: <pending-first-run>
+actual: |
+  not_yet_run  -  requires: TimesFM-2 local weights (models/timesfm-2, ~2GB) + FRED DCOILWTICO series.
 exit_code: -1
 stdout_inline: ''
 stdout_sha256: ''
 stderr_tail: ''
 stdout_bytes: 0
 match: false
-comparator_note: ''
+comparator_note: not executed (blocked); see `requires`
 runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
+timestamp_utc: |
+  2026-07-02T13:35:51Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: ''
 platform: ''
 env_notes:
+status: not_yet_run
+requires: TimesFM-2 local weights (models/timesfm-2, ~2GB) + FRED DCOILWTICO series.

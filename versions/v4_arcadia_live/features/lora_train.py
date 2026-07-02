@@ -38,7 +38,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 LORA_OUT = PROJECT_ROOT / "rl" / "checkpoints" / "lora" / "supplymind_v5"
 SCENARIOS_LIB = (PROJECT_ROOT / "versions/v4_arcadia_live" / "scenarios"
                  / "iran_israel_hormuz_2024_2026.json")
-R4_RESULTS = PROJECT_ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+R4_RESULTS = PROJECT_ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
 
 
 @dataclass

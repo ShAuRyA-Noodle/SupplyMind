@@ -18,7 +18,7 @@ This directory contains the **Phoenix v5 ascensionism layer** being built on top
 | `counterfactual_twin/` | Live Counterfactual Digital Twin — 100 MC rollouts of MaskablePPO vs no-action vs greedy, conditioned on live Hormuz signal |
 | `autoresearch_fixed/` | Fixed copy of v4's autoresearch loop (v4 crashed all 5 seeds in ~5s; root cause patched here) |
 | `receipts_v2/` | Grade-A reproducibility receipts: `command` + full `stdout` + `exit_code` + `expected` + `actual` + `match` (upgrade of v4's 13 receipts) |
-| `server/` | `phoenix_app.py` — Phoenix FastAPI entry point that imports v4's app and adds `/arena`, `/twin`, `/phoenix/*` routers |
+| `server/` | `phoenix_app.py` — legacy standalone launcher. **The deployed entrypoint is the repo-root `server/app.py`** (`uvicorn server.app:app`), which already mounts the v5 `/arena`, `/twin`, and replay routers. Use `server.app:app`, not this file. |
 | `upstream_prs/meta_openenv/` | Draft PR to `github.com/meta-pytorch/openenv` — SupplyMind as a reference env |
 | `upstream_prs/alibaba_roll/` | Draft PR to `github.com/alibaba/ROLL` — `examples/supplymind_crisis/` reference agentic environment |
 | `experiments/` | ROLL training runs, checkpoints, lab notebook outputs |
@@ -28,11 +28,11 @@ This directory contains the **Phoenix v5 ascensionism layer** being built on top
 
 ## Design invariants
 
-- **v3 and v4 are untouched.** `tests/` and `versions/v4_arcadia_live/tests/` (249 total) must stay green throughout Phoenix work.
+- **v3 and v4 are untouched.** `tests/` and `versions/v4_arcadia_live/tests/` (261 total as of 2026-07-02: 184 core + 77 v4) must stay green throughout Phoenix work.
 - **Copy-before-edit.** Any existing v4 file being modified is copied into Phoenix first; edits happen on the copy.
 - **Isolated Python env.** ROLL has a massive dependency graph (Megatron, DeepSpeed, vLLM, Ray, flash-attn). Its venv lives at `.venv-roll/` inside this folder and never touches the main venv.
 - **Fail gracefully.** Every Phoenix endpoint, feature, and demo path has an offline fallback. `--replay` flags, cached outputs, `trl.DPOTrainer` fallback for DPO, `transformers` fallback for vLLM.
-- **Reproducibility is non-negotiable.** Every claim in `JUDGES_V5.md` has a matching receipt in `receipts_v2/` executable as one bash command.
+- **Reproducibility is non-negotiable.** Every headline claim has a receipt in `receipts_v2/` with the correct current-layout command. As of 2026-07-02, 10 of the 20 receipts run green on this machine; the other 10 are honestly marked `not_yet_run` in each receipt's `requires` field (they need local GGUF judges, an absent embedder, GPU-hours, or a live FRED key — see `receipts_v2/INDEX.md`). No receipt is a `<pending-first-run>` stub any more.
 
 ## Track: "Ascensionism"
 
@@ -57,14 +57,14 @@ cd Sleep-Token
 python -m venv .venv && .venv\Scripts\activate
 pip install -r requirements.txt
 
-# v4 tests (frozen baseline, 249 passing)
+# v3 core + v4 tests (frozen baseline, 261 passing)
 pytest tests/ versions/v4_arcadia_live/tests/ -q
 
 # Phoenix tests (new)
 pytest versions/v5_phoenix/tests/ -q
 
-# Live Phoenix server (Arena + Counterfactual Twin + v4 Hormuz)
-uvicorn versions.v5_phoenix.server.phoenix_app:app --host 0.0.0.0 --port 8000
+# Live server (Arena + Counterfactual Twin + v4 Hormuz all mounted here)
+uvicorn server.app:app --host 0.0.0.0 --port 8000
 
 # Any headline receipt
 bash versions/v5_phoenix/receipts_v2/<claim>.reproduce.sh

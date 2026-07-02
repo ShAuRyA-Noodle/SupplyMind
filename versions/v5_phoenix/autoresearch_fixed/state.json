@@ -9,8 +9,8 @@
       "n": 9
     },
     "architecture_summary": "MaskablePPO [128,128] curriculum easy->med->hard (40/30/30 split)",
-    "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\seed1000_candidate\\policy.zip",
-    "updated_at": "2026-04-22T06:51:52Z"
+    "checkpoint_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\seed1000_candidate\\policy.zip",
+    "updated_at": "2026-07-02T13:41:19Z"
   },
   "history": [
     {
@@ -45,8 +45,8 @@
       "wall_clock_s": 122.68,
       "total_steps": 20000,
       "architecture_summary": "MaskablePPO MlpPolicy[256,256]+ReLU, lr=3e-4, n_steps=2048, gamma=0.99",
-      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s1_bigger_network\\train.stdout.log",
-      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s1_bigger_network\\train.stderr.log",
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s1_bigger_network\\train.stdout.log",
+      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s1_bigger_network\\train.stderr.log",
       "accepted": true,
       "reason": "first accepted experiment -- seeding baseline",
       "delta_ci95_lower": 0.4035,
@@ -86,8 +86,8 @@
       "wall_clock_s": 135.79,
       "total_steps": 20000,
       "architecture_summary": "MaskablePPO MlpPolicy[256,256]+ReLU, lr=3e-4, n_steps=2048, gamma=0.99",
-      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s2_higher_entropy\\train.stdout.log",
-      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s2_higher_entropy\\train.stderr.log",
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s2_higher_entropy\\train.stdout.log",
+      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s2_higher_entropy\\train.stderr.log",
       "accepted": true,
       "reason": "CI95 lower +0.0513 > 0.0050 threshold",
       "delta_ci95_lower": 0.0513,
@@ -127,8 +127,8 @@
       "wall_clock_s": 216.85,
       "total_steps": 20000,
       "architecture_summary": "MaskablePPO [128,128] curriculum easy->med->hard (40/30/30 split)",
-      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s3_curriculum_learning_rerun\\train.stdout.log",
-      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s3_curriculum_learning_rerun\\train.stderr.log",
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s3_curriculum_learning_rerun\\train.stdout.log",
+      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s3_curriculum_learning_rerun\\train.stderr.log",
       "accepted": true,
       "reason": "CI95 lower +0.0967 > 0.0050 threshold",
       "delta_ci95_lower": 0.0967,
@@ -168,8 +168,8 @@
       "wall_clock_s": 193.97,
       "total_steps": 20000,
       "architecture_summary": "RecurrentPPO MlpLstmPolicy lstm=128, [64], lr=3e-4",
-      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s4_recurrent_ppo_rerun\\train.stdout.log",
-      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s4_recurrent_ppo_rerun\\train.stderr.log",
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s4_recurrent_ppo_rerun\\train.stdout.log",
+      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s4_recurrent_ppo_rerun\\train.stderr.log",
       "accepted": false,
       "reason": "CI95 lower delta -0.2932 <= 0.0050 threshold",
       "delta_ci95_lower": -0.2932,
@@ -209,8 +209,8 @@
       "wall_clock_s": 129.73,
       "total_steps": 20000,
       "architecture_summary": "MaskablePPO [64,64] + ActionDiversityWrapper(k=5, bonus=0.02)",
-      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s5_action_diversity_bonus_rerun\\train.stdout.log",
-      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v5_phoenix/\autoresearch_fixed\\experiments\\s5_action_diversity_bonus_rerun\\train.stderr.log",
+      "stdout_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s5_action_diversity_bonus_rerun\\train.stdout.log",
+      "stderr_path": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions\\v5_phoenix\\autoresearch_fixed\\experiments\\s5_action_diversity_bonus_rerun\\train.stderr.log",
       "accepted": false,
       "reason": "CI95 lower delta +0.0013 <= 0.0050 threshold",
       "delta_ci95_lower": 0.0013,
@@ -219,6 +219,6 @@
       "status": "rejected"
     }
   ],
-  "rebuilt_at": "2026-04-22T06:51:52Z",
+  "rebuilt_at": "2026-07-02T13:41:19Z",
   "rebuilt_note": "Phoenix v5 rebuild: v4 state.json was stale (claimed all crashed). This state reflects the real result.json artifacts plus Phoenix fixes to s3/s4."
 }

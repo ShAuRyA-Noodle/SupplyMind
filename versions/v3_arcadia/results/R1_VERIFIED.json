@@ -105,17 +105,24 @@
       "test": "synthetic 224x224 image -> coherent description"
     }
   },
+  "corrected_2026_07_02": {
+    "scope": "external_data dataset inventory only. The models block above is left as originally recorded on 2026-04-17 (its current-disk accuracy is tracked separately by the models/OpenRouter audit).",
+    "changes": [
+      "fred: was 'fred_supply_chain_pressure count 2' where one series had 404'd; now 2 genuinely-present FRED series with correct ids - fred_brent_daily.csv (DCOILBRENTEU, real daily Brent, ~10,204 obs 1987-2026) + fred_truck_transport.csv (PCU484121484121, monthly truck-transport PPI).",
+      "policy_papers: still 3, but all 3 are now real PDFs (verified %PDF magic bytes). The former frbny_supply_chain.pdf (an HTML error page) was replaced by the real FRBNY GSCPI staff report frbny_gscpi_sr1017.pdf.",
+      "noaa: was a static June-2024 sample_track.zip mislabeled 'realtime'; now a live NHC current_storms.json (top-level 'activeStorms') is fetched.",
+      "removed openflights (5 files), world_bank_pink_sheet (1 file), imf_ifs (0) and un_comtrade (0): all unconsumed by any code and deleted from disk by the data-plumbing fix.",
+      "wikipedia_crisis_articles: 26 -> 31, previously-failed crisis titles retried (Francis Scott Key Bridge collapse, Red Sea crisis, Russia-Ukraine economic impact, 2021-2023 global supply-chain crisis, etc.)."
+    ],
+    "source": "data-plumbing findings (_audit/audit_6_external-data.json) + on-disk verification on 2026-07-02"
+  },
   "external_data": {
     "sec_10k_fortune500": {"count": 20, "dir": "external_data/sec_10k"},
-    "fed_bis_policy_papers": {"count": 3, "dir": "external_data/policy_papers"},
-    "openflights": {"count": 5, "dir": "external_data/openflights"},
-    "fred_supply_chain_pressure": {"count": 2, "dir": "external_data"},
-    "noaa_realtime_storms": {"count": 1, "dir": "external_data/noaa"},
-    "world_bank_pink_sheet": {"count": 1, "dir": "external_data/worldbank"},
-    "wikipedia_crisis_articles": {"count": 26, "dir": "external_data/wikipedia_crises"},
-    "world_bank_macro_indicators": {"count": 6, "dir": "external_data/world_bank_macro"},
-    "imf_ifs": {"count": 0, "note": "Free API endpoint returns empty envelope; replaced by World Bank above"},
-    "un_comtrade": {"count": 0, "note": "Public preview requires subscription key; replaced by World Bank above"}
+    "fed_bis_policy_papers": {"count": 3, "dir": "external_data/policy_papers", "files": ["bis_bottlenecks_bull48.pdf", "frbny_gscpi_sr1017.pdf", "frbsf_supply_demand_inflation_wp2022-18.pdf"], "note": "All 3 verified real PDFs; frbny_gscpi_sr1017.pdf replaced the earlier HTML-error-page file."},
+    "fred_series": {"count": 2, "dir": "external_data", "files": ["fred_brent_daily.csv (DCOILBRENTEU)", "fred_truck_transport.csv (PCU484121484121)"], "note": "Both genuinely present with correct FRED ids; real daily Brent added by the data-plumbing fix."},
+    "noaa_active_storms": {"count": 1, "dir": "external_data/noaa", "file": "current_storms.json", "note": "Live NHC CurrentStorms.json fetch (top-level 'activeStorms'); no longer the static 2024 archive zip."},
+    "wikipedia_crisis_articles": {"count": 31, "dir": "external_data/wikipedia_crises"},
+    "world_bank_macro_indicators": {"count": 6, "dir": "external_data/world_bank_macro"}
   },
   "engineering_decisions": {
     "quantization": {

@@ -1,22 +1,26 @@
 claim_id: R4_Cohen_kappa_QwenMistral
-claim: Cohen weighted kappa Qwen-14B vs Mistral-Nemo equals 0.747
-command: python -m v3_arcadia.30_dangerous.r4_ablation_and_baseline --out /tmp/r4_kappa.json
+claim: Cohen weighted kappa Qwen-14B vs Mistral-Nemo equals 0.747 (this is the best-agreeing pair; DeepSeek-R1 pairwise kappa is 0.158 / 0.095)
+command: python versions/v3_arcadia/30_dangerous/r4_ablation_and_baseline.py --out /tmp/r4_kappa.json
 extraction: python -c "import json; blob=json.load(open(r\"/tmp/r4_kappa.json\")); print(blob.get(\"pairwise_weighted_kappa\",{}).get(\"qwen_mistral\") or blob.get(\"agreement_primary_panel\",{}).get(\"cohen_kappa_qwen_mistral\"))"
 expected: 0.747
 comparator: ==
 expected_range: ''
 expected_regex: ''
-actual: <pending-first-run>
+actual: |
+  not_yet_run  -  requires: the local GGUF 3-judge panel via Ollama (no OpenRouter equivalent; key revoked). Cached judge outputs in versions/v3_arcadia/results/R4_DANGEROUS_V2*.json.
 exit_code: -1
 stdout_inline: ''
 stdout_sha256: ''
 stderr_tail: ''
 stdout_bytes: 0
 match: false
-comparator_note: ''
+comparator_note: not executed (blocked); see `requires`
 runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
+timestamp_utc: |
+  2026-07-02T13:35:51Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: ''
 platform: ''
 env_notes:
+status: not_yet_run
+requires: the local GGUF 3-judge panel via Ollama (no OpenRouter equivalent; key revoked). Cached judge outputs in versions/v3_arcadia/results/R4_DANGEROUS_V2*.json.

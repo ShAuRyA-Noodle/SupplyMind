@@ -1,68 +1,68 @@
 {
-  "n_train": 48000,
-  "n_test": 12000,
+  "n_train": 40000,
+  "n_test": 10000,
   "n_features": 24,
   "n_folds": 5,
   "base_learners": [
     {
       "name": "xgboost",
-      "auc": 0.9799,
-      "f1": 0.972,
-      "train_time_s": 3.29,
+      "auc": 0.9807,
+      "f1": 0.9751,
+      "train_time_s": 6.28,
       "n_params": 0
     },
     {
       "name": "lightgbm",
-      "auc": 0.9818,
-      "f1": 0.9724,
-      "train_time_s": 7.25,
+      "auc": 0.9814,
+      "f1": 0.9753,
+      "train_time_s": 4.86,
       "n_params": 0
     },
     {
       "name": "catboost",
-      "auc": 0.9757,
-      "f1": 0.972,
-      "train_time_s": 15.07,
+      "auc": 0.9776,
+      "f1": 0.9751,
+      "train_time_s": 14.98,
       "n_params": 0
     },
     {
       "name": "random_forest",
-      "auc": 0.9753,
-      "f1": 0.972,
-      "train_time_s": 7.72,
+      "auc": 0.9766,
+      "f1": 0.9751,
+      "train_time_s": 44.33,
       "n_params": 0
     },
     {
       "name": "logistic_regression",
-      "auc": 0.9725,
-      "f1": 0.972,
-      "train_time_s": 0.7,
+      "auc": 0.9752,
+      "f1": 0.9751,
+      "train_time_s": 0.2,
       "n_params": 0
     },
     {
       "name": "mlp",
-      "auc": 0.9722,
-      "f1": 0.9717,
-      "train_time_s": 13.92,
+      "auc": 0.9755,
+      "f1": 0.975,
+      "train_time_s": 4.8,
       "n_params": 0
     }
   ],
   "ensemble_wv_v1": {
     "name": "ensemble_wv_v1",
-    "auc": 0.9771,
-    "f1": 0.972,
+    "auc": 0.9791,
+    "f1": 0.9751,
     "train_time_s": 0.0,
     "n_params": 0
   },
   "stacking_v2": {
     "name": "stacking_v2",
-    "auc": 0.9816,
-    "f1": 0.9726,
-    "train_time_s": 0.08,
+    "auc": 0.9818,
+    "f1": 0.9753,
+    "train_time_s": 0.03,
     "n_params": 0
   },
   "best_single": "lightgbm",
-  "best_single_auc": 0.9818,
-  "lift_stacking_vs_best_single_auc": -0.0002,
-  "lift_stacking_vs_wv_auc": 0.0045
+  "best_single_auc": 0.9814,
+  "lift_stacking_vs_best_single_auc": 0.0003,
+  "lift_stacking_vs_wv_auc": 0.0027
 }

@@ -30,10 +30,10 @@ logger = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[4]
 LIVE_CRISES_PATH = ROOT / "versions/v4_arcadia_live" / "scenarios" / "iran_israel_hormuz_2024_2026.json"
-R4_GT_PATH = ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
-R4_DEEPSEEK_PATH = ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_judge_deepseek-r1.json"
-R4_MISTRAL_PATH = ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_judge_mistral-nemo.json"
-R4_QWEN_PATH = ROOT / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_judge_qwen25-14b.json"
+R4_GT_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
+R4_DEEPSEEK_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_judge_deepseek-r1.json"
+R4_MISTRAL_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_judge_mistral-nemo.json"
+R4_QWEN_PATH = ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2_judge_qwen25-14b.json"
 
 OUT_PATH = Path(__file__).resolve().parent / "data" / "preference_pairs.jsonl"
 

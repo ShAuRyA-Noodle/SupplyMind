@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 GRAPH_DIR = REPO_ROOT / "server" / "data" / "graphs"
-R6_RESULTS = REPO_ROOT / "v3_arcadia" / "results" / "R6_PROVIDER_V2.json"
+R6_RESULTS = REPO_ROOT / "versions" / "v3_arcadia" / "results" / "R6_PROVIDER_V2.json"
 OUT_DIR = REPO_ROOT / "versions/v5_phoenix" / "experiments" / "hetgat_v1"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 

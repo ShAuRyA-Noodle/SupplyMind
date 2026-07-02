@@ -52,19 +52,19 @@ ANALYST_MODELS: dict[str, tuple[str, Path]] = {
 LOCAL_WRAPPER_MODELS: dict[str, tuple[str, Path]] = {
     "qwen25-14b-local": (
         "qwen25-14b-local",
-        _PROJECT_ROOT / "v3_arcadia" / "00_emergence" / "qwen25-14b.Modelfile",
+        _PROJECT_ROOT / "versions" / "v3_arcadia" / "00_emergence" / "qwen25-14b.Modelfile",
     ),
     "qwen25-coder-local": (
         "qwen25-coder-local",
-        _PROJECT_ROOT / "v3_arcadia" / "00_emergence" / "qwen25-coder-14b.Modelfile",
+        _PROJECT_ROOT / "versions" / "v3_arcadia" / "00_emergence" / "qwen25-coder-14b.Modelfile",
     ),
     "mistral-nemo-local": (
         "mistral-nemo-local",
-        _PROJECT_ROOT / "v3_arcadia" / "00_emergence" / "mistral-nemo.Modelfile",
+        _PROJECT_ROOT / "versions" / "v3_arcadia" / "00_emergence" / "mistral-nemo.Modelfile",
     ),
     "deepseek-r1-local-q4": (
         "deepseek-r1-local-q4",
-        _PROJECT_ROOT / "v3_arcadia" / "00_emergence" / "deepseek-r1.Modelfile",
+        _PROJECT_ROOT / "versions" / "v3_arcadia" / "00_emergence" / "deepseek-r1.Modelfile",
     ),
 }
 

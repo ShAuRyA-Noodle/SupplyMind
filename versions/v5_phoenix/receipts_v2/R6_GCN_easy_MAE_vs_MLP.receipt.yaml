@@ -1,22 +1,26 @@
 claim_id: R6_GCN_easy_MAE_vs_MLP
-claim: GCN beats MLP on easy graph by 48.02 percent MAE reduction
-command: python -m v3_arcadia.70_provider.r6_gnn_arrival_time --out /tmp/r6_gnn.json
+claim: GCN beats MLP on easy graph by 48.02 percent MAE reduction (committed in versions/v3_arcadia/results/R6_PROVIDER_V2.json)
+command: python versions/v3_arcadia/70_provider/r6_gnn_arrival_time.py --out /tmp/r6_gnn.json
 extraction: python -c "import json; print(round(100*json.load(open(r\"/tmp/r6_gnn.json\")).get(\"easy\",{}).get(\"mae_reduction_pct\",0),4))"
 expected: 48.0247
 comparator: ==
 expected_range: ''
 expected_regex: ''
-actual: <pending-first-run>
+actual: |
+  not_yet_run  -  requires: GCN + MLP training on the provider arrival-time task (GPU / long-run).
 exit_code: -1
 stdout_inline: ''
 stdout_sha256: ''
 stderr_tail: ''
 stdout_bytes: 0
 match: false
-comparator_note: ''
+comparator_note: not executed (blocked); see `requires`
 runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
+timestamp_utc: |
+  2026-07-02T13:35:51Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: ''
 platform: ''
 env_notes:
+status: not_yet_run
+requires: GCN + MLP training on the provider arrival-time task (GPU / long-run).

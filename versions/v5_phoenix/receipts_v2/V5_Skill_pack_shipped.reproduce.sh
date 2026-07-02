@@ -3,15 +3,15 @@
 # Claim:    supplymind-skills pack contains 3 SKILL.md files + plugin.json
 # Expected: '4' (>=)
 # Hardware at last run: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
-# Runtime:  0.04s
+# Runtime:  0.12s
 set -euo pipefail
 echo "[V5_Skill_pack_shipped] command:"
-echo '> ls versions/v5_phoenix/supplymind_skills/*/SKILL.md versions/v5_phoenix/supplymind_skills/plugin.json'
-ls versions/v5_phoenix/supplymind_skills/*/SKILL.md versions/v5_phoenix/supplymind_skills/plugin.json
+echo '> python -c "import glob; [print(p) for p in glob.glob('versions/v5_phoenix/supplymind_skills/*/SKILL.md') + glob.glob('versions/v5_phoenix/supplymind_skills/plugin.json')]"'
+python -c "import glob; [print(p) for p in glob.glob('versions/v5_phoenix/supplymind_skills/*/SKILL.md') + glob.glob('versions/v5_phoenix/supplymind_skills/plugin.json')]"
 echo
 echo "[V5_Skill_pack_shipped] extraction:"
-echo '> ls versions/v5_phoenix/supplymind_skills/*/SKILL.md versions/v5_phoenix/supplymind_skills/plugin.json | wc -l'
-ls versions/v5_phoenix/supplymind_skills/*/SKILL.md versions/v5_phoenix/supplymind_skills/plugin.json | wc -l
+echo '> python -c "import glob; print(len(glob.glob('versions/v5_phoenix/supplymind_skills/*/SKILL.md') + glob.glob('versions/v5_phoenix/supplymind_skills/plugin.json')))"'
+python -c "import glob; print(len(glob.glob('versions/v5_phoenix/supplymind_skills/*/SKILL.md') + glob.glob('versions/v5_phoenix/supplymind_skills/plugin.json')))"
 echo
 echo "[V5_Skill_pack_shipped] expected: 4"
 echo "[V5_Skill_pack_shipped] comparator: >="

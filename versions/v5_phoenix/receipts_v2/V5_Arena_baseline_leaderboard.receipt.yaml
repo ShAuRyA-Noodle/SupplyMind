@@ -22,10 +22,12 @@ stderr_tail: ''
 stdout_bytes: 543
 match: true
 comparator_note: regex /^6 MaskablePPO/ over actual='6 MaskablePPO-v3 (ours)'
-runtime_s: 0.13
+runtime_s: 0.15
 timestamp_utc: |
-  2026-04-22T06:50:46Z
+  2026-07-02T13:41:19Z
 hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: 3.11.9
 platform: Windows 10
 env_notes:
+status: ran
+requires: ''

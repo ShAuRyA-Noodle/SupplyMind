@@ -95,12 +95,6 @@ class WarRoomRequest(BaseModel):
                     "and report Krippendorff α on their risk_level rankings. "
                     "Adds ~6-12s and uses OpenRouter rate budget.",
     )
-    expand_to_12_judges: bool = Field(
-        default=False,
-        description="If True (and enable_openrouter_panel=True), use the 12-judge "
-                    "frontier panel (DeepSeek + Qwen-3 + Llama-4 + Mistral-3 + "
-                    "Grok-4-mini + Claude-Haiku-4.5 added). Adds ~10-20s.",
-    )
     enable_specialist_judges: bool = Field(
         default=True,
         description="If True, run the 10 deterministic sector-specialist judges "
@@ -353,7 +347,7 @@ if router is not None:
         # ---- Stage 3: chokepoint graph (static, IEA-cited)
         chokepoint = graph_mod.get_graph()
 
-        # ---- Stage 3b (optional): 6 or 12-judge OpenRouter cross-check
+        # ---- Stage 3b (optional): 6-judge OpenRouter frontier cross-check
         openrouter_panel: dict | None = None
         if req.enable_openrouter_panel:
             try:
@@ -367,7 +361,6 @@ if router is not None:
                     brent=req.brent_price_usd_bbl,
                     duration=req.duration_days,
                     top_analog=top_analog,
-                    expand_to_12=req.expand_to_12_judges,
                 )
             except Exception as e:  # noqa: BLE001
                 logger.warning("[war-room] OpenRouter panel failed: %s", e)

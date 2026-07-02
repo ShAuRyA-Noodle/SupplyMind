@@ -1,22 +1,66 @@
 claim_id: V4_Tests_Total
-claim: v3 core (173) + v4 new (76) = 249 total tests pass
-command: pytest tests/ versions/v4_arcadia_live/tests/ -q --tb=no
-extraction: grep -oE "[0-9]+ passed" || true
-expected: 249
+claim: v3 core (184) + v4 new (77) = 261 total tests pass (measured 2026-07-02)
+command: pytest tests/ versions/v4_arcadia_live/tests/ -q --tb=no | grep -oE "[0-9]+ passed"
+extraction: ''
+expected: 261
 comparator: regex
 expected_range: ''
-expected_regex: (2[45][0-9]) passed
-actual: <pending-first-run>
-exit_code: -1
-stdout_inline: ''
-stdout_sha256: ''
-stderr_tail: ''
-stdout_bytes: 0
-match: false
-comparator_note: ''
-runtime_s: 0.0
-timestamp_utc: <pending-first-run>
-hardware: <pending-first-run>
-python_version: ''
-platform: ''
+expected_regex: (26[0-9]) passed
+actual: 261 passed
+exit_code: 0
+stdout_inline: |
+  261 passed
+stdout_sha256: 034ad644d90b91f13c72f57de5fa22c25364cf679988801e9792731a5378e7d5
+stderr_tail: |
+    File "<frozen importlib._bootstrap>", line 690 in _load_unlocked
+    File "<frozen importlib._bootstrap>", line 1147 in _find_and_load_unlocked
+    File "<frozen importlib._bootstrap>", line 1176 in _find_and_load
+    File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\transformers\modeling_utils.py", line 48 in <module>
+    File "<frozen importlib._bootstrap>", line 241 in _call_with_frames_removed
+    File "<frozen importlib._bootstrap_external>", line 940 in exec_module
+    File "<frozen importlib._bootstrap>", line 690 in _load_unlocked
+    File "<frozen importlib._bootstrap>", line 1147 in _find_and_load_unlocked
+    File "<frozen importlib._bootstrap>", line 1176 in _find_and_load
+    File "<frozen importlib._bootstrap>", line 1204 in _gcd_import
+    File "C:\Users\Dell\AppData\Local\Programs\Python\Python311\Lib\importlib\__init__.py", line 126 in import_module
+    File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\transformers\utils\import_utils.py", line 1778 in _get_module
+    File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\transformers\utils\import_utils.py", line 1766 in __getattr__
+    File "<frozen importlib._bootstrap>", line 1229 in _handle_fromlist
+    File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sentence_transformers\base\model.py", line 24 in <module>
+    File "<frozen importlib._bootstrap>", line 241 in _call_with_frames_removed
+    File "<frozen importlib._bootstrap_external>", line 940 in exec_module
+    File "<frozen importlib._bootstrap>", line 690 in _load_unlocked
+    File "<frozen importlib._bootstrap>", line 1147 in _find_and_load_unlocked
+    File "<frozen importlib._bootstrap>", line 1176 in _find_and_load
+    File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sentence_transformers\base\__init__.py", line 4 in <module>
+    File "<frozen importlib._bootstrap>", line 241 in _call_with_frames_removed
+    File "<frozen importlib._bootstrap_external>", line 940 in exec_module
+    File "<frozen importlib._bootstrap>", line 690 in _load_unlocked
+    File "<frozen importlib._bootstrap>", line 1147 in _find_and_load_unlocked
+    File "<frozen importlib._bootstrap>", line 1176 in _find_and_load
+    File "<frozen importlib._bootstrap>", line 241 in _call_with_frames_removed
+    File "<frozen importlib._bootstrap>", line 1126 in _find_and_load_unlocked
+    File "<frozen importlib._bootstrap>", line 1176 in _find_and_load
+    File "C:\Users\Dell\Desktop\Sleep-Token\.venv\Lib\site-packages\sentence_transformers\__init__.py", line 15 in <module>
+    File "<frozen importlib._bootstrap>", line 241 in _call_with_frames_removed
+    File "<frozen importlib._bootstrap_external>", line 940 in exec_module
+    File "<frozen importlib._bootstrap>", line 690 in _load_unlocked
+    File "<frozen importlib._bootstrap>", line 1147 in _find_and_load_unlocked
+    File "<frozen importlib._bootstrap>", line 1176 in _find_and_load
+    File "C:\Users\Dell\Desktop\Sleep-Token\versions\v4_arcadia_live\realtime\crisis_library.py", line 89 in _load_embed_model
+    File "C:\Users\Dell\Desktop\Sleep-Token\versions\v4_arcadia_live\realtime\crisis_library.py", line 150 in find_analogs
+    File "C:\Users\Dell\Desktop\Sleep-Token\versions\v4_arcadia_live\realtime\hormuz_endpoint.py", line 346 in run_hormuz_pipeline
+    ...
+  sys:1: DeprecationWarning: builtin type swigvarlink has no __module__ attribute
+stdout_bytes: 11
+match: true
+comparator_note: regex /(26[0-9]) passed/ over actual='261 passed'
+runtime_s: 248.64
+timestamp_utc: |
+  2026-07-02T13:37:10Z
+hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
+python_version: 3.11.9
+platform: Windows 10
 env_notes:
+status: ran
+requires: ''

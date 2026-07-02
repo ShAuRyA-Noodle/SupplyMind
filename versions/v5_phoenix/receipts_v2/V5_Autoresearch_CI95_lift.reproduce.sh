@@ -3,7 +3,7 @@
 # Claim:    Autoresearch S3 accepted with CI95 lower delta >= +0.05 over S2 (final best)
 # Expected: '0.05' (>=)
 # Hardware at last run: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
-# Runtime:  0.37s
+# Runtime:  0.35s
 set -euo pipefail
 echo "[V5_Autoresearch_CI95_lift] command:"
 echo '> python -m versions.v5_phoenix.autoresearch_fixed.rebuild_state'

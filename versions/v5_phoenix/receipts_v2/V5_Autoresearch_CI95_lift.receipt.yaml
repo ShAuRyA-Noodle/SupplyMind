@@ -9,7 +9,7 @@ expected_regex: ''
 actual: 0.0967
 exit_code: 0
 stdout_inline: |
-  [rebuild] wrote C:\Users\Dell\Desktop\Sleep-Token\versions/v5_phoenix/autoresearch_fixed\state.json
+  [rebuild] wrote C:\Users\Dell\Desktop\Sleep-Token\versions\v5_phoenix\autoresearch_fixed\state.json
   [rebuild] best: s3_curriculum_learning
     - s1_bigger_network: status=accepted mean=0.5841 ci95_lower=0.4035
     - s2_higher_entropy: status=accepted mean=0.6066 ci95_lower=0.4548
@@ -17,15 +17,17 @@ stdout_inline: |
     - s4_recurrent_ppo: status=rejected mean=0.301 ci95_lower=0.2583
     - s5_action_diversity_bonus: status=rejected mean=0.6574 ci95_lower=0.5528
   0.0967
-stdout_sha256: ce48e1812dcf157ab68b312af69c32d5757de12882bbd32fb07386d6aa01787e
+stdout_sha256: bff488f15cc2eb78381794f544ed10851111663446f94fef68c2702f2c1dc85b
 stderr_tail: ''
-stdout_bytes: 497
+stdout_bytes: 501
 match: true
 comparator_note: actual=0.0967 >= expected=0.05
-runtime_s: 0.37
+runtime_s: 0.35
 timestamp_utc: |
-  2026-04-22T06:51:51Z
+  2026-07-02T13:41:19Z
 hardware: NVIDIA GeForce RTX 4080 Laptop GPU 11GB VRAM
 python_version: 3.11.9
 platform: Windows 10
 env_notes:
+status: ran
+requires: ''

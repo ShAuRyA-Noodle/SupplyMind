@@ -5,11 +5,11 @@ Usage:
     from versions.v5_phoenix.receipts_v2.framework import Receipt
 
     r = Receipt(
-        claim_id="R5_GRANITE_mxbai_P1",
-        claim="mxbai-embed-large P@1 on 53 precise queries equals 0.9622",
-        command="python -m v3_arcadia.40_granite.r5_rag_beast --out /tmp/r5.json",
-        extraction="jq '.pipelines.P2_mxbai_bi.p1' /tmp/r5.json",
-        expected="0.9622",
+        claim_id="V4_SPOF_V2_F1",
+        claim="SPOF detector v2 mean F1 over 3 graphs equals 1.000",
+        command="python -m versions.v4_arcadia_live.features.spof_v2 --graph all --save",
+        extraction="python -c \"import json;print(json.load(open('versions/v4_arcadia_live/features/R6_SPOF_V2.json'))['summary']['v2_mean_f1'])\"",
+        expected="1.0",
         comparator="==",
     )
     r.run()           # executes command + extraction; fills actual, stdout, exit_code, match
@@ -61,6 +61,15 @@ class Receipt:
     python_version: str = ""
     platform: str = ""
     env_notes: dict[str, str] = field(default_factory=dict)
+    # Honest run-status metadata (added 2026-07-02, Wave 3 solidification):
+    #   status  = "ran" (command executed this session) | "not_yet_run" | "" (never touched)
+    #   requires = when non-empty, the receipt is BLOCKED and was NOT executed;
+    #              this string names exactly what is missing (local GGUF judges,
+    #              a missing embedder, GPU-hours, live API key, ...). A blocked
+    #              receipt is recorded honestly as not_yet_run — never as a
+    #              <pending-first-run> stub masquerading as a passing receipt.
+    status: str = ""
+    requires: str = ""
 
     def run(self, cwd: Path | None = None, timeout: int = 600) -> None:
         self.timestamp_utc = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -100,14 +109,15 @@ class Receipt:
         self.match, self.comparator_note = _compare(self.actual, self.expected,
                                                     self.comparator, self.expected_range,
                                                     self.expected_regex)
+        self.status = "ran"
 
     def save(self, stem: Path | str) -> tuple[Path, Path]:
         stem = Path(stem)
         stem.parent.mkdir(parents=True, exist_ok=True)
         yaml_path = stem.with_suffix(".receipt.yaml")
         sh_path = stem.with_suffix(".reproduce.sh")
-        yaml_path.write_text(_to_yaml(asdict(self)))
-        sh_path.write_text(_to_shell(self))
+        yaml_path.write_text(_to_yaml(asdict(self)), encoding="utf-8")
+        sh_path.write_text(_to_shell(self), encoding="utf-8")
         try:
             sh_path.chmod(0o755)
         except Exception:

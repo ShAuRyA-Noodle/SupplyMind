@@ -91,8 +91,8 @@ def _load_trained_policy(task_id: str) -> Any | None:
     from sb3_contrib import MaskablePPO
 
     candidates = [
-        ROOT / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{task_id}.zip",
-        ROOT / "v3_arcadia" / "checkpoints" / "gethsemane" / "ppo_easy_typhoon_response.zip",
+        ROOT / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{task_id}.zip",
+        ROOT / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane" / "ppo_easy_typhoon_response.zip",
     ]
     for c in candidates:
         if c.exists():

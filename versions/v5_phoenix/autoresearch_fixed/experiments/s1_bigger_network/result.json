@@ -13,6 +13,6 @@
   "wall_clock_s": 122.68,
   "total_steps": 20000,
   "architecture_summary": "MaskablePPO MlpPolicy[256,256]+ReLU, lr=3e-4, n_steps=2048, gamma=0.99",
-  "final_checkpoint": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v4_arcadia_live/\autoresearch\\experiments\\seed1000_candidate\\policy.zip",
+  "final_checkpoint": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\versions/v4_arcadia_live/autoresearch\\experiments\\seed1000_candidate\\policy.zip",
   "training_seed": 1000
 }

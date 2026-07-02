@@ -19,19 +19,26 @@ dimensional observation space with a MultiDiscrete[7, 40] action space.
 Agents are trained via MaskablePPO with action masking (+26.77 % reward lift
 and zero invalid actions vs vanilla PPO), evaluated over a 10,800-episode
 bootstrap benchmark (95 % CI non-overlapping with all baselines), and graded
-by a 3-judge LLM panel (Krippendorff α = 0.750 on a 2-judge sub-panel).
+by a 3-judge LLM panel (raw 3-judge Krippendorff α = 0.210; the cherry-picked
+Qwen + Mistral 2-judge sub-panel reaches α = 0.750 — see §4).
 SupplyMind also integrates a live geopolitical pipeline (NewsAPI, GDELT,
 FRED, USGS) with a crisis-analog library anchored to the 2024–2026 Iran /
 Israel / Hormuz events, and a Karpathy-style autonomous research loop that
 has produced two validated improvements on a bootstrap-CI95-lower metric.
 
-v5 adds three substantial capabilities: (1) a DPO-fine-tuned Qwen-2.5-3B
-judge with a trl-fallback path; (2) an **OpenEnv Arena** harness where
+v5 adds three substantial capabilities: (1) a DPO judge-tuning **pipeline**
+(preference-pair builder + trl / ROLL DPO configs on Qwen-2.5-3B + LoRA); the
+fine-tune itself **did not complete** — every training run crashed on a
+torch/peft version skew, so no tuned-judge weights exist (see §16). (2) an
+**OpenEnv Arena** harness where
 external agents can be dropped in as `policy.pt` files and benchmarked
 against SOTA baselines; (3) a **Counterfactual Digital Twin** that runs
 100 Monte-Carlo rollouts conditioned on a live signal to quantify
-$ saved versus the no-action counterfactual. Every headline claim has
-a grade-A receipt (command + stdout + exit + expected/actual/match).
+$ saved versus the no-action counterfactual. Each headline claim carries a
+receipt (command + stdout + exit + expected/actual/match); as of 2026-07-02,
+10 of the 20 receipts execute green on a clean checkout and 10 are honestly
+marked `not_yet_run` because they need local GGUF judges, an absent embedder,
+TimesFM weights, GPU-hours, or a live FRED key (see §14).
 
 Two upstream PRs are drafted: `meta-pytorch/openenv` adds SupplyMind as a
 reference env; `alibaba/ROLL` registers it as a first-class agentic-RL
@@ -122,13 +129,26 @@ training budget.
 
 100 % parse rate (two-pass DeepSeek-R1 CoT → Qwen-14B JSON extraction →
 regex fallback). Per-judge ground-truth accuracy: DeepSeek-R1 31 %, Qwen-14B
-54 %, Mistral-Nemo 69 %, majority vote 69 %. **2-judge Krippendorff
-α = 0.750** (Qwen + Mistral ordinal). Cohen κ (weighted, Qwen × Mistral) =
-0.747.
+54 %, Mistral-Nemo 69 %, majority vote 69 %.
 
-v5 adds DPO fine-tuning on 26 preference pairs (chosen = judge output
-matching GT, rejected = worst-scoring judge output) via Qwen-2.5-3B + LoRA
-r=8. Expected delta: +5 to +15 pp absolute accuracy over baseline Qwen-3B.
+**Agreement (be honest about which number you quote).** The *raw 3-judge*
+Krippendorff α (ordinal) is **0.210** and Fleiss κ (nominal) is **0.016** —
+i.e. the full panel disagrees a lot (source of truth:
+`versions/v3_arcadia/results/R4_DANGEROUS_V2_REPORT.md`). The only high number,
+**α = 0.750 / weighted κ = 0.747**, is the *Qwen + Mistral 2-judge sub-panel*;
+DeepSeek-R1 is the outlier (pairwise κ 0.158 and 0.095 against the other two).
+Earlier drafts headlined the 0.750 sub-panel figure without the 3-judge
+context — that was a cherry-pick and has been corrected here.
+
+v5 **builds** a DPO judge-tuning pipeline on 26 preference pairs (chosen =
+judge output matching GT, rejected = worst-scoring judge output) targeting
+Qwen-2.5-3B + LoRA r=8. **The fine-tune never completed**: every training run
+crashed on a torch/peft version skew (documented in `PHOENIX_PUSH_REPORT.md`
+§3.1 and `experiments/dpo_judge_v1/train_gpu.log`, which ends in
+`AttributeError: module 'torch' has no attribute 'float8_e8m0fnu'`). No tuned
+judge weights exist and no delta was measured. The pipeline (`prepare_preference_data.py`,
+`train_dpo_roll.py`, `evaluate_delta.py`) is real and runnable once the
+version skew is fixed; the *result* is not claimed. See §16.
 
 ---
 
@@ -270,12 +290,21 @@ Packaged with `plugin.json` + attribution to Jesse Vincent's
 
 `versions/v5_phoenix/receipts_v2/` — 20 receipts, each a YAML + `reproduce.sh`
 pair. Each records: claim, command, extraction, expected, actual, exit_code,
-full stdout (or sha256 if truncated), stderr tail, match, hardware,
-timestamp, runtime. Upgrade from v4's one-liner receipts.
+full stdout (or sha256 if truncated), stderr tail, match, hardware, timestamp,
+runtime, plus a `status` / `requires` pair. Upgrade from v4's one-liner receipts.
 
-`python -m versions.v5_phoenix.receipts_v2.register --regenerate` re-runs every
-receipt from scratch. `--stub` emits stubs for commit without running (useful
-when environment isn't ready). `--only <claim_id>` regenerates one.
+Current state (regenerated 2026-07-02): **10 run green, 10 are `not_yet_run`.**
+A blocked receipt is NOT a stub — its command is the correct current-layout
+invocation and `requires` states exactly what is missing (local GGUF judge
+panel, the absent Snowflake-Arctic embedder, TimesFM-2 weights, GPU-hours for
+RL/GNN retraining, or a live FRED key). `receipts_v2/INDEX.md` is the live
+table.
+
+`python -m versions.v5_phoenix.receipts_v2.register --regenerate` runs every
+runnable receipt and stamps the blocked ones honestly; `--only <claim_id>`
+does one. (The old `--stub` mode — which committed `<pending-first-run>`
+placeholders that were then shown as receipts — has been removed: that abuse
+was the integrity bug this framework earlier suffered.)
 
 ---
 
@@ -299,8 +328,12 @@ marketplace submission.
    fine-tuning beyond 3B parameters are out of scope.
 - Arena baselines are pre-seeded from R6 Euclidian rather than re-run on
    every leaderboard rebuild (pragmatic: re-running is ~3 h).
-- DPO-judge delta vs baseline is unverified at submission time; we ship
-   whatever we find, positive or null.
+- **The DPO judge fine-tune did not complete.** Every training attempt
+   crashed on a torch/peft version skew (`train_gpu.log` →
+   `AttributeError: module 'torch' has no attribute 'float8_e8m0fnu'`; a
+   non-crashing run trained with `None` gradients). No tuned-judge weights
+   exist, so there is **no measured delta** vs baseline — the abstract's
+   capability (1) is a *built pipeline*, not a trained model.
 - ROLL Windows-native install often needs WSL2 escalation; we document
    Phases A/B/C and ship fallbacks.
 - Live pipeline depends on NewsAPI / FRED keys; offline replay is the
@@ -310,11 +343,15 @@ marketplace submission.
 
 ## 17. Conclusion
 
-SupplyMind v5 demonstrates a complete research-to-production loop: OpenEnv-
+SupplyMind v5 demonstrates a near-complete research-to-production loop: OpenEnv-
 compliant environment + trained SOTA RL agents + real-data calibration +
-live geopolitical evaluation + LLM post-training + autonomous research +
-open-source contributions upstream to two major ecosystems. Every headline
-number has a one-bash-command receipt. Nothing synthetic.
+live geopolitical evaluation + a built (but not-yet-trained) DPO judge-tuning
+pipeline + autonomous research + open-source contributions upstream to two
+major ecosystems. Every headline number is either backed by a receipt that runs
+green today, or by a committed result whose from-scratch receipt is honestly
+marked `not_yet_run` with its exact dependency. Nothing synthetic, nothing
+faked — the gaps (the DPO fine-tune, the local-model receipts) are stated, not
+papered over.
 
 ---
 
