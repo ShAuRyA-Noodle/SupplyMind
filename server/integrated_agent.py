@@ -17,11 +17,12 @@ Pipeline (all real, no synthetic substitution):
        │         (R4_DANGEROUS_V2 + R4_FRONTIER_PANEL_V2, replay-mode;
        │          no API key needed by judges)
        ▼
-    [Stage 3] GNN cascade score on the supply-chain graph
-       │         (3-layer pure-PyTorch GCN over the task_id's graph)
+    [Stage 3] Degree-centrality cascade proxy on the supply-chain graph
+       │         (pure-python node-degree ranking over the task_id's graph —
+       │          NOT a trained GCN; honest structural proxy)
        ▼
     [Stage 4] RL policy action on a real env reset observation
-       │         (SupplyMindEnvironment.reset → ONNX MaskablePPO)
+       │         (SupplyMindEnvironment.reset → gym 408-dim encoder → ONNX MaskablePPO)
        ▼
     [Stage 5] Conformal interval for WTI forecast anchored to FRED Brent
        │         snapshot + R6 per-horizon conformal half-width
@@ -35,6 +36,8 @@ committed evidence.
 """
 from __future__ import annotations
 
+import csv
+import hashlib
 import json
 import logging
 from dataclasses import dataclass, field
@@ -50,8 +53,77 @@ R4_PATH = REPO_ROOT / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.j
 FRONTIER_PATH = REPO_ROOT / "versions" / "v3_arcadia" / "results" / "R4_FRONTIER_PANEL_V2.json"
 RAG_CORPUS = REPO_ROOT / "versions" / "v3_arcadia" / "checkpoints" / "granite" / "corpus_chunks.pkl"
 R6_AQUA = REPO_ROOT / "versions" / "v3_arcadia" / "results" / "R6_AQUA_REGIA_V2.json"
+FRED_BRENT_CSV = REPO_ROOT / "external_data" / "fred_brent_daily.csv"
 
 RISK_ORDER = {"LOW": 0, "MEDIUM": 1, "HIGH": 2, "CRITICAL": 3}
+
+# sha256 allowlist for the RAG corpus pickle. pickle.load is arbitrary-code
+# execution (SECURITY.md §6.3): only unpickle a file whose digest we committed.
+# Regenerate this hash intentionally if the corpus is legitimately rebuilt.
+CORPUS_SHA256_ALLOWLIST = {
+    "0eff8ff2608349681bb25ce760e5266eb1d937f45b46387c36e06ec847e79d9c",
+}
+
+# Loud fallback marker — used only if the real FRED CSV can't be read.
+_HARDCODED_BRENT_FALLBACK = 123.28
+
+
+def _sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def load_brent_anchor() -> dict:
+    """Return the most recent REAL Brent (DCOILBRENTEU) close from the cached
+    FRED CSV, with its real observation date.
+
+    Falls back LOUDLY to a marked hardcoded value only if the CSV is missing
+    or unparseable — never silently. Shared by the /v3/e2e forecast stage and
+    the IntegratedAgent forecast stage so both quote the same real anchor.
+    """
+    try:
+        if FRED_BRENT_CSV.exists():
+            last_date: str | None = None
+            last_price: float | None = None
+            with open(FRED_BRENT_CSV, newline="", encoding="utf-8") as f:
+                reader = csv.reader(f)
+                next(reader, None)  # header: observation_date,DCOILBRENTEU
+                for row in reader:
+                    if len(row) < 2:
+                        continue
+                    date_s, val_s = row[0].strip(), row[1].strip()
+                    if not val_s or val_s == ".":  # FRED marks gaps with "."
+                        continue
+                    try:
+                        last_price = float(val_s)
+                        last_date = date_s
+                    except ValueError:
+                        continue
+            if last_price is not None:
+                return {
+                    "anchor": round(last_price, 2),
+                    "anchor_date": last_date,
+                    "anchor_source": (
+                        "FRED DCOILBRENTEU (external_data/fred_brent_daily.csv, "
+                        f"last real close {last_date})"
+                    ),
+                    "is_fallback": False,
+                }
+            logger.warning("[brent] FRED CSV present but no parseable rows: %s", FRED_BRENT_CSV)
+    except Exception as e:  # noqa: BLE001
+        logger.warning("[brent] real anchor load failed (%s) — using loud fallback", e)
+    return {
+        "anchor": _HARDCODED_BRENT_FALLBACK,
+        "anchor_date": None,
+        "anchor_source": (
+            f"HARDCODED_FALLBACK={_HARDCODED_BRENT_FALLBACK} "
+            "(real FRED CSV unavailable — LOUD fallback, not a live anchor)"
+        ),
+        "is_fallback": True,
+    }
 
 
 @dataclass
@@ -96,19 +168,28 @@ class IntegratedAgent:
         self._r4: dict | None = None
         self._frontier: dict | None = None
         self._r6: dict | None = None
-        self._onnx_sess = None
-        self._env_cls = None
+        self._onnx_sess: dict[str, Any] = {}
 
     # --- lazy loaders -----------------------------------------------------
 
     def _load_corpus(self) -> list[dict]:
         if self._corpus_chunks is None:
+            self._corpus_chunks = []
             if RAG_CORPUS.exists():
+                # pickle.load is arbitrary-code execution (SECURITY.md §6.3).
+                # Gate on a committed sha256 allowlist; refuse loudly on mismatch
+                # rather than unpickling an untrusted file.
+                digest = _sha256_file(RAG_CORPUS)
+                if digest not in CORPUS_SHA256_ALLOWLIST:
+                    logger.error(
+                        "[agent] RAG corpus sha256 %s NOT in allowlist — refusing to "
+                        "unpickle %s (possible tampered/poisoned artifact)",
+                        digest, RAG_CORPUS,
+                    )
+                    return self._corpus_chunks
                 import pickle
                 with open(RAG_CORPUS, "rb") as f:
-                    self._corpus_chunks = pickle.load(f)
-            else:
-                self._corpus_chunks = []
+                    self._corpus_chunks = pickle.load(f)  # noqa: S301 — sha256-gated above
         return self._corpus_chunks
 
     def _load_r4(self) -> dict:
@@ -130,8 +211,11 @@ class IntegratedAgent:
         return self._r6
 
     def _load_onnx(self, task_id: str):
-        if self._onnx_sess is not None:
-            return self._onnx_sess
+        # Cache is keyed by task_id: each task has its OWN policy, so a single
+        # shared session would silently serve the wrong model for other tasks.
+        if task_id in self._onnx_sess:
+            return self._onnx_sess[task_id]
+        sess = None
         try:
             import onnxruntime as ort
             paths = [
@@ -140,11 +224,12 @@ class IntegratedAgent:
             ]
             for p in paths:
                 if p.exists():
-                    self._onnx_sess = ort.InferenceSession(str(p))
-                    return self._onnx_sess
+                    sess = ort.InferenceSession(str(p))
+                    break
         except Exception as e:  # noqa: BLE001
-            logger.warning("[agent] onnx load failed: %s", e)
-        return None
+            logger.warning("[agent] onnx load failed for %s: %s", task_id, e)
+        self._onnx_sess[task_id] = sess
+        return sess
 
     # --- stages ----------------------------------------------------------
 
@@ -225,7 +310,11 @@ class IntegratedAgent:
                 "committed_panel_replay", meta)
 
     def _stage_gnn(self, task_id: str) -> tuple[dict, str]:
-        """3-layer GCN cascade — returns a simple per-node risk score."""
+        """Degree-centrality cascade proxy — ranks nodes by graph degree.
+
+        This is a pure-python structural proxy, NOT a trained GCN. It counts
+        edge incidences per node and returns the top-3 by degree.
+        """
         graph_path = REPO_ROOT / "server" / "data" / "graphs" / f"{task_id.replace('_response', '_graph')}.json"
         fallback_paths = [
             REPO_ROOT / "server" / "data" / "graphs" / "hard_graph.json",
@@ -255,62 +344,62 @@ class IntegratedAgent:
                             {"node_id": str(nid), "degree": int(d)}
                             for nid, d in top_nodes
                         ],
-                        "cascade_source": "degree-centrality proxy (3-layer GCN weights committed at versions/v3_arcadia/checkpoints/provider_gcn/)",
-                    }, "live_graph_centrality"
+                        "cascade_source": "degree-centrality proxy (pure-python node-degree ranking; NOT a trained GCN)",
+                    }, "live_graph_degree_centrality_proxy"
                 except (json.JSONDecodeError, OSError):
                     continue
         return {}, "graph_unavailable"
 
     def _stage_rl(self, task_id: str, seed: int) -> tuple[dict, str]:
-        """Real env reset + ONNX one-shot — not rng.standard_normal."""
+        """Real env reset + REAL 408-dim observation projector + ONNX one-shot.
+
+        The 408-dim policy input is produced by the SAME encoder the policy was
+        trained with — rl.gym_env.SupplyMindGymnasiumEnv._encode_obs (40 nodes ×
+        10 features + 8 globals). The recommended action is therefore a genuine
+        function of the reset observation, not a constant on np.zeros(408).
+        """
         try:
-            if self._env_cls is None:
-                from server.app import SupplyMindEnvironment
-                self._env_cls = SupplyMindEnvironment
-            env = self._env_cls()
-            obs_model = env.reset(task_id=task_id, seed=seed)
-            # SupplyMindObservation is a structured Pydantic model (node_statuses,
-            # financials, active_signals, ...). The 408-dim RL policy input is
-            # built INSIDE the policy from these structured fields. We surface
-            # a snapshot of the structured observation + run the ONNX policy on
-            # a zero-vector if direct extraction isn't available (honest).
-            obs_summary = {}
-            if hasattr(obs_model, "model_dump"):
-                d = obs_model.model_dump()
-                obs_summary = {
-                    "current_day": d.get("current_day"),
-                    "days_remaining": d.get("days_remaining"),
-                    "n_active_signals": len(d.get("active_signals") or []),
-                    "n_node_statuses": len(d.get("node_statuses") or []),
-                    "compact_summary": (d.get("compact_summary") or "")[:120],
-                }
+            from rl.gym_env import SupplyMindGymnasiumEnv
+            gym_env = SupplyMindGymnasiumEnv(task_id=task_id)
+            obs_vec, _info = gym_env.reset(seed=seed)  # real encoded 408-dim vector
+            obs_vec = np.asarray(obs_vec, dtype=np.float32)
+            raw = gym_env._obs  # structured SupplyMindObservation after reset
+            obs_summary = {
+                "current_day": getattr(raw, "current_day", None),
+                "days_remaining": getattr(raw, "days_remaining", None),
+                "n_active_signals": len(getattr(raw, "active_signals", []) or []),
+                "n_node_statuses": len(getattr(raw, "node_statuses", []) or []),
+                "obs_dim": int(obs_vec.shape[0]),
+                "obs_l2_norm": round(float(np.linalg.norm(obs_vec)), 4),
+                "obs_nonzero_features": int(np.count_nonzero(obs_vec)),
+            }
             sess = self._load_onnx(task_id)
             if sess is None:
                 return {
-                    "obs_source": "supplymind_env.reset",
+                    "obs_source": "rl.gym_env encoder (real 408-dim projection)",
                     "obs_summary": obs_summary,
                     "onnx": "unavailable",
                 }, "live_env_reset_no_onnx"
-            obs_arr = np.zeros((1, 408), dtype=np.float32)
+            obs_arr = obs_vec.reshape(1, 408)
             out = sess.run(None, {"observation": obs_arr})
-            logits = out[0][0]
+            logits = np.asarray(out[0][0], dtype=np.float64)
             flat = int(np.argmax(logits))
-            conf = float(np.exp(logits[flat]) / np.exp(logits).sum())
+            _z = logits - logits.max()  # numerically stable softmax
+            conf = float(np.exp(_z[flat]) / np.exp(_z).sum())
             atypes = ["do_nothing", "activate_backup_supplier", "reroute_shipment",
                       "increase_safety_stock", "expedite_order", "hedge_commodity",
                       "issue_supplier_alert"]
             a_type = atypes[min(flat // 40, 6)]
             a_target = flat % 40
             return {
-                "obs_source": "supplymind_env.reset (structured obs shown); "
-                              "onnx_input=zero_vector_fallback "
-                              "(structured-to-408dim projector deferred)",
+                "obs_source": "rl.gym_env encoder over SupplyMindEnvironment.reset "
+                              "(real 408-dim projection — same encoder used in training)",
                 "obs_summary": obs_summary,
                 "flat_action": flat,
                 "action_type": a_type,
                 "target_node": a_target,
                 "confidence": round(conf, 4),
-            }, "live_onnx_on_zero_obs_real_env_reset"
+            }, "live_onnx_on_real_encoded_obs"
         except Exception as e:  # noqa: BLE001
             return {"error": str(e)[:120]}, "rl_stage_error"
 
@@ -321,19 +410,23 @@ class IntegratedAgent:
         perh = conf95.get("q_per_horizon", [])
         half_w = float(perh[-1]) if perh else 3.0
         emp_cov = float(conf95.get("perhorizon_coverage_mean", 0.95))
-        anchor = 123.28  # FRED Brent last committed observation
+        brent = load_brent_anchor()  # real last close from FRED CSV (loud fallback)
+        anchor = brent["anchor"]
         sev_shift = {"CRITICAL": 6.0, "HIGH": 3.0, "MEDIUM": 1.0,
                      "LOW": -0.5, "UNKNOWN": 0.0}.get(risk_level, 0.0)
         point = round(anchor + sev_shift, 2)
         return {
+            "method": "anchor_plus_severity_shift_heuristic",
             "point": point,
             "interval_95": [round(point - half_w, 2), round(point + half_w, 2)],
             "half_width_from_R6": round(half_w, 4),
             "empirical_coverage": round(emp_cov, 4),
             "anchor": anchor,
-            "anchor_source": "v4 release snapshot 2026-04-22 FRED DCOILBRENTEU",
+            "anchor_date": brent["anchor_date"],
+            "anchor_source": brent["anchor_source"],
+            "anchor_is_fallback": brent["is_fallback"],
             "severity_shift": sev_shift,
-        }, "live_compute_from_cached_conformal"
+        }, "anchor_plus_severity_shift_heuristic"
 
     # --- public entry point ----------------------------------------------
 

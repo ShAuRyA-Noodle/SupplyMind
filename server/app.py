@@ -24,6 +24,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Header, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from typing import Optional
 from pydantic import BaseModel, Field
@@ -120,6 +121,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Serve locally-vendored dashboard assets (Tailwind, fonts) so master.html and
+# hormuz_war_room.html render without any CDN/network. The dashboards reference
+# these as /static/vendor/... (absolute), so this mount MUST exist or they 404.
+_STATIC_DIR = Path(__file__).parent / "static"
+if _STATIC_DIR.is_dir():
+    app.mount("/static", StaticFiles(directory=str(_STATIC_DIR)), name="static")
+    logger.info("mounted /static -> %s", _STATIC_DIR)
+else:
+    logger.warning("static dir missing (%s) — dashboards will 404 on vendor assets", _STATIC_DIR)
 
 
 # Root route — pretty landing page for HF Space visitors (instead of FastAPI 404)
@@ -582,19 +593,31 @@ async def grade(
 
 
 @app.post("/baseline")
-async def run_baseline() -> dict:
+async def run_baseline(
+    seeds: int = Query(
+        1, ge=1, le=3,
+        description=(
+            "Number of seeds per task to run (each seed is a full LLM episode). "
+            "Default 1 keeps this demo endpoint light (3 episodes). Use seeds=3 "
+            "for the full 3-seed run (9 episodes)."
+        ),
+    ),
+) -> dict:
     """
-    Run the baseline inference agent on all 3 tasks.
+    Run the baseline LLM inference agent on all 3 tasks.
 
-    Requires at least one of HF_TOKEN, API_KEY, or OPENAI_API_KEY to be set.
-    Uses the model specified by MODEL_NAME (default: gpt-4o) with
-    temperature=0.1 for reproducible scores.
+    Each (task, seed) pair is one full episode. With the default seeds=1 this
+    runs 3 episodes (one per task); seeds=3 runs the full 9 (3 seeds x 3 tasks).
 
-    Returns scores for all 3 tasks and an average score.
+    Requires an LLM API key (OPENROUTER_API_KEY preferred; API_KEY / OPENAI_API_KEY
+    / HF_TOKEN accepted). NOTE (CLAUDE.md §0): the committed OPENROUTER_API_KEY is
+    currently revoked — this endpoint will fail loud (upstream 401) until a live
+    key is provided; it never fabricates episode scores.
     """
     import os
     api_key = (
-        os.environ.get("HF_TOKEN")
+        os.environ.get("OPENROUTER_API_KEY")
+        or os.environ.get("HF_TOKEN")
         or os.environ.get("API_KEY")
         or os.environ.get("OPENAI_API_KEY")
     )
@@ -604,19 +627,28 @@ async def run_baseline() -> dict:
             detail={
                 "error": "API key not set",
                 "message": (
-                    "Set HF_TOKEN (or API_KEY / OPENAI_API_KEY) environment variable "
-                    "to run baseline inference."
+                    "Set OPENROUTER_API_KEY (preferred) — or HF_TOKEN / API_KEY / "
+                    "OPENAI_API_KEY — to run baseline inference."
                 ),
                 "instructions": (
-                    "docker run -e HF_TOKEN=hf_... -e MODEL_NAME=gpt-4o "
-                    "-p 8000:8000 supplymind"
+                    "docker run -e OPENROUTER_API_KEY=sk-or-... -p 8000:8000 supplymind"
                 ),
             },
         )
     async with _env_lock:
         try:
+            import baseline as _baseline_mod
             from baseline import run_all_baselines
-            results = run_all_baselines(env)
+            # Limit the seed count for a light demo without editing baseline.py.
+            # run_all_baselines reads baseline.BASELINE_SEEDS at call time and
+            # /baseline is serialized by _env_lock, so this override is safe.
+            _orig_seeds = _baseline_mod.BASELINE_SEEDS
+            _baseline_mod.BASELINE_SEEDS = list(_orig_seeds)[:seeds]
+            try:
+                results = run_all_baselines(env)
+            finally:
+                _baseline_mod.BASELINE_SEEDS = _orig_seeds
+            results["seeds_requested"] = seeds
             return results
         except ImportError:
             raise HTTPException(
@@ -670,7 +702,57 @@ class PredictResponse(BaseModel):
     flat_action: int
     confidence: float
     explanation: str
-    counterfactual: str
+    inference: str = Field(
+        "qrdqn_cvar_policy",
+        description="'qrdqn_cvar_policy' for real inference, 'degraded_fallback' when the RL path failed",
+    )
+    degraded_reason: Optional[str] = Field(
+        None, description="Populated only when inference == 'degraded_fallback'"
+    )
+    counterfactual_available: bool = Field(
+        False, description="True only when a real counterfactual is computed (surrogate not yet wired)"
+    )
+    counterfactual: Optional[str] = Field(
+        None, description="Real counterfactual text, or null when counterfactual_available is False"
+    )
+
+
+_TORCH_NUMPY_GLOBALS_ALLOWED = False
+
+
+def _allow_numpy_globals_for_torch() -> None:
+    """Allowlist the benign numpy scalar/dtype constructors so QR-DQN
+    checkpoints (saved under numpy<2) load via the SAFE ``weights_only=True``
+    path. SECURITY.md §6 bans ``weights_only=False`` on production paths, so we
+    keep arbitrary-code protection ON and only allowlist numpy's scalar/dtype
+    reconstructors. numpy 2.x reports the scalar under ``numpy._core.*`` while
+    the pickle references ``numpy.core.*``, so we register a name-matched shim.
+    Idempotent.
+    """
+    global _TORCH_NUMPY_GLOBALS_ALLOWED
+    if _TORCH_NUMPY_GLOBALS_ALLOWED:
+        return
+    try:
+        import torch
+        import numpy as np
+        import numpy.core.multiarray as _nca
+
+        def _np_scalar(*args, **kwargs):
+            return _nca.scalar(*args, **kwargs)
+        _np_scalar.__module__ = "numpy.core.multiarray"
+        _np_scalar.__name__ = "scalar"
+        _np_scalar.__qualname__ = "scalar"
+
+        allow = [_np_scalar, np.dtype]
+        _dtypes = getattr(np, "dtypes", None)
+        for _name in ("Float64DType", "Float32DType", "Int64DType", "Int32DType"):
+            _cls = getattr(_dtypes, _name, None)
+            if _cls is not None:
+                allow.append(_cls)
+        torch.serialization.add_safe_globals(allow)
+        _TORCH_NUMPY_GLOBALS_ALLOWED = True
+    except Exception as _e:  # noqa: BLE001
+        logger.warning("could not allowlist numpy globals for torch.load: %s", _e)
 
 
 @app.post("/predict", response_model=PredictResponse)
@@ -699,33 +781,63 @@ async def predict(request: PredictRequest):
         "issue_supplier_alert",
     ]
 
+    inference = "qrdqn_cvar_policy"
+    degraded_reason: Optional[str] = None
     try:
         import torch
         from rl.distributional.qr_dqn import QRDQNNetwork
         from pathlib import Path
 
         ckpt_path = Path(__file__).parent.parent / "rl" / "checkpoints" / "qrdqn_best_easy.pt"
-        if ckpt_path.exists():
-            ckpt = torch.load(str(ckpt_path), map_location="cpu", weights_only=True)
-            model = QRDQNNetwork(**ckpt["config"])
-            model.load_state_dict(ckpt["state_dict"])
-            model.eval()
+        if not ckpt_path.exists():
+            # A missing checkpoint is a real, surfaced degradation — not a
+            # silent canned action indistinguishable from a real one.
+            raise FileNotFoundError(
+                f"QR-DQN checkpoint not found at {ckpt_path} "
+                "(excluded from slim deploys; ship rl/checkpoints/qrdqn_best_easy.pt to enable live inference)"
+            )
+        _allow_numpy_globals_for_torch()  # keeps weights_only=True (SECURITY.md §6)
+        ckpt = torch.load(str(ckpt_path), map_location="cpu", weights_only=True)
+        # The checkpoint config carries an inference-time key (cvar_alpha) the
+        # constructor doesn't accept — filter to real constructor params.
+        import inspect as _inspect
+        _cfg = ckpt["config"]
+        _ctor_params = set(_inspect.signature(QRDQNNetwork.__init__).parameters) - {"self"}
+        model = QRDQNNetwork(**{k: v for k, v in _cfg.items() if k in _ctor_params})
+        model.load_state_dict(ckpt["state_dict"])
+        model.eval()
 
-            state_t = torch.from_numpy(state).unsqueeze(0)
-            mask_t = torch.from_numpy(action_mask).unsqueeze(0) if action_mask is not None else None
-            flat_action = model.cvar_policy(state_t, alpha=0.1, action_mask=mask_t).item()
-            q_values = model.q_values(state_t).squeeze(0).numpy()
-            confidence = float(np.exp(q_values[flat_action]) / np.exp(q_values).sum())
-        else:
-            flat_action = 0
-            confidence = 0.5
-    except Exception:
+        cvar_alpha = float(_cfg.get("cvar_alpha", 0.1))
+        state_t = torch.from_numpy(state).unsqueeze(0)
+        mask_t = torch.from_numpy(action_mask).unsqueeze(0) if action_mask is not None else None
+        with torch.no_grad():
+            flat_action = model.cvar_policy(state_t, alpha=cvar_alpha, action_mask=mask_t).item()
+            q_values = model.q_values(state_t).squeeze(0).detach().numpy()
+        _q = q_values - q_values.max()  # numerically stable softmax
+        confidence = float(np.exp(_q[flat_action]) / np.exp(_q).sum())
+    except Exception as e:
+        # Fail loud: log with traceback AND surface the degradation in the
+        # response so a canned fallback can never be mistaken for real output.
+        logger.warning(
+            "/predict RL inference degraded — serving fallback action: %s\n%s",
+            e, traceback.format_exc(),
+        )
         flat_action = 0
         confidence = 0.5
+        inference = "degraded_fallback"
+        degraded_reason = f"{type(e).__name__}: {e}"
 
     action_type_idx = flat_action // 40
     target_node_idx = flat_action % 40
     action_type = action_types[min(action_type_idx, 6)]
+
+    if inference == "degraded_fallback":
+        explanation = (
+            f"DEGRADED FALLBACK (RL policy unavailable): defaulting to "
+            f"{action_type}. Not a model recommendation — see degraded_reason."
+        )
+    else:
+        explanation = f"CVaR-optimal action: {action_type} targeting node {target_node_idx}"
 
     return PredictResponse(
         action_type=action_type,
@@ -733,8 +845,11 @@ async def predict(request: PredictRequest):
         target_node_idx=target_node_idx,
         flat_action=flat_action,
         confidence=round(confidence, 4),
-        explanation=f"CVaR-optimal action: {action_type} targeting node {target_node_idx}",
-        counterfactual="Train surrogate model for live counterfactual analysis",
+        explanation=explanation,
+        inference=inference,
+        degraded_reason=degraded_reason,
+        counterfactual_available=False,
+        counterfactual=None,
     )
 
 
@@ -1380,25 +1495,36 @@ async def analyst_panel_consensus(scenario_id: str) -> dict:
 
 @app.get("/analyst/panel-consensus/{scenario_id}/stream", tags=["training"])
 async def analyst_panel_consensus_stream(scenario_id: str):
-    """SSE-stream the 9-judge verdicts one at a time — demo-surface flair.
+    """SSE-stream the committed 9-judge verdicts for a scenario.
 
-    Each event is a JSON object with a single judge's verdict. Judges are
-    sent with a small delay so the live demo shows the panel "arriving"
-    judgment-by-judgment. Reads from committed files only.
+    This is an HONEST REPLAY of an already-committed panel run (R4 cache),
+    not a live panel. Every event carries "mode": "replay_of_committed_run"
+    so the UI never presents pre-computed verdicts as if judges were
+    arriving live. Verdicts are emitted immediately with no artificial
+    delay. (A live panel will stream here once the OpenRouter key is
+    restored — P1.)
     """
     from fastapi.responses import StreamingResponse
 
     snapshot = await analyst_panel_consensus(scenario_id)
+    _MODE = "replay_of_committed_run"
 
     async def _gen():
-        yield f"event: start\ndata: {json.dumps({'scenario_id': scenario_id, 'ground_truth': snapshot['ground_truth'], 'n_judges': snapshot['n_judges_total']})}\n\n"
+        start = {
+            "scenario_id": scenario_id,
+            "ground_truth": snapshot["ground_truth"],
+            "n_judges": snapshot["n_judges_total"],
+            "mode": _MODE,
+            "source": snapshot.get("sources", {}),
+        }
+        yield f"event: start\ndata: {json.dumps(start)}\n\n"
         for v in snapshot["verdicts"]:
-            yield f"event: verdict\ndata: {json.dumps(v)}\n\n"
-            await asyncio.sleep(0.35)
+            yield f"event: verdict\ndata: {json.dumps({**v, 'mode': _MODE})}\n\n"
         final = {k: snapshot[k] for k in (
             "majority_vote", "majority_matches_ground_truth",
             "tallies", "ordinal_dispersion_squared", "inference_type",
         )}
+        final["mode"] = _MODE
         yield f"event: consensus\ndata: {json.dumps(final)}\n\n"
 
     return StreamingResponse(_gen(), media_type="text/event-stream")
@@ -1419,7 +1545,7 @@ class E2EResponse(BaseModel):
     """Aggregated output of RAG + Judge + Forecast + RL + Conformal."""
     query: str
     retrieved_context: list[str] = Field(default_factory=list, description="Top-k chunks from R5 Granite (ids only in this fast path)")
-    risk_level: str = Field("UNKNOWN", description="3-judge panel majority vote")
+    risk_level: str = Field("UNKNOWN", description="keyword risk heuristic result (LOW/MEDIUM/HIGH/CRITICAL) — not a judge panel")
     recommended_action: str
     action_confidence: float
     forecast_point: float | None = None
@@ -1496,15 +1622,14 @@ async def v3_end_to_end(request: E2ERequest):
         stages["rag"] = {"inference_type": "error", "detail": str(e)[:160]}
 
     # ---------------------------------------------------------------------
-    # Stage 2 — 3-judge risk panel
-    # Input-dependent: use a keyword-calibrated rubric that maps the query's
-    # severity signals to one of LOW/MEDIUM/HIGH/CRITICAL. Anchored by the
-    # real 3-judge cache (R4) where we report agreement stats — but the
-    # risk_level for THIS query is computed live from the query text, not
-    # hardcoded.
+    # Stage 2 — keyword risk heuristic (NOT a judge panel)
+    # A deterministic keyword classifier maps the query's severity signals to
+    # one of LOW/MEDIUM/HIGH/CRITICAL. This is explicitly a heuristic, not an
+    # LLM panel — no fabricated agreement statistics. A real 3-judge panel
+    # (with genuine alpha/kappa) returns here in P1 once the OpenRouter key is
+    # restored.
     # ---------------------------------------------------------------------
     try:
-        r4_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "results" / "R4_DANGEROUS_V2.json"
         _kw = {
             "CRITICAL": ("closure", "shut down", "nuclear", "seiz", "war", "invasion",
                          "strait of hormuz", "global collapse", "full stop"),
@@ -1515,33 +1640,29 @@ async def v3_end_to_end(request: E2ERequest):
             "LOW":      ("routine", "scheduled", "normal", "nominal", "minor", "calm"),
         }
         risk_level = "UNKNOWN"
+        matched_terms: list[str] = []
         if q_lower:
             for level in ("CRITICAL", "HIGH", "MEDIUM", "LOW"):
-                if any(k in q_lower for k in _kw[level]):
+                hits = [k for k in _kw[level] if k in q_lower]
+                if hits:
                     risk_level = level
+                    matched_terms = hits
                     break
             if risk_level == "UNKNOWN":
                 risk_level = "MEDIUM"  # neutral default for a non-trivial query
-        if r4_path.exists():
-            d = json.loads(r4_path.read_text(encoding="utf-8"))
-            stages["judge"] = {
-                "inference_type": "live_rubric",
-                "rubric_source": "R4 keyword-calibrated deterministic classifier",
-                "anchored_by_panel": "DeepSeek + Qwen-14B + Mistral-Nemo (R4 cache)",
-                "panel_alpha_ordinal": 0.750,
-                "panel_cohen_kappa": 0.747,
-                "n_scenarios_in_R4_cache": d.get("n_scenarios", 26),
-                "note": "risk_level is computed live from the input query, not read from cache",
-            }
-        else:
-            stages["judge"] = {
-                "inference_type": "live_rubric",
-                "rubric_source": "keyword-calibrated classifier",
-                "r4_cache_available": False,
-            }
+        stages["risk"] = {
+            "inference_type": "keyword_risk_heuristic",
+            "method": "deterministic keyword severity classifier",
+            "matched_terms": matched_terms,
+            "note": (
+                "risk_level is computed live from the query text via keyword match. "
+                "This is NOT an LLM judge panel and reports NO agreement statistics; "
+                "a real 3-judge panel returns in P1 once OpenRouter is live."
+            ),
+        }
     except Exception as e:
         risk_level = "UNKNOWN"
-        stages["judge"] = {"inference_type": "error", "detail": str(e)[:160]}
+        stages["risk"] = {"inference_type": "error", "detail": str(e)[:160]}
 
     # ---------------------------------------------------------------------
     # Stage 3 — forecaster + conformal band
@@ -1562,40 +1683,35 @@ async def v3_end_to_end(request: E2ERequest):
             half_width = float(perh_widths[-1]) if perh_widths else 3.0
             # Real coverage stats from the same committed run
             emp_cov = float(conf95.get("perhorizon_coverage_mean", 0.95))
-            # Anchor the point estimate to the most recent FRED snapshot we have
-            # committed (RELEASE_V4_TAG recorded $123.28/bbl on 2026-04-22).
-            # If a live FRED cache is present we read it; otherwise anchor to
-            # the release-committed value so the endpoint is still honest.
-            _fred_cache = (Path(__file__).parent.parent / "versions/v4_arcadia_live"
-                           / "realtime" / "fred_brent_latest.json")
-            anchor_source = "release_v4_tag_snapshot_2026-04-22"
-            base_price = 123.28  # FRED DCOILBRENTEU last committed observation
-            try:
-                if _fred_cache.exists():
-                    _fred = json.loads(_fred_cache.read_text(encoding="utf-8"))
-                    _p = _fred.get("price") or _fred.get("value")
-                    if _p:
-                        base_price = float(_p)
-                        anchor_source = f"fred_live_cache:{_fred.get('observed_at', 'latest')}"
-            except Exception:
-                pass  # keep release-snapshot anchor
+            # Anchor the point estimate to the REAL most-recent Brent close from
+            # the cached FRED DCOILBRENTEU daily series (external_data/). The
+            # hardcoded 123.28 is only a LOUD fallback if that file is missing.
+            from server.integrated_agent import load_brent_anchor
+            _brent = load_brent_anchor()
+            base_price = _brent["anchor"]
             sev_shift = {"CRITICAL": 6.0, "HIGH": 3.0, "MEDIUM": 1.0,
                          "LOW": -0.5, "UNKNOWN": 0.0}[risk_level]
             forecast_point = round(base_price + sev_shift, 2)
             forecast_interval = [round(forecast_point - half_width, 2),
                                  round(forecast_point + half_width, 2)]
             stages["forecast"] = {
-                "inference_type": "live_compute_from_cached_conformal",
-                "model": "Chronos-Bolt + ARIMA ensemble + per-horizon split-conformal",
+                "inference_type": "anchor_plus_severity_shift_heuristic",
+                "method": "anchor_plus_severity_shift_heuristic",
                 "target": "DCOILBRENTEU (FRED)",
                 "horizon_days": 14,
                 "half_width_source": "R6_AQUA_REGIA_V2 conf=0.95 q_per_horizon[-1]",
                 "half_width_value": round(half_width, 4),
                 "empirical_coverage_from_R6": round(emp_cov, 4),
-                "price_anchor_source": anchor_source,
+                "price_anchor_source": _brent["anchor_source"],
                 "price_anchor_value": round(base_price, 2),
+                "price_anchor_date": _brent["anchor_date"],
+                "price_anchor_is_fallback": _brent["is_fallback"],
                 "point_estimate_shift_by_risk_level": sev_shift,
-                "note": "interval half-width from committed R6 run; point = FRED anchor + severity-conditioned shift",
+                "note": (
+                    "interval half-width from committed R6 conformal run; "
+                    "point = real FRED Brent anchor + deterministic severity-conditioned shift. "
+                    "This is a heuristic anchor+shift, NOT a live forecaster call."
+                ),
             }
         else:
             stages["forecast"] = {"inference_type": "unavailable",
@@ -1618,22 +1734,14 @@ async def v3_end_to_end(request: E2ERequest):
             onnx_path = Path(__file__).parent.parent / "versions" / "v3_arcadia" / "checkpoints" / "gethsemane" / f"ppo_{request.task_id}.onnx"
         obs_source = "unknown"
         try:
-            _env = SupplyMindEnvironment()
-            _real_obs = _env.reset(task_id=request.task_id, seed=request.seed)
-            # Observation is a pydantic model with features list/array; project to 408-dim
-            _feat = getattr(_real_obs, "observation", None)
-            if _feat is None and hasattr(_real_obs, "model_dump"):
-                _dump = _real_obs.model_dump()
-                _feat = _dump.get("observation") or _dump.get("features") or _dump.get("state_vector")
-            obs_arr = _np.asarray(_feat, dtype=_np.float32).reshape(1, -1)
-            if obs_arr.shape[1] != 408:
-                # pad or truncate to 408 to match the ONNX input contract
-                if obs_arr.shape[1] < 408:
-                    obs_arr = _np.pad(obs_arr, ((0, 0), (0, 408 - obs_arr.shape[1])))
-                else:
-                    obs_arr = obs_arr[:, :408]
-            obs = obs_arr
-            obs_source = "supplymind_env.reset"
+            # Use the SAME 408-dim encoder the policy was trained with
+            # (rl.gym_env._encode_obs). The action is thus a real function of
+            # the reset observation — never a constant on np.zeros(408).
+            from rl.gym_env import SupplyMindGymnasiumEnv
+            _genv = SupplyMindGymnasiumEnv(task_id=request.task_id)
+            _obs_vec, _ = _genv.reset(seed=request.seed)
+            obs = _np.asarray(_obs_vec, dtype=_np.float32).reshape(1, 408)
+            obs_source = "rl.gym_env encoder over supplymind_env.reset"
         except Exception as _oerr:
             # Fall back cleanly; mark the source so judges can see it's degraded.
             obs = _np.zeros((1, 408), dtype=_np.float32)
@@ -1641,9 +1749,10 @@ async def v3_end_to_end(request: E2ERequest):
         if onnx_path.exists():
             sess = _ort.InferenceSession(str(onnx_path))
             out = sess.run(None, {"observation": obs})
-            logits = out[0][0]
+            logits = _np.asarray(out[0][0], dtype=_np.float64)
             flat = int(_np.argmax(logits))
-            confidence = float(_np.exp(logits[flat]) / _np.exp(logits).sum())
+            _z = logits - logits.max()  # numerically stable softmax
+            confidence = float(_np.exp(_z[flat]) / _np.exp(_z).sum())
             atypes = ["do_nothing", "activate_backup_supplier", "reroute_shipment",
                       "increase_safety_stock", "expedite_order", "hedge_commodity", "issue_supplier_alert"]
             a_type = atypes[min(flat // 40, 6)]
@@ -1651,12 +1760,12 @@ async def v3_end_to_end(request: E2ERequest):
             recommended_action = f"{a_type} target_node={a_target}"
             action_confidence = round(confidence, 4)
             stages["rl"] = {
-                "inference_type": "live_onnx_inference" if obs_source == "supplymind_env.reset" else "degraded_zero_obs",
+                "inference_type": "live_onnx_inference" if obs_source.startswith("rl.gym_env") else "degraded_zero_obs",
                 "model": "MaskablePPO ONNX",
                 "size_kb": int(onnx_path.stat().st_size / 1024),
                 "flat_action": flat,
-                "ent_coef": 0.01,
                 "observation_source": obs_source,
+                "observation_l2_norm": round(float(_np.linalg.norm(obs)), 4),
             }
         else:
             recommended_action = "model-not-loaded"
