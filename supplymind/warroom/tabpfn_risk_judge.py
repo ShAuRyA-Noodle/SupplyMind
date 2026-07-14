@@ -1,18 +1,28 @@
 """tabpfn_risk_judge.py — TabPFN-v2 classifier as a tabular 7th judge.
 
-Trains on the 8 documented historical events (real EMDAT-anchored) using
-features (severity, brent_pre, duration_days, region_id, hormuz_dep_share)
-→ ground-truth tier from `severity` band. Acts as a 7th vote alongside the
-6-judge OpenRouter panel + 3-judge Ollama panel.
+RESURRECTED (R9). The TabPFN-v2 classifier weights are now on disk at
+models/tabpfn-v2-clf/tabpfn-v2-classifier.ckpt (29MB, downloaded from the
+Prior-Labs GCS mirror — huggingface.co is ISP-blocked here). Previously the
+weights were absent and this "judge" was a silent-fallback ghost per
+CLAUDE.md §0.
 
-Output: predicted tier (LOW/MEDIUM/HIGH/CRITICAL) + class probabilities +
-contributing feature ranks.
+This module exposes the judge in its production role: given a crisis's
+(severity, brent_pre, duration_days, region_id, hormuz_dep_share), it predicts
+a risk tier (LOW/MEDIUM/HIGH/CRITICAL) with class probabilities, as a 7th vote
+alongside the OpenRouter + Ollama panels.
 
-Availability: this judge requires the TabPFN-v2 classifier weights at
-models/tabpfn-v2-clf/ (NOT present in this checkout) and the `tabpfn` package.
-When either is missing, predict() returns an explicit unavailable status with
-install instructions — it does NOT silently emit a severity-band tier dressed
-as a model prediction (that would be a fake per CLAUDE.md §0).
+HONESTY CAVEAT (documented, not hidden): the crisis-tier training target here
+is derived from `severity` via `_severity_to_tier`, and `severity` is also an
+input feature — so on this 8-event corpus the judge largely recovers the
+severity band (a near-circular, low-information task). It is therefore NOT a
+valid measurement of whether TabPFN adds signal. That question is answered on
+an INDEPENDENT labeled task — DataCo late-delivery-risk — in
+`ghost_models_eval.py`, with the real number committed to
+tests/receipts/ghost_models_eval_REAL.json.
+
+Availability: requires the ckpt above + the `tabpfn` package. When either is
+missing, predict() returns an explicit unavailable status with install
+instructions — never a silent fallback tier dressed as a model prediction.
 """
 from __future__ import annotations
 
