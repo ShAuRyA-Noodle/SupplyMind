@@ -1,0 +1,15 @@
+Agent,Easy,Medium,Hard,Average,vs_Scripted_overall_delta,vs_Scripted_p,vs_Scripted_r,n_seeds,valid
+QR-DQN (CVaR),0.820+/-0.049,0.490+/-0.052,0.750+/-0.009,0.687,0.00383,1.0,0.0,2,yes
+Scripted,0.672+/-0.000,0.700+/-0.003,0.677+/-0.006,0.683,baseline,—,—,2,yes
+Random,0.728+/-0.001,0.579+/-0.148,0.716+/-0.029,0.674,-0.00863,0.401678,0.3424,2,yes
+Ensemble (DT+QR-DQN),0.522+/-0.000,0.577+/-0.066,0.593+/-0.010,0.564,-0.1193,0.036032,0.8559,2,yes
+Decision Transformer,0.522+/-0.000,0.577+/-0.066,0.592+/-0.010,0.564,-0.11945,0.036032,0.8559,2,yes
+PPO,0.322+/-0.000,0.423+/-0.009,0.730+/-0.000,0.492,-0.19138,0.142213,0.5991,2,yes
+BC,0.547+/-0.000,0.577+/-0.066,0.341+/-0.000,0.488,-0.19495,0.036032,0.8559,2,yes
+IQL,0.671+/-0.000,0.263+/-0.066,0.523+/-0.010,0.486,-0.19733,0.036032,0.8559,2,yes
+CQL,0.498+/-0.000,0.263+/-0.066,0.321+/-0.000,0.361,-0.32247,0.036032,0.8559,2,yes
+TD3+BC,0.322+/-0.000,0.263+/-0.066,0.321+/-0.000,0.302,-0.38118,0.036032,0.8559,2,yes
+BC-v2,retrain_pending,retrain_pending,retrain_pending,retrain_pending,—,—,—,0,no
+CQL-v2,retrain_pending,retrain_pending,retrain_pending,retrain_pending,—,—,—,0,no
+IQL-v2,retrain_pending,retrain_pending,retrain_pending,retrain_pending,—,—,—,0,no
+TD3+BC-v2,retrain_pending,retrain_pending,retrain_pending,retrain_pending,—,—,—,0,no

@@ -1,0 +1,27 @@
+{
+  "what": "Regeneration of the offline unified buffers after the action-taxonomy fix (WP6.3 step 1).",
+  "why": "build_unified_buffer.py / build_unified_buffer_v2.py action_of() emitted action-type integers under a taxonomy (0=none,1=alert,2=reroute,3=expedite,4=inventory,5=backup,6=cancel) that did NOT match rl.gym_env.ACTION_TYPES (0=do_nothing,1=activate_backup_supplier,2=reroute_shipment,3=increase_safety_stock,4=expedite_order,5=hedge_commodity,6=issue_supplier_alert). The Jul-2 fix remapped each branch to the correct env-canonical integer; the pre-fix real_unified*.npz on disk (dated Apr 26) still encoded the wrong labels and was rebuilt here.",
+  "commands": [
+    "python -m rl.data.build_unified_buffer      # -> real_unified.npz + real_train/val/test.npz",
+    "python -m rl.data.build_unified_buffer_v2   # -> real_unified_v2.npz + real_train/val/test_v2.npz"
+  ],
+  "branch_to_label_permutation": {
+    "none (late==0 & delay<=0)":        {"old": 0, "new": 0},
+    "severe (delay>5 | profit<-0.3)":   {"old": 6, "new": 1, "meaning_new": "activate_backup_supplier"},
+    "sameday/first shipping mode":      {"old": 3, "new": 4, "meaning_new": "expedite_order"},
+    "late & delay>2":                   {"old": 2, "new": 2, "meaning_new": "reroute_shipment"},
+    "late":                             {"old": 1, "new": 6, "meaning_new": "issue_supplier_alert"},
+    "second-class shipping mode":       {"old": 4, "new": 3, "meaning_new": "increase_safety_stock"},
+    "else":                             {"old": 5, "new": 5, "meaning_new": "hedge_commodity"}
+  },
+  "note": "Branch CONDITIONS are unchanged, so per-branch counts are preserved; only the emitted integer permutes to match the env. Rewards are unchanged (they do not depend on the action label).",
+  "action_type_distribution": {
+    "old_on_disk_pre_fix": {"0": 77119, "1": 48996, "2": 12123, "3": 29261, "4": 981, "5": 1631, "6": 10408},
+    "new_regenerated":     {"0": 77119, "1": 10408, "2": 12123, "3": 981, "4": 29261, "5": 1631, "6": 48996}
+  },
+  "applies_to_files": [
+    "rl/data/real_unified.npz", "rl/data/real_train.npz", "rl/data/real_val.npz", "rl/data/real_test.npz",
+    "rl/data/real_unified_v2.npz", "rl/data/real_train_v2.npz", "rl/data/real_val_v2.npz", "rl/data/real_test_v2.npz"
+  ],
+  "downstream_impact": "Offline agents trained on the OLD real_train_v2.npz (bc_v2/cql_v2/iql_v2/td3bc_v2) learned scrambled action semantics and are marked retrain_pending_on_regenerated_buffer in the leaderboard (retrain = WP7.3). The *_best.pt offline checkpoints (bc_best/cql_best/iql_best/td3bc_best) were trained on offline_buffer.npz, which is built by rolling the ENV with the scripted+random agents (env-canonical actions) and is therefore unaffected by this bug."
+}

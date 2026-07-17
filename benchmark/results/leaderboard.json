@@ -1,0 +1,672 @@
+{
+  "leaderboard": [
+    {
+      "rank": 1,
+      "agent": "QR-DQN (CVaR)",
+      "key": "qrdqn",
+      "Easy": {
+        "grade_mean": 0.82,
+        "grade_std": 0.0494,
+        "reward_mean": 1.29525
+      },
+      "Medium": {
+        "grade_mean": 0.4905,
+        "grade_std": 0.0521,
+        "reward_mean": 2.70437
+      },
+      "Hard": {
+        "grade_mean": 0.7502,
+        "grade_std": 0.009,
+        "reward_mean": 2.16634
+      },
+      "overall_grade": 0.6869,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": 0.1482,
+          "median_delta": 0.1482,
+          "W": 0.0,
+          "z": 0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 3.0,
+          "W_minus": 0.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.20955,
+          "median_delta": -0.20955,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": 0.07285,
+          "median_delta": 0.07285,
+          "W": 0.0,
+          "z": 0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 3.0,
+          "W_minus": 0.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": 0.00383,
+          "median_delta": 0.07285,
+          "W": 10.0,
+          "z": 0.0,
+          "p_value": 1.0,
+          "effect_r": 0.0,
+          "W_plus": 11.0,
+          "W_minus": 10.0
+        }
+      }
+    },
+    {
+      "rank": 2,
+      "agent": "Scripted",
+      "key": "scripted",
+      "Easy": {
+        "grade_mean": 0.6718,
+        "grade_std": 0.0004,
+        "reward_mean": 0.8026
+      },
+      "Medium": {
+        "grade_mean": 0.70005,
+        "grade_std": 0.00295,
+        "reward_mean": -0.917
+      },
+      "Hard": {
+        "grade_mean": 0.67735,
+        "grade_std": 0.00635,
+        "reward_mean": -1.2863
+      },
+      "overall_grade": 0.68307,
+      "vs_scripted": "baseline"
+    },
+    {
+      "rank": 3,
+      "agent": "Random",
+      "key": "random",
+      "Easy": {
+        "grade_mean": 0.7283,
+        "grade_std": 0.0014,
+        "reward_mean": 0.77221
+      },
+      "Medium": {
+        "grade_mean": 0.57875,
+        "grade_std": 0.14845,
+        "reward_mean": -1.11013
+      },
+      "Hard": {
+        "grade_mean": 0.71625,
+        "grade_std": 0.02865,
+        "reward_mean": -1.54009
+      },
+      "overall_grade": 0.67443,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": 0.0565,
+          "median_delta": 0.0565,
+          "W": 0.0,
+          "z": 0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 3.0,
+          "W_minus": 0.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.1213,
+          "median_delta": -0.1213,
+          "W": 1.0,
+          "z": -0.0,
+          "p_value": 1.0,
+          "effect_r": 0.0,
+          "W_plus": 1.0,
+          "W_minus": 2.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": 0.0389,
+          "median_delta": 0.0389,
+          "W": 0.0,
+          "z": 0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 3.0,
+          "W_minus": 0.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": -0.00863,
+          "median_delta": 0.0424,
+          "W": 6.0,
+          "z": 0.8386,
+          "p_value": 0.401678,
+          "effect_r": 0.3424,
+          "W_plus": 15.0,
+          "W_minus": 6.0
+        }
+      }
+    },
+    {
+      "rank": 4,
+      "agent": "Ensemble (DT+QR-DQN)",
+      "key": "ensemble",
+      "Easy": {
+        "grade_mean": 0.5218,
+        "grade_std": 0.0004,
+        "reward_mean": -0.26157
+      },
+      "Medium": {
+        "grade_mean": 0.5768,
+        "grade_std": 0.0662,
+        "reward_mean": -1.02299
+      },
+      "Hard": {
+        "grade_mean": 0.5927,
+        "grade_std": 0.0105,
+        "reward_mean": -2.78037
+      },
+      "overall_grade": 0.56377,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.15,
+          "median_delta": -0.15,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.12325,
+          "median_delta": -0.12325,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.08465,
+          "median_delta": -0.08465,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": -0.1193,
+          "median_delta": -0.1194,
+          "W": 0.0,
+          "z": -2.0966,
+          "p_value": 0.036032,
+          "effect_r": 0.8559,
+          "W_plus": 0.0,
+          "W_minus": 21.0
+        }
+      }
+    },
+    {
+      "rank": 5,
+      "agent": "Decision Transformer",
+      "key": "dt",
+      "Easy": {
+        "grade_mean": 0.5218,
+        "grade_std": 0.0004,
+        "reward_mean": -0.26157
+      },
+      "Medium": {
+        "grade_mean": 0.5768,
+        "grade_std": 0.0662,
+        "reward_mean": -1.02299
+      },
+      "Hard": {
+        "grade_mean": 0.59225,
+        "grade_std": 0.01005,
+        "reward_mean": -3.20527
+      },
+      "overall_grade": 0.56362,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.15,
+          "median_delta": -0.15,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.12325,
+          "median_delta": -0.12325,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.0851,
+          "median_delta": -0.0851,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": -0.11945,
+          "median_delta": -0.1194,
+          "W": 0.0,
+          "z": -2.0966,
+          "p_value": 0.036032,
+          "effect_r": 0.8559,
+          "W_plus": 0.0,
+          "W_minus": 21.0
+        }
+      }
+    },
+    {
+      "rank": 6,
+      "agent": "PPO",
+      "key": "ppo",
+      "Easy": {
+        "grade_mean": 0.3218,
+        "grade_std": 0.0004,
+        "reward_mean": 0.982
+      },
+      "Medium": {
+        "grade_mean": 0.42315,
+        "grade_std": 0.00915,
+        "reward_mean": 2.68018
+      },
+      "Hard": {
+        "grade_mean": 0.7301,
+        "grade_std": 0.0004,
+        "reward_mean": 3.2216
+      },
+      "overall_grade": 0.49168,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.35,
+          "median_delta": -0.35,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.2769,
+          "median_delta": -0.2769,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": 0.05275,
+          "median_delta": 0.05275,
+          "W": 0.0,
+          "z": 0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 3.0,
+          "W_minus": 0.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": -0.19138,
+          "median_delta": -0.2769,
+          "W": 3.0,
+          "z": -1.4676,
+          "p_value": 0.142213,
+          "effect_r": 0.5991,
+          "W_plus": 3.0,
+          "W_minus": 18.0
+        }
+      }
+    },
+    {
+      "rank": 7,
+      "agent": "BC",
+      "key": "bc",
+      "Easy": {
+        "grade_mean": 0.5468,
+        "grade_std": 0.0004,
+        "reward_mean": -0.17777
+      },
+      "Medium": {
+        "grade_mean": 0.5768,
+        "grade_std": 0.0662,
+        "reward_mean": -2.24058
+      },
+      "Hard": {
+        "grade_mean": 0.34075,
+        "grade_std": 5e-05,
+        "reward_mean": -1.33333
+      },
+      "overall_grade": 0.48812,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.125,
+          "median_delta": -0.125,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.12325,
+          "median_delta": -0.12325,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.3366,
+          "median_delta": -0.3366,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": -0.19495,
+          "median_delta": -0.1587,
+          "W": 0.0,
+          "z": -2.0966,
+          "p_value": 0.036032,
+          "effect_r": 0.8559,
+          "W_plus": 0.0,
+          "W_minus": 21.0
+        }
+      }
+    },
+    {
+      "rank": 8,
+      "agent": "IQL",
+      "key": "iql",
+      "Easy": {
+        "grade_mean": 0.67085,
+        "grade_std": 0.00035,
+        "reward_mean": 0.56736
+      },
+      "Medium": {
+        "grade_mean": 0.2631,
+        "grade_std": 0.0662,
+        "reward_mean": -1.85933
+      },
+      "Hard": {
+        "grade_mean": 0.52325,
+        "grade_std": 0.01005,
+        "reward_mean": -1.63928
+      },
+      "overall_grade": 0.48573,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.00095,
+          "median_delta": -0.00095,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.43695,
+          "median_delta": -0.43695,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.1541,
+          "median_delta": -0.1541,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": -0.19733,
+          "median_delta": -0.1541,
+          "W": 0.0,
+          "z": -2.0966,
+          "p_value": 0.036032,
+          "effect_r": 0.8559,
+          "W_plus": 0.0,
+          "W_minus": 21.0
+        }
+      }
+    },
+    {
+      "rank": 9,
+      "agent": "CQL",
+      "key": "cql",
+      "Easy": {
+        "grade_mean": 0.49795,
+        "grade_std": 0.00035,
+        "reward_mean": 0.99536
+      },
+      "Medium": {
+        "grade_mean": 0.2631,
+        "grade_std": 0.0662,
+        "reward_mean": -1.85933
+      },
+      "Hard": {
+        "grade_mean": 0.32075,
+        "grade_std": 5e-05,
+        "reward_mean": -1.33333
+      },
+      "overall_grade": 0.3606,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.17385,
+          "median_delta": -0.17385,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.43695,
+          "median_delta": -0.43695,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.3566,
+          "median_delta": -0.3566,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": -0.32247,
+          "median_delta": -0.3566,
+          "W": 0.0,
+          "z": -2.0966,
+          "p_value": 0.036032,
+          "effect_r": 0.8559,
+          "W_plus": 0.0,
+          "W_minus": 21.0
+        }
+      }
+    },
+    {
+      "rank": 10,
+      "agent": "TD3+BC",
+      "key": "td3bc",
+      "Easy": {
+        "grade_mean": 0.3218,
+        "grade_std": 0.0004,
+        "reward_mean": 0.982
+      },
+      "Medium": {
+        "grade_mean": 0.2631,
+        "grade_std": 0.0662,
+        "reward_mean": -1.85933
+      },
+      "Hard": {
+        "grade_mean": 0.32075,
+        "grade_std": 5e-05,
+        "reward_mean": -1.33333
+      },
+      "overall_grade": 0.30188,
+      "vs_scripted": {
+        "Easy": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.35,
+          "median_delta": -0.35,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Medium": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.43695,
+          "median_delta": -0.43695,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Hard": {
+          "n_pairs": 2,
+          "n_nonzero": 2,
+          "mean_delta": -0.3566,
+          "median_delta": -0.3566,
+          "W": 0.0,
+          "z": -0.8944,
+          "p_value": 0.371093,
+          "effect_r": 0.6325,
+          "W_plus": 0.0,
+          "W_minus": 3.0
+        },
+        "Overall": {
+          "n_pairs": 6,
+          "n_nonzero": 6,
+          "mean_delta": -0.38118,
+          "median_delta": -0.3566,
+          "W": 0.0,
+          "z": -2.0966,
+          "p_value": 0.036032,
+          "effect_r": 0.8559,
+          "W_plus": 0.0,
+          "W_minus": 21.0
+        }
+      }
+    }
+  ],
+  "retrain_pending": {
+    "BC-v2": "bc_v2.pt trained on scrambled real_train_v2.npz; retrain on regenerated buffer (WP7.3)",
+    "CQL-v2": "cql_v2.pt trained on scrambled real_train_v2.npz; retrain on regenerated buffer (WP7.3)",
+    "IQL-v2": "iql_v2.pt trained on scrambled real_train_v2.npz; retrain on regenerated buffer (WP7.3)",
+    "TD3+BC-v2": "td3bc_v2.pt trained on scrambled real_train_v2.npz; retrain on regenerated buffer (WP7.3)"
+  },
+  "errors": {}
+}
