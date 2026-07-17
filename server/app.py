@@ -1351,15 +1351,82 @@ class FanOutResponse(BaseModel):
 
 @app.post("/live/intel-fan-out", response_model=FanOutResponse, tags=["live"])
 async def live_intel_fan_out(timeout_s: float = 45.0,
-                              parallel: int = 8) -> FanOutResponse:
+                              parallel: int = 8,
+                              include_freshness: bool = True) -> FanOutResponse:
     """Fan out across all 20 real-data sources concurrently.
 
     No synthetic substitution. Each source independent — failures don't
     block successes. Per-source counts surfaced in `summary.n_events_per_source`.
+
+    When ``include_freshness`` (default), the WP6.4 live-signal layer's
+    per-source freshness table (age / degraded flag per real source) is attached
+    at ``summary.live_source_freshness`` — cache-aware (TTL 10 min) so it never
+    hammers the free tiers.
     """
     from supplymind.warroom.orchestrator_v2 import fan_out_all
     result = fan_out_all(timeout_s=timeout_s, parallel=parallel)
+    if include_freshness:
+        try:
+            from supplymind.data.live import signal_counts
+            sc = signal_counts()
+            result.setdefault("summary", {})
+            result["summary"]["live_source_freshness"] = sc["counts"]
+            result["summary"]["live_freshness_summary"] = sc["summary"]
+            result["summary"]["replay_mode"] = sc["replay_mode"]
+        except Exception as e:  # noqa: BLE001 — freshness is additive; never 500 the fan-out
+            result.setdefault("summary", {})
+            result["summary"]["live_source_freshness_error"] = (
+                f"{type(e).__name__}: {str(e)[:160]}")
     return FanOutResponse(**result)
+
+
+# ============================================================
+# Live-signal freshness layer (WP6.4) — real per-source status
+# ============================================================
+#
+# Golden-path step 1. Backed by supplymind.data.live: each source is fetched
+# from a real public API, timestamped, cached on disk, and reported with an
+# honest `degraded` flag + reason when down (never a synthetic value). These sit
+# at the app root (the /live/* prefix is owned by the v4 event-store router).
+
+
+@app.get("/signal-counts", tags=["live"])
+async def live_signal_counts_v2(ttl: int = 600, force_live: bool = False) -> dict:
+    """Per-source live-signal freshness table (count, value, age, degraded).
+
+    This is what the war-room strip polls to render "< N h old" stamps and the
+    REPLAY banner. `force_live=true` forces one real call per source (ignores the
+    on-disk cache); otherwise cached snapshots younger than `ttl` seconds are
+    served. `FORCE_REPLAY=1` in the server env serves cached snapshots only and
+    sets `replay_mode`.
+    """
+    from supplymind.data.live import signal_counts
+    return signal_counts(ttl=ttl, force_live=force_live)
+
+
+@app.get("/recent-events", tags=["live"])
+async def live_recent_events_v2(region: str | None = None, limit: int = 20,
+                                ttl: int = 600) -> dict:
+    """Recent live events flattened across all sources, newest first.
+
+    Optional `region` substring filter (e.g. `hormuz`). Degraded sources
+    contribute no events but are listed under `degraded_sources` so the caller
+    knows what is missing — no gap is silently backfilled.
+    """
+    from supplymind.data.live import recent_events
+    return recent_events(region=region, limit=limit, ttl=ttl)
+
+
+@app.get("/recent-disaster", tags=["live"])
+async def live_recent_disaster_v2(region: str | None = None, ttl: int = 600) -> dict:
+    """Highest-severity live disaster/hazard event for a region (or globally).
+
+    Draws from USGS quakes, NASA fires, GDELT/NewsAPI headlines. If every hazard
+    source is degraded/empty, returns `degraded=true` with the reasons rather
+    than inventing an event.
+    """
+    from supplymind.data.live import recent_disaster
+    return recent_disaster(region=region, ttl=ttl)
 
 
 # ============================================================

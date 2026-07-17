@@ -202,6 +202,17 @@
 </head>
 <body class="min-h-screen">
 
+<!-- ============================ REPLAY BANNER ============================ -->
+<!-- Shown ONLY when the server is started with FORCE_REPLAY=1 (reported by the
+     real /signal-counts payload). Never silently canned: replay is always
+     visible so a judge can tell live from replay at a glance. -->
+<div id="replay-banner" class="hidden" style="background: rgba(251,191,36,.14);
+     border-bottom: 1px solid var(--amber); color: var(--amber);
+     text-align:center; font-size:12px; font-weight:600; padding:6px 12px;
+     letter-spacing:.02em;">
+  ⟲ REPLAY MODE — showing cached source snapshots (FORCE_REPLAY=1), not live fetches
+</div>
+
 <!-- ============================ TOP BAR ============================ -->
 <header class="sticky top-0 z-40 border-b border-[var(--bd)] backdrop-blur"
         style="background: rgba(7,9,15,.85);">
@@ -230,6 +241,23 @@
     </div>
   </div>
 </header>
+
+<!-- ===================== LIVE-SOURCE FRESHNESS STRIP ===================== -->
+<!-- One chip per real live source (supplymind.data.live via GET /signal-counts).
+     Each chip shows how long ago that source was fetched ("< N h old") and turns
+     amber with the real reason when the source is degraded. No fabricated
+     stamps: a source with no live data reads "down", never a fake age. -->
+<div class="border-b border-[var(--bd)]" style="background: rgba(7,9,15,.55);">
+  <div class="max-w-[1500px] mx-auto px-6 py-2 flex flex-wrap items-center gap-2">
+    <span class="text-[10px] font-semibold uppercase tracking-wider text-[var(--fg-2)] mr-1">
+      Live sources
+    </span>
+    <div id="source-freshness" class="flex flex-wrap items-center gap-1.5">
+      <span class="text-xs text-[var(--fg-2)]">loading source status…</span>
+    </div>
+    <span id="freshness-summary" class="ml-auto text-[11px] mono text-[var(--fg-2)]"></span>
+  </div>
+</div>
 
 <main class="max-w-[1500px] mx-auto px-6 py-6 space-y-6">
 
@@ -1465,6 +1493,59 @@
     $("#copy-btn").textContent = "copied ✓";
     setTimeout(()=>$("#copy-btn").textContent = "copy json", 1200);
   });
+
+  // ---------- live-source freshness strip + REPLAY banner ----------
+  // Polls the real WP6.4 live-signal layer (GET /signal-counts). Every stamp is
+  // a real fetch age; degraded sources show the real reason, never a fake time.
+  function fmtAge(sec) {
+    if (sec == null) return "—";
+    if (sec < 90)   return "live";
+    if (sec < 3600) return Math.round(sec / 60) + "m old";
+    return (sec / 3600).toFixed(1) + "h old";
+  }
+  async function loadSourceFreshness() {
+    const box = document.getElementById("source-freshness");
+    try {
+      const r = await fetch("/signal-counts");
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const j = await r.json();
+      // REPLAY banner reflects the real server FORCE_REPLAY state.
+      const rb = document.getElementById("replay-banner");
+      if (rb) rb.classList.toggle("hidden", !j.replay_mode);
+
+      box.innerHTML = "";
+      const order = ["fred","eia","nasa_firms","gfw","newsapi","noaa","usgs","gdelt"];
+      for (const name of order) {
+        const c = (j.counts || {})[name];
+        if (!c) continue;
+        const up = !c.degraded;
+        const dot = up ? (c.replay ? "var(--amber)" : "var(--green)") : "var(--amber)";
+        const ageTxt = up ? fmtAge(c.age_seconds) : "down";
+        const tip = up
+          ? [c.provider, c.headline || "", "fetched " + (c.fetched_at || "?"),
+             c.replay ? "(REPLAY snapshot)" : ""].filter(Boolean).join(" · ")
+          : (c.provider + " · DEGRADED: " + (c.degraded_reason || "unknown"));
+        const chip = document.createElement(c.raw_url ? "a" : "span");
+        if (c.raw_url) { chip.href = c.raw_url; chip.target = "_blank"; chip.rel = "noopener"; }
+        chip.className = "chip help";
+        chip.setAttribute("data-tip", tip);
+        chip.innerHTML =
+          `<span class="w-1.5 h-1.5 rounded-full" style="background:${dot}"></span> ` +
+          `${name} <span class="mono" style="color:${up ? 'var(--fg-2)' : 'var(--amber)'}">${ageTxt}</span>`;
+        box.appendChild(chip);
+      }
+      const s = j.summary || {};
+      const fs = document.getElementById("freshness-summary");
+      if (fs) fs.textContent =
+        `${s.n_ok ?? "?"}/${s.n_sources ?? "?"} live · ${s.n_degraded ?? "?"} degraded` +
+        (j.replay_mode ? " · REPLAY" : "");
+    } catch (e) {
+      box.innerHTML =
+        `<span class="text-xs" style="color:var(--amber)">source status unavailable: ${e.message}</span>`;
+    }
+  }
+  loadSourceFreshness();
+  setInterval(loadSourceFreshness, 60000);
 
   // ---------- pre-render the static IEA map on load ----------
   fetch("/demo/hormuz-war-room/health").then(r=>r.json()).then(()=>{
