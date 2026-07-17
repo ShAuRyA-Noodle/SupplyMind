@@ -183,8 +183,17 @@ class ChatResult:
 
 
 class OpenRouterClient:
-    def __init__(self, api_key: str | None = None, timeout_s: float = 120.0) -> None:
+    def __init__(
+        self,
+        api_key: str | None = None,
+        timeout_s: float = 120.0,
+        *,
+        transport: httpx.BaseTransport | httpx.AsyncBaseTransport | None = None,
+    ) -> None:
         # Read key from env; never accept as string arg in production.
+        # ``transport`` is an optional injection point used ONLY by the offline
+        # mock-transport unit tests (httpx.MockTransport). Default None keeps the
+        # real network path unchanged.
         key = api_key or os.environ.get("OPENROUTER_API_KEY")
         if not key:
             # Populate os.environ from .env via the shared loader (names only,
@@ -200,6 +209,7 @@ class OpenRouterClient:
         self._client = httpx.AsyncClient(
             base_url=BASE_URL,
             timeout=timeout_s,
+            transport=transport,
             headers={
                 "Authorization": f"Bearer {self._key}",
                 "HTTP-Referer": os.environ.get(
