@@ -1,0 +1,3 @@
+# Throwaway artifacts from local notebook execution (nb13 writes receipts/plots/cert here).
+# The real, committed evidence is the embedded cell outputs inside the .ipynb files.
+_nb13_run/

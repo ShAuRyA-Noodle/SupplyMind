@@ -1,19 +1,19 @@
 [
   {
     "source": "eia",
-    "event_id": "eia_sum_2026-04-17",
-    "title": "US Weekly Crude Oil Stocks: 870774 MBBL (2026-04-17)",
-    "description": "EIA series petroleum/sum/sndw/data/, latest period 2026-04-17: 870774 MBBL. Last 5 obs returned.",
-    "occurred_at_utc": "2026-04-17T00:00:00Z",
+    "event_id": "eia_sum_2026-07-03",
+    "title": "US Weekly Crude Oil Stocks: 17024 MBBL/D (2026-07-03)",
+    "description": "EIA series petroleum/sum/sndw/data/, latest period 2026-07-03: 17024 MBBL/D. Last 5 obs returned.",
+    "occurred_at_utc": "2026-07-03T00:00:00Z",
     "lat": null,
     "lon": null,
     "severity_proxy": 0.0,
     "raw_url": "https://www.eia.gov/opendata/browser/petroleum/sum/sndw",
-    "fetched_at_utc": "2026-04-25T06:10:33Z",
+    "fetched_at_utc": "2026-07-14T23:19:09Z",
     "inference_type": "live_eia",
-    "value": "870774",
-    "units": "MBBL",
-    "period": "2026-04-17",
+    "value": "17024",
+    "units": "MBBL/D",
+    "period": "2026-07-03",
     "n_obs": 5,
     "endpoint": "petroleum/sum/sndw/data/"
   }
