@@ -110,19 +110,23 @@ class TestRerouteDegradation:
     """Tests for reroute port operational status checking."""
 
     def test_reroute_through_healthy_port(self, env):
-        """Rerouting through a healthy port uses normal transit times."""
+        """Rerouting through a healthy port uses normal transit times (no warning)."""
         env.reset("medium_multi_front")
         obs = env.step(SupplyMindAction(
             action_type="reroute_shipment",
             target_node_id="PORT_LONG_BEACH",
             reroute_via=["PORT_OAKLAND"],
         ))
-        # Should succeed without warning
-        if obs.last_action_result.success:
-            assert "WARNING" not in obs.last_action_result.message
+        # Precondition: a healthy-port reroute must actually succeed (deterministic
+        # on this task) — otherwise the "no warning" check below would be a silent
+        # no-op that can never fail.
+        assert obs.last_action_result.success is True, (
+            f"healthy reroute must succeed: {obs.last_action_result.message}"
+        )
+        assert "WARNING" not in obs.last_action_result.message
 
     def test_reroute_through_disrupted_port_warns(self, env):
-        """Rerouting through a disrupted port should warn and degrade."""
+        """Rerouting through a disrupted port must still execute BUT warn + degrade."""
         env.reset("medium_multi_front")
         # Manually disrupt the reroute port
         env.engine.graph.G.nodes["PORT_OAKLAND"]["is_operational"] = False
@@ -133,10 +137,14 @@ class TestRerouteDegradation:
             target_node_id="PORT_LONG_BEACH",
             reroute_via=["PORT_OAKLAND"],
         ))
-        if obs.last_action_result.success:
-            assert "WARNING" in obs.last_action_result.message
-            assert "degraded" in obs.last_action_result.message.lower() or \
-                   "Degraded" in obs.last_action_result.message
+        # Precondition: the reroute still goes through (deterministic), so the
+        # degraded-warning branch is actually exercised — no silent skip.
+        assert obs.last_action_result.success is True, (
+            f"reroute through disrupted port must still execute: "
+            f"{obs.last_action_result.message}"
+        )
+        assert "WARNING" in obs.last_action_result.message
+        assert "degraded" in obs.last_action_result.message.lower()
 
 
 # ---------------------------------------------------------------------------

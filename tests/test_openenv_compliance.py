@@ -104,7 +104,10 @@ def test_tasks(client):
     r = client.get("/tasks")
     assert r.status_code == 200
     body = r.json()
-    assert "tasks" in body or isinstance(body, list)
+    assert "tasks" in body, "/tasks must return a 'tasks' collection"
+    tasks = body["tasks"]
+    assert isinstance(tasks, list) and len(tasks) >= 3, "must list at least 3 tasks"
+    assert all("task_id" in t for t in tasks), "every task must declare a task_id"
 
 
 def test_reset_returns_observation(client):
@@ -153,13 +156,28 @@ def test_mcp_route_declared():
     assert "/mcp" in route_paths, "MCP JSON-RPC endpoint /mcp must exist"
 
 
-def test_websocket_declared():
-    # OpenEnv spec: WebSocket /ws for persistent sessions
-    # FastAPI stores WS routes separately; just check it doesn't 404 on protocol mismatch
+def test_persistent_session_transport(client):
+    """OpenEnv persistent-session / tool-discovery transport.
+
+    SupplyMind does NOT currently expose a raw WebSocket; it serves the
+    persistent-session + tool-discovery contract over MCP JSON-RPC on the
+    HTTP POST /mcp route. This test asserts the REAL transport works — the
+    route exists AND answers `initialize` with a well-formed JSON-RPC 2.0
+    result. (If a raw WebSocket route is ever added, it also satisfies the
+    contract.) This is deliberately falsifiable: a broken or missing /mcp
+    transport turns it red, unlike the earlier vacuous `has_ws or /mcp-exists`
+    check that could never fail while /mcp was a registered route.
+    """
     from starlette.routing import WebSocketRoute
     has_ws = any(isinstance(r, WebSocketRoute) for r in app.routes)
-    # Accept either a registered WS route OR a route matching /ws or /mcp via HTTP (since we test both)
-    assert has_ws or any(getattr(r, "path", "") in ("/ws", "/mcp") for r in app.routes)
+    mcp_declared = any(getattr(r, "path", "") == "/mcp" for r in app.routes)
+    assert has_ws or mcp_declared, "must expose a WebSocket or the /mcp transport"
+    # The transport must actually respond, not merely be declared.
+    r = client.post("/mcp", json={"jsonrpc": "2.0", "id": 1, "method": "initialize"})
+    assert r.status_code == 200, f"/mcp transport must answer: {r.status_code} {r.text}"
+    body = r.json()
+    assert body.get("jsonrpc") == "2.0" and body.get("id") == 1
+    assert "result" in body and "serverInfo" in body["result"]
 
 
 # ============================================================
@@ -213,15 +231,22 @@ def test_step_reward_is_float():
 # ============================================================
 
 def test_invalid_action_rejected_or_graceful(client):
-    """Invalid action (e.g. unknown target_node_id) must not crash."""
+    """Invalid action (unknown target_node_id) must be handled, never crash, and
+    never silently 'succeed'."""
     client.post("/reset", params={"task_id": "easy_typhoon_response", "seed": 42})
     r = client.post("/step", json={
         "action_type": "activate_backup_supplier",
         "target_node_id": "DOES_NOT_EXIST",
         "backup_supplier_id": "ALSO_FAKE",
     })
-    # Either 200 with result.success=False, or 4xx validation error.
-    assert r.status_code in (200, 400, 404, 422)
+    # Either 200 with a truthful failure result, or a 4xx validation error —
+    # but NOT a 500 crash, and NOT a fabricated success.
+    assert r.status_code in (200, 400, 404, 422), f"must not crash: {r.status_code} {r.text}"
+    if r.status_code == 200:
+        lar = r.json()["last_action_result"]
+        assert lar["success"] is False, "activating a nonexistent node must NOT report success"
+        assert lar["cost"] == 0.0, "a failed action must incur zero cost"
+        assert "not found" in lar["message"].lower()
 
 
 # ============================================================
