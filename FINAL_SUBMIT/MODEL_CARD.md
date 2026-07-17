@@ -1,68 +1,102 @@
-# Model Card — SupplyMind RL Agents
+# Model Card — SupplyMind
 
-> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+**Regenerated 2026-07-15 from committed receipts** (WP8.2). Every quantitative claim here is
+machine-checked by [`scripts/verify_claims.py`](../scripts/verify_claims.py) against the cited
+receipt. Per-claim status lives in [`CLAIMS_LEDGER.md`](CLAIMS_LEDGER.md).
 
 ## Overview
-- **Project**: SupplyMind (OpenEnv India 2026 Hackathon Theme #3 Professional Tasks)
-- **Latest commit**: `dcb3e19` (pass 19) + pass 20 grand-final
-- **License**: MIT
-- **Languages**: Python 3.11+ · PyTorch 2.x · TRL 0.12.2 · PEFT 0.19.0
+- **Project**: SupplyMind — a live supply-chain-risk decision copilot on an OpenEnv-compliant
+  deterministic simulation.
+- **License**: MIT.
+- **Stack**: Python 3.11+ · PyTorch 2.x · FastAPI · Pydantic v2 · NetworkX · scikit-learn.
+- **Local model assets** (sanctioned edge exception — no OpenRouter equivalent): Chronos-Bolt,
+  TimesFM-2, TabPFN-v2, mxbai-embed-large.
 
-## Models shipped
-| Name | Type | Where | Trained how |
-|------|------|-------|-------------|
-| **REINFORCE-v2** | small policy net (188→256→256→128→n_act, LayerNorm) | `scripts/final_real_reinforce_wordle_v2.py` | 125 grad steps · 3000 episodes · CPU only · Williams 1992 + entropy decay + cosine LR + curriculum |
-| **RAP-XC** | curriculum + replay BC + CQL | `rl/algos/rap_xc.py` | 12 epochs · 948 grad steps · 40K real PPO transitions · bf16 RTX 4080 |
-| **MaskablePPO-v3** | mask-aware PPO | `rl/algos/maskable_ppo_v3.py` | reproducible via `train_rl_baselines.py` |
-| **MaskablePPO-v2** | mask-aware PPO | `rl/algos/maskable_ppo_v2.py` | earlier baseline |
-| **RecurrentPPO** | LSTM-PPO | `rl/train_rl_baselines.py` | partial-obs handling |
-| **A2C** | advantage actor-critic | `rl/train_rl_baselines.py` | discrete-action baseline |
-| **SAC-Discrete** | SAC for discrete actions | `rl/train_rl_baselines.py` | off-policy baseline |
-| **CQL** | conservative Q-learning offline | `rl/algos/cql.py` | Optuna-tuned (12 trials) lr=3.54e-4 |
-| **Heuristic** | rule-based filter | `rl/heuristic_policy.py` | constraint propagation |
+---
 
-## Headline metrics (REINFORCE-v2)
-- Final solve rate: **0.9550** (target ≥ 0.90 ✓)
-- Cohen's d trained vs null-random: **5.133**
-- Bootstrap d CI95: **[2.66, 3.96]**
-- Wilcoxon p-value: **6.6 × 10⁻³⁵**
-- Real episodes: 3000 · real gradient updates: 125
-- Wall-clock: ~3 min CPU-only
+## 1. Components that ship, with their real measurement
 
-## Headline metrics (RAP-XC)
-- Hard task mean reward: **+2.83** (CI95 [+2.68, +2.96])
-- Wilcoxon vs MaskablePPO-v3: **STRUCK** — fabricated significance (CLAIMS_LEDGER A1); valid paired-by-seed re-run pending (P1.3)
-- BC loss reduction: **96%** (5.624 → 0.233 in 17.77s on RTX 4080 bf16)
+Each row is a real model/component and the receipt that measures it. "KEEP / RETIRE" decisions come
+from measurement, not preference.
 
-## Limitations
-- REINFORCE-v2 trained on 20-word tier-2 pool; generalization to 100-word pool gives ~80% solve via masking + random search.
-- Bootstrap CI [2.66, 3.96] is wider than point estimate 5.133 because of small sample variation; both numbers reported honestly.
-- No transformer fine-tune submitted (CPU-only constraint); Unsloth+TRL+GRPO recipe wired in `rl/lora/finetune_unsloth.py`.
+| Component | Type | What it does | Measured result | Receipt |
+|---|---|---|---|---|
+| **Brent ensemble** | Chronos-Bolt + TimesFM-2 + TabPFN-v2 weighted blend | 30-day crude forecast around crisis events | mean MAPE **7.1%** over 8 real events (walk-forward on real FRED `DCOILBRENTEU`) | [`ensemble_brent_REAL.json`](../tests/receipts/ensemble_brent_REAL.json) |
+| **TFT forecaster** | Temporal Fusion Transformer (90,602 params) | quantile WTI forecast (p10/p50/p90) | MAE p50 **$7.83**, 14-day horizon | [`tft_real_metrics.json`](receipts/tft_real_metrics.json) |
+| **mxbai RAG** | mxbai-embed-large bi-encoder (1024-dim, FAISS HNSW) | crisis-analog retrieval over 6,483 real chunks | **P@1 0.962, MRR 0.978, nDCG@10 0.961** | [`ghost_models_eval_REAL.json`](../tests/receipts/ghost_models_eval_REAL.json) |
+| **TabPFN judge** | TabPFN-v2 classifier | late-delivery-risk on DataCo (pre-shipment features) | **KEEP** — AUC **0.7377** vs logreg 0.7028 (adds signal) | [`ghost_models_eval_REAL.json`](../tests/receipts/ghost_models_eval_REAL.json) |
+| **Embedder ensemble** | mxbai + Snowflake-Arctic-Embed-L (RRF) | dual-embedder retrieval | **RETIRE** — P@1 −0.076 vs mxbai alone (ensemble is *worse*) | [`ghost_models_eval_REAL.json`](../tests/receipts/ghost_models_eval_REAL.json) |
+| **Reranker** | BGE-reranker-v2-m3 | rerank mxbai top-k | **RETIRE** — P@1 −0.038 vs bi-encoder | [`ghost_models_eval_REAL.json`](../tests/receipts/ghost_models_eval_REAL.json) |
+| **Conformal action filter** | split-conformal over a BC reference policy | calibrated action-set with coverage guarantee | 90% nominal → **90.03%** held-out coverage | [`conformal_REAL.json`](../tests/receipts/conformal_REAL.json) |
+| **Causal counterfactual** | paired-bootstrap MC + Abadie synthetic control + AR(1) FRED + do-calculus | $ impact of a disruption | 4 real methods; macro synthetic control **$230B** brackets the documented $210–235B Tōhoku headline | [`counterfactual_4method_REAL.json`](receipts/counterfactual_4method_REAL.json) |
+| **BC policy + SHAP** | behaviour-cloned policy (408-dim obs) | supply-chain action + explanation | real SHAP: NOAA feature group ≈ **60%** attribution | [`shap_real.json`](receipts/shap_real.json) |
+| **Wordle REINFORCE** | small policy net (Williams 1992) | RLVR self-improvement demo | beats random (p=2.7e-18, d=4.27) but **ties info-aware greedy** (p=0.93) | [`pass27_B_real_episodic_bootstrap.json`](receipts/pass27_B_real_episodic_bootstrap.json) |
+| **FedAvg** | logistic regression, 5-region FedAvg (McMahan 2017) | privacy-preserving late-delivery model | **honest negative** — AUC 0.7218 = centralized 0.7218 (Δ −0.0) | [`fedavg_REAL.json`](../tests/receipts/fedavg_REAL.json) |
 
-## Intended use
-- Hackathon judging demonstration of OpenEnv-compliant RL agent
-- Educational reference for RLVR + RLVE + dual-verifier patterns
-- NOT for production deployment without further validation
+### v3 result receipts (on disk, inspectable; not in the automated gate)
+- GNN arrival-time MAE −48/−49/−64% vs MLP — [`R6_PROVIDER_V2.json`](receipts/R6_PROVIDER_V2.json)
+- Per-horizon conformal deviation 0.024 on WTI — [`R6_AQUA_REGIA_V2.json`](receipts/R6_AQUA_REGIA_V2.json)
+- Cohen κ 0.747 (Qwen × Mistral) judge agreement — [`R4_DANGEROUS_V2_ABLATION.json`](receipts/R4_DANGEROUS_V2_ABLATION.json)
+- ONNX roundtrip 4/4 (opset 17) — [`onnx_roundtrip.json`](receipts/onnx_roundtrip.json)
 
-## Out-of-scope use
-- Real-world supply-chain decisions in production (use it as a research aid, not as a final decider)
-- Extrapolating Wordle solve rate to other RL domains without re-evaluation
+---
 
-## Compute
-- Training device for REINFORCE-v2: **CPU only** (no GPU required)
-- Training device for RAP-XC: RTX 4080 (12 GB VRAM, bf16)
-- Total compute budget: <30 GPU-hours total across all 9 agents
+## 2. RL agents (trained checkpoints on disk)
 
-## Ethical considerations
-- Live API calls (NewsAPI, OpenRouter, EIA, NASA FIRMS, GFW) only access public-license data.
-- LLM judge ensemble uses OpenRouter free-tier models — no PII.
-- Reward functions explicitly tested against 19 reward-hacking attacks (literature-grade defense).
+Behaviour Cloning, CQL, IQL, TD3+BC, Decision Transformer, MaskablePPO, QR-DQN — checkpoints in
+[`rl/checkpoints/`](../rl/checkpoints). Training genuinely ran (varied grades in
+`rl/autoresearch_results.json`). Observation is 408-dim; the action space is MultiDiscrete with
+action masking.
 
-## Reproducibility
+**The head-to-head RL leaderboard is RERUN-PENDING (WP6.3).** The buffer↔env action-taxonomy
+mismatch must be regenerated first, then the real checkpoints evaluated on easy/medium/hard × ≥20
+seeds with correct paired-by-seed statistics. Until then, no RL-vs-baseline ranking is cited as
+fact, and the RL-vs-scripted product narrative is deliberately left to that evidence
+([ledger](CLAIMS_LEDGER.md) D7). The specialist-router mapping (which checkpoint serves which tier)
+is recorded in [`specialist_router_real.json`](receipts/specialist_router_real.json).
+
+---
+
+## 3. LLM analyst layer
+
+A domain-calibrated risk-analyst prompt (LOW/MEDIUM/HIGH/CRITICAL gating, confidence caps,
+strict-JSON output, real 2011–2026 crisis knowledge). The IP is the prompt + calibration, portable
+across providers. The OpenRouter port ([`supplymind/llm/`](../supplymind/llm)) and the Brier-scored
+A/B (analyst prompt vs bare model) are **built but RERUN-PENDING** — `OPENROUTER_API_KEY` is revoked
+([ledger](CLAIMS_LEDGER.md) C1). No live-panel number is cited as current.
+
+---
+
+## 4. Struck claims (do not cite — see ledger §C/§D)
+
+- Fabricated Wilcoxon / Cohen-d leaderboard significance (sorted-"paired" test) — **STRUCK** (A1).
+- Inconsistent Wordle p-values — **STRUCK**, replaced by the real per-episode paired test (A2 → V9).
+- "0.9001 conformal on Gaussian noise" — **STRUCK**, replaced by the real 90.03% (A5 → V2).
+- "DPO-fine-tuned judge" — **STRUCK**, never trained; real QLoRA re-train is WP7.4 (D2).
+- Twin savings figure — **STRUCK** (receipt exit −9); re-run is WP9 (D3).
+- "25-judge / 12-frontier panel" α — **RERUN-PENDING on the key** (C1).
+
+---
+
+## 5. Intended use, out-of-scope, ethics
+
+- **Intended**: research + demonstration of an OpenEnv-compliant risk copilot; educational reference
+  for RLVR / conformal / causal-counterfactual patterns.
+- **Out of scope**: real-world production supply-chain decisions without further validation;
+  extrapolating any single benchmark number to other domains.
+- **Ethics**: live API calls (NewsAPI, EIA, NASA FIRMS, GFW, FRED, NOAA) access only public-license
+  data; no PII. Reward functions are tested against real reward-hacking attacks (see result 1 in the
+  root README and the adversarial receipt).
+
+## 6. Reproducibility
+
 ```bash
-bash FINAL_SUBMIT/REPRODUCE_ONE_BASH.sh
+pip install -e .
+pytest tests/ -q                                   # 184/184
+python scripts/verify_claims.py                    # every headline number → receipt
+python -m supplymind.phoenix.counterfactual_v2.causal_methods --analog tohoku_2011 --receipt
 ```
-Regenerates 60+ receipts deterministically (seeds locked).
 
-## Citations
-See `CITATIONS.bib`.
+Receipts are sha256-stamped and embed the git SHA + command. Local model assets (Chronos / TimesFM /
+TabPFN / mxbai) are gitignored by size; the receipts record their measured behaviour. Citations in
+[`CITATIONS.bib`](CITATIONS.bib).

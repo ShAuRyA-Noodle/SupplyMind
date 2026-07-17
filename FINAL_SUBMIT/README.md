@@ -1,113 +1,72 @@
 # SupplyMind — Final Submit
 
-> ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
+**Regenerated 2026-07-15 from committed receipts** (WP8.2). This folder is the judge-facing
+package. Everything here is receipt-backed or honestly marked pending; the machine gate
+[`scripts/verify_claims.py`](../scripts/verify_claims.py) fails CI if any headline claim lacks
+backing.
 
-**Meta PyTorch × Scaler OpenEnv Hackathon Finals 2026 · Bangalore · 800 teams**
-
-A retrieval-augmented RL agent for global supply-chain risk, evaluated against 8 documented historical events with 100% risk-band accuracy and 100% Brent ±30%, on an OpenEnv-compliant environment with 20 live data sources, 13 verified foundation models, 25 frontier judges, and split-conformal action safety with 0.9001 empirical coverage.
-
-Every claim has a sha256-replayable receipt.
-
----
-
-## Open the master demo
-
-```
-http://127.0.0.1:8000/demo/master
-```
-
-9 cards, every one live, every claim cited. From there, click into:
-
-- `/demo/hormuz-war-room/ui` — flagship live demo
-- `/arena/health` — 9-agent leaderboard
-- `/phoenix/status` — 13 foundation models verified
-- `/library/v2/search` — 1500-event EMDAT crisis library
-- `/counterfactual/platinum` — 4-method causal counterfactual
-- `/analyst/panel-consensus/{id}` — 12-frontier-judge panel
-- `/replay/health` — HetGAT cascade replay
-- `/live/health` — 20-source intel fan-out
+> SupplyMind is a live supply-chain-risk decision copilot on an OpenEnv-compliant deterministic
+> simulation. See the product thesis in [`../PRODUCT_THESIS.md`](../PRODUCT_THESIS.md) and the full
+> project README in [`../README.md`](../README.md).
 
 ---
 
-## The headline numbers (every cell links to a receipt)
+## Start here (authoritative, receipt-backed)
 
-| Metric | Value | Receipt |
-|---|---|---|
-| War-room risk-band accuracy | **100%** (8/8) | `tests/receipts/war_room_validation.json` |
-| Ensemble Brent ±30% | **100%** (8/8) | `tests/receipts/ensemble_brent_validation.json` |
-| Median Brent rel error | **3.3%** | same |
-| Conformal action coverage | **0.9001** | `tests/receipts/conformal_calibration.json` |
-| Cross-corpus α (frontier 6, v2 EMDAT) | **0.5436** | `tests/receipts/cross_corpus_alpha.json` |
-| 12-frontier panel α (R4 corpus) | **0.5669** | `tests/receipts/panel_agreement_R4.json` |
-| HetGAT vs v1 GCN MAE | **+7.77 / +12.15 / +10.03 %** | `versions/v5_phoenix/experiments/hetgat_v1/report.json` |
-| RAP-XC training loss | BC **5.62 → 0.23** | `versions/v5_phoenix/experiments/rap_xc_v1/rapxc.pt` |
-| RAP-XC parameters | **3,137,049** | same |
-| Tohoku 2011 replicated | **$276 B vs $235 B published (+18%)** | `tests/receipts/platinum_counterfactual.json` |
-| Live data sources | **20** | `versions/v4_arcadia_live/realtime/orchestrator_v2.py` |
-| Crisis library | **1,500 EMDAT events** | `versions/v4_arcadia_live/scenarios/crisis_library_v2.json` |
-| Foundation models verified | **13/13** | `versions/v3_arcadia/00_emergence/verify_*.py` |
-| Custom Ollama analyst models | **5 (v1→v5)** | `rl/lora/Modelfile.v[2-4]`, `Modelfile.analyst_v5` |
-| LoRA training pairs | **225** | `rl/data/lora_training_data.json` |
-| DPO preference pairs | **21** | `dpo_judge/data/preference_pairs.jsonl` |
-
----
-
-## What's novel
-
-1. **Retrieval-augmented policy with cross-attention** — RAP-XC conditions on top-k retrieved historical events from a 1500-event EMDAT FAISS index. 3.14M params. Trained on 40,000 real harvested PPO transitions in 17.77s.
-
-2. **4-method causal counterfactual ensemble** — paired-bootstrap MC + synthetic control + ARIMA-BSTS + SCM do-calculus, calibrated to 6 paper anchors (Suez 2021 $9.6B/day, Tohoku $235B, Chip shortage $210B, etc.). Tohoku replicated within 18%.
-
-3. **Split-conformal action filter** — Vovk 2005 NLL-quantile with finite-sample correction, calibrated on 8000 real harvest rows, **empirical coverage 0.9001 vs 0.9 target**.
-
-4. **Cross-corpus frontier α** — same 6 OpenRouter judges scoring R4 (26 scenarios) and v2 EMDAT (30 events): α=0.5669 vs 0.5436, drift 0.024 absolute → strong cross-corpus stability.
-
-5. **HetTemporalGAT** — edge-type-conditional GAT with GRU temporal gating; beats v1 GCN on all three difficulty tiers.
-
-6. **Chronos-Bolt + TimesFM-2 + TabPFN-v2 ensemble Brent forecaster** — closed our 25% backtest miss to 100% within ±30%, median rel error 3.3%.
-
-7. **8-event historical backtest** — every output validated against documented EMDAT-cited Iran/Israel/Hormuz/Red-Sea events with published Brent peaks.
-
----
-
-## What we honestly cannot do
-
-See [HONEST_LIMITATIONS.md](HONEST_LIMITATIONS.md). Short version:
-- We don't predict whether a chokepoint will close. We quantify second-order industrial effects *conditional* on closure.
-- Our forecasts have wide CI95 in tail events (oil is volatile).
-- 2 of 6 OpenRouter judges typically rate-limit during testing; we report 4/6 succeeded.
-- Sector-level loss bands are point-estimate ranges from published agency data, not precise dollar forecasts.
-
----
-
-## Reproduce in 5 commands
-
-```
-git clone <repo>
-cd Sleep-Token && python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env  # fill in 4 keys: OPENROUTER, EIA, NASA_FIRMS, GFW
-python -m uvicorn server.app:app --host 0.0.0.0 --port 8000 &
-open http://127.0.0.1:8000/demo/master
-```
-
-Detailed: see [REPRODUCE.md](REPRODUCE.md).
-
----
-
-## Repo map
-
-| Section | Where |
+| Doc | What |
 |---|---|
-| Game engine (OpenEnv) | `server/app.py`, `server/supply_environment.py`, `server/engine/` |
-| 9 RL agents | `versions/v5_phoenix/arena/`, `versions/v5_phoenix/rap_xc/` |
-| 13 foundation models | `models/`, `versions/v3_arcadia/00_emergence/verify_*.py` |
-| Custom Ollama analyst models | `rl/lora/Modelfile.v[2-4]`, `versions/v4_arcadia_live/features/Modelfile.analyst_v5` |
-| LoRA + DPO + GRPO training | `rl/lora/`, `versions/v5_phoenix/roll_integration/dpo_judge/` |
-| 1500-event crisis library | `versions/v4_arcadia_live/scenarios/crisis_library_v2.{json,faiss}` |
-| 4-method counterfactual | `versions/v5_phoenix/counterfactual_v2/platinum.py` |
-| Hormuz War Room | `versions/v4_arcadia_live/realtime/hormuz_war_room_router.py`, `server/static/hormuz_war_room.html` |
-| Master demo page | `server/static/master.html` |
-| Receipts | `tests/receipts/*.json` |
+| [`CLAIMS_LEDGER.md`](CLAIMS_LEDGER.md) | **Every headline claim → VERIFIED / CORRECTED / STRUCK / RERUN-PENDING**, with its receipt path. Machine-checked. |
+| [`MODEL_CARD.md`](MODEL_CARD.md) | Every model/component and its real measured result. |
+| [`DATASET_CARD.md`](DATASET_CARD.md) | Data sources, splits, provenance (per-file SHA-256). |
+| [`HONEST_LIMITATIONS.md`](HONEST_LIMITATIONS.md) | Honest negatives, scope caveats, and what's still pending. |
+| [`../README.md`](../README.md) | Full project README (engine, endpoints, quick start). |
 
-For a complete bullet-by-bullet inventory, see [FEATURE_INVENTORY.md](FEATURE_INVENTORY.md).
+Verify everything yourself:
+
+```bash
+pip install -e . && pytest tests/ -q      # 184/184
+python scripts/verify_claims.py           # every headline number → receipt; exits nonzero if not
+```
+
+---
+
+## The receipt-backed headline numbers
+
+Each is asserted against its receipt by `verify_claims.py` (values copied from the receipts):
+
+| Result | Number | Receipt |
+|---|---|---|
+| Adversarial gauntlet | **318/318 blocked (100%), 0 breaches** | [`adversarial_gauntlet_REAL.json`](../tests/receipts/adversarial_gauntlet_REAL.json) |
+| Split-conformal coverage | 90% nominal → **90.03%** held-out | [`conformal_REAL.json`](../tests/receipts/conformal_REAL.json) |
+| Brent ensemble backtest (real FRED) | mean MAPE **7.1%** over 8 events | [`ensemble_brent_REAL.json`](../tests/receipts/ensemble_brent_REAL.json) |
+| Federated learning (honest negative) | FedAvg AUC **0.7218 = centralized** | [`fedavg_REAL.json`](../tests/receipts/fedavg_REAL.json) |
+| Ghost-model triage | ensemble **RETIRE**, reranker **RETIRE**, TabPFN **KEEP** | [`ghost_models_eval_REAL.json`](../tests/receipts/ghost_models_eval_REAL.json) |
+| RAG retrieval (mxbai) | **P@1 0.962, MRR 0.978, nDCG@10 0.961** | [`ghost_models_eval_REAL.json`](../tests/receipts/ghost_models_eval_REAL.json) |
+| RAG World-Bank fix | **0 → 20 WB chunks, 6,602 total** | [`rag_recook_REAL.json`](../tests/receipts/rag_recook_REAL.json) |
+| 4-method causal counterfactual | 4 real methods; **$230B** brackets the $210–235B Tōhoku headline | [`counterfactual_4method_REAL.json`](receipts/counterfactual_4method_REAL.json) |
+| Wordle REINFORCE | beats random (p=2.7e-18) but **ties greedy** (p=0.93) | [`pass27_B_real_episodic_bootstrap.json`](receipts/pass27_B_real_episodic_bootstrap.json) |
+| TFT forecaster (real WTI) | **MAE p50 $7.83** | [`tft_real_metrics.json`](receipts/tft_real_metrics.json) |
+| Real SHAP | NOAA group ≈ **60%** attribution | [`shap_real.json`](receipts/shap_real.json) |
+| Test suite | **184/184 pass**, exit 0 | [`test_suite_grand_total.json`](../tests/receipts/test_suite_grand_total.json) |
+
+Plots: [`plots/`](plots) — [`brent_backtest.png`](plots/brent_backtest.png),
+[`conformal_coverage.png`](plots/conformal_coverage.png). All receipts: [`receipts/`](receipts).
+
+---
+
+## What's honest about this submission
+
+- **Negatives are reported as measured**: federated learning ties centralized; the embedder
+  ensemble is worse than mxbai alone; the RL policy ties a strong greedy baseline. See
+  [`HONEST_LIMITATIONS.md`](HONEST_LIMITATIONS.md).
+- **Blocked items are labeled, not faked**: the OpenRouter judge panel and analyst A/B are
+  RERUN-PENDING on a revoked key; the full RL leaderboard is RERUN-PENDING on the benchmark run.
+- **Fabricated predecessors are struck**, and their real rebuilds are cited — the diff is documented
+  row-by-row in [`CLAIMS_LEDGER.md`](CLAIMS_LEDGER.md).
+
+## Legacy documents
+
+Other markdown files in this folder are **pre-audit artifacts** (marketing decks, feature maps,
+FAQ). Each carries a `PRE-AUDIT ARTIFACT` banner and had its struck numbers marked. They are
+superseded by the four authoritative docs above; treat any number there as struck unless it also
+appears, receipt-backed, in [`CLAIMS_LEDGER.md`](CLAIMS_LEDGER.md).

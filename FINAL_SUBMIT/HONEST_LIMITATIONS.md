@@ -1,110 +1,90 @@
 # Honest limitations
 
-What SupplyMind does **not** claim. We list these explicitly because the credibility of every claim above depends on the honesty of these exclusions.
-
-## 0. Fabrication cleanup in progress (2026-07-02 internal audit)
-
-A brutal 12-agent internal audit on 2026-07-02 found that the engine core is genuinely strong
-but the **presentation/receipts layer contained fabricated and overstated claims**. We are
-removing them rather than hiding them. Judges should know, up front, what is being re-run:
-
-- **Fabricated statistics chain struck.** The "RAP-XC vs MaskablePPO Wilcoxon p / Cohen's d" and
-  "REINFORCE p / d" headlines came from the bootstrap-CI and Wilcoxon-pairwise leaderboard
-  generator scripts, which **sorted two independently synthesized samples and
-  called them "paired"** — a statistically meaningless test. Those p-values and the plots quoting
-  them are struck and pending an honest re-run on real paired-by-seed episodes.
-- **Conformal coverage (0.9001) unverified.** The committed conformal receipts were computed on
-  `rng.normal()` Gaussian noise labeled "model-NLL split conformal", not on real model NLLs. The
-  real number must come from `calibrate_conformal_from_harvest.py` on real transitions.
-- **Ensemble Brent "8/8 within ±30%" unverified.** `validate_ensemble_brent.py` backtested on a
-  synthetic sinusoid+AR(1) price history, not real FRED Brent. Re-run on real `DCOILBRENTEU` pending.
-- **Adversarial "[STRUCK] = 100% blocked" (and the "257/257" variant) rigged.** The gauntlet counted
-  every non-crashing call as "safe" in *both* branches, never passed injection payloads to two of
-  the tools, and added 19 attacks as a constant — 100% was guaranteed by construction. Being
-  rewritten to attack the real env `step()`/gates.
-- **No DPO-fine-tuned judge exists.** Every DPO training run crashed or trained with `None`
-  gradients. Any claim of a "DPO-fine-tuned Qwen-2.5-3B judge" is false today and is struck.
-- **"$135.5M twin savings" receipt is not real** — the on-disk `V5_Twin_savings_gt_zero` receipt
-  records the process killed (`exit_code: -9`, `match: false`). Do not cite the figure until re-run.
-- **14 of 20 "grade-A" receipts are unexecuted stubs** (`<pending-first-run>`, `exit_code: -1`)
-  with reproduce commands that cannot run (pre-reorg, digit-leading module paths).
-- **Three "foundation model" dirs do not exist**: `tabpfn-v2-clf`, `snowflake-arctic-embed-l`,
-  `bge-reranker-v2-m3`. The dependent features (7th TabPFN judge, 2-embedder ensemble, reranker)
-  silently fall back and never run. FEATURE_INVENTORY.md's old "PRESENT (verified)" rows were false.
-- **"[STRUCK] features demonstrated" was a hardcoded constant**, not a measured count. Struck.
-- **Krippendorff α headline.** The advertised "α = 0.750" is a cherry-picked **2-judge** sub-panel;
-  the raw **3-judge** panel scored **α = 0.210**. Both must be stated together or neither. We now
-  publish the full ladder (0.210 3-judge / 0.750 2-judge sub-panel) instead of the flattering one.
-
-Tracking table with per-claim status: [`CLAIMS_LEDGER.md`](CLAIMS_LEDGER.md).
-
-## 1. We do not predict whether a chokepoint will close
-
-The Hormuz War Room is **conditional**: *if* Iran-Israel-US escalation restricts Hormuz, here are the second-order industrial effects. We report base rates from EMDAT v2 + analog events but we never claim a probability that war happens. That's a political-economic question, not a supply-chain one.
-
-## 2. Ensemble Brent forecast accuracy is UNVERIFIED (being re-run)
-
-The previously advertised "closes 6/8 → 8/8 within ±30%, median rel error 3.3%" was produced by
-`validate_ensemble_brent.py` backtesting on a **synthetic** sinusoid+AR(1) price history, not real
-FRED Brent — so it is not a real out-of-sample accuracy figure. It is struck pending a re-run on
-real `DCOILBRENTEU` slices for each event. The forecast ensemble code (Chronos+TimesFM+TabPFN) is
-real; only the backtest data was synthetic.
-
-## 3. OpenRouter free-tier judges rate-limit
-
-In live HTTP testing, **2/6 frontier OpenRouter judges typically return 429 rate-limit** under the free tier (Gemma-4 family). We report **4/6 succeeded** in the war-room receipt rather than retrying until 6/6 — that would mask the real production behavior.
-
-## 4. Sector-level loss bands are point-estimate ranges, not precise dollar forecasts
-
-The `impact_inr_cr_30d_band` and `impact_usd_m_30d_band` fields on each sector are published agency-data ranges (PPAC/MoPNG/IATA/CSCMP/ADNOC). The score function interpolates within the band but the interpolation is a deterministic heuristic, not a calibrated prior. Treat them as "order of magnitude" rather than "decision-quality forecast."
-
-## 5. Bootstrap leaderboard "paired" test is invalid — STRUCK
-
-The v3_arcadia eval runs persisted only (n, mean, std, min, max) per (task, agent) — not raw
-per-episode arrays. The bootstrap-CI leaderboard generator script reconstructs arrays via truncated-normal draws,
-then **sorts the two reconstructed samples and pairs them by quantile rank** before running the
-"paired" bootstrap / Wilcoxon. Sorting two independent samples and pairing them guarantees
-near-zero variance in the difference and manufactures significance — the resulting p-values
-([STRUCK], etc.) are **not valid**. The whole RAP-XC-vs-MaskablePPO headline pair is struck until a
-real paired-by-seed comparison is run on the actual trained checkpoints (P1.3).
-
-## 6. 16 of 27 leaderboard cells say `no_data`
-
-DQN, QRDQN, TRPO, Decision Transformer were never run on the 3 difficulty tiers in v3_arcadia. recurrent_ppo and a2c only ran on `easy_typhoon_response`. Rather than fabricate, we mark these `status="no_data"`. They are queued for v2.
-
-## 7. Cross-corpus α drift may be optimistic
-
-The 30-event v2 sample was stratified (5 per tier × 4 tiers + 10 random). Stratification artificially compresses inter-judge disagreement. A purely random sample from the 1500-event corpus would likely show somewhat lower α. The 0.024 absolute drift is the *stratified* drift, which we state in the receipt's `inference_type` field as `cross_corpus_panel_v2_library_stratified`.
-
-## 8. Tohoku "4-method counterfactual" is not 4 real methods — STRUCK as evidence
-
-The "$276 B vs $235 B published, +18%" Tohoku replication came from a "4-method causal
-counterfactual" in which **3 of the 4 methods (synthetic control, BSTS, SCM do-calculus) are
-hardcoded literals** (250 / 263 / 285) and the 4th is `np.random.normal()` draws (audit_5, audit_4).
-The `platinum.py` "real FRED" path also always hits a hardcoded fallback table because it parses
-CSV columns that don't exist (audit_6). The number is struck as a scientific claim until real
-causal methods are implemented. (An honest framing: it is a hand-set economic *anchor*, not a
-replicated estimate.)
-
-## 9. Synthetic Brent pre-history in ensemble validation
-
-`scripts/validate_ensemble_brent.py` constructs a 200-day pre-event Brent history by anchoring at the documented `pre` price + AR(1) noise + sinusoidal seasonal. This is not real FRED Brent data on the actual pre-event day window — it's a deterministic synthesizer. The validation method note is explicit about this. A future v2 should fetch real FRED Brent slices for each event.
-
-## 10. We don't have ACLED, Reddit OAuth, or full SAR access
-
-Three sources we wanted but didn't get:
-- **ACLED** (conflict events) requires institutional access we don't have. We use GDELT-Conflict instead.
-- **Reddit OAuth** app credentials weren't approved during build window. We use HN tech ticker.
-- **Full Synthetic Aperture Radar** access for port congestion would cost real money. We use Qwen-VL on free RGB satellite imagery.
-
-## 11. War-Room is conditional on operator-asserted scenario parameters
-
-The user supplies `severity`, `brent_price_usd_bbl`, `duration_days`. The model does not detect these from the live signal stream — it accepts them as inputs. A future v2 should auto-extract scenario parameters from incoming news + sentiment.
-
-## 12. The "no AI fluff" rule is a discipline, not a guarantee
-
-Every claim in this submission is intended to be sha256-replayable from a committed file. If you find a claim that isn't, file an issue and we will either fix the receipt or retract the claim.
+**Regenerated 2026-07-15.** What SupplyMind does **not** claim, and what is still pending. The
+credibility of every result depends on the honesty of these exclusions. Per-claim status:
+[`CLAIMS_LEDGER.md`](CLAIMS_LEDGER.md). Machine gate: [`scripts/verify_claims.py`](../scripts/verify_claims.py).
 
 ---
 
-**These honesty admissions are the headline.** Every team will pitch their model. We pitch a system that can be audited.
+## 0. The audit, and the rebuild
+
+A brutal internal audit (2026-07-02) found a genuinely strong engine wearing fabricated presentation.
+We removed the fakes **and rebuilt the capabilities behind them for real**. Eight results that were
+then "STRUCK / being re-run" now have committed, machine-checked receipts:
+
+| Was (2026-07-02) | Now (real receipt) |
+|---|---|
+| Rigged "269/269 = 100%" gauntlet | **318/318 real attacks blocked, 0 breaches** ([`adversarial_gauntlet_REAL.json`](../tests/receipts/adversarial_gauntlet_REAL.json)) |
+| "0.9001 conformal" on Gaussian noise | **90.03% held-out coverage** on real transitions ([`conformal_REAL.json`](../tests/receipts/conformal_REAL.json)) |
+| "8/8 within ±30%" on a synthetic price series | **mean MAPE 7.1%** on real FRED Brent walk-forward ([`ensemble_brent_REAL.json`](../tests/receipts/ensemble_brent_REAL.json)) |
+| "$276B, +18%" from 3 hardcoded literals + 1 `np.random` | **4 real causal methods**, honest scope disagreement ([`counterfactual_4method_REAL.json`](receipts/counterfactual_4method_REAL.json)) |
+| 3 "absent" model dirs | obtained + **measured** → 2 RETIRE, 1 KEEP ([`ghost_models_eval_REAL.json`](../tests/receipts/ghost_models_eval_REAL.json)) |
+| World Bank "in corpus" (actually 0 chunks) | **0 → 20 WB chunks** ([`rag_recook_REAL.json`](../tests/receipts/rag_recook_REAL.json)) |
+| Inconsistent Wordle p-values | one **real per-episode paired test** ([`pass27_B_real_episodic_bootstrap.json`](receipts/pass27_B_real_episodic_bootstrap.json)) |
+| No real federated result | **honest negative** — FedAvg = centralized ([`fedavg_REAL.json`](../tests/receipts/fedavg_REAL.json)) |
+
+The point of the audit was not to shrink the project; it was to make every remaining claim true.
+
+---
+
+## 1. Results that are honest negatives or ties (we report them as measured)
+
+- **Federated learning does not beat centralized.** On 180K real DataCo orders across 5 regions,
+  FedAvg AUC 0.7218 equals centralized 0.7218 (Δ −0.0). The data is close to IID by region, so
+  federation buys privacy, not accuracy. We say so.
+- **The embedder ensemble is worse than mxbai alone** (P@1 −0.076), and **the reranker lowers P@1**
+  (−0.038). Both are **retired by measurement**, not shipped as wins. TabPFN, which *does* add
+  signal (AUC 0.738 vs 0.703), is kept.
+- **The Wordle RL policy ties a strong baseline.** Trained REINFORCE beats random decisively
+  (p=2.7e-18, d=4.27) but is statistically indistinguishable from an info-aware greedy baseline
+  (p=0.93). It is a real RLVR demonstration, not a claim of RL superiority.
+
+## 2. Scope and confounding caveats we surface, not hide
+
+- **The 4 counterfactual methods disagree by ~1,459×** because they measure different scopes: the
+  macro synthetic control captures whole-economy output loss (~$230B, which brackets the documented
+  $210–235B Tōhoku headline), while the supply-graph MC/do-calculus methods capture only the modelled
+  auto-supplier subset, and the AR(1) FRED method captures only the oil channel. **Do not average
+  across scopes.** The oil-channel estimate is further **confounded** by the concurrent 2011 Libya /
+  Arab-Spring oil rally — stated in the receipt, not buried.
+- **Conformal coverage** assumes exchangeability; transitions are shuffled across trajectories before
+  splitting to approximate it, but within-trajectory autocorrelation is a known caveat (in the
+  receipt's `method` field). Coverage is reported on a **disjoint** held-out test set, not the
+  circular calibration set.
+- **War-room scenarios are conditional.** The operator supplies severity / pre-event price / duration;
+  the system reports second-order industrial effects *given* those. It does not predict whether a
+  chokepoint closes. Sector loss bands are published-agency ranges interpolated by a deterministic
+  heuristic — "order of magnitude", not decision-quality forecasts.
+
+## 3. Still blocked or pending (never faked around)
+
+- **OpenRouter key revoked.** The LLM analyst A/B (Brier-scored) and the multi-judge panel α are
+  **built but RERUN-PENDING**. No live-panel number is cited as current (ledger C1–C3, B1). The
+  adversarial gauntlet therefore tests injection only against data-handling surfaces (RAG, MCP tool
+  args, string action fields); live-LLM instruction-override resistance is explicitly not claimed.
+- **The full RL leaderboard is RERUN-PENDING** (WP6.3). Real checkpoints exist; the head-to-head
+  ranking requires fixing the buffer↔env action-taxonomy mismatch, then evaluating on ≥20 seeds with
+  correct paired-by-seed statistics. The RL-vs-scripted narrative follows that evidence (ledger D7).
+- **No DPO-fine-tuned judge exists** — every DPO run crashed (`float8` / `None` gradients). Real
+  QLoRA re-train is WP7.4 (ledger D2). Struck until it trains and is evaluated honestly.
+- **The twin savings figure is STRUCK** — the committed receipt records `exit_code:-9` (process
+  killed). Re-run to completion is WP9 (ledger D3).
+- **Notebook outputs are RERUN-PENDING** (WP7.1) — the pruned notebook set is committed but not yet
+  executed with outputs.
+- **War-room `war_room_validation.json`** has a malformed JSON escape and is not machine-gated until
+  re-serialized (ledger D6) — the run is real; the receipt file needs a re-emit.
+
+## 4. Data we wanted but do not have
+
+- **ACLED** (conflict events) needs institutional access — we use GDELT-Conflict instead.
+- **Full SAR** imagery for port congestion costs money — we use free RGB satellite + vision models.
+- **Reddit OAuth** wasn't approved in the build window — we use a tech-news ticker.
+
+## 5. The discipline
+
+Every headline number is intended to be sha256-replayable from a committed receipt and is checked by
+`scripts/verify_claims.py`, which fails CI if any claim lacks backing. If you find a claim that is
+not receipt-backed, it is a bug — file it and we fix the receipt or retract the claim.
+
+**These honesty admissions are the headline.** Every team pitches a model; we pitch a system that
+can be audited, negatives and all.

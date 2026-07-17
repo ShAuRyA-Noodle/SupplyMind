@@ -1,3 +1,9 @@
+> [!WARNING]
+> **PRE-AUDIT ARTIFACT.** Numbers in this file predate the 2026-07-02 fabrication audit and
+> some were struck. Authoritative, receipt-backed claims live in [CLAIMS_LEDGER.md](CLAIMS_LEDGER.md),
+> the root [README.md](../README.md), MODEL_CARD.md, DATASET_CARD.md and HONEST_LIMITATIONS.md.
+> Verify with `python scripts/verify_claims.py`.
+
 # PRESENTATION FINAL CHECKLIST — every minimum requirement verified
 
 > ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
@@ -38,7 +44,7 @@ Cross-reference against the brutal hackathon doc Part 5 (Minimum Submission Requ
 
 | Requirement | Status | Anchor |
 |---|---|---|
-| Real training run (not simulated) | ✅ | `pass23_colab_local_smoke.json` (10% → 100% solve, Wilcoxon p=1.87e-34, Cohen d=3.89, 9.8s wall-clock) |
+| Real training run (not simulated) | ✅ | `pass23_colab_local_smoke.json` (10% → 100% solve, Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md], Cohen d=3.89, 9.8s wall-clock) |
 | Reward plots exist, axes labeled | ✅ | `plots/colab_reproduction.png` x="episode" y="reward / win rate" + axis labels in `loss_components.png`, `reward_curve.png` etc |
 | Loss plots exist | ✅ | `plots/loss_components.png` (4-component BC + CQL + V + KL) |
 | Baseline vs trained comparison | ⚠️ | `plots/colab_reproduction.png` (right panel) — `before_after.png` STRUCK (A1), from fabricated leaderboard, deleted |
@@ -88,7 +94,7 @@ Score estimate: **26/30** (recorded video is the only gap).
 
 Anchors:
 - `wordle_real_reinforce_v2_curve.json` — REINFORCE v2 95.5–97% solve, Cohen d 5.13
-- `pass23_colab_local_smoke.json` — Colab notebook proof: 10% → 100% solve, Wilcoxon p=1.87e-34
+- `pass23_colab_local_smoke.json` — Colab notebook proof: 10% → 100% solve, Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md]
 - ❌ STRUCK — the bootstrap-CI leaderboard receipt was fabricated + deleted (CLAIMS_LEDGER A1); RAP-XC vs MaskablePPO significance pending valid re-run (P1.3)
 - RERUN-PENDING (A2) — `v2_inferential_stats.json` deleted; real paired arrays in `pass27_B_real_episodic_bootstrap.json`
 - RERUN-PENDING (A2) — `statistical_power_analysis.json` deleted; recompute from `pass27_B_real_episodic_bootstrap.json`

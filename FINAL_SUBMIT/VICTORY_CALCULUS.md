@@ -1,3 +1,9 @@
+> [!WARNING]
+> **PRE-AUDIT ARTIFACT.** Numbers in this file predate the 2026-07-02 fabrication audit and
+> some were struck. Authoritative, receipt-backed claims live in [CLAIMS_LEDGER.md](CLAIMS_LEDGER.md),
+> the root [README.md](../README.md), MODEL_CARD.md, DATASET_CARD.md and HONEST_LIMITATIONS.md.
+> Verify with `python scripts/verify_claims.py`.
+
 # VICTORY CALCULUS — Bayesian decomposition of win probability
 
 > ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
@@ -74,7 +80,7 @@ Top 3 requires beating ~7 strong submissions on weighted criteria. Per-criterion
 |---|---|---|
 | Training reward curve | BC loss 5.624 → 0.233 (96% reduction) | 4 / 4 |
 | Quantitative before/after | RAP-XC vs MaskablePPO Wilcoxon significance — **STRUCK** (fabricated; CLAIMS_LEDGER A1); valid re-run pending (P1.3) | — |
-| Statistical rigor | Bootstrap CI95, power analysis, Wilcoxon p=6.6e-35 (REINFORCE v2) | 4 / 4 |
+| Statistical rigor | Bootstrap CI95, power analysis, Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md] (REINFORCE v2) | 4 / 4 |
 | Real episodic bootstrap | **CURRENT: reconstructed from sufficient stats. POST U1: real per-episode** | 2 / 4 (post-U1: 4/4) |
 | Ablations | 5-component reward leave-one-out matrix | 2 / 2 |
 | Cross-task generalization | Tier-3 OOD eval | 1 / 1 |
@@ -121,7 +127,7 @@ Among top 3, the differentiator is judge taste. Three persona models:
 
 ### Persona A — Technical Depth Judge (academic / research lead)
 - Values: novelty, rigor, statistical evidence, reproducibility
-- Our fit: very high (Wilcoxon p=6.6e-35, conformal coverage proof, 4-method counterfactual)
+- Our fit: very high (Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md], conformal coverage proof, 4-method counterfactual)
 - P(#1 | judge=A) ≈ 0.50
 
 ### Persona B — Industry Pragmatist (engineer / product)
@@ -235,7 +241,7 @@ These ratios come from prior Meta×PyTorch / Scaler hackathon dropoff data and O
 
 Our submission state post pass-22 v2:
 - ✅ All mandatory items closable (HF Space live, Colab, README, slide deck — only video pending)
-- ✅ Real training (REINFORCE v2 4992 episodes, BC loss 96% reduction, Wilcoxon p=6.6e-35)
+- ✅ Real training (REINFORCE v2 4992 episodes, BC loss 96% reduction, Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md])
 - ✅ Real metrics (Cohen d 5.13 with bootstrap CI95, conformal 0.9001 empirical, 19/19 adversarial blocked)
 - ✅ 79 sha256-stamped receipts, 261 tests, 50 objection rebuttals, 7 pass-22 audit docs
 - ✅ Genuinely novel theme (supply-chain RL with EMDAT-1500 RAG vs typical Wordle/Sokoban grid-world)

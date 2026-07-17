@@ -1,3 +1,9 @@
+> [!WARNING]
+> **PRE-AUDIT ARTIFACT.** Numbers in this file predate the 2026-07-02 fabrication audit and
+> some were struck. Authoritative, receipt-backed claims live in [CLAIMS_LEDGER.md](CLAIMS_LEDGER.md),
+> the root [README.md](../README.md), MODEL_CARD.md, DATASET_CARD.md and HONEST_LIMITATIONS.md.
+> Verify with `python scripts/verify_claims.py`.
+
 # BRUTAL HONEST FINAL ANSWER — what we can and cannot guarantee
 
 > ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
@@ -26,7 +32,7 @@ Anyone telling you "90% guaranteed top-1" is selling you a story, not a probabil
 |---|---|---|
 | **Submission completeness** | ~100% | All 7 mandatory items satisfied except recorded video (user owns) |
 | **Reproducibility** | 100% | 107 sha256-stamped receipts, every claim replayable |
-| **Real training evidence** | 100% | REINFORCE 100% solve, Wilcoxon p=1.87e-34 / [STRUCK], Cohen d=3.89 / 4.28 |
+| **Real training evidence** | 100% | REINFORCE 100% solve, Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md] / [STRUCK], Cohen d=3.89 / 4.28 |
 | **OpenEnv compliance** | 100% | MCPEnvironment subclass, 6 non-reserved tools, valid yaml, 210/210 MCP fuzz pass |
 | **HF Space live** | 100% | 4/5 endpoints 200 OK pre-submit |
 
@@ -156,7 +162,7 @@ Despite the impossibility of a 90% top-1 guarantee, three things make this submi
 
 1. **Submission breadth** — most teams pick ONE theme; we hit all three with a single env (Theme 1 multi-agent K2-K6 + Theme 2 long-horizon 60-step cascading + Theme 3 professional with 9 live APIs).
 
-2. **Statistical rigor** — most teams report "training works"; we report Wilcoxon p=1.87e-34, Cohen's d=3.89, paired bootstrap CI95 [+0.812, +0.928] with **raw per-episode arrays persisted on disk** — judges can re-run the analysis themselves.
+2. **Statistical rigor** — most teams report "training works"; we report Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md], Cohen's d=3.89, paired bootstrap CI95 [+0.812, +0.928] with **raw per-episode arrays persisted on disk** — judges can re-run the analysis themselves.
 
 3. **Honest receipt provenance** — 107 sha256-stamped JSON files. Every claim has a file path. Every limitation is disclosed (`HONEST_LIMITATIONS.md`). Every audit-found bug has a closure receipt (`pass22_full_squeeze.py`, `pass27_killshot.py`).
 
@@ -166,6 +172,6 @@ What we DO NOT pitch: kitchen-sink-without-evidence. What we DO pitch: a system 
 
 ## 9 · The honest one-liner
 
-> **We cannot guarantee 90% top-1 against 800 teams — that ceiling is ~15-20% mathematically. We CAN guarantee 98% of 250 features are individually demonstrated, 100% of mandatory submission items met (post-video), and statistical evidence at p=1.87e-34. Top-10 reliability is the achievable target at 70-83%.**
+> **We cannot guarantee 90% top-1 against 800 teams — that ceiling is ~15-20% mathematically. We CAN guarantee 98% of 250 features are individually demonstrated, 100% of mandatory submission items met (post-video), and statistical evidence at p=[STRUCK — fabricated; see CLAIMS_LEDGER.md]. Top-10 reliability is the achievable target at 70-83%.**
 
 End brutal honest final answer.

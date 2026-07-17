@@ -1,3 +1,9 @@
+> [!WARNING]
+> **PRE-AUDIT ARTIFACT.** Numbers in this file predate the 2026-07-02 fabrication audit and
+> some were struck. Authoritative, receipt-backed claims live in [CLAIMS_LEDGER.md](CLAIMS_LEDGER.md),
+> the root [README.md](../README.md), MODEL_CARD.md, DATASET_CARD.md and HONEST_LIMITATIONS.md.
+> Verify with `python scripts/verify_claims.py`.
+
 # JUDGE OBJECTION HANDBOOK — pre-emptive rebuttals
 
 > ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
@@ -51,7 +57,7 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 ## C · IMPROVEMENT IN REWARDS (20% weight) objections
 
 **Q9**. "How do I know training actually happened?"
-**A**. Three converging proofs: (1) BC loss curve — 5.624 → 0.233 over 12 epochs in 17.77s on RTX 4080 (`reward_curve.png`, `loss_components.png`), (2) deterministic eval — 95.5–97% solve on REINFORCE v2 vs ~22% null random, (3) inferential — Wilcoxon p=6.6e-35 + bootstrap Cohen d CI95 [2.66, 3.96] strictly excludes zero.
+**A**. Three converging proofs: (1) BC loss curve — 5.624 → 0.233 over 12 epochs in 17.77s on RTX 4080 (`reward_curve.png`, `loss_components.png`), (2) deterministic eval — 95.5–97% solve on REINFORCE v2 vs ~22% null random, (3) inferential — Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md] + bootstrap Cohen d CI95 [2.66, 3.96] strictly excludes zero.
 **Receipt**: `wordle_real_reinforce_v2_curve.json` + `pass27_B_real_episodic_bootstrap.json` (real paired arrays; old `v2_inferential_stats.json` RERUN-PENDING, A2).
 
 **Q10**. "Bootstrap leaderboard CI95 is suspiciously tight — was it real bootstrap?"
@@ -118,7 +124,7 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 **A**. Cohen 1988 thresholds: 0.8 = "large", 1.2 = "very large". Anything past 1.2 is qualitatively "the distributions barely overlap". Trained mean 1.5982 vs untrained 0.2203 with comparable variance gives d ~5. Bootstrap CI95 [2.66, 3.96] (n=2000 resamples) shows the uncertainty around the point estimate. The distributions really don't overlap — the policy went from "almost never solves" to "almost always solves with ≤6 turns".
 **Receipt**: RERUN-PENDING (A2) — `v2_inferential_stats.json` deleted; real paired arrays in `pass27_B_real_episodic_bootstrap.json`.
 
-**Q23**. "Why p=6.6e-35 — is that scientifically meaningful?"
+**Q23**. "Why p=[STRUCK — fabricated; see CLAIMS_LEDGER.md] — is that scientifically meaningful?"
 **A**. Wilcoxon signed-rank statistic 20100 with n=200 paired samples. p-value reflects extreme separation, not statistical malpractice. The point isn't the p-value magnitude — it's that under H0 (no improvement), this separation has effectively zero probability. Power analysis shows minimum detectable d at n=200 is 0.28. Our observed d is 18.3× the detection threshold.
 **Receipt**: RERUN-PENDING (A2) — `statistical_power_analysis.json` deleted; recompute from `pass27_B_real_episodic_bootstrap.json`.
 
@@ -247,7 +253,7 @@ Format: **Q** = the objection · **A** = the rebuttal · **Receipt** = the on-di
 **Receipt**: `VICTORY_CALCULUS.md`, `HYPERMODE_DEEP_AUDIT_PASS22.md` §7.
 
 **Q49**. "Why didn't you train more REINFORCE — push it past 97% solve?"
-**A**. Diminishing returns. REINFORCE v2 already at 95.5–97% solve with Cohen d 5.13 (18× the n=200 detection threshold) and Wilcoxon p=6.6e-35. Pushing to 98% would require either ≥30K episodes (3+ hours GPU) or a tighter curriculum tuning that risks brittleness. Compute reserved for U1 real-episodic-bootstrap which closes a higher-impact credibility gap (L5).
+**A**. Diminishing returns. REINFORCE v2 already at 95.5–97% solve with Cohen d 5.13 (18× the n=200 detection threshold) and Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md]. Pushing to 98% would require either ≥30K episodes (3+ hours GPU) or a tighter curriculum tuning that risks brittleness. Compute reserved for U1 real-episodic-bootstrap which closes a higher-impact credibility gap (L5).
 **Receipt**: `wordle_real_reinforce_v2_curve.json` + `MASTER_UPGRADE_PLAN_PASS22.md` §U26 explains the choice.
 
 **Q50**. "Your three NEW pass-22-v2 docs (`PASS22_EXECUTION_LOG`, `VICTORY_CALCULUS`, `ALL_250_FEATURES_LIVE_PROOF`) — are they evidence or padding?"

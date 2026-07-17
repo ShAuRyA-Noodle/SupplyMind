@@ -1,3 +1,9 @@
+> [!WARNING]
+> **PRE-AUDIT ARTIFACT.** Numbers in this file predate the 2026-07-02 fabrication audit and
+> some were struck. Authoritative, receipt-backed claims live in [CLAIMS_LEDGER.md](CLAIMS_LEDGER.md),
+> the root [README.md](../README.md), MODEL_CARD.md, DATASET_CARD.md and HONEST_LIMITATIONS.md.
+> Verify with `python scripts/verify_claims.py`.
+
 # HYPERMODE DEEP AUDIT — pass 22 brutal
 
 > ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
@@ -19,7 +25,7 @@ No marketing prose. Every line is auditable.
 | HF Space deployed | https://huggingface.co/spaces/Shaurya-Noodle/Supplymind | ✅ HTTP 200 verified now |
 | OpenEnv compliance | MCPEnvironment subclass + 6 non-reserved MCP tools + valid `openenv.yaml` | ✅ compliant |
 | Trained agents in leaderboard | 9 (RAP-XC, MaskablePPO v2/v3, RecurrentPPO, A2C, SAC-Discrete, CQL, Heuristic, Random) | ✅ but 16/27 cells `no_data` |
-| RL post-training real proof | REINFORCE v2 95.5–97% solve, Cohen d 5.133, Wilcoxon p=6.6e-35 | ✅ `wordle_real_reinforce_v2_curve.json` |
+| RL post-training real proof | REINFORCE v2 95.5–97% solve, Cohen d 5.133, Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md] | ✅ `wordle_real_reinforce_v2_curve.json` |
 | Adversarial reward-hack defense | 19/19 blocked, 1/1 legit accepted | ✅ `adversarial_20_attack_gauntlet.json` |
 | Conformal action filter | 0.9001 empirical vs 0.9000 target | ✅ `conformal_calibration.json` |
 | Multi-level + Mondrian conformal | RERUN-PENDING (A5) — computed on noise-NLL | `conformal_multilevel.json` deleted; real path `conformal_calibration.json` |

@@ -1,3 +1,9 @@
+> [!WARNING]
+> **PRE-AUDIT ARTIFACT.** Numbers in this file predate the 2026-07-02 fabrication audit and
+> some were struck. Authoritative, receipt-backed claims live in [CLAIMS_LEDGER.md](CLAIMS_LEDGER.md),
+> the root [README.md](../README.md), MODEL_CARD.md, DATASET_CARD.md and HONEST_LIMITATIONS.md.
+> Verify with `python scripts/verify_claims.py`.
+
 # FINAL_SUBMIT INDEX — single page, every artifact, one click away
 
 > ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
@@ -88,7 +94,7 @@ Top-level receipts in `FINAL_SUBMIT/receipts/`:
 - ~~master_audit_summary_pass24_v5_FINAL.json~~ — **STRUCK (D9)**, hardcoded 248-of-250 count; deleted, regenerate via `scripts/verify_claims.py` (P2.2)
 
 ### Pass 23 (foolproof Colab + OpenEnv compliance)
-- [pass23_colab_local_smoke.json](receipts/pass23_colab_local_smoke.json) — 100% solve, p=1.87e-34, d=3.89, 9.8s
+- [pass23_colab_local_smoke.json](receipts/pass23_colab_local_smoke.json) — 100% solve, p=[STRUCK — fabricated; see CLAIMS_LEDGER.md], d=3.89, 9.8s
 - [pass23_openenv_compliance_mcp_fuzz.json](receipts/pass23_openenv_compliance_mcp_fuzz.json) — compliant, 14/14 fuzz safe
 
 ### Pass 22 (squeeze, 14 sub-receipts)

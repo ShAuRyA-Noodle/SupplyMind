@@ -1,3 +1,9 @@
+> [!WARNING]
+> **PRE-AUDIT ARTIFACT.** Numbers in this file predate the 2026-07-02 fabrication audit and
+> some were struck. Authoritative, receipt-backed claims live in [CLAIMS_LEDGER.md](CLAIMS_LEDGER.md),
+> the root [README.md](../README.md), MODEL_CARD.md, DATASET_CARD.md and HONEST_LIMITATIONS.md.
+> Verify with `python scripts/verify_claims.py`.
+
 # BRUTAL BREAKDOWN — 19 PARTS · IMPLEMENTATION MAP
 
 > ⚠️ **UNDER FABRICATION CLEANUP (2026-07-02 audit).** Several claims in this file were machine-checked FALSE or UNVERIFIED and are being struck or re-run: fabricated Wilcoxon p-values (from a sorted-"paired" test, generators deleted), "0.9001 conformal coverage" (computed on Gaussian noise), the rigged "100% attacks blocked" gauntlet, the hardcoded feature-demonstration count, the "25-judge / 12-frontier" panel (only 6 judges evidenced), a "DPO-fine-tuned judge" that never trained, the "$135.5M twin savings" receipt (exit -9), and 3 model dirs that do not exist on disk (snowflake-arctic-embed-l, bge-reranker-v2-m3, tabpfn-v2-clf). Do not cite numbers here without checking FINAL_SUBMIT/CLAIMS_LEDGER.md.
@@ -193,7 +199,7 @@ URL: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind. Receipt: `pass25_h
 | Requirement | nb 08 | nb 09 |
 |---|---|---|
 | Connects to LIVE env (not static dataset) | ✅ HTTP health check + local mirror | ✅ HTTP health check + local mirror |
-| Produces evidence of learning | ✅ 100% solve, p=1.87e-34, d=3.89 | ✅ pre/post-GRPO + same-axes plot |
+| Produces evidence of learning | ✅ 100% solve, p=[STRUCK — fabricated; see CLAIMS_LEDGER.md], d=3.89 | ✅ pre/post-GRPO + same-axes plot |
 | Re-runnable by judge | ✅ top-to-bottom executable, 9.8s on CPU | ✅ top-to-bottom on T4, ~12 min |
 | Reward/loss plots at end | ✅ `colab_reproduction.png` saved | ✅ `llama_grpo_curve.png` saved during run |
 
@@ -208,7 +214,7 @@ URL: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind. Receipt: `pass25_h
 | Show baseline failing | `plots/colab_reproduction.png` left bar (random uniform 10% solve) *(before_after.png STRUCK — from fabricated leaderboard, A1)* |
 | Show reward/verifier output | `dual_verifier_smoke.json` + 4-component reward breakdown in env step `info` field |
 | Show trained model winning | `plots/colab_reproduction.png` right bar (REINFORCE 100% solve) |
-| Show measurable improvement | Wilcoxon p=1.87e-34, Cohen d=3.89, +855% reward, +90pp solve |
+| Show measurable improvement | Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md], Cohen d=3.89, +855% reward, +90pp solve |
 | Explain anti-hacking safeguards | `adversarial_20_attack_gauntlet.json` + 4-layer defense table in `STORY_README.md` §5 |
 
 ---
@@ -275,7 +281,7 @@ URL: https://huggingface.co/spaces/Shaurya-Noodle/Supplymind. Receipt: `pass25_h
 | What judges value | How we address |
 |---|---|
 | Ambition over polish | Supply-chain RL with EMDAT-1500 RAG + 4-method causal counterfactual is genuinely fresh |
-| Real evidence over clean code | Real REINFORCE 100% solve in 9.8s, real Wilcoxon p=1.87e-34, real bootstrap CI95 |
+| Real evidence over clean code | Real REINFORCE 100% solve in 9.8s, real Wilcoxon p=[STRUCK — fabricated; see CLAIMS_LEDGER.md], real bootstrap CI95 |
 | Fresh domain over well-trodden | NOT chess/snake/tic-tac-toe/grid-world — supply-chain is underexplored in OpenEnv hub |
 | Energy + conviction | We picked supply chain because it's genuinely interesting, not chasing what we think judges want |
 | End-to-end story | `STORY_README.md` problem → env → training → improvement → why-it-matters |
