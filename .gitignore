@@ -18,6 +18,9 @@ env/
 .pytest_cache/
 wandb/
 
+# P0.4 archive-out-of-repo target (see CLAUDE.md) — lives beside the repo, never tracked
+Sleep-Token-ARCHIVE/
+
 # Stray pip version artifacts
 0.*/
 1.*/

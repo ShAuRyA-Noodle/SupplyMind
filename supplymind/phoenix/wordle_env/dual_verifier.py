@@ -24,17 +24,23 @@ For SupplyMind we already have this de-facto:
 from __future__ import annotations
 
 import logging
-import os
 import time
 from collections import deque
 from dataclasses import dataclass, field
 from typing import Optional
 
-import requests
-
 logger = logging.getLogger(__name__)
 
-OLLAMA_URL = os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+# Model-layer judge schema (enforced by the gateway).
+_MODEL_JUDGE_SCHEMA: dict = {
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["score"],
+    "properties": {
+        "score": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "reasoning": {"type": "string"},
+    },
+}
 
 
 @dataclass
@@ -90,7 +96,17 @@ class DualVerifier:
     # -------- model layer --------
     def _model_wordle(self, guess: str, history: list[dict],
                        remaining_guesses: int) -> tuple[float | None, bool | None, str]:
-        """Ask local Ollama judge: 'is this guess strategically sound?'"""
+        """Ask the model-layer judge (via the gateway) 'is this guess sound?'
+
+        The model layer is OPTIONAL by design (RLVR §31-33): when no provider is
+        available the model score is None and the composite falls back to the
+        rule score. That absence is surfaced honestly (never faked into a score).
+        Provider is env-driven (openrouter default | ollama edge); the model slug
+        is ``self.model_name`` (an edge tag by default)."""
+        from supplymind.llm.providers import get_provider
+
+        from rl.lora.edge_capability_matrix import run_coro_sync
+
         prompt = (
             f"You are evaluating a Wordle guess. The player has {remaining_guesses} "
             f"guesses remaining. Past guesses + feedback:\n"
@@ -103,25 +119,18 @@ class DualVerifier:
             'Respond with JSON only: {"score": 0.XX, "reasoning": "<one sentence>"}'
         )
         try:
-            r = requests.post(
-                f"{OLLAMA_URL}/api/chat",
-                json={
-                    "model": self.model_name,
-                    "messages": [{"role": "user", "content": prompt}],
-                    "format": "json", "stream": False,
-                    "options": {"temperature": 0.1, "num_ctx": 4096},
-                },
-                timeout=30,
-            )
-            r.raise_for_status()
-            import json as _json
-            content = r.json()["message"]["content"]
-            obj = _json.loads(content)
-            score = float(obj.get("score", 0.5))
-            score = max(0.0, min(1.0, score))
-            return score, score >= 0.5, obj.get("reasoning", "")[:200]
+            resp = run_coro_sync(get_provider().complete(
+                [{"role": "user", "content": prompt}],
+                model=self.model_name, schema=_MODEL_JUDGE_SCHEMA,
+                max_tokens=200, temperature=0.1,
+            ))
         except Exception as e:  # noqa: BLE001
             return None, None, f"unavailable: {str(e)[:120]}"
+        if not (resp.ok and resp.parsed):
+            reason = resp.degrade_reason or resp.error or "no parseable score"
+            return None, None, f"unavailable: {reason[:120]}"
+        score = max(0.0, min(1.0, float(resp.parsed.get("score", 0.5))))
+        return score, score >= 0.5, str(resp.parsed.get("reasoning", ""))[:200]
 
     def _format_history(self, history: list[dict]) -> str:
         if not history:

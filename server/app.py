@@ -276,6 +276,46 @@ _mount_phoenix("/twin", "supplymind.phoenix.counterfactual_twin.router", "twin (
 _mount_phoenix("/replay", "supplymind.phoenix.realtime_v5.replay_adapter", "replay (v5)")
 
 
+# /replay/health — real readiness probe for the replay adapter.
+#
+# The replay router exposes /replay/status + /replay/hormuz-closure but no
+# /health, so master.html's LED probe + the Makefile smoke check 404'd. This is
+# a GENUINE probe (not a fig-leaf 200): it actually loads the frozen replay
+# cache and reports readiness = the router is mounted AND the cache holds >= 1
+# event. Only registered when the real router mounted; if the import failed the
+# _mount_phoenix fallback already serves a degraded /replay/health.
+if "/replay" not in _phoenix_mount_errors:
+    @app.get("/replay/health", tags=["replay"])
+    def _replay_health() -> dict:
+        try:
+            from supplymind.phoenix.realtime_v5.replay_adapter import status as _replay_status
+            st = _replay_status()
+            cache_exists = bool(st.get("cache_exists"))
+            n_events = int(st.get("n_events", 0) or 0)
+            ready = cache_exists and n_events > 0
+            out = {
+                "ok": ready,
+                "status": "ok" if ready else "degraded",
+                "cache_exists": cache_exists,
+                "n_events": n_events,
+                "built_at": st.get("built_at"),
+                "force_replay_env": st.get("force_replay_env"),
+                "cache_path": st.get("cache_path"),
+            }
+            if not ready:
+                out["reason"] = (
+                    "replay cache missing or empty — run "
+                    "python -m supplymind.phoenix.realtime_v5.freeze_cache"
+                )
+            return out
+        except Exception as e:  # noqa: BLE001 — a probe must report, not 500
+            return {
+                "ok": False,
+                "status": "degraded",
+                "reason": f"replay readiness probe failed: {type(e).__name__}: {str(e)[:200]}",
+            }
+
+
 # /phoenix/status — introspection endpoint
 @app.get("/phoenix/status", tags=["phoenix (v5)"])
 def _phoenix_status() -> dict:
@@ -692,6 +732,15 @@ class PredictRequest(BaseModel):
     state: list[float]  # 408-float state vector
     action_mask: list[bool] | None = None  # Optional 280-bool mask
     desired_return: float = 0.7  # DT return-to-go conditioning
+    scenario_text: Optional[str] = Field(
+        None,
+        description="Optional natural-language scenario. When supplied, the "
+                    "SupplyMind analyst (routed through supplymind.llm — the one "
+                    "gateway) AUGMENTS the RL action with a calibrated risk "
+                    "verdict. Omitted -> no analyst block (never faked). With no "
+                    "LLM key the analyst block is present but degraded LOUD; the "
+                    "RL fields are unaffected.",
+    )
 
 
 class PredictResponse(BaseModel):
@@ -714,6 +763,15 @@ class PredictResponse(BaseModel):
     )
     counterfactual: Optional[str] = Field(
         None, description="Real counterfactual text, or null when counterfactual_available is False"
+    )
+    analyst: Optional[dict] = Field(
+        None,
+        description="LLM analyst augmentation (only when scenario_text was "
+                    "supplied). Routed through supplymind.llm.analyst -> providers "
+                    "(the one gateway). Carries `routed_through`, `provider`, "
+                    "`model`, `ok`, `degraded`, `degrade_reason`, and — on success "
+                    "— the strict-JSON decision. It NEVER overrides the RL action; "
+                    "with no key it is degraded LOUD, not faked.",
     )
 
 
@@ -839,6 +897,11 @@ async def predict(request: PredictRequest):
     else:
         explanation = f"CVaR-optimal action: {action_type} targeting node {target_node_idx}"
 
+    # LLM augmentation — additive, gateway-routed, never touches the RL fields
+    # above. Only runs when the caller supplies scenario_text; degrades LOUD
+    # (surfaced flag + reason) when no key/daemon is available (CLAUDE.md §0).
+    analyst_block = await _predict_analyst_block(request.scenario_text)
+
     return PredictResponse(
         action_type=action_type,
         action_type_idx=action_type_idx,
@@ -850,7 +913,56 @@ async def predict(request: PredictRequest):
         degraded_reason=degraded_reason,
         counterfactual_available=False,
         counterfactual=None,
+        analyst=analyst_block,
     )
+
+
+async def _predict_analyst_block(scenario_text: Optional[str]) -> Optional[dict]:
+    """Run the SupplyMind analyst through the LLM gateway to AUGMENT /predict.
+
+    Returns None when no scenario_text is supplied (no analyst requested — never
+    faked). Otherwise returns a block that ALWAYS carries the routing provenance
+    and an honest ``degraded`` flag: with a live provider it includes the strict-
+    JSON decision; with a revoked/absent key it surfaces the real reason. It
+    never raises (an analyst error must not 500 /predict) and never alters the
+    real RL action.
+    """
+    if not scenario_text or not scenario_text.strip():
+        return None
+    try:
+        from supplymind.llm.analyst import Analyst
+        from supplymind.llm.providers import get_provider
+
+        provider = get_provider()
+        resp = await Analyst(provider=provider).assess(scenario_text)
+        block = {
+            "routed_through": "supplymind.llm.analyst -> providers (one gateway)",
+            "provider": resp.provider,
+            "model": resp.model,
+            "ok": resp.ok,
+            "degraded": resp.degraded,
+            "degrade_reason": resp.degrade_reason or None,
+            "latency_s": resp.latency_s,
+            "attempts": resp.attempts,
+        }
+        if resp.ok and resp.parsed:
+            block["decision"] = resp.parsed
+            block["risk_level"] = resp.parsed.get("risk_level")
+            block["confidence"] = resp.parsed.get("confidence")
+        else:
+            block["note"] = ("analyst degraded — RL action above is unaffected; "
+                             "no verdict fabricated (CLAUDE.md §0)")
+        return block
+    except Exception as e:  # noqa: BLE001 — augmentation must never take down /predict
+        logger.warning("/predict analyst augmentation failed: %s\n%s",
+                       e, traceback.format_exc())
+        return {
+            "routed_through": "supplymind.llm.analyst -> providers (one gateway)",
+            "ok": False,
+            "degraded": True,
+            "degrade_reason": f"{type(e).__name__}: {str(e)[:200]}",
+            "note": "analyst augmentation errored — RL action above is unaffected",
+        }
 
 
 # ============================================================
@@ -1350,25 +1462,36 @@ class FanOutResponse(BaseModel):
 
 
 @app.post("/live/intel-fan-out", response_model=FanOutResponse, tags=["live"])
-async def live_intel_fan_out(timeout_s: float = 45.0,
+async def live_intel_fan_out(timeout_s: float = 12.0,
                               parallel: int = 8,
-                              include_freshness: bool = True) -> FanOutResponse:
+                              include_freshness: bool = True,
+                              force_live: bool = False) -> FanOutResponse:
     """Fan out across all 20 real-data sources concurrently.
 
-    No synthetic substitution. Each source independent — failures don't
-    block successes. Per-source counts surfaced in `summary.n_events_per_source`.
+    Cache-first + non-blocking: a warm request (fresh 10-min snapshots) returns
+    in well under a second; a cold request is bounded by ``timeout_s`` — a slow
+    source is abandoned to a background refresh and reported honestly
+    (``degraded`` + ``background_refreshing`` in ``summary.per_source_freshness``)
+    rather than blocking the whole response. Set ``force_live=true`` to bypass
+    the cache and re-poll every source now.
+
+    No synthetic substitution. Each source independent — failures don't block
+    successes. The synchronous fan-out is run off the event loop so it never
+    stalls other requests.
 
     When ``include_freshness`` (default), the WP6.4 live-signal layer's
-    per-source freshness table (age / degraded flag per real source) is attached
-    at ``summary.live_source_freshness`` — cache-aware (TTL 10 min) so it never
+    per-source freshness table (age / degraded flag per real source) is also
+    attached at ``summary.live_source_freshness`` — cache-aware so it never
     hammers the free tiers.
     """
+    from starlette.concurrency import run_in_threadpool
     from supplymind.warroom.orchestrator_v2 import fan_out_all
-    result = fan_out_all(timeout_s=timeout_s, parallel=parallel)
+    result = await run_in_threadpool(
+        fan_out_all, timeout_s=timeout_s, force_live=force_live)
     if include_freshness:
         try:
             from supplymind.data.live import signal_counts
-            sc = signal_counts()
+            sc = await run_in_threadpool(signal_counts)
             result.setdefault("summary", {})
             result["summary"]["live_source_freshness"] = sc["counts"]
             result["summary"]["live_freshness_summary"] = sc["summary"]
@@ -1378,6 +1501,30 @@ async def live_intel_fan_out(timeout_s: float = 45.0,
             result["summary"]["live_source_freshness_error"] = (
                 f"{type(e).__name__}: {str(e)[:160]}")
     return FanOutResponse(**result)
+
+
+@app.get("/live/intel-fan-out/stream", tags=["live"])
+async def live_intel_fan_out_stream(timeout_s: float = 12.0,
+                                    force_live: bool = False):
+    """Server-Sent Events stream of the fan-out: one event per source as it
+    genuinely lands, then a final ``summary`` event.
+
+    These are REAL stage events (CLAUDE.md §0 — no sleep-choreography): a cached
+    source is emitted immediately, a live refresh the instant its fetch returns,
+    and sources still running at ``timeout_s`` are emitted as
+    ``background_refreshing`` so the war room fills progressively and honestly.
+    """
+    from fastapi.responses import StreamingResponse
+    from supplymind.warroom.orchestrator_v2 import fan_out_stream
+
+    async def _gen():
+        async for ev in fan_out_stream(timeout_s=timeout_s, force_live=force_live):
+            yield f"event: {ev.get('event', 'source')}\n"
+            yield f"data: {json.dumps(ev, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(_gen(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache",
+                                      "X-Accel-Buffering": "no"})
 
 
 # ============================================================

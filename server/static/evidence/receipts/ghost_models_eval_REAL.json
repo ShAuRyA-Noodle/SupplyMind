@@ -1,0 +1,143 @@
+{
+  "receipt": "R9_ghost_models_eval_REAL",
+  "generated_at_utc": "2026-07-02T23:12:17Z",
+  "git_sha": "063de5f86f705194b72ed315d625ead622d66093",
+  "principle": "Each ghost feature ships only with its honest measurement. KEEP = measurably helps; RETIRE = does not help on real data.",
+  "weights_on_disk": {
+    "snowflake-arctic-embed-l/model.safetensors": {
+      "present": true,
+      "bytes": 1336413848,
+      "sha256": "large-file-skipped"
+    },
+    "bge-reranker-v2-m3/model.safetensors": {
+      "present": true,
+      "bytes": 2271071852,
+      "sha256": "large-file-skipped"
+    },
+    "tabpfn-v2-clf/tabpfn-v2-classifier.ckpt": {
+      "present": true,
+      "bytes": 29016968,
+      "sha256": "large-file-skipped"
+    },
+    "mxbai-embed-large/model.safetensors": {
+      "present": true,
+      "bytes": 670328392,
+      "sha256": "large-file-skipped"
+    }
+  },
+  "retrieval": {
+    "n_chunks": 6483,
+    "n_queries": 53,
+    "device": "cuda",
+    "elapsed_s": 756.9,
+    "aggregate_metrics": {
+      "mxbai_alone": {
+        "p1": 0.9623,
+        "p3": 0.9245,
+        "p5": 0.8566,
+        "r5": 0.9811,
+        "r10": 0.9811,
+        "mrr": 0.978,
+        "ndcg10": 0.961
+      },
+      "snowflake_alone": {
+        "p1": 0.6981,
+        "p3": 0.6101,
+        "p5": 0.5283,
+        "r5": 0.7736,
+        "r10": 0.8208,
+        "mrr": 0.744,
+        "ndcg10": 0.7428
+      },
+      "ensemble_rrf": {
+        "p1": 0.8868,
+        "p3": 0.7547,
+        "p5": 0.7358,
+        "r5": 0.9811,
+        "r10": 0.9811,
+        "mrr": 0.9292,
+        "ndcg10": 0.8981
+      },
+      "ensemble_mean": {
+        "p1": 0.8679,
+        "p3": 0.7296,
+        "p5": 0.7019,
+        "r5": 0.9434,
+        "r10": 0.9434,
+        "mrr": 0.9022,
+        "ndcg10": 0.8878
+      },
+      "mxbai_rerank": {
+        "p1": 0.9245,
+        "p3": 0.8616,
+        "p5": 0.8189,
+        "r5": 0.9906,
+        "r10": 0.9906,
+        "mrr": 0.9591,
+        "ndcg10": 0.9385
+      },
+      "snowflake_rerank": {
+        "p1": 0.7925,
+        "p3": 0.673,
+        "p5": 0.6038,
+        "r5": 0.8208,
+        "r10": 0.8208,
+        "mrr": 0.8082,
+        "ndcg10": 0.7901
+      }
+    },
+    "ensemble": {
+      "embedders": [
+        "mxbai-embed-large",
+        "snowflake-arctic-embed-l"
+      ],
+      "mxbai_alone_p1": 0.9623,
+      "mxbai_alone_mrr": 0.978,
+      "best_blend": "ensemble_rrf",
+      "ensemble_p1": 0.8868,
+      "ensemble_mrr": 0.9292,
+      "p1_delta": -0.0755,
+      "mrr_delta": -0.0487,
+      "decision": "RETIRE"
+    },
+    "rerank": {
+      "available": true,
+      "model": "bge-reranker-v2-m3",
+      "mxbai_rerank_p1": 0.9245283018867925,
+      "mxbai_rerank_mrr": 0.9591194968553458,
+      "p1_delta_vs_mxbai": -0.037735849056603765,
+      "mrr_delta_vs_mxbai": -0.018867924528301883,
+      "decision": "RETIRE"
+    }
+  },
+  "tabpfn_judge": {
+    "task": "DataCo late-delivery-risk (binary) \u2014 pre-shipment features only",
+    "label": "Late_delivery_risk",
+    "n_train": 1000,
+    "n_test": 2000,
+    "n_features": 20,
+    "leakage_excluded": [
+      "Days for shipping (real)",
+      "Delivery Status",
+      "Order Status"
+    ],
+    "test_positive_rate": 0.552,
+    "majority_baseline_acc": 0.552,
+    "logreg_acc": 0.653,
+    "logreg_auc": 0.7028,
+    "tabpfn": {
+      "available": true,
+      "model": "tabpfn-v2-clf",
+      "device": "cuda",
+      "n_estimators": 4,
+      "acc": 0.682,
+      "auc": 0.7377,
+      "acc_delta_vs_majority": 0.13,
+      "acc_delta_vs_logreg": 0.029,
+      "auc_delta_vs_logreg": 0.0349,
+      "fit_predict_s": 6.8,
+      "decision": "KEEP",
+      "note": "Comparison is TabPFN vs standard tabular baselines (majority, logistic regression). The 6-judge OpenRouter LLM panel comparison is BLOCKED-ON-KEY (OPENROUTER_API_KEY revoked); this key-free measurement answers whether TabPFN adds predictive signal on the labeled task."
+    }
+  }
+}

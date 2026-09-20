@@ -45,6 +45,8 @@ class LeaderboardOut(BaseModel):
     generated_at: str
     n_submissions: int
     n_baselines: int
+    degraded: bool = False
+    degraded_reason: str | None = None
     rows: list[LeaderboardRow]
 
 

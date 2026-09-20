@@ -37,7 +37,6 @@ baseline = [
 ]
 dev = [
     "pytest>=7.0.0",
-    "pytest-asyncio>=0.21.0",
     "httpx>=0.25.0",
 ]
 rl = [
@@ -63,7 +62,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-asyncio_mode = "auto"
 addopts = ["--import-mode=importlib"]
 
 # Top-level single-file modules. packages.find CANNOT discover these (it only

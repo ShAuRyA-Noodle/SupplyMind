@@ -74,22 +74,22 @@ data (audit_5). Do not cite "8/8" until re-run on real Brent.
 | Bullet | Status | Path(s) | Note |
 |---|---|---|---|
 | `dpo_judge/*` directory | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/` | 6 files |
-| `prepare_preference_data.py` | PRESENT | `dpo_judge/prepare_preference_data.py:1-50+` | DPO pair builder |
-| `train_dpo_trl.py` | PRESENT | `dpo_judge/train_dpo_trl.py:1-50+` | TRL trainer |
-| `train_dpo_roll.py` | PRESENT | `dpo_judge/train_dpo_roll.py:1-30+` | ROLL-integrated |
-| `train_grpo_env.py` | PRESENT | `dpo_judge/train_grpo_env.py:1-50+` | GRPO multi-turn |
-| `train_grpo_live_env.py` | PRESENT | `dpo_judge/train_grpo_live_env.py:1-50+` | live-env GRPO |
-| `evaluate_delta.py` | PRESENT | `dpo_judge/evaluate_delta.py:1-50+` | base vs DPO delta |
-| 21 preference pairs | PRESENT | `dpo_judge/data/preference_pairs.jsonl:1` | 21 lines |
-| `dpo_qwen25_3b_supplymind.yaml` | PRESENT | `roll_integration/configs/dpo_qwen25_3b_supplymind.yaml:1` | DPO config |
-| `agentic_supplymind_gigpo.yaml` | PRESENT | `roll_integration/configs/agentic_supplymind_gigpo.yaml:1` | GiGPO config |
+| `prepare_preference_data.py` | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/prepare_preference_data.py:1-50+` | DPO pair builder |
+| `train_dpo_trl.py` | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/train_dpo_trl.py:1-50+` | TRL trainer |
+| `train_dpo_roll.py` | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/train_dpo_roll.py:1-30+` | ROLL-integrated |
+| `train_grpo_env.py` | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_env.py:1-50+` | GRPO multi-turn |
+| `train_grpo_live_env.py` | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py:1-50+` | live-env GRPO |
+| `evaluate_delta.py` | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/evaluate_delta.py:1-50+` | base vs DPO delta |
+| 21 preference pairs | PRESENT | `versions/v5_phoenix/roll_integration/dpo_judge/data/preference_pairs.jsonl:1` | 21 lines |
+| `dpo_qwen25_3b_supplymind.yaml` | PRESENT | `versions/v5_phoenix/roll_integration/configs/dpo_qwen25_3b_supplymind.yaml:1` | DPO config |
+| `agentic_supplymind_gigpo.yaml` | PRESENT | `versions/v5_phoenix/roll_integration/configs/agentic_supplymind_gigpo.yaml:1` | GiGPO config |
 
 ## A.5 ROLL Integration
 
 | Bullet | Status | Path(s) | Note |
 |---|---|---|---|
-| `SupplyMindRollEnv` | PRESENT | `roll_integration/env/supplymind_roll_env.py:32-89` | reset/step/grade |
-| `SupplyMind3JudgeRewardWorker` | PRESENT | `roll_integration/reward_bridge/supplymind_judge_worker.py:44-100` | majority-vote |
+| `SupplyMindRollEnv` | PRESENT | `versions/v5_phoenix/roll_integration/env/supplymind_roll_env.py:32-89` | reset/step/grade |
+| `SupplyMind3JudgeRewardWorker` | PRESENT | `versions/v5_phoenix/roll_integration/reward_bridge/supplymind_judge_worker.py:44-100` | majority-vote |
 | forecast tool | PRESENT | `agentic_supplymind_gigpo.yaml:9-11` | endpoint defined |
 | rag tool | PRESENT | `agentic_supplymind_gigpo.yaml:12-14` | endpoint defined |
 | rl_act tool | PRESENT | `agentic_supplymind_gigpo.yaml:15` | RL-act endpoint |
@@ -151,7 +151,7 @@ data (audit_5). Do not cite "8/8" until re-run on real Brent.
 
 | Bullet | Status | Path(s) | Note |
 |---|---|---|---|
-| Sigmoid warning + bell active + exp decay | PRESENT | `server/engine/disruption.py` | curve composition |
+| Sigmoid warning + bell active + exp decay | PRESENT | `server/engine/disruptions.py` | curve composition |
 | BFS propagation through graph | PRESENT | `server/engine/graph.py` | BFS w/ severity decay |
 | `SEVERITY_DECAY_PER_HOP = 0.20` | PRESENT | `server/engine/graph.py:30` | exact constant |
 | `_ever_offline` / `_customer_delays` / `_active_hedges` / `_alerted_suppliers` / `_rerouted_edges` | PRESENT | `server/supply_environment.py` | episode flags |
@@ -191,7 +191,7 @@ data (audit_5). Do not cite "8/8" until re-run on real Brent.
 |---|---|---|
 | `reset(task_id, seed)` deterministic | PRESENT | `server/supply_environment.py` |
 | `step(action) -> obs` | PRESENT | `server/supply_environment.py` |
-| `grade()` 0-1 + breakdown | PRESENT | `server/engine/grader.py` |
+| `grade()` 0-1 + breakdown | PRESENT | `server/graders/grader.py` |
 | Graceful no-op after `done=True` | PRESENT | `supply_environment.py` |
 | Jitter within determinism | PRESENT | seeded `np.random.default_rng` |
 

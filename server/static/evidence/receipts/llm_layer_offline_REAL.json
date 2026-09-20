@@ -1,0 +1,103 @@
+{
+  "receipt": "llm_layer_offline_REAL",
+  "wp": "WP6.1 \u2014 LLM provider layer + analyst-v5 port",
+  "framework": "Offline verification of the supplymind.llm provider/analyst/panel layer via httpx.MockTransport (zero live calls). Live A/B Brier + 12-judge alpha are BLOCKED-ON-KEY (OpenRouter key revoked).",
+  "git_sha": "c659cfd98b17acaff5a8b8449688414eca961b1b",
+  "python": "3.11.9",
+  "generated_at": 1784070127.0383415,
+  "match": true,
+  "exit_code": 0,
+  "files_built": [
+    "supplymind/llm/providers.py",
+    "supplymind/llm/analyst.py",
+    "supplymind/llm/panel.py",
+    "tests/test_llm_layer.py"
+  ],
+  "files_touched": [
+    "supplymind/llm/client.py (added optional transport kwarg for offline tests)"
+  ],
+  "offline_verification": {
+    "mock_transport_tests": {
+      "command": "python -m pytest tests/test_llm_layer.py -q",
+      "exit_code": 0,
+      "n_passed": 25,
+      "n_failed": 0,
+      "summary_line": "25 passed, 1 warning in 0.57s",
+      "elapsed_s": 1.81
+    },
+    "structural_port_validation": {
+      "few_shot_count": 8,
+      "few_shots_all_valid_json_keys": true,
+      "few_shot_risk_levels": [
+        "LOW",
+        "HIGH",
+        "CRITICAL",
+        "LOW",
+        "CRITICAL",
+        "LOW",
+        "MEDIUM",
+        "HIGH"
+      ],
+      "few_shot_level_coverage": [
+        "CRITICAL",
+        "HIGH",
+        "LOW",
+        "MEDIUM"
+      ],
+      "schema_required_keys": [
+        "decision",
+        "evidence",
+        "counterfactual",
+        "precedent",
+        "risk_level",
+        "confidence"
+      ],
+      "system_prompt_chars": 2832,
+      "system_prompt_declares_all_output_keys": true,
+      "decoding_params": {
+        "temperature": 0.15,
+        "top_k": 40,
+        "top_p": 0.9,
+        "num_ctx": 16384,
+        "num_predict": 768,
+        "repeat_penalty": 1.05
+      },
+      "message_turns_for_one_scenario": 18,
+      "port_ok": true
+    },
+    "no_key_loud_degrade_demo": {
+      "liveness_ok": false,
+      "liveness_reason": "OPENROUTER_API_KEY absent (env + .env) \u2014 provider unavailable",
+      "assess_ok": false,
+      "assess_degraded": true,
+      "assess_parsed_is_none": true,
+      "assess_degrade_reason": "OPENROUTER_API_KEY not set in env or .env \u2014 cannot make a live OpenRouter call (CLAUDE.md \u00a70: no faking around a missing key)",
+      "verdict_fabricated": false
+    }
+  },
+  "capabilities_built": [
+    "providers.py: single interface, openrouter(default)|ollama backends, env-driven selection (SUPPLYMIND_LLM_PROVIDER) and model slug (SUPPLYMIND_LLM_MODEL / SUPPLYMIND_OLLAMA_MODEL, NEVER hardcoded)",
+    "structured-JSON enforcement at the interface (schema validate + retry-on-invalid corrective nudge); OpenRouter response_format json_schema; Ollama format=json",
+    "every call logged to .openrouter_usage.jsonl (SUPPLYMIND_USAGE_LOG overridable); provider-level row with ok/degraded/tokens",
+    "startup liveness() that FAILS LOUD (ok=False + reason) on absent key/daemon \u2014 never a fake OK",
+    "analyst.py: v5 system prompt + 8 few-shots + decoding params transcribed verbatim from supplymind-analyst_v5.modelfile.txt; strict 6-key decision schema; --validate (offline) + --holdout (loud-exit without a live provider) CLI",
+    "panel.py: N-judge scaffold, env-driven slugs, ordinal Krippendorff alpha, median consensus, unparseable/failed judges counted SEPARATELY (excluded from alpha, never faked)"
+  ],
+  "blocked_on_key": [
+    {
+      "item": "WP6.2 live A/B Brier calibration (analyst-v5 vs bare model)",
+      "reason": "OPENROUTER_API_KEY revoked (401). Code path + holdout scenarios ready; no calibration numbers fabricated."
+    },
+    {
+      "item": "python -m supplymind.llm.analyst --holdout (live verdicts)",
+      "reason": "Requires a live provider; CLI loud-exits (status BLOCKED) without one. Demonstrated offline that it degrades, not fakes."
+    },
+    {
+      "item": "WP7.2 live 12-judge panel + real Krippendorff alpha",
+      "reason": "Panel scaffold complete + mock-tested; live run needs key."
+    }
+  ],
+  "integration_followups_not_in_scope": [
+    "server/app.py: route /predict + war-room panel through supplymind.llm.providers/analyst (owned by server WP; noted only)"
+  ]
+}

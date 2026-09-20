@@ -1,0 +1,44 @@
+{
+  "finding_id": "ppo-final-degenerate",
+  "title": "PPO end-of-run checkpoint (ppo_final_*) is degenerate; ppo_best_* is the correct one",
+  "severity": "defect (training artifact); NOT user-facing (already refused downstream)",
+  "generated_at_utc": "2026-07-17T15:10:46Z",
+  "git_sha": "849f6d9cfaff65b7bb19792c4f7014f658f7b473",
+  "status": "OK",
+  "match": true,
+  "exit_code": 0,
+  "method": "First-party eval using the exact benchmark methodology (MaskablePPO + saved VecNormalize obs stats + 47-dim per-dimension action mask; grader score env.grade()['score'] at episode end). 30 fixed seeds on easy_typhoon_response, deterministic predict.",
+  "task": "easy_typhoon_response",
+  "n_seeds": 30,
+  "seeds": [42, 99, 7, 123, 256, 512, 1024, 2, 17, 71, 88, 314, 271, 161, 8, 33, 64, 128, 555, 777, 11, 22, 44, 55, 66, 202, 303, 404, 606, 909],
+  "measured": {
+    "ppo_final_easy.zip": {
+      "grade_mean": 0.3212,
+      "grade_std": 0.0007,
+      "n_episodes": 30,
+      "distinct_action_types_chosen": 3,
+      "action_type_histogram": {"6": 432, "0": 144, "1": 24},
+      "verdict": "DEGENERATE: policy has collapsed to a single dominant action type (type 6 in 432/600 steps); grade ~0.32 is near the do-nothing floor."
+    },
+    "ppo_best_easy/best_model.zip": {
+      "grade_mean": 0.6836,
+      "grade_std": 0.026,
+      "n_episodes": 30,
+      "distinct_action_types_chosen": 5,
+      "action_type_histogram": {"6": 237, "5": 333, "1": 11, "2": 11, "0": 8},
+      "verdict": "HEALTHY: diverse action selection, grade ~0.68. This is the EvalCallback-selected best checkpoint and the one that must be used."
+    }
+  },
+  "grade_gap_best_minus_final": 0.3624,
+  "evidence_trail": {
+    "final_saved_at": "rl/train_ppo.py:249 (ppo_final_{task}.zip written at end of training, no degeneracy guard)",
+    "best_saved_at": "rl/train_ppo.py:200 (EvalCallback -> ppo_best_{task}/best_model.zip)",
+    "downstream_consumer_handled": "benchmark/run_full_benchmark.py:236 loads ppo_best_{tk}/best_model.zip and explicitly refuses ppo_final (documented run_full_benchmark.py:218-220: 'end-of-run ppo_final_* checkpoints are near-degenerate ... using them would MIS-report PPO downward, so we do not').",
+    "not_served_elsewhere": "server/ does not load either PPO checkpoint for /predict; supplymind/phoenix/counterfactual_twin/twin.py loads the v3 gethsemane checkpoints (versions/v3_arcadia/checkpoints/gethsemane/ppo_*.zip), NOT ppo_final; supplymind/phoenix/arena baseline 'MaskablePPO-v3' derives from R6_EUCLIDIAN.json (the good v3 policy), NOT ppo_final."
+  },
+  "remaining_action": {
+    "owner": "rl/ maintainer (NOT this integrity-sweep agent's scope)",
+    "recommendation": "In rl/train_ppo.py, at the ppo_final save site (:249), emit a loud logged warning that the end-of-run checkpoint may be degenerate and that ppo_best_{task} is the checkpoint to load/serve; or refuse to save ppo_final when its eval grade is materially below the best checkpoint. This receipt records the defect so it cannot silently return.",
+    "blocker_tag": "cross-scope (rl/ owned by another agent)"
+  }
+}

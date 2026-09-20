@@ -1,0 +1,237 @@
+{
+  "receipt": "replay_proof_REAL",
+  "what": "Historical replay proof: 'what SupplyMind would have said on the day vs what actually happened', on real documented crises, with a hard no-lookahead guard enforced in code. Untuned, run once. The realized oil-channel impact uses the real R6 ARIMA counterfactual; the engine Monte-Carlo continuity channel is real; the LLM analyst hop is BLOCKED-ON-KEY (marked pending).",
+  "command": "python -m supplymind.warroom.replay_proof --receipt tests/receipts/replay_proof_REAL.json",
+  "git_sha": "849f6d9cfaff65b7bb19792c4f7014f658f7b473",
+  "generated_at": "2026-07-17T15:12:16Z",
+  "featured_event": "iran_true_promise_2_2024_10",
+  "no_lookahead_enforcement": "supplymind.warroom.replay_proof.guard_asof raises NoLookaheadError on any datum dated on/after the as-of date; both the FRED pre-window and the prior-analog set pass through it. Proven by tests/test_trust_replay.py (a future-dated datum is refused).",
+  "aggregate": {
+    "n_eligible": 6,
+    "n_scored": 6,
+    "n_directional_correct": 3,
+    "directional_hit_rate": 0.5,
+    "median_brent_abs_error_vs_peak_usd": 10.74,
+    "honest_reading": "Across 6 eligible documented crises replayed with a hard no-lookahead guard, SupplyMind's as-of directional call was correct on 3/6 (50%). This is an untuned, run-once result: the system was never adjusted to improve on any known event (that would be hindsight fitting). Median absolute Brent-level error vs the realised peak was $10.7/bbl. The forward oil-price channel is the material one for chokepoint events; the engine supply-continuity channel is near-zero by design (rerouting preserves continuity) and is surfaced honestly."
+  },
+  "per_event": [
+    {
+      "event_id": "iran_true_promise_1_2024_04",
+      "event_name": "Iran 'True Promise' operation — first direct drone+missile attack on Israel",
+      "as_of": "2024-04-13",
+      "lookahead_guard": "enforced — 31 FRED rows + 3 analogs, all dated < 2024-04-13; 0 violations",
+      "risk_level": "LOW",
+      "forward_brent_p50": 80.0,
+      "forward_direction": "down",
+      "pre_close": 93.12,
+      "realized_peak": 91.29,
+      "realized_post7d": 88.29,
+      "realized_direction": "down",
+      "realized_oil_channel_usd": 457072239.67168766,
+      "engine_mc_continuity_usd": 0.0,
+      "directional_correct": true,
+      "brent_abs_error_vs_peak_usd": 11.29,
+      "verdict": "As of 2024-04-13 (pre-event Brent $93.12), SupplyMind assessed risk=LOW and projected Brent $80.0 (down). Brent actually down to a peak of $91.29 (-2.0%) and sat at $88.29 (-5.2%) ~7 trading days out. Direction CALLED CORRECTLY."
+    },
+    {
+      "event_id": "iran_true_promise_2_2024_10",
+      "event_name": "Iran 'True Promise II' ballistic missile barrage on Israel",
+      "as_of": "2024-10-01",
+      "lookahead_guard": "enforced — 30 FRED rows + 5 analogs, all dated < 2024-10-01; 0 violations",
+      "risk_level": "HIGH",
+      "forward_brent_p50": 87.67,
+      "forward_direction": "up",
+      "pre_close": 72.35,
+      "realized_peak": 81.74,
+      "realized_post7d": 77.06,
+      "realized_direction": "up",
+      "realized_oil_channel_usd": 317642260.90322375,
+      "engine_mc_continuity_usd": 0.0,
+      "directional_correct": true,
+      "brent_abs_error_vs_peak_usd": 5.93,
+      "verdict": "As of 2024-10-01 (pre-event Brent $72.35), SupplyMind assessed risk=HIGH and projected Brent $87.7 (up). Brent actually up to a peak of $81.74 (+13.0%) and sat at $77.06 (+6.5%) ~7 trading days out. Direction CALLED CORRECTLY."
+    },
+    {
+      "event_id": "us_uk_operation_poseidon_archer_2024_01",
+      "event_name": "US-UK Operation Poseidon Archer — strikes on Houthi Yemen targets",
+      "as_of": "2024-01-11",
+      "lookahead_guard": "enforced — 30 FRED rows + 2 analogs, all dated < 2024-01-11; 0 violations",
+      "risk_level": "LOW",
+      "forward_brent_p50": 64.94,
+      "forward_direction": "down",
+      "pre_close": 78.46,
+      "realized_peak": 84.14,
+      "realized_post7d": 80.71,
+      "realized_direction": "up",
+      "realized_oil_channel_usd": 270117625.10477865,
+      "engine_mc_continuity_usd": 0.0,
+      "directional_correct": false,
+      "brent_abs_error_vs_peak_usd": 19.2,
+      "verdict": "As of 2024-01-11 (pre-event Brent $78.46), SupplyMind assessed risk=LOW and projected Brent $64.9 (down). Brent actually up to a peak of $84.14 (+7.2%) and sat at $80.71 (+2.9%) ~7 trading days out. Direction MISSED — reported honestly, not tuned away."
+    },
+    {
+      "event_id": "haifa_port_missile_2024_10",
+      "event_name": "Hezbollah / Iran-backed rocket attacks on Haifa port",
+      "as_of": "2024-10-07",
+      "lookahead_guard": "enforced — 30 FRED rows + 6 analogs, all dated < 2024-10-07; 0 violations",
+      "risk_level": "LOW",
+      "forward_brent_p50": 80.0,
+      "forward_direction": "up",
+      "pre_close": 79.32,
+      "realized_peak": 81.74,
+      "realized_post7d": 73.68,
+      "realized_direction": "down",
+      "realized_oil_channel_usd": 265935631.66107824,
+      "engine_mc_continuity_usd": 0.0,
+      "directional_correct": false,
+      "brent_abs_error_vs_peak_usd": 1.74,
+      "verdict": "As of 2024-10-07 (pre-event Brent $79.32), SupplyMind assessed risk=LOW and projected Brent $80.0 (up). Brent actually down to a peak of $81.74 (+3.0%) and sat at $73.68 (-7.1%) ~7 trading days out. Direction MISSED — reported honestly, not tuned away."
+    },
+    {
+      "event_id": "houthi_yaffa_tel_aviv_2024_07",
+      "event_name": "Houthi 'Yaffa' drone strike on Tel Aviv + Israeli retaliation on Hodeidah",
+      "as_of": "2024-07-19",
+      "lookahead_guard": "enforced — 33 FRED rows + 4 analogs, all dated < 2024-07-19; 0 violations",
+      "risk_level": "LOW",
+      "forward_brent_p50": 74.99,
+      "forward_direction": "down",
+      "pre_close": 86.26,
+      "realized_peak": 85.19,
+      "realized_post7d": 80.94,
+      "realized_direction": "down",
+      "realized_oil_channel_usd": 429184990.3775094,
+      "engine_mc_continuity_usd": 0.0,
+      "directional_correct": true,
+      "brent_abs_error_vs_peak_usd": 10.2,
+      "verdict": "As of 2024-07-19 (pre-event Brent $86.26), SupplyMind assessed risk=LOW and projected Brent $75.0 (down). Brent actually down to a peak of $85.19 (-1.2%) and sat at $80.94 (-6.2%) ~7 trading days out. Direction CALLED CORRECTLY."
+    },
+    {
+      "event_id": "hormuz_trump_cargo_ship_2026_04",
+      "event_name": "US seizure of Iranian-flagged cargo ship in Gulf of Oman + Hormuz closure threat",
+      "as_of": "2026-04-18",
+      "lookahead_guard": "enforced — 31 FRED rows + 7 analogs, all dated < 2026-04-18; 0 violations",
+      "risk_level": "HIGH",
+      "forward_brent_p50": 80.0,
+      "forward_direction": "down",
+      "pre_close": 98.63,
+      "realized_peak": 124.24,
+      "realized_post7d": 117.62,
+      "realized_direction": "up",
+      "realized_oil_channel_usd": 637589802.7171042,
+      "engine_mc_continuity_usd": 0.0,
+      "directional_correct": false,
+      "brent_abs_error_vs_peak_usd": 44.24,
+      "verdict": "As of 2026-04-18 (pre-event Brent $98.63), SupplyMind assessed risk=HIGH and projected Brent $80.0 (down). Brent actually up to a peak of $124.24 (+26.0%) and sat at $117.62 (+19.2%) ~7 trading days out. Direction MISSED — reported honestly, not tuned away."
+    }
+  ],
+  "featured_detail": {
+    "event_id": "iran_true_promise_2_2024_10",
+    "event_name": "Iran 'True Promise II' ballistic missile barrage on Israel",
+    "as_of": "2024-10-01",
+    "lookahead_guard": "enforced — 30 FRED rows + 5 analogs, all dated < 2024-10-01; 0 violations",
+    "trigger_text_used": "Iran 'True Promise II' ballistic missile barrage on Israel. Type: kinetic_conflict. Region: iran_israel. Routes affected: strait_of_hormuz, eastern_mediterranean, red_sea.",
+    "as_of_assessment": {
+      "as_of": "2024-10-01",
+      "pre_close_usd_bbl": 72.35,
+      "pre_close_date": "2024-09-30",
+      "n_prior_analogs_available": 5,
+      "analogs_matched": [
+        {
+          "event_id": "iran_true_promise_1_2024_04",
+          "name": "Iran 'True Promise' operation — first direct drone+missile attack on Israel",
+          "date": "2024-04-13",
+          "similarity": 0.6178,
+          "severity": 0.8
+        },
+        {
+          "event_id": "us_uk_operation_poseidon_archer_2024_01",
+          "name": "US-UK Operation Poseidon Archer — strikes on Houthi Yemen targets",
+          "date": "2024-01-11",
+          "similarity": 0.1171,
+          "severity": 0.65
+        },
+        {
+          "event_id": "houthi_yaffa_tel_aviv_2024_07",
+          "name": "Houthi 'Yaffa' drone strike on Tel Aviv + Israeli retaliation on Hodeidah",
+          "date": "2024-07-19",
+          "similarity": 0.0982,
+          "severity": 0.7
+        }
+      ],
+      "projection": {
+        "brent_projection_usd_bbl_p50": 87.67,
+        "duration_days_p50": 1.1,
+        "vessel_rerouting_days_p50": 1.4,
+        "severity_p50": 0.61,
+        "top_analog_similarity": 0.618,
+        "confidence": 0.765,
+        "top_analog_id": "iran_true_promise_1_2024_04",
+        "top_analog_name": "Iran 'True Promise' operation — first direct drone+missile attack on Israel"
+      },
+      "risk_level": "HIGH",
+      "risk_confidence": 0.5,
+      "risk_rationale": "Rubric assessment (Ollama unavailable). Analog severity P50=0.61; text floor=0.68; mapped severity=0.68 to HIGH. 0 recent signals corroborate.",
+      "risk_inference_type": "rubric_fallback",
+      "forward_brent_p50_usd_bbl": 87.67,
+      "forward_brent_move_usd_bbl": 15.32,
+      "forward_direction": "up",
+      "forward_oil_channel_usd": 1447740000.0,
+      "engine_mc_continuity_channel": {
+        "status": "ok",
+        "usd": 0.0,
+        "p95_usd": 0.0,
+        "do_nodes": [
+          "PORT_MUMBAI"
+        ],
+        "note": "engine MonteCarloEngine, supply-CONTINUITY channel. Near-zero: the structural graph reroutes around a single chokepoint, so continuity is preserved and the cost is in the price channel below."
+      },
+      "llm_hop": {
+        "status": "pending-key",
+        "would_call": "supplymind.llm.analyst (v5 calibrated prompt)",
+        "reason": "OpenRouter key revoked (401). The analyst verdict would refine this heuristic risk call with a calibrated, Brier-scored assessment; it lights up the moment a key lands. Not faked in the interim."
+      }
+    },
+    "actual_outcome": {
+      "as_of": "2024-10-01",
+      "pre_close_usd_bbl": 72.35,
+      "n_post_rows": 16,
+      "realized_peak_usd_bbl": 81.74,
+      "realized_peak_date": "2024-10-07",
+      "realized_post7d_usd_bbl": 77.06,
+      "realized_post7d_date": "2024-10-09",
+      "realized_move_pct_post7d": 6.51,
+      "realized_peak_move_pct": 12.98,
+      "realized_direction": "up",
+      "documented_oil_impact_usd_bbl": {
+        "pre": 71.8,
+        "peak": 78.2,
+        "post_7d": 74.4,
+        "source": "FRED DCOILBRENTEU Oct 2024"
+      },
+      "documented_summary": "Iran launched ~180 ballistic missiles at Israeli military bases (Nevatim, Tel Nof, HQ in Tel Aviv), IDF reports 90%+ intercepted. Israel responds Oct 26 with 100+ aircraft hitting Iranian air defense + missile production sites.",
+      "realized_oil_channel_counterfactual": {
+        "status": "ok",
+        "usd": 317642260.90322375,
+        "ci_low_usd": 19047184.48728169,
+        "ci_high_usd": 734611634.3556412,
+        "effect_per_bbl_usd": 4.7058,
+        "actual_post_avg_usd_bbl": 76.665,
+        "counterfactual_avg_usd_bbl": 71.959,
+        "method": "R6 ARIMA(p,1,0) on FRED DCOILBRENTEU (realized counterfactual)",
+        "note": "AR(4) (AIC-selected) on the differenced pre-event Brent window, iteratively forecast + integrated to a counterfactual price path; residual-bootstrap CI (n=1000). Effect +4.71 $/bbl. OIL-CHANNEL scope only — a narrow slice, and confounded: Global macro / demand factors also move Brent over the window; the isolated event effect is confounded."
+      }
+    },
+    "verdict": {
+      "directional_correct": true,
+      "forward_direction": "up",
+      "realized_direction": "up",
+      "brent_abs_error_vs_peak_usd": 5.93,
+      "brent_abs_error_vs_post7d_usd": 10.61,
+      "risk_level": "HIGH",
+      "verdict": "As of 2024-10-01 (pre-event Brent $72.35), SupplyMind assessed risk=HIGH and projected Brent $87.7 (up). Brent actually up to a peak of $81.74 (+13.0%) and sat at $77.06 (+6.5%) ~7 trading days out. Direction CALLED CORRECTLY."
+    }
+  },
+  "match": true,
+  "match_note": "match:true means the replay genuinely ran end-to-end; engine MC + ARIMA are seeded and reproduce; FRED path is the committed real corpus.",
+  "payload_sha256": "b123fb5fb20775ad8725e23cc067d93c4af9bb1f479c967e409e61729a970519"
+}

@@ -1,10 +1,27 @@
 """
-RAG crisis documentation retrieval — Ollama-powered, NO fallback.
+RAG crisis documentation retrieval — local mxbai embeddings, NO fallback.
+
+Embeddings are a SANCTIONED local exception (CLAUDE.md §7.3): they have no
+OpenRouter route and are deliberately NOT sent to the cloud. This retriever runs
+fully on-device via a SentenceTransformer bi-encoder — a first-class edge asset,
+not an accident. R9 measured mxbai-alone as the best retriever in this repo
+(arctic ensemble -0.076 P@1 RETIRED, BGE rerank -0.038 RETIRED), so mxbai is the
+canonical single embedder here.
+
+This replaces the previous Ollama ``nomic-embed-text`` path: routing embeddings
+through the Ollama daemon made the RAG a hidden hard dependency on a running
+daemon. The SentenceTransformer path needs no daemon and no key. Provider chat
+calls elsewhere still go through ``supplymind.llm.providers``; embeddings are the
+explicit on-device exception (see ``rl.lora.edge_capability_matrix``).
 
 Production design:
-  - Embeddings: Ollama `nomic-embed-text` (768-d, runs locally, no HF dependency)
+  - Embeddings: local mxbai bi-encoder (1024-d, normalized, cosine), no daemon
   - Storage: ChromaDB persistent client at rl/rag/chroma_db/
   - Retrieval: cosine similarity, min score threshold, or raise
+
+Switching the embedder changes the vector dimension (768 nomic -> 1024 mxbai),
+so the collection name is bumped; rebuild the corpus once via
+``python -m rl.rag.build_corpus`` (the stale 768-d collection is left untouched).
 
 Legacy hardcoded-precedent path preserved in:
   rl/legacy/fallbacks/rag_indexer_with_fallback.py  (tests/comparison only)
@@ -25,12 +42,52 @@ from typing import Any
 
 logger = logging.getLogger(__name__)
 
-RAG_DB_PATH = Path(__file__).resolve().parent.parent.parent / "rl" / "rag" / "chroma_db"
-EMBEDDING_MODEL = "nomic-embed-text"
-EMBED_DIM = 768
+REPO_ROOT = Path(__file__).resolve().parents[2]
+RAG_DB_PATH = REPO_ROOT / "rl" / "rag" / "chroma_db"
+EMBEDDING_MODEL = "mixedbread-ai/mxbai-embed-large-v1"
+# Canonical on-device copy (§7.3): a complete SentenceTransformer directory. When
+# present it is used directly so the retriever needs no network at all — the HF
+# hub id is only a fresh-clone fallback.
+LOCAL_MXBAI_DIR = REPO_ROOT / "models" / "mxbai-embed-large"
+EMBED_DIM = 1024
 CHUNK_SIZE_WORDS = 300
-COLLECTION_NAME = "crisis_docs_v2"
+COLLECTION_NAME = "crisis_docs_v3_mxbai"
 MIN_SCORE = 0.60  # cosine similarity threshold for "valid precedent"
+
+_EMBEDDER = None  # lazily-loaded SentenceTransformer singleton (per model name)
+_EMBEDDER_NAME: str | None = None
+
+
+def _resolve_embedder_source(model_name: str) -> str:
+    """Prefer the local on-device copy for offline-first edge operation; fall
+    back to the HF hub id only on a fresh clone that lacks the local dir."""
+    if model_name == EMBEDDING_MODEL and LOCAL_MXBAI_DIR.is_dir():
+        return str(LOCAL_MXBAI_DIR)
+    return model_name
+
+
+def _get_embedder(model_name: str):
+    """Load the local mxbai bi-encoder once and cache it. Raises RAGError loud if
+    the model cannot be loaded (no silent fallback, per CLAUDE.md §0/§3)."""
+    global _EMBEDDER, _EMBEDDER_NAME
+    if _EMBEDDER is not None and _EMBEDDER_NAME == model_name:
+        return _EMBEDDER
+    try:
+        from sentence_transformers import SentenceTransformer
+    except Exception as e:  # noqa: BLE001
+        raise RAGError(
+            f"sentence-transformers not installed for local embeddings: {e}"
+        ) from e
+    source = _resolve_embedder_source(model_name)
+    try:
+        _EMBEDDER = SentenceTransformer(source)
+    except Exception as e:  # noqa: BLE001
+        raise RAGError(
+            f"failed to load local embedder '{model_name}' (source={source}): {e}"
+        ) from e
+    _EMBEDDER_NAME = model_name
+    logger.info("Loaded local embedder '%s' from %s (%d-d)", model_name, source, EMBED_DIM)
+    return _EMBEDDER
 
 
 class RAGError(RuntimeError):
@@ -38,7 +95,7 @@ class RAGError(RuntimeError):
 
 
 class CrisisRAG:
-    """Production RAG with Ollama embeddings. No heuristic fallback."""
+    """Production RAG with local mxbai embeddings. No heuristic fallback."""
 
     def __init__(
         self,
@@ -66,16 +123,16 @@ class CrisisRAG:
                     self.db_path, self._collection.count())
 
     def _embed(self, texts: list[str]) -> list[list[float]]:
-        """Embed with Ollama nomic-embed-text. Raises RAGError on failure."""
-        import ollama
-        out = []
-        for t in texts:
-            try:
-                r = ollama.embeddings(model=self.embedding_model_name, prompt=t)
-                out.append(r["embedding"])
-            except Exception as e:
-                raise RAGError(f"Ollama embedding failed: {e}") from e
-        return out
+        """Embed with the local mxbai bi-encoder (normalized, cosine-ready).
+        Raises RAGError loud on failure — never a silent fallback."""
+        embedder = _get_embedder(self.embedding_model_name)
+        try:
+            vecs = embedder.encode(
+                list(texts), normalize_embeddings=True, convert_to_numpy=True,
+            )
+        except Exception as e:  # noqa: BLE001
+            raise RAGError(f"local embedding failed: {e}") from e
+        return [v.tolist() for v in vecs]
 
     def index_text(self, text: str, source: str = "unknown", metadata: dict | None = None) -> int:
         self._ensure_initialized()

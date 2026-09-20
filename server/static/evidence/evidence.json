@@ -1,0 +1,1042 @@
+{
+  "generated_at": "2026-07-17T15:07:03Z",
+  "builder": "server/static/evidence/build_evidence.py",
+  "principle": "Every number on the dashboard is extracted here from a committed receipt by its JSON path and carries that path + the served-copy sha256. The HTML/CSS/JS hold zero metric literals. Honesty is the aesthetic: real, degraded, blocked, retired and provisional are all shown with equal candour.",
+  "legend": [
+    {
+      "state": "REAL",
+      "meaning": "measured on real data, positive, reproducible from a committed receipt"
+    },
+    {
+      "state": "DEGRADED",
+      "meaning": "reachable but partial — the truthful reason is shown, never papered over"
+    },
+    {
+      "state": "BLOCKED-ON-KEY",
+      "meaning": "code built + verified offline; awaiting the revoked OpenRouter key. No number fabricated around it"
+    },
+    {
+      "state": "RETIRED-BY-MEASUREMENT",
+      "meaning": "we measured it, it lost, we cut it — the receipt records why"
+    },
+    {
+      "state": "PROVISIONAL",
+      "meaning": "honest but weak statistical power; shown, never dressed up as a headline"
+    }
+  ],
+  "ledger": {
+    "capabilities_real": 9,
+    "provisional": 1,
+    "blocked_on_key": 1,
+    "retired_by_measurement": 2,
+    "degraded_live_sources": 1,
+    "receipts_cited": 11
+  },
+  "cards": [
+    {
+      "id": "counterfactual",
+      "title": "Causal counterfactual · 4 methods",
+      "subtitle": "Tōhoku 2011 analog — what does acting-vs-not cost?",
+      "state": "REAL",
+      "tier": "core-spine",
+      "question": "What's the downside if we do nothing?",
+      "claim": "Four independent causal estimators run on real engine rollouts, World Bank GDP, and FRED Brent. They disagree by orders of magnitude — because each measures a different SCOPE. The macro synthetic control lands inside the documented headline; the supply-graph methods correctly sit below it.",
+      "probe": {
+        "method": "POST",
+        "url": "/counterfactual/platinum",
+        "body": {
+          "severity_tier": "HIGH",
+          "n_episodes_mc": 1
+        }
+      },
+      "receipt": {
+        "served": "/static/evidence/receipts/counterfactual_4method_REAL.json",
+        "source": "FINAL_SUBMIT/receipts/counterfactual_4method_REAL.json",
+        "sha256": "2ab2bf4aa0bb0fc7121408981edd2cea57b1ac4932337b44fb7f783cddefea39"
+      },
+      "stats": [
+        {
+          "label": "methods run",
+          "value": 4,
+          "path": "result.pooled.n_methods_ok",
+          "fmt": "int",
+          "unit": "of 4",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "scope spread",
+          "value": 1458.9,
+          "path": "result.pooled.spread_max_over_min",
+          "fmt": "x",
+          "unit": "× max/min",
+          "tone": "warn",
+          "note": "not an error — different scopes"
+        },
+        {
+          "label": "macro estimate",
+          "value": 230288834478.5462,
+          "path": "result.methods.b.estimate_usd",
+          "fmt": "usd",
+          "unit": "",
+          "tone": "neutral",
+          "note": ""
+        }
+      ],
+      "chart": {
+        "type": "scope_range",
+        "methods": [
+          {
+            "label": "paired_bootstrap_mc",
+            "scope": "supply_graph",
+            "estimate_usd": 16759204637.533257,
+            "ci_low_usd": 15337095959.416286,
+            "ci_high_usd": 18148583881.913185,
+            "path": "result.methods.a.estimate_usd"
+          },
+          {
+            "label": "synthetic_control_abadie",
+            "scope": "macro_economy",
+            "estimate_usd": 230288834478.5462,
+            "ci_low_usd": 230041247894.3379,
+            "ci_high_usd": 232299733056.18564,
+            "path": "result.methods.b.estimate_usd"
+          },
+          {
+            "label": "arima_p10_fred_brent",
+            "scope": "oil_channel",
+            "estimate_usd": 157846742.6009928,
+            "ci_low_usd": 8418990.951743534,
+            "ci_high_usd": 643140709.2728908,
+            "path": "result.methods.c.estimate_usd"
+          },
+          {
+            "label": "scm_do_intervention",
+            "scope": "supply_graph",
+            "estimate_usd": 36500000000.0,
+            "ci_low_usd": 0.0,
+            "ci_high_usd": 36500000000.0,
+            "path": "result.methods.d.estimate_usd"
+          }
+        ],
+        "headline_low": 210000000000,
+        "headline_high": 235000000000,
+        "bracketed_by": [
+          "synthetic_control_abadie"
+        ]
+      },
+      "notes": [
+        "The 4 methods DISAGREE by ~1459× — expected, because they measure different SCOPES: the macro synthetic control captures whole-economy output loss while the supply-graph MC/SCM methods capture only the modelled auto-supplier subset, and the ARIMA method captures only the (confounded) oil-price channel. Against the documented whole-economy headline, the macro method is the scope-appropriate comparison; the supply-graph methods are a subset and correctly land below it. Do not average across scopes as if they estimated the same quantity.",
+        "ARIMA oil-channel estimate is confounded by the concurrent Libya/Arab-Spring rally — surfaced in the receipt, not hidden."
+      ]
+    },
+    {
+      "id": "ghost",
+      "title": "Ghost-model eval · measured, then cut",
+      "subtitle": "53 real crisis queries · 6,483 chunks · CUDA",
+      "state": "REAL",
+      "tier": "supporting",
+      "question": "Does every model we shipped actually earn its place?",
+      "claim": "We downloaded three 'ghost' models and measured them on real retrieval. The Arctic ensemble and the BGE reranker both LOWERED precision against mxbai-alone, so both were RETIRED. TabPFN added real signal on a labeled task, so it was KEPT. We measure, it loses, we cut it.",
+      "probe": {
+        "method": "POST",
+        "url": "/library/v2/search",
+        "body": {
+          "query": "strait of hormuz closure disrupts crude oil shipping",
+          "top_k": 1
+        }
+      },
+      "receipt": {
+        "served": "/static/evidence/receipts/ghost_models_eval_REAL.json",
+        "source": "tests/receipts/ghost_models_eval_REAL.json",
+        "sha256": "91eecafde61c04b460aa15145313dbd028360f624c98a65d52fcd7ef84a577ca"
+      },
+      "stats": [
+        {
+          "label": "mxbai P@1",
+          "value": 0.9623,
+          "path": "retrieval.aggregate_metrics.mxbai_alone.p1",
+          "fmt": "pct",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "Arctic ensemble ΔP@1",
+          "value": -0.0755,
+          "path": "retrieval.ensemble.p1_delta",
+          "fmt": "pct_signed",
+          "unit": "",
+          "tone": "bad",
+          "note": "RETIRE"
+        },
+        {
+          "label": "BGE rerank ΔP@1",
+          "value": -0.037735849056603765,
+          "path": "retrieval.rerank.p1_delta_vs_mxbai",
+          "fmt": "pct_signed",
+          "unit": "",
+          "tone": "bad",
+          "note": "RETIRE"
+        },
+        {
+          "label": "TabPFN ΔAUC",
+          "value": 0.0349,
+          "path": "tabpfn_judge.tabpfn.auc_delta_vs_logreg",
+          "fmt": "pct_signed",
+          "unit": "vs logreg",
+          "tone": "good",
+          "note": "KEEP"
+        }
+      ],
+      "chart": {
+        "type": "ghost_bars",
+        "bars": [
+          {
+            "key": "mxbai_alone",
+            "label": "mxbai-embed-large (incumbent)",
+            "p1": 0.9623,
+            "path": "retrieval.aggregate_metrics.mxbai_alone.p1",
+            "decision": "KEEP"
+          },
+          {
+            "key": "mxbai_rerank",
+            "label": "+ BGE reranker",
+            "p1": 0.9245,
+            "path": "retrieval.aggregate_metrics.mxbai_rerank.p1",
+            "decision": "RETIRE"
+          },
+          {
+            "key": "ensemble_rrf",
+            "label": "+ Arctic ensemble (RRF)",
+            "p1": 0.8868,
+            "path": "retrieval.aggregate_metrics.ensemble_rrf.p1",
+            "decision": "RETIRE"
+          },
+          {
+            "key": "snowflake_alone",
+            "label": "Snowflake Arctic alone",
+            "p1": 0.6981,
+            "path": "retrieval.aggregate_metrics.snowflake_alone.p1",
+            "decision": "WEAKER"
+          }
+        ]
+      },
+      "retired": [
+        {
+          "name": "Snowflake Arctic ensemble",
+          "reason_metric_path": "retrieval.ensemble.p1_delta",
+          "reason": "lowered P@1 vs mxbai-alone on 53 real queries"
+        },
+        {
+          "name": "BGE-reranker-v2-m3",
+          "reason_metric_path": "retrieval.rerank.p1_delta_vs_mxbai",
+          "reason": "lowered P@1 vs mxbai-alone on 53 real queries"
+        }
+      ],
+      "notes": [
+        "TabPFN comparison is vs standard tabular baselines (majority, logistic regression). The 6-judge OpenRouter LLM-panel comparison is BLOCKED-ON-KEY (key revoked); this key-free measurement still answers whether TabPFN adds predictive signal."
+      ]
+    },
+    {
+      "id": "conformal",
+      "title": "Conformal calibration",
+      "subtitle": "Split-conformal (Vovk 2005) · held-out test set",
+      "state": "REAL",
+      "tier": "supporting",
+      "question": "When the model says 90%, is it really 90%?",
+      "claim": "Split-conformal on 40,000 real harvested transitions, calibrated on a disjoint set and measured on a held-out test set the quantile never saw. Nominal vs empirical coverage match to a fraction of a percent — no assertion, a measurement.",
+      "probe": null,
+      "receipt": {
+        "served": "/static/evidence/receipts/conformal_REAL.json",
+        "source": "tests/receipts/conformal_REAL.json",
+        "sha256": "a35f11e572d067b936208b7fd42f5907e640a446bc8d212b04e55e6c13906b98"
+      },
+      "stats": [
+        {
+          "label": "nominal",
+          "value": 0.9,
+          "path": "headline.nominal_coverage",
+          "fmt": "pct",
+          "unit": "target",
+          "tone": "neutral",
+          "note": ""
+        },
+        {
+          "label": "empirical (held-out)",
+          "value": 0.90025,
+          "path": "headline.empirical_coverage_on_heldout_test",
+          "fmt": "pct",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "coverage gap",
+          "value": 0.00025,
+          "path": "headline.coverage_gap",
+          "fmt": "pct_signed",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        }
+      ],
+      "chart": {
+        "type": "calibration",
+        "rows": [
+          {
+            "nominal": 0.95,
+            "empirical": 0.95138,
+            "gap": 0.00138,
+            "set_size": 10.311,
+            "path": "conformal_coverage_by_alpha[0].empirical_coverage_TEST"
+          },
+          {
+            "nominal": 0.9,
+            "empirical": 0.90025,
+            "gap": 0.00025,
+            "set_size": 8.71,
+            "path": "conformal_coverage_by_alpha[1].empirical_coverage_TEST"
+          },
+          {
+            "nominal": 0.8,
+            "empirical": 0.7935,
+            "gap": -0.0065,
+            "set_size": 5.411,
+            "path": "conformal_coverage_by_alpha[2].empirical_coverage_TEST"
+          }
+        ]
+      },
+      "notes": [
+        "Marginal coverage assumes exchangeability; transitions are shuffled across trajectories to approximate it. Within-trajectory autocorrelation is a known caveat — surfaced, not hidden."
+      ]
+    },
+    {
+      "id": "benchmark",
+      "title": "Agent leaderboard",
+      "subtitle": "10 agents · easy/medium/hard · grader score",
+      "state": "PROVISIONAL",
+      "tier": "supporting",
+      "question": "Does RL actually beat the scripted baseline?",
+      "claim": "Real trained checkpoints evaluated on the real grader. At this seed count the top RL agent and the scripted baseline are statistically indistinguishable overall. We show this as PROVISIONAL, not a headline — the honest reading is 'scripted essentially ties; RL is our research frontier'.",
+      "probe": {
+        "method": "GET",
+        "url": "/arena/health"
+      },
+      "receipt": {
+        "served": "/static/evidence/receipts/benchmark_leaderboard_REAL.json",
+        "source": "tests/receipts/benchmark_leaderboard_REAL.json",
+        "sha256": "8bae3e5333320a3b92930e44ee3118948e3a65e1a09917e53cb6e9dbef101748"
+      },
+      "stats": [
+        {
+          "label": "seeds",
+          "value": 2,
+          "path": "n_seeds",
+          "fmt": "int",
+          "unit": "× 1 ep",
+          "tone": "warn",
+          "note": "weak N — provisional"
+        },
+        {
+          "label": "top agent grade",
+          "value": 0.6869,
+          "path": "leaderboard[0].overall_grade",
+          "fmt": "num3",
+          "unit": "",
+          "tone": "neutral",
+          "note": ""
+        },
+        {
+          "label": "scripted grade",
+          "value": 0.68307,
+          "path": "leaderboard[1].overall_grade",
+          "fmt": "num3",
+          "unit": "",
+          "tone": "neutral",
+          "note": ""
+        },
+        {
+          "label": "top-vs-scripted p",
+          "value": 1.0,
+          "path": "leaderboard[0].vs_scripted.Overall.p_value",
+          "fmt": "num3",
+          "unit": "Wilcoxon",
+          "tone": "warn",
+          "note": "not significant"
+        }
+      ],
+      "chart": {
+        "type": "leaderboard",
+        "rows": [
+          {
+            "agent": "QR-DQN (CVaR)",
+            "grade": 0.6869,
+            "path": "leaderboard[0].overall_grade",
+            "is_baseline": false,
+            "p_value": 1.0,
+            "effect_r": 0.0
+          },
+          {
+            "agent": "Scripted",
+            "grade": 0.68307,
+            "path": "leaderboard[1].overall_grade",
+            "is_baseline": true
+          },
+          {
+            "agent": "Random",
+            "grade": 0.67443,
+            "path": "leaderboard[2].overall_grade",
+            "is_baseline": false,
+            "p_value": 0.401678,
+            "effect_r": 0.3424
+          },
+          {
+            "agent": "Ensemble (DT+QR-DQN)",
+            "grade": 0.56377,
+            "path": "leaderboard[3].overall_grade",
+            "is_baseline": false,
+            "p_value": 0.036032,
+            "effect_r": 0.8559
+          },
+          {
+            "agent": "Decision Transformer",
+            "grade": 0.56362,
+            "path": "leaderboard[4].overall_grade",
+            "is_baseline": false,
+            "p_value": 0.036032,
+            "effect_r": 0.8559
+          },
+          {
+            "agent": "PPO",
+            "grade": 0.49168,
+            "path": "leaderboard[5].overall_grade",
+            "is_baseline": false,
+            "p_value": 0.142213,
+            "effect_r": 0.5991
+          },
+          {
+            "agent": "BC",
+            "grade": 0.48812,
+            "path": "leaderboard[6].overall_grade",
+            "is_baseline": false,
+            "p_value": 0.036032,
+            "effect_r": 0.8559
+          },
+          {
+            "agent": "IQL",
+            "grade": 0.48573,
+            "path": "leaderboard[7].overall_grade",
+            "is_baseline": false,
+            "p_value": 0.036032,
+            "effect_r": 0.8559
+          },
+          {
+            "agent": "CQL",
+            "grade": 0.3606,
+            "path": "leaderboard[8].overall_grade",
+            "is_baseline": false,
+            "p_value": 0.036032,
+            "effect_r": 0.8559
+          },
+          {
+            "agent": "TD3+BC",
+            "grade": 0.30188,
+            "path": "leaderboard[9].overall_grade",
+            "is_baseline": false,
+            "p_value": 0.036032,
+            "effect_r": 0.8559
+          }
+        ],
+        "scale_up_command": "python benchmark/run_full_benchmark.py --seeds 30"
+      },
+      "notes": [
+        "Offline v2 agents (BC/CQL/IQL/TD3+BC) are RETRAIN-PENDING: their buffers predate the Jul-2 action-taxonomy fix, so evaluating them now would score scrambled action semantics. Listed, not silently dropped.",
+        "Determinism: env fully seeded; 1 episode/seed is reproducible; power from seed count. Scale up: python benchmark/run_full_benchmark.py --seeds 30"
+      ]
+    },
+    {
+      "id": "live",
+      "title": "Live signal fan-out",
+      "subtitle": "8 real-world sources · one genuine call each",
+      "state": "REAL",
+      "tier": "core-spine",
+      "question": "What changed overnight?",
+      "claim": "One real API call to each of eight live sources. Seven returned fresh data (Brent, EIA, FIRMS, GFW, NewsAPI, NOAA, USGS); one (GDELT) was rate-limited and is shown DEGRADED with its reason. Nothing is silently faked when a source is down.",
+      "probe": {
+        "method": "GET",
+        "url": "/live/health"
+      },
+      "receipt": {
+        "served": "/static/evidence/receipts/live_data_freshness_REAL.json",
+        "source": "tests/receipts/live_data_freshness_REAL.json",
+        "sha256": "7872c348ac80e50df7bbf472b3ac3d86ad6236be3251f9a0c97f54d058fdcac0"
+      },
+      "stats": [
+        {
+          "label": "sources up",
+          "value": 7,
+          "path": "summary.n_ok",
+          "fmt": "int",
+          "unit": "of 8",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "degraded",
+          "value": 1,
+          "path": "summary.n_degraded",
+          "fmt": "int",
+          "unit": "loud",
+          "tone": "warn",
+          "note": ""
+        },
+        {
+          "label": "Brent (FRED)",
+          "value": 69.56,
+          "path": "per_source[0].value",
+          "fmt": "usd_bbl",
+          "unit": "/bbl",
+          "tone": "neutral",
+          "note": ""
+        },
+        {
+          "label": "max age",
+          "value": 43.9,
+          "path": "summary.max_age_seconds",
+          "fmt": "sec",
+          "unit": "s",
+          "tone": "good",
+          "note": ""
+        }
+      ],
+      "chart": {
+        "type": "live_strip",
+        "sources": [
+          {
+            "source": "fred",
+            "ok": true,
+            "degraded": false,
+            "reason": null,
+            "age_seconds": 0.0,
+            "headline": "Brent $69.56/bbl on 2026-07-06 (DoD +1.28%, WoW -2.84%)",
+            "path": "per_source[0].ok"
+          },
+          {
+            "source": "eia",
+            "ok": true,
+            "degraded": false,
+            "reason": null,
+            "age_seconds": 0.0,
+            "headline": "EIA Brent spot 69.56 $/BBL (2026-07-06)",
+            "path": "per_source[1].ok"
+          },
+          {
+            "source": "nasa_firms",
+            "ok": true,
+            "degraded": false,
+            "reason": null,
+            "age_seconds": 0.0,
+            "headline": "No active fires in Strait-of-Hormuz bbox, last 24h",
+            "path": "per_source[2].ok"
+          },
+          {
+            "source": "gfw",
+            "ok": true,
+            "degraded": false,
+            "reason": null,
+            "age_seconds": 0.0,
+            "headline": "30 recent port-visit events (0 in Strait-of-Hormuz bbox); GFW reports 518513 total available",
+            "path": "per_source[3].ok"
+          },
+          {
+            "source": "newsapi",
+            "ok": true,
+            "degraded": false,
+            "reason": null,
+            "age_seconds": 0.0,
+            "headline": "1 supply-chain headlines in last 48h — top: 'Super' El Niño Could Trigger Severe Global Food Price Shock Lasting Into 2028, Economists Warn",
+            "path": "per_source[4].ok"
+          },
+          {
+            "source": "noaa",
+            "ok": true,
+            "degraded": false,
+            "reason": null,
+            "age_seconds": 0.0,
+            "headline": "76 active NWS weather alert(s) over US port states; top: Flash Flood Warning (Severe)",
+            "path": "per_source[5].ok"
+          },
+          {
+            "source": "usgs",
+            "ok": true,
+            "degraded": false,
+            "reason": null,
+            "age_seconds": 0.0,
+            "headline": "16 M4.5+ earthquake(s) in last 24h; largest M6.2 — 34 km WSW of Sarangani, Philippines",
+            "path": "per_source[6].ok"
+          },
+          {
+            "source": "gdelt",
+            "ok": false,
+            "degraded": true,
+            "reason": "live fetch failed (GDELT HTTP 429); serving cached snapshot 43.9s old",
+            "age_seconds": 43.9,
+            "headline": "30 chokepoint news article(s) in last 24h — top:   Oil could hit $200 a barrel if ...: Yemen threatens to close Bab al Mandeb Strait amid US Iran war",
+            "path": "per_source[7].ok"
+          }
+        ]
+      },
+      "notes": [
+        "Committed freshness snapshot from a run WITH keys. The LED beside this card is a live probe of THIS server — if its keys are unset it will degrade loudly, which is the honest behaviour."
+      ]
+    },
+    {
+      "id": "brent",
+      "title": "Brent forecast backtest",
+      "subtitle": "Walk-forward on real FRED daily · 8 crisis events",
+      "state": "REAL",
+      "tier": "supporting",
+      "question": "Can we forecast the oil-price channel of a shock?",
+      "claim": "Chronos + TimesFM + TabPFN ensemble, walk-forward on 9,922 real FRED DCOILBRENTEU daily observations across 8 documented Iran/Israel/Hormuz events. Honest single-digit MAPE — not a cherry-picked window.",
+      "probe": null,
+      "receipt": {
+        "served": "/static/evidence/receipts/ensemble_brent_REAL.json",
+        "source": "tests/receipts/ensemble_brent_REAL.json",
+        "sha256": "6d2e2e386e1150be50ba10320116e415d0e5a2eb9f95105ab43897151446447b"
+      },
+      "stats": [
+        {
+          "label": "ensemble MAPE",
+          "value": 7.118,
+          "path": "aggregate_metrics_vs_realized.ensemble.mean_mape_pct",
+          "fmt": "pct_raw",
+          "unit": "mean",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "events",
+          "value": 8,
+          "path": "n_events_tested",
+          "fmt": "int",
+          "unit": "real dates",
+          "tone": "neutral",
+          "note": ""
+        },
+        {
+          "label": "FRED obs",
+          "value": 9922,
+          "path": "brent_provenance.n_observations",
+          "fmt": "int",
+          "unit": "daily",
+          "tone": "neutral",
+          "note": ""
+        }
+      ],
+      "chart": {
+        "type": "brent_bars",
+        "bars": [
+          {
+            "model": "ensemble",
+            "mape": 7.118,
+            "path": "aggregate_metrics_vs_realized.ensemble.mean_mape_pct"
+          },
+          {
+            "model": "chronos",
+            "mape": 7.301,
+            "path": "aggregate_metrics_vs_realized.chronos.mean_mape_pct"
+          },
+          {
+            "model": "timesfm",
+            "mape": 7.214,
+            "path": "aggregate_metrics_vs_realized.timesfm.mean_mape_pct"
+          },
+          {
+            "model": "tabpfn",
+            "mape": 8.395,
+            "path": "aggregate_metrics_vs_realized.tabpfn.mean_mape_pct"
+          }
+        ]
+      },
+      "notes": []
+    },
+    {
+      "id": "gauntlet",
+      "title": "Adversarial gauntlet",
+      "subtitle": "Real attacks executed against the real system",
+      "state": "REAL",
+      "tier": "supporting",
+      "question": "Can the system be tricked or reward-hacked?",
+      "claim": "318 real attacks across seven categories — malformed schema, out-of-range, oversized unicode, prompt injection, replay, reward hacking, session isolation — executed against the live surfaces. All blocked, zero breaches, and 8 valid control actions accepted (0% false-positive).",
+      "probe": {
+        "method": "GET",
+        "url": "/health"
+      },
+      "receipt": {
+        "served": "/static/evidence/receipts/adversarial_gauntlet_REAL.json",
+        "source": "tests/receipts/adversarial_gauntlet_REAL.json",
+        "sha256": "5de04a166195ddc41a36760241e7c925e11f5fbdc1e7caec60b3f64f0d4d62c5"
+      },
+      "stats": [
+        {
+          "label": "attacks executed",
+          "value": 318,
+          "path": "n_executed",
+          "fmt": "int",
+          "unit": "",
+          "tone": "neutral",
+          "note": ""
+        },
+        {
+          "label": "blocked",
+          "value": 100.0,
+          "path": "block_rate_pct",
+          "fmt": "pct_raw",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "breaches",
+          "value": 0,
+          "path": "n_breaches",
+          "fmt": "int",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "control false-positives",
+          "value": 0.0,
+          "path": "controls.false_positive_rate_pct",
+          "fmt": "pct_raw",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        }
+      ],
+      "chart": {
+        "type": "gauntlet_cats",
+        "cats": [
+          {
+            "cat": "malformed_schema",
+            "n": 55,
+            "blocked": 55,
+            "path": "per_category.malformed_schema.n"
+          },
+          {
+            "cat": "out_of_range",
+            "n": 35,
+            "blocked": 35,
+            "path": "per_category.out_of_range.n"
+          },
+          {
+            "cat": "oversized_unicode",
+            "n": 50,
+            "blocked": 50,
+            "path": "per_category.oversized_unicode.n"
+          },
+          {
+            "cat": "prompt_injection",
+            "n": 90,
+            "blocked": 90,
+            "path": "per_category.prompt_injection.n"
+          },
+          {
+            "cat": "replay_duplicate",
+            "n": 34,
+            "blocked": 34,
+            "path": "per_category.replay_duplicate.n"
+          },
+          {
+            "cat": "reward_hacking",
+            "n": 23,
+            "blocked": 23,
+            "path": "per_category.reward_hacking.n"
+          },
+          {
+            "cat": "session_isolation",
+            "n": 31,
+            "blocked": 31,
+            "path": "per_category.session_isolation.n"
+          }
+        ]
+      },
+      "notes": [
+        "OPENROUTER_API_KEY revoked: prompt-injection is tested only against data-handling surfaces (RAG retrieval, MCP tool string args, string action fields). Live-LLM instruction-override resistance is BLOCKED-ON-KEY and not claimed here."
+      ]
+    },
+    {
+      "id": "analyst",
+      "title": "Calibrated analyst (v5)",
+      "subtitle": "OpenRouter provider layer + analyst-v5 port",
+      "state": "BLOCKED-ON-KEY",
+      "tier": "core-spine",
+      "question": "How bad is it, and how sure are we?",
+      "claim": "The provider/analyst/panel layer is fully built and verified offline with a mock transport — 25 tests pass, the v5 prompt + 8 few-shots port cleanly. With the OpenRouter key REVOKED, live assessment degrades LOUDLY (verdict is null, never fabricated). The live Brier-scored A/B is code-ready and BLOCKED-ON-KEY.",
+      "probe": {
+        "method": "GET",
+        "url": "/analyst/panel-consensus/2021_Suez_Canal_obstruction"
+      },
+      "receipt": {
+        "served": "/static/evidence/receipts/llm_layer_offline_REAL.json",
+        "source": "tests/receipts/llm_layer_offline_REAL.json",
+        "sha256": "40090fff9d61374ddf4d5cde8ef73dcc5cd33309d2a7e06c3c00590126814a71"
+      },
+      "stats": [
+        {
+          "label": "offline tests",
+          "value": 25,
+          "path": "offline_verification.mock_transport_tests.n_passed",
+          "fmt": "int",
+          "unit": "pass",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "few-shots ported",
+          "value": 8,
+          "path": "offline_verification.structural_port_validation.few_shot_count",
+          "fmt": "int",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "verdict fabricated?",
+          "value": false,
+          "path": "offline_verification.no_key_loud_degrade_demo.verdict_fabricated",
+          "fmt": "bool_no",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        }
+      ],
+      "blocked": {
+        "reason": "OPENROUTER_API_KEY not set in env or .env — cannot make a live OpenRouter call (CLAUDE.md §0: no faking around a missing key)",
+        "items": [
+          "WP6.2 live A/B Brier calibration (analyst-v5 vs bare model)",
+          "python -m supplymind.llm.analyst --holdout (live verdicts)",
+          "WP7.2 live 12-judge panel + real Krippendorff alpha"
+        ]
+      },
+      "notes": [
+        "The /analyst/panel-consensus endpoint returns a COMMITTED PANEL REPLAY (a genuine panel run computed once and committed), not a live call. Live re-run of the 15-judge panel is BLOCKED-ON-KEY and not claimed as live."
+      ]
+    },
+    {
+      "id": "rag",
+      "title": "RAG corpus re-cook",
+      "subtitle": "World Bank ingestion bug — found and fixed",
+      "state": "REAL",
+      "tier": "appendix",
+      "question": "Is the evidence-retrieval corpus actually complete?",
+      "claim": "A list-vs-dict bug meant the World Bank macro source silently ingested zero chunks. Fixed and re-cooked: World Bank went 0 → 20 chunks, and WB-specific queries went from un-retrievable to P@1 = 1.0, with no regression on existing crisis retrieval.",
+      "probe": {
+        "method": "POST",
+        "url": "/library/v2/search",
+        "body": {
+          "query": "world bank current account balance macro shock",
+          "top_k": 1
+        }
+      },
+      "receipt": {
+        "served": "/static/evidence/receipts/rag_recook_REAL.json",
+        "source": "tests/receipts/rag_recook_REAL.json",
+        "sha256": "2fadf375a97e7e12a1ed86b0d13ab0c61eb98cea1bc3139e4f2654d4b5be44fe"
+      },
+      "stats": [
+        {
+          "label": "WB chunks before",
+          "value": 0,
+          "path": "corpus.world_bank_chunks_before",
+          "fmt": "int",
+          "unit": "",
+          "tone": "bad",
+          "note": ""
+        },
+        {
+          "label": "WB chunks after",
+          "value": 20,
+          "path": "corpus.world_bank_chunks_after",
+          "fmt": "int",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "WB query P@1 after",
+          "value": 1.0,
+          "path": "retrieval_wb_queries.after_wb.p1",
+          "fmt": "pct",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "crisis P@1 Δ",
+          "value": 0.0,
+          "path": "retrieval_crisis_queries.p1_delta",
+          "fmt": "pct_signed",
+          "unit": "no regression",
+          "tone": "good",
+          "note": ""
+        }
+      ],
+      "chart": null,
+      "notes": []
+    },
+    {
+      "id": "fedavg",
+      "title": "Federated averaging",
+      "subtitle": "5 DataCo market regions · 180K real orders",
+      "state": "REAL",
+      "tier": "appendix",
+      "question": "Does federated learning beat centralized here?",
+      "claim": "Real FedAvg (McMahan 2017) across five market regions on 180,519 real DataCo orders. The honest finding: it does NOT beat centralized (ΔAUC ≈ 0). We report the negative result rather than bury it — the smallest client does gain slightly from the federation.",
+      "probe": null,
+      "receipt": {
+        "served": "/static/evidence/receipts/fedavg_REAL.json",
+        "source": "tests/receipts/fedavg_REAL.json",
+        "sha256": "56954b060eb460d8677d23450f417a244747f77a7d12988b9c1eefa07ac1998f"
+      },
+      "stats": [
+        {
+          "label": "orders",
+          "value": 180519,
+          "path": "dataset.n_orders",
+          "fmt": "int",
+          "unit": "real",
+          "tone": "neutral",
+          "note": ""
+        },
+        {
+          "label": "ΔAUC vs centralized",
+          "value": -0.0,
+          "path": "findings.fedavg_vs_centralized_auc_delta",
+          "fmt": "num3",
+          "unit": "honest 0",
+          "tone": "warn",
+          "note": ""
+        },
+        {
+          "label": "smallest-client gain",
+          "value": 0.00183,
+          "path": "findings.smallest_client_fedavg_gain_auc",
+          "fmt": "num3_signed",
+          "unit": "AUC",
+          "tone": "good",
+          "note": ""
+        }
+      ],
+      "chart": null,
+      "notes": []
+    },
+    {
+      "id": "warroom",
+      "title": "Hormuz war room",
+      "subtitle": "The golden-path demo surface (live endpoint)",
+      "state": "REAL",
+      "tier": "core-spine",
+      "question": "Show me the whole path, live.",
+      "claim": "The war room renders the full golden path for Priya's desk. Backtested against 8 documented Hormuz-region events: the risk band, reroute action and counterfactual savings were correct on every event; the Brent 90% interval bracketed the documented peak on most.",
+      "probe": {
+        "method": "GET",
+        "url": "/demo/hormuz-war-room/health"
+      },
+      "live_action": {
+        "method": "POST",
+        "url": "/demo/hormuz-war-room/validate",
+        "label": "run 8-event backtest live"
+      },
+      "live_fields": [
+        {
+          "label": "graph nodes",
+          "key": "n_graph_nodes"
+        },
+        {
+          "label": "graph edges",
+          "key": "n_graph_edges"
+        },
+        {
+          "label": "India sectors",
+          "key": "n_india_sectors"
+        },
+        {
+          "label": "Gulf sectors",
+          "key": "n_gulf_sectors"
+        }
+      ],
+      "receipt": {
+        "served": "/static/evidence/receipts/war_room_validation.json",
+        "source": "tests/receipts/war_room_validation.json",
+        "sha256": "9a6f419796a436511900da67b39a658bf68bb2ee1ec50af86ff7b1a6e0847b9b"
+      },
+      "stats": [
+        {
+          "label": "events backtested",
+          "value": 8,
+          "path": "n_events_tested",
+          "fmt": "int",
+          "unit": "documented",
+          "tone": "neutral",
+          "note": ""
+        },
+        {
+          "label": "risk-band hit",
+          "value": 1.0,
+          "path": "aggregate_accuracy.risk_level_in_expected_band",
+          "fmt": "pct",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        },
+        {
+          "label": "reroute-action hit",
+          "value": 1.0,
+          "path": "aggregate_accuracy.reroute_action_when_doc_reroute_ge_5d",
+          "fmt": "pct",
+          "unit": "",
+          "tone": "good",
+          "note": ""
+        }
+      ],
+      "chart": {
+        "type": "warroom_bars",
+        "rows": [
+          {
+            "label": "risk band",
+            "path": "aggregate_accuracy.risk_level_in_expected_band",
+            "value": 1.0
+          },
+          {
+            "label": "Brent ±90% bracket",
+            "path": "aggregate_accuracy.brent_p90_brackets_documented_peak",
+            "value": 0.75
+          },
+          {
+            "label": "reroute action",
+            "path": "aggregate_accuracy.reroute_action_when_doc_reroute_ge_5d",
+            "value": 1.0
+          },
+          {
+            "label": "India top-3 sector",
+            "path": "aggregate_accuracy.india_top3_includes_known_affected_sector",
+            "value": 1.0
+          },
+          {
+            "label": "counterfactual savings > 0",
+            "path": "aggregate_accuracy.counterfactual_positive_savings",
+            "value": 1.0
+          }
+        ]
+      },
+      "open": {
+        "url": "/demo/hormuz-war-room/ui",
+        "label": "open the war room"
+      },
+      "notes": []
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 """
-qwen_vl_port_imagery.py — G3+F1. Qwen-VL-7B satellite-imagery port-risk scorer.
+qwen_vl_port_imagery.py — G3+F1. Satellite-imagery port-risk scorer.
 
-Runs a vision-language model (Qwen-VL) on satellite imagery of critical ports
-(Kaohsiung, Shanghai, Long Beach, Rotterdam, Jebel Ali, Haifa, Hodeidah) and
-extracts structured supply-chain risk signals:
+Runs a vision-language model on satellite imagery of critical ports (Kaohsiung,
+Shanghai, Long Beach, Rotterdam, Jebel Ali, Haifa, Hodeidah) and extracts
+structured supply-chain risk signals:
 
     {
         "ship_queue_count": int,
@@ -15,14 +15,23 @@ extracts structured supply-chain risk signals:
         "confidence": float (0-1),
     }
 
-Modes:
-    "ollama" — uses qwen2.5-vl:7b via Ollama HTTP (requires model pulled)
-    "local"  — uses transformers + Qwen2VLForConditionalGeneration (requires GPU)
-    "heuristic" — deterministic fallback using PIL image stats (no VL model)
+The VLM now runs through the single gateway ``supplymind.llm.providers``: an
+OpenRouter vision model (image_url data-URI). The gateway's Ollama edge backend
+does NOT carry image inputs, so edge vision is intentionally unsupported here;
+the deterministic on-device heuristic covers offline operation.
 
-Default: attempt ollama -> fall back to heuristic. The heuristic is not random;
-it computes color histograms + blob counts so that the integration path is
-exercised even without the 15 GB VL model loaded.
+Modes:
+    "cloud"     — OpenRouter vision model via the gateway. Needs OPENROUTER_API_KEY
+                  (currently REVOKED -> blocked-on-key) + SUPPLYMIND_VISION_MODEL
+                  (env-driven slug; no hardcoded default per CLAUDE.md §0).
+    "heuristic" — deterministic on-device fallback using PIL image stats (no VLM,
+                  no key). Confidence <= 0.35 and honestly labeled — never a
+                  fabricated VLM reading.
+
+Default "auto": use cloud VLM when a key + vision model are configured, else fall
+back to the heuristic. The heuristic is not random; it computes color histograms
++ blob counts so the integration path is exercised without a VLM loaded. See
+``rl.lora.edge_capability_matrix`` for the cloud/edge/local map.
 """
 from __future__ import annotations
 
@@ -36,11 +45,9 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
-import requests
-
 logger = logging.getLogger(__name__)
 
-OLLAMA_URL = os.environ.get("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
+VISION_MODEL_ENV = "SUPPLYMIND_VISION_MODEL"  # OpenRouter vision slug (env-driven)
 OUT_DIR = Path(__file__).resolve().parent / "port_imagery"
 OUT_DIR.mkdir(exist_ok=True, parents=True)
 
@@ -89,35 +96,61 @@ class PortRiskAssessment:
 
 
 # ---------------------------------------------------------------------------
-# Ollama qwen-vl path
+# Cloud VLM path (OpenRouter vision via the gateway)
 # ---------------------------------------------------------------------------
 
+VISION_SCHEMA: dict = {
+    "type": "object",
+    "required": ["ship_queue_count", "container_stack_density", "smoke_or_fire",
+                 "flood_indicators", "risk_score", "confidence"],
+    "properties": {
+        "ship_queue_count": {"type": "number"},
+        "container_stack_density": {"type": "string"},
+        "smoke_or_fire": {"type": "boolean"},
+        "flood_indicators": {"type": "boolean"},
+        "unusual_activity": {"type": "string"},
+        "risk_score": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "confidence": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+    },
+}
 
-def _ollama_has_vl() -> bool:
-    try:
-        r = requests.get(f"{OLLAMA_URL}/api/tags", timeout=3).json()
-        return any("vl" in m.get("name", "").lower() for m in r.get("models", []))
-    except Exception:
-        return False
+
+def _vision_ready() -> tuple[bool, str]:
+    """Is a cloud VLM configured? Needs an OpenRouter key AND a vision slug. No
+    slug is hardcoded (§0); an unset model is a loud, honest 'not ready'."""
+    from supplymind.llm.providers import resolve_openrouter_key
+
+    if not resolve_openrouter_key():
+        return False, "OPENROUTER_API_KEY absent (env + .env)"
+    if not os.environ.get(VISION_MODEL_ENV):
+        return False, f"{VISION_MODEL_ENV} unset (env-driven vision slug; no default)"
+    return True, "ok"
 
 
-def _call_ollama_vl(image_b64: str, prompt: str, model: str = "qwen2.5vl:7b") -> dict:
-    start = time.time()
-    r = requests.post(
-        f"{OLLAMA_URL}/api/chat",
-        json={
-            "model": model,
-            "messages": [{"role": "user", "content": prompt, "images": [image_b64]}],
-            "format": "json",
-            "stream": False,
-            "options": {"temperature": 0.2, "num_ctx": 16384},
-        },
-        timeout=120,
-    )
-    r.raise_for_status()
-    text = r.json()["message"]["content"]
-    data = json.loads(text)
-    data["_latency_s"] = time.time() - start
+def _call_cloud_vl(image_b64: str, prompt: str) -> dict:
+    """Call the OpenRouter vision model through the gateway with an image_url
+    data-URI. Returns the parsed VLM JSON (+ _latency_s), or raises loud."""
+    from supplymind.llm.providers import get_provider
+
+    from rl.lora.edge_capability_matrix import run_coro_sync
+
+    model = os.environ.get(VISION_MODEL_ENV)
+    messages = [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": prompt},
+            {"type": "image_url",
+             "image_url": {"url": f"data:image/png;base64,{image_b64}"}},
+        ],
+    }]
+    resp = run_coro_sync(get_provider("openrouter").complete(
+        messages, model=model, schema=VISION_SCHEMA, max_tokens=512, temperature=0.2,
+    ))
+    if not (resp.ok and resp.parsed):
+        reason = resp.degrade_reason or resp.error or "no parseable VLM output"
+        raise RuntimeError(f"cloud VLM ({model}) unavailable: {reason}")
+    data = dict(resp.parsed)
+    data["_latency_s"] = resp.latency_s
     return data
 
 
@@ -203,18 +236,22 @@ def assess_port_image(
     port_meta = PORT_ANCHORS.get(port_id, {"name": port_id, "baseline_queue": 15})
     start = time.time()
 
+    degrade_reason = ""
     mode = prefer_mode
     if mode == "auto":
-        mode = "ollama" if _ollama_has_vl() else "heuristic"
+        ready, reason = _vision_ready()
+        mode = "cloud" if ready else "heuristic"
+        if not ready:
+            degrade_reason = reason
 
-    if mode == "ollama":
+    if mode == "cloud":
         try:
             b64 = base64.b64encode(image_bytes).decode()
-            result = _call_ollama_vl(b64, VL_PROMPT)
+            result = _call_cloud_vl(b64, VL_PROMPT)
             latency = result.pop("_latency_s", 0.0)
-            ar = PortRiskAssessment(
+            return PortRiskAssessment(
                 port_id=port_id, port_name=port_meta["name"],
-                mode="ollama",
+                mode="cloud",
                 ship_queue_count=int(result.get("ship_queue_count", 0)),
                 container_stack_density=str(result.get("container_stack_density", "medium")),
                 smoke_or_fire=bool(result.get("smoke_or_fire", False)),
@@ -224,13 +261,15 @@ def assess_port_image(
                 confidence=float(result.get("confidence", 0.5)),
                 latency_s=latency,
             )
-            return ar
         except Exception as e:  # noqa: BLE001
-            logger.warning("Ollama VL failed: %s; falling back to heuristic", e)
+            # Loud, honest degrade to the on-device heuristic — never fabricate.
+            logger.warning("Cloud VLM failed: %s; falling back to heuristic", e)
+            degrade_reason = str(e)[:200]
             mode = "heuristic"
 
-    # Heuristic path
+    # Heuristic path (deterministic on-device fallback, honestly labeled)
     data = _heuristic_from_image(image_bytes)
+    meta = {"degraded_from": "cloud", "degrade_reason": degrade_reason} if degrade_reason else {}
     return PortRiskAssessment(
         port_id=port_id, port_name=port_meta["name"],
         mode=mode,
@@ -242,6 +281,7 @@ def assess_port_image(
         risk_score=float(data["risk_score"]),
         confidence=float(data["confidence"]),
         latency_s=time.time() - start,
+        meta=meta,
     )
 
 
@@ -298,7 +338,7 @@ def run_all_ports(mode: str = "auto") -> dict:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", default="auto", choices=["auto", "ollama", "heuristic"])
+    parser.add_argument("--mode", default="auto", choices=["auto", "cloud", "heuristic"])
     parser.add_argument("--port", default=None)
     args = parser.parse_args()
 

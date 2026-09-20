@@ -1,0 +1,254 @@
+{
+  "experiment": "fedavg_dataco_late_delivery",
+  "dataset": {
+    "path": "rl/data/dataco.csv",
+    "n_orders": 180519,
+    "n_train": 144414,
+    "n_test": 36105,
+    "base_rate_late": 0.5483,
+    "n_features": 32,
+    "n_clients": 5,
+    "clients_by_market": {
+      "Africa": 9291,
+      "Europe": 40201,
+      "LATAM": 41275,
+      "Pacific Asia": 33008,
+      "USCA": 20639
+    }
+  },
+  "config": {
+    "model": "logistic_regression (nn.Linear -> 1 logit, BCEWithLogits)",
+    "optimizer": "SGD(lr=0.05, weight_decay=0.0001)",
+    "n_rounds": 60,
+    "local_epochs": 3,
+    "total_local_steps_per_client": 180,
+    "test_frac": 0.2,
+    "seed": 42,
+    "device": "cuda",
+    "fedavg_weighting": "by client sample count (McMahan 2017)",
+    "leakage_excluded": [
+      "Days for shipping (real)",
+      "Delivery Status",
+      "Order Status",
+      "shipping date (DateOrders)"
+    ]
+  },
+  "results": {
+    "client_alone": {
+      "Africa": {
+        "on_global_test": {
+          "auc": 0.7203920652250849,
+          "accuracy": 0.6863592300235425,
+          "f1": 0.6709669920966992,
+          "n": 36105
+        },
+        "on_own_test": {
+          "auc": 0.7105020407553038,
+          "accuracy": 0.6745587602238484,
+          "f1": 0.6560509554140127,
+          "n": 2323
+        }
+      },
+      "Europe": {
+        "on_global_test": {
+          "auc": 0.7225848513504742,
+          "accuracy": 0.6863315330286663,
+          "f1": 0.6708518615398029,
+          "n": 36105
+        },
+        "on_own_test": {
+          "auc": 0.7235707059252174,
+          "accuracy": 0.6879912446522735,
+          "f1": 0.6749585406301825,
+          "n": 10051
+        }
+      },
+      "LATAM": {
+        "on_global_test": {
+          "auc": 0.719721394597449,
+          "accuracy": 0.6865254119927988,
+          "f1": 0.6710266248110685,
+          "n": 36105
+        },
+        "on_own_test": {
+          "auc": 0.7193040908246111,
+          "accuracy": 0.6861129954452951,
+          "f1": 0.6677607959790748,
+          "n": 10319
+        }
+      },
+      "Pacific Asia": {
+        "on_global_test": {
+          "auc": 0.7215329560982442,
+          "accuracy": 0.6862207450491622,
+          "f1": 0.670697322907886,
+          "n": 36105
+        },
+        "on_own_test": {
+          "auc": 0.7220881535735353,
+          "accuracy": 0.6834706737760543,
+          "f1": 0.6670066292707802,
+          "n": 8252
+        }
+      },
+      "USCA": {
+        "on_global_test": {
+          "auc": 0.7227062146469871,
+          "accuracy": 0.68616535105941,
+          "f1": 0.6706391884428684,
+          "n": 36105
+        },
+        "on_own_test": {
+          "auc": 0.7328110253747746,
+          "accuracy": 0.6934108527131783,
+          "f1": 0.6813053988718775,
+          "n": 5160
+        }
+      }
+    },
+    "fedavg": {
+      "global_test": {
+        "auc": 0.7218210810664882,
+        "accuracy": 0.6863315330286663,
+        "f1": 0.6708518615398029,
+        "n": 36105
+      },
+      "per_market_test": {
+        "Africa": {
+          "auc": 0.7123275075874236,
+          "accuracy": 0.6745587602238484,
+          "f1": 0.6560509554140127,
+          "n": 2323
+        },
+        "Europe": {
+          "auc": 0.7219963470711521,
+          "accuracy": 0.6879912446522735,
+          "f1": 0.6749585406301825,
+          "n": 10051
+        },
+        "LATAM": {
+          "auc": 0.7196824446909897,
+          "accuracy": 0.6861129954452951,
+          "f1": 0.6677607959790748,
+          "n": 10319
+        },
+        "Pacific Asia": {
+          "auc": 0.7218230329443909,
+          "accuracy": 0.6834706737760543,
+          "f1": 0.6671763506625892,
+          "n": 8252
+        },
+        "USCA": {
+          "auc": 0.7299990022587165,
+          "accuracy": 0.6934108527131783,
+          "f1": 0.6813053988718775,
+          "n": 5160
+        }
+      },
+      "round_history": [
+        {
+          "round": 1,
+          "auc": 0.4804534967812778,
+          "accuracy": 0.49200941697825784,
+          "f1": 0.5558327077228586,
+          "n": 36105
+        },
+        {
+          "round": 10,
+          "auc": 0.6964769882056898,
+          "accuracy": 0.6454507685916078,
+          "f1": 0.6854868430751088,
+          "n": 36105
+        },
+        {
+          "round": 20,
+          "auc": 0.7117441207694781,
+          "accuracy": 0.6771084337349398,
+          "f1": 0.6745211904628957,
+          "n": 36105
+        },
+        {
+          "round": 30,
+          "auc": 0.7147256761749909,
+          "accuracy": 0.6853067442182523,
+          "f1": 0.6712193992707911,
+          "n": 36105
+        },
+        {
+          "round": 40,
+          "auc": 0.7178120378043051,
+          "accuracy": 0.6862761390389143,
+          "f1": 0.6710232058319537,
+          "n": 36105
+        },
+        {
+          "round": 50,
+          "auc": 0.7202544669839239,
+          "accuracy": 0.6863038360337903,
+          "f1": 0.6708514966579483,
+          "n": 36105
+        },
+        {
+          "round": 60,
+          "auc": 0.7218210810664882,
+          "accuracy": 0.6863315330286663,
+          "f1": 0.6708518615398029,
+          "n": 36105
+        }
+      ]
+    },
+    "centralized": {
+      "global_test": {
+        "auc": 0.7218236038867525,
+        "accuracy": 0.6863315330286663,
+        "f1": 0.6708518615398029,
+        "n": 36105
+      },
+      "per_market_test": {
+        "Africa": {
+          "auc": 0.712339468058068,
+          "accuracy": 0.6745587602238484,
+          "f1": 0.6560509554140127,
+          "n": 2323
+        },
+        "Europe": {
+          "auc": 0.7219974078519716,
+          "accuracy": 0.6879912446522735,
+          "f1": 0.6749585406301825,
+          "n": 10051
+        },
+        "LATAM": {
+          "auc": 0.7196893527576813,
+          "accuracy": 0.6861129954452951,
+          "f1": 0.6677607959790748,
+          "n": 10319
+        },
+        "Pacific Asia": {
+          "auc": 0.721819323926076,
+          "accuracy": 0.6834706737760543,
+          "f1": 0.6671763506625892,
+          "n": 8252
+        },
+        "USCA": {
+          "auc": 0.7300006702152696,
+          "accuracy": 0.6934108527131783,
+          "f1": 0.6813053988718775,
+          "n": 5160
+        }
+      }
+    }
+  },
+  "findings": {
+    "fedavg_vs_best_single_client_auc_delta": -0.00089,
+    "fedavg_vs_mean_single_client_auc_delta": 0.00043,
+    "fedavg_vs_centralized_auc_delta": -0.0,
+    "best_single_client": "USCA",
+    "smallest_client": "Africa",
+    "smallest_client_alone_own_auc": 0.7105,
+    "smallest_client_fedavg_own_auc": 0.71233,
+    "smallest_client_fedavg_gain_auc": 0.00183
+  },
+  "elapsed_s": 13.33,
+  "git_sha": "a50d87569c9a117ad3aa79ab8032068bcb0a77d2",
+  "generated_at_utc": "2026-07-02T22:58:55Z"
+}

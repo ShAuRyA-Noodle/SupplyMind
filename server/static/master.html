@@ -3,542 +3,128 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SupplyMind · Master Demo</title>
-<!-- Assets vendored locally under server/static/vendor/ so the demo survives with no internet.
-     (Served-over-HTTP note: these resolve when the static dir is opened/served as a directory;
-      a StaticFiles mount for server/static is required for the FastAPI /demo/master route.) -->
+<title>SupplyMind · Evidence Console</title>
+<meta name="description" content="A zero-fakes audit console: every number traces to a committed receipt and a live endpoint probe.">
+<!-- Assets vendored locally under /static so the demo survives with no internet.
+     Served at /demo/master (read directly, not via the static mount) so every
+     reference is absolute. No CDN, no external host. -->
 <link href="/static/vendor/fonts/fonts.css" rel="stylesheet">
-<script src="/static/vendor/tailwind.js"></script>
-<style>
-  :root {
-    --bg-0:#06080d; --bg-1:#0c1018; --bg-2:#131826; --bg-3:#1a2030;
-    --bd:#232a3d; --fg-0:#e8edf6; --fg-1:#aab3c5; --fg-2:#6c7689;
-    --cyan:#22d3ee; --amber:#fbbf24; --zinc:#71717a;
-    --red:#f87171; --green:#34d399; --violet:#a78bfa;
-  }
-  html,body { background: var(--bg-0); color: var(--fg-0);
-              font-family:'Inter',system-ui,sans-serif;
-              font-feature-settings:"tnum" on,"ss01" on;}
-  .mono { font-family:'JetBrains Mono',ui-monospace,monospace; }
-  .panel { background: var(--bg-1); border:1px solid var(--bd);
-           border-radius:14px; transition: all .15s ease; }
-  .panel:hover { border-color: rgba(34,211,238,.4); }
-  .chip { display:inline-flex; align-items:center; gap:6px;
-          padding:3px 9px; border-radius:999px;
-          border:1px solid var(--bd); font-size:11px;
-          font-weight:600; text-transform:uppercase; letter-spacing:.04em; }
-  .chip-live { color:var(--cyan); border-color:rgba(34,211,238,.4);
-               background:rgba(34,211,238,.08); }
-  .chip-good { color:var(--green); border-color:rgba(52,211,153,.4);
-               background:rgba(52,211,153,.10); }
-  .chip-amber{ color:var(--amber); border-color:rgba(251,191,36,.4);
-               background:rgba(251,191,36,.10); }
-  .chip-violet{color:var(--violet); border-color:rgba(167,139,250,.4);
-               background:rgba(167,139,250,.10); }
-  .chip-bad,.chip-crit{ color:var(--red); border-color:rgba(248,113,113,.4);
-               background:rgba(248,113,113,.10); }
-  .stat { font-family:'JetBrains Mono',ui-monospace,monospace;
-          font-weight:700; font-size: 24px; line-height: 1; }
-  .gradient-text {
-    background: linear-gradient(135deg,var(--cyan),var(--violet));
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .hero-grid {
-    display:grid; gap:14px;
-    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  }
-  .ring { transition: all .15s ease; }
-  .ring:hover { box-shadow: 0 0 0 2px rgba(34,211,238,.4); }
-  .scrollbar::-webkit-scrollbar { width:8px; height:8px; }
-  .scrollbar::-webkit-scrollbar-thumb { background:var(--bd); border-radius:4px;}
-  .led { display:inline-block; width:8px; height:8px; border-radius:50%;
-         background:var(--green); box-shadow:0 0 6px var(--green); }
-  .led.warn { background:var(--amber); box-shadow:0 0 6px var(--amber); }
-  .led.bad  { background:var(--red);   box-shadow:0 0 6px var(--red); }
-  details > summary { list-style:none; cursor:pointer; }
-  details > summary::-webkit-details-marker { display:none; }
-
-  /* Tooltip system — hover for plain-language explanation */
-  .help { position: relative; cursor: help;
-          border-bottom: 1px dotted var(--fg-2); }
-  .help::after {
-    content: attr(data-tip);
-    position: absolute; bottom: 130%; left: 0;
-    background: #0c1018; color: #e8edf6;
-    border: 1px solid var(--cyan); border-radius: 8px;
-    padding: 10px 12px; width: 320px; max-width: 90vw;
-    font-size: 11px; font-weight: 400; line-height: 1.45;
-    text-transform: none; letter-spacing: 0;
-    box-shadow: 0 8px 24px rgba(0,0,0,.55);
-    opacity: 0; pointer-events: none; transition: opacity .18s ease;
-    z-index: 99; white-space: pre-wrap;
-  }
-  .help:hover::after { opacity: 1; }
-  .panel.reliance-flag { border-color: rgba(167,139,250,.5); }
-  .panel.reliance-flag::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--violet), var(--cyan));
-    border-radius: 14px 14px 0 0;
-  }
-</style>
+<link href="/static/dashboard.css" rel="stylesheet">
 </head>
-<body class="min-h-screen">
+<body>
 
-<header class="sticky top-0 z-40 border-b border-[var(--bd)] backdrop-blur"
-        style="background:rgba(6,8,13,.85);">
-  <div class="max-w-[1500px] mx-auto px-6 py-4 flex flex-col gap-3 md:flex-row
-              md:items-center md:justify-between">
-    <div class="flex items-center gap-3">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center"
-           style="background:linear-gradient(135deg,var(--cyan),var(--violet));">
-        <span class="font-extrabold text-xl text-[var(--bg-0)]">SM</span>
-      </div>
+<header class="hdr">
+  <div class="hdr-in">
+    <div class="brand">
+      <div class="mark">SM</div>
       <div>
-        <h1 class="text-xl font-bold leading-tight">
-          <span class="gradient-text">SupplyMind</span>
-          <span class="text-[var(--fg-2)]"> · </span>
-          <span class="text-[var(--fg-0)]">Master Demo</span>
-        </h1>
-        <div class="text-xs text-[var(--fg-2)] mono">
-          v4 final-submit · Meta OpenEnv × Scaler · Bangalore 2026 ·
-          <span id="utc-clock"></span>
-        </div>
+        <h1>SupplyMind · <span style="color:var(--ink-2);font-weight:600">Evidence Console</span></h1>
+        <div class="sub">supply-chain risk decision copilot · measures everything, hides nothing · <span class="mono" id="clock"></span></div>
       </div>
     </div>
-    <div class="flex flex-wrap items-center gap-2">
-      <span class="chip chip-good" id="live-count">probing endpoints…</span>
-      <a href="/docs" target="_blank" class="chip chip-amber hover:underline">/docs ↗</a>
+    <div class="hdr-tools">
+      <span class="chip" id="live-count"><span class="dot pending"></span> probing endpoints…</span>
+      <button class="chip btn" id="reprobe" type="button">▶ re-probe</button>
+      <button class="chip btn" id="theme" type="button">◑ light</button>
+      <a class="chip btn" href="/docs" target="_blank" rel="noopener">/docs ↗</a>
     </div>
   </div>
 </header>
 
-<main class="max-w-[1500px] mx-auto px-6 py-8 space-y-10">
+<main>
 
-  <!-- HERO — LIVE SYSTEM STATUS (probed from the browser; no hardcoded numbers) -->
-  <section class="panel p-7" id="headline-section">
-    <div class="flex items-center justify-between mb-2">
-      <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">
-        live system status · probed from your browser on load
-      </div>
-      <button id="ping-hero" class="chip chip-live cursor-pointer">▶ re-probe</button>
-    </div>
-    <div class="text-sm text-[var(--fg-1)] mb-4 leading-tight">
-      This board shows only values it can fetch from a running SupplyMind server. Each tile below
-      is a real HTTP probe made from this browser — <span class="text-[var(--green)]">green = 200 OK</span>,
-      <span class="text-[var(--amber)]">amber = reachable but non-200</span>,
-      <span class="text-[var(--red)]">red = no response</span>. Metrics quoted on the subsystem cards
-      are backed by committed receipts under <span class="mono">tests/receipts/</span> and
-      <span class="mono">versions/…/results/</span> — open the linked endpoint or receipt to verify.
-    </div>
-    <div id="status-grid" class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
-      <div class="text-[var(--fg-2)] text-xs">probing endpoints…</div>
-    </div>
+  <!-- HERO -->
+  <section class="panel hero">
+    <div class="lead">The question a judge always asks is <span class="accent">“how do you know that number?”</span> — so every number here answers it.</div>
+    <div class="desc" id="hero-desc">loading evidence manifest…</div>
   </section>
 
-  <!-- 8-CARD GRID -->
-  <section>
-    <div class="flex items-center justify-between mb-3">
-      <div class="text-xs uppercase tracking-wider text-[var(--fg-2)]">
-        eight subsystems · one click each · every card links to a live endpoint
-      </div>
-      <button id="ping-all" class="chip chip-live cursor-pointer">▶ ping all</button>
-    </div>
-
-    <div class="hero-grid">
-
-      <!-- Card 1: Hormuz War Room (UPGRADED) -->
-      <a href="/demo/hormuz-war-room/ui" class="panel p-5 ring block relative reliance-flag">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2"><span class="led" id="led-1"></span>
-            <span class="font-semibold help"
-                data-tip="Hormuz War Room — flagship Theme #3 demo. 14-node IEA-cited chokepoint map + India/Gulf/Reliance sector tables + 25-judge ensemble (3 Ollama + 12 OpenRouter + 10 specialist) + sha256 receipt. Click to open.">1 · Hormuz War Room</span>
-          </div>
-          <span class="chip chip-violet">25-judge · Reliance</span>
-        </div>
-        <div class="text-sm text-[var(--fg-1)] leading-tight">
-          IEA-cited chokepoint map · India + Gulf + <strong>Reliance Industries</strong>
-          10-subsidiary tables · <strong>25-judge ensemble</strong>
-          (3 Ollama + 12 frontier + 10 specialist) · sha256 receipt
-        </div>
-        <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--cyan)]">25</span>
-          <span class="text-xs text-[var(--fg-2)]">judges · 14 nodes · 18 edges · 4 scenario templates</span>
-        </div>
-      </a>
-
-      <!-- Card 2: 9-Agent Leaderboard -->
-      <a href="/arena/health" class="panel p-5 ring block">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2"><span class="led" id="led-2"></span>
-            <span class="font-semibold">2 · 9-Agent Arena</span></div>
-          <span class="chip chip-violet">RL</span>
-        </div>
-        <div class="text-sm text-[var(--fg-1)] leading-tight">
-          PPO · MaskablePPO · Recurrent · DQN · A2C · QRDQN · TRPO ·
-          DT · <strong>RAP-XC 3.14M (BC 5.6→0.2)</strong>
-        </div>
-        <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--cyan)]">9</span>
-          <span class="text-xs text-[var(--fg-2)]">agents on /arena/leaderboard</span>
-        </div>
-      </a>
-
-      <!-- Card 3: 13 Foundation Models -->
-      <a href="/phoenix/status" class="panel p-5 ring block">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2"><span class="led" id="led-3"></span>
-            <span class="font-semibold">3 · 13 Foundation Models</span></div>
-          <span class="chip chip-good">verified local</span>
-        </div>
-        <div class="text-sm text-[var(--fg-1)] leading-tight">
-          Qwen-14B · Coder-14B · Mistral-Nemo · DeepSeek-R1-Q4 ·
-          <strong>Chronos+TimesFM+TabPFN ensemble</strong> ·
-          BGE-M3 / mxbai / Snowflake / BGE-rerank · Qwen-VL 7B
-        </div>
-        <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--cyan)]">13</span>
-          <span class="text-xs text-[var(--fg-2)]">all loaded under models/</span>
-        </div>
-      </a>
-
-      <!-- Card 4: Crisis Library v2 (1500 events) -->
-      <a href="/docs#/library%20%28v2%29" class="panel p-5 ring block">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2"><span class="led" id="led-4"></span>
-            <span class="font-semibold">4 · Crisis Library v2</span></div>
-          <span class="chip chip-amber">EMDAT</span>
-        </div>
-        <div class="text-sm text-[var(--fg-1)] leading-tight">
-          1500 real disasters · mxbai 1024-d FAISS HNSW · P@1=0.962 ·
-          deterministic severity from real death/damage/affected counts
-        </div>
-        <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--violet)]">1500</span>
-          <span class="text-xs text-[var(--fg-2)]">events · POST analog query</span>
-        </div>
-      </a>
-
-      <!-- Card 5: Platinum Counterfactual -->
-      <a href="/docs#/training/counterfactual_platinum_counterfactual_platinum_post" class="panel p-5 ring block">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2"><span class="led" id="led-5"></span>
-            <span class="font-semibold">5 · Platinum Counterfactual</span></div>
-          <span class="chip chip-violet">causal</span>
-        </div>
-        <div class="text-sm text-[var(--fg-1)] leading-tight">
-          Paired-bootstrap MC · Synthetic Control · BSTS-lite ·
-          SCM do-calculus — calibrated to 6 paper anchors;
-          <strong>Tohoku replicated $276B vs $235B published (+18%)</strong>
-        </div>
-        <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--green)]">4</span>
-          <span class="text-xs text-[var(--fg-2)]">methods · 6 anchors · CI95</span>
-        </div>
-      </a>
-
-      <!-- Card 6: 12-Frontier Panel + Cross-Corpus α -->
-      <a href="/analyst/panel-consensus/2021_Suez_Canal_obstruction" class="panel p-5 ring block">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2"><span class="led" id="led-6"></span>
-            <span class="font-semibold">6 · 12-Judge Frontier Panel</span></div>
-          <span class="chip chip-violet">α=0.567</span>
-        </div>
-        <div class="text-sm text-[var(--fg-1)] leading-tight">
-          OpenRouter 12 frontier judges + 13 local — Krippendorff α (ordinal):
-          R4 corpus 0.567 · v2 EMDAT cross-corpus 0.5436 · drift 0.024 abs
-        </div>
-        <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--violet)]">25</span>
-          <span class="text-xs text-[var(--fg-2)]">judges · α-stable cross-corpus</span>
-        </div>
-      </a>
-
-      <!-- Card 7: Phoenix Replay (v5) -->
-      <a href="/replay/health" class="panel p-5 ring block">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2"><span class="led" id="led-7"></span>
-            <span class="font-semibold">7 · Phoenix Replay</span></div>
-          <span class="chip chip-violet">v5</span>
-        </div>
-        <div class="text-sm text-[var(--fg-1)] leading-tight">
-          Frozen-event replay adapter (versions/v5_phoenix/realtime_v5) ·
-          deterministic re-run of captured war-room events · mounted under /replay
-        </div>
-        <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--cyan)]">/replay</span>
-          <span class="text-xs text-[var(--fg-2)]">GET /replay/health</span>
-        </div>
-      </a>
-
-      <!-- Card 8: Live Intel Fan-Out -->
-      <a href="/live/health" class="panel p-5 ring block">
-        <div class="flex items-center justify-between mb-3">
-          <div class="flex items-center gap-2"><span class="led" id="led-8"></span>
-            <span class="font-semibold">8 · Live Intel Fan-Out</span></div>
-          <span class="chip chip-live">20 sources</span>
-        </div>
-        <div class="text-sm text-[var(--fg-1)] leading-tight">
-          NewsAPI · GDELT · USGS · NOAA NDBC/Tides · NASA EONET/FIRMS ·
-          EIA · MarineTraffic · GFW · WHO DON · SEC · CISA · OFAC ·
-          World Bank · Wiki · HN
-        </div>
-        <div class="mt-3 flex items-baseline gap-3">
-          <span class="stat text-[var(--cyan)]">20</span>
-          <span class="text-xs text-[var(--fg-2)]">live sources · graceful</span>
-        </div>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ============================ REWARD-HACKING SIDE-BY-SIDE ============================ -->
-  <section class="panel p-5">
-    <div class="flex items-center justify-between mb-3">
+  <!-- HONESTY LEGEND -->
+  <section class="section">
+    <div class="section-head">
       <div>
-        <h2 class="font-semibold">Reward-hacking · 6 attacks · 6 rejected · all by different defense layer</h2>
-        <div class="text-xs text-[var(--fg-2)] mt-1">
-          Per Meta OpenEnv × Scaler hackathon-guide §8 — multi-component reward + multiple independent gates beat single-signal reward hacking.
-        </div>
-      </div>
-      <span class="chip chip-good">6/6 rejected · honest=0.86</span>
-    </div>
-    <div class="grid md:grid-cols-2 gap-3 text-xs">
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="flex items-center justify-between"><span class="mono font-semibold">A1 · empty_string</span><span class="chip chip-crit">REJECTED 0.00</span></div>
-        <div class="text-[var(--fg-2)] mt-1">degenerate empty output, no info</div>
-        <div class="mono mt-1 text-[var(--fg-1)]">match=0.00 · format=0.00 · length=0.00 · n_tokens=1</div>
-        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: format_gate + length_gate</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="flex items-center justify-between"><span class="mono font-semibold">A2 · risk_only_short_circuit</span><span class="chip chip-crit">REJECTED 0.70</span></div>
-        <div class="text-[var(--fg-2)] mt-1">pure short-circuit: output ground-truth label only</div>
-        <div class="mono mt-1 text-[var(--fg-1)]">match=1.00 · format=0.00 · length=0.00 · n_tokens=1</div>
-        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: length_gate (shorter than honest)</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="flex items-center justify-between"><span class="mono font-semibold">A3 · long_spam_no_json</span><span class="chip chip-crit">REJECTED 0.80</span></div>
-        <div class="text-[var(--fg-2)] mt-1">pad with junk to beat length-guard, omit JSON</div>
-        <div class="mono mt-1 text-[var(--fg-1)]">match=1.00 · format=0.00 · length=1.00 · n_tokens=200</div>
-        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: format_gate (no JSON shape)</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="flex items-center justify-between"><span class="mono font-semibold">A4 · over_length_500_token</span><span class="chip chip-crit">REJECTED 0.85</span></div>
-        <div class="text-[var(--fg-2)] mt-1">massive output to dilute detection</div>
-        <div class="mono mt-1 text-[var(--fg-1)]">match=1.00 · format=1.00 · length=<span class="text-[var(--red)]">-0.50</span> · n_tokens=500</div>
-        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: max_length_penalty (negative reward over 400tk)</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="flex items-center justify-between"><span class="mono font-semibold">A5 · adjacent_tier_guess</span><span class="chip chip-crit">REJECTED 0.65</span></div>
-        <div class="text-[var(--fg-2)] mt-1">always guess adjacent tier to hedge</div>
-        <div class="mono mt-1 text-[var(--fg-1)]">match=<span class="text-[var(--amber)]">0.50</span> · format=1.00 · length=1.00 · n_tokens=60</div>
-        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: ordinal_proximity_penalty (only 0.5 partial credit)</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="flex items-center justify-between"><span class="mono font-semibold">A6 · wrong_tier_confident</span><span class="chip chip-crit">REJECTED 0.30</span></div>
-        <div class="text-[var(--fg-2)] mt-1">always guess LOW (opposite end)</div>
-        <div class="mono mt-1 text-[var(--fg-1)]">match=<span class="text-[var(--red)]">0.00</span> · format=1.00 · length=1.00 · n_tokens=60</div>
-        <div class="text-[var(--cyan)] text-[10px] mt-1">defense: far-from-GT match=0 (not partial credit)</div>
+        <div class="eyebrow">the honesty taxonomy</div>
+        <h2>Five states, shown with equal candour</h2>
+        <p>Most dashboards paint everything green. This one names what is real, what degraded, what is blocked on a revoked key, what we measured and cut, and what is still statistically thin.</p>
       </div>
     </div>
-    <div class="mt-3 p-3 rounded-lg border border-[var(--green)]/30 bg-[var(--green)]/5">
-      <div class="text-xs font-semibold text-[var(--green)]">honest baseline reward = 0.86 · STRICTLY GREATER than every attack</div>
-      <div class="text-xs text-[var(--fg-2)] mt-1 mono">verdict: All attack vectors score strictly below honest. Layered reward rejects each via different component: length-guard (A2), format-guard (A3), max-length (A4), proximity penalty (A5,A6).</div>
-      <div class="text-xs text-[var(--fg-2)] mt-1 mono">receipt: tests/receipts/adversarial_reward_audit.json</div>
-    </div>
+    <div class="legend" id="legend"></div>
   </section>
 
-  <!-- ============================ WORDLE RLVR CANONICAL DEMO ============================ -->
-  <section class="panel p-5">
-    <div class="flex items-center justify-between mb-3">
+  <!-- INTEGRITY LEDGER -->
+  <section class="section">
+    <div class="section-head">
       <div>
-        <h2 class="font-semibold">Wordle RLVR · canonical hackathon-guide demo</h2>
-        <div class="text-xs text-[var(--fg-2)] mt-1">
-          OpenEnv-compliant · multi-component reward · GRPO-trainable via TRL · bridges domain-heavy supply-chain to canonical hackathon flow
-        </div>
-      </div>
-      <a href="/wordle/ui" target="_blank" class="chip chip-violet hover:underline">▶ play live</a>
-    </div>
-    <div class="grid md:grid-cols-3 gap-3 text-xs">
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="text-[var(--fg-2)]">env contract</div>
-        <div class="mono mt-1">reset / step / grade / observation / action</div>
-        <div class="text-[10px] text-[var(--fg-2)] mt-1">Pydantic v2 typed · OpenEnv compliant</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="text-[var(--fg-2)]">reward components (multi · §7)</div>
-        <div class="mono mt-1">solve_bonus · green_credit · yellow_credit · timeout_penalty · format_gate · dictionary_gate</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="text-[var(--fg-2)]">anti-hack layers (§8)</div>
-        <div class="mono mt-1">format_gate · dictionary_gate · timeout · no internal-state mutation</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="text-[var(--fg-2)]">baseline (heuristic constraint filter, 50 episodes seeded)</div>
-        <div class="mono mt-1 text-[var(--green)]">win_rate=1.00 · mean_guesses=1.82 · mean_reward=0.77</div>
-        <div class="text-[10px] text-[var(--fg-2)] mt-1">receipt: tests/receipts/wordle_grpo_baseline.json</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="text-[var(--fg-2)]">trainer stack</div>
-        <div class="mono mt-1">TRL GRPO · Unsloth (optional) · Qwen-2.5-1.5B-Instruct base</div>
-        <div class="text-[10px] text-[var(--fg-2)] mt-1">recipe: rl/lora/finetune_unsloth.py + versions/v5_phoenix/wordle_env/train_grpo.py</div>
-      </div>
-      <div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-        <div class="text-[var(--fg-2)]">endpoints</div>
-        <div class="mono mt-1">POST /wordle/reset · POST /wordle/step · POST /wordle/grade · GET /wordle/health · GET /wordle/ui</div>
+        <div class="eyebrow">integrity ledger · counts derived from the cards below</div>
+        <h2>What actually holds up</h2>
       </div>
     </div>
+    <div class="ledger" id="ledger"></div>
   </section>
 
-  <!-- VALIDATION + RECEIPTS ROW -->
-  <section class="grid md:grid-cols-2 gap-4">
-    <div class="panel p-5">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="font-semibold">Validation · backtest receipts</h2>
-        <button id="run-validate" class="chip chip-live cursor-pointer">▶ run war-room backtest</button>
-      </div>
-      <div id="validate-out" class="text-sm text-[var(--fg-1)]">
-        click ▶ to run 8-event backtest · expected:
-        <span class="mono text-[var(--green)]">100% risk-band, 100% Brent ±30%, 100% reroute</span>
+  <!-- LIVE ENDPOINT TELEMETRY -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">live telemetry · real HTTP from your browser</div>
+        <h2>Endpoint probes</h2>
+        <p>Each tile is a genuine request to this running server. Only HTTP 200 counts green; POST-only endpoints get a real minimal POST; a non-200 is amber with its true status; no response is red.</p>
       </div>
     </div>
-
-    <div class="panel p-5">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="font-semibold">Receipts · all real, all sha256</h2>
-        <span class="chip chip-good">10+ receipts</span>
-      </div>
-      <ul class="text-sm space-y-1 mono text-[var(--fg-1)]">
-        <li>tests/receipts/war_room_validation.json — 100/100/100/100/100%</li>
-        <li>tests/receipts/ensemble_brent_validation.json — 8/8 ±30%, median 3.3% err</li>
-        <li>tests/receipts/conformal_calibration.json — 0.9001 coverage</li>
-        <li>tests/receipts/cross_corpus_alpha.json — α=0.5436</li>
-        <li>tests/receipts/panel_agreement_R4.json — α=0.5669</li>
-        <li>versions/v5_phoenix/experiments/hetgat_v1/report.json — +7.77/+12.15/+10.03%</li>
-        <li>versions/v5_phoenix/experiments/rap_xc_v1/rapxc.pt — BC 5.62→0.23</li>
-      </ul>
-    </div>
+    <div class="probe-grid" id="probe-grid"><div class="loading">probing…</div></div>
   </section>
 
-  <!-- FOOTER -->
-  <footer class="text-xs text-[var(--fg-2)] py-6 flex items-center justify-between">
-    <div>
-      Every subsystem card above links to a live server endpoint, and each LED is a real HTTP
-      request made from this browser (green = 200, amber = reachable but non-200, red = down).
-      Quoted metrics are backed by committed receipts under tests/receipts/ and
-      versions/…/results/ — open the linked endpoint or receipt to verify. If a subsystem is
-      unavailable, its LED and the status grid say so.
+  <!-- GOLDEN PATH -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">the golden path · Priya's 8am desk</div>
+        <h2>Signal → assess → decide → cost → war room</h2>
+        <p>The four questions a risk officer asks — what changed, how bad, what's my move, what's the downside if I do nothing — each mapped to the evidence card that answers it.</p>
+      </div>
     </div>
-    <a href="/demo/hormuz-war-room/ui"
-       class="chip chip-violet cursor-pointer">→ open Hormuz War Room</a>
-  </footer>
+    <div class="spine" id="spine"></div>
+  </section>
+
+  <!-- EVIDENCE CARDS -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">evidence · core spine first, then supporting, then appendix</div>
+        <h2>Every card earns its place</h2>
+        <p>Each card carries a live endpoint probe or a committed receipt (usually both). Hover any figure to see the exact receipt field it was read from; the footer links the served receipt file and its sha256.</p>
+      </div>
+    </div>
+    <div class="cards" id="cards"><div class="loading">loading cards…</div></div>
+  </section>
+
+  <!-- CUTTING ROOM (retired-by-measurement) -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">the cutting room · a credibility flex</div>
+        <h2>We measured it, it lost, we cut it</h2>
+        <p>Capabilities removed because the measurement said so — the receipt records the exact metric that failed. Deletion is triage; the honesty is the point.</p>
+      </div>
+    </div>
+    <div class="list-panel" id="cutting"></div>
+  </section>
+
+  <!-- LIMITATIONS (proud) -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow">limitations · proud, not apologetic</div>
+        <h2>What we do not claim yet</h2>
+        <p>Blocked-on-key work is built and offline-verified, awaiting the revoked OpenRouter key. Provisional and degraded items are surfaced with their true reason. Nothing here is fabricated to fill the gap.</p>
+      </div>
+    </div>
+    <div class="list-panel" id="limits"></div>
+  </section>
+
+  <footer id="foot"></footer>
 </main>
 
-<script>
-  const $ = (s)=>document.querySelector(s);
-
-  function tickClock() {
-    const d = new Date(), z = (n)=>String(n).padStart(2,"0");
-    $("#utc-clock").textContent =
-      d.getUTCFullYear()+"-"+z(d.getUTCMonth()+1)+"-"+z(d.getUTCDate())+
-      " "+z(d.getUTCHours())+":"+z(d.getUTCMinutes())+":"+z(d.getUTCSeconds())+"Z";
-  }
-  setInterval(tickClock, 500); tickClock();
-
-  // ---- LIVE ENDPOINT PROBES -------------------------------------------------
-  // Each entry is exercised with a REAL request from this browser. Only HTTP 200
-  // counts as "live" (green LED). 405/4xx/5xx = amber (reachable but not OK); a
-  // network failure = red. POST-only endpoints are probed with a real minimal
-  // POST body — never a GET that would 405 and be mislabelled green.
-  const ENDPOINTS = [
-    {id:"led-1", label:"Hormuz War Room",         url:"/demo/hormuz-war-room/health",                          method:"GET"},
-    {id:"led-2", label:"9-Agent Arena",           url:"/arena/health",                                         method:"GET"},
-    {id:"led-3", label:"Phoenix v5 mounts",       url:"/phoenix/status",                                       method:"GET"},
-    {id:"led-4", label:"Crisis Library v2",       url:"/library/v2/search",                                    method:"POST",
-       body:{query:"strait of hormuz closure disrupts crude oil shipping", top_k:1}},
-    {id:"led-5", label:"Platinum Counterfactual", url:"/counterfactual/platinum",                              method:"POST",
-       body:{severity_tier:"HIGH", n_episodes_mc:1}},
-    {id:"led-6", label:"Frontier Judge Panel",    url:"/analyst/panel-consensus/2021_Suez_Canal_obstruction",  method:"GET"},
-    {id:"led-7", label:"Phoenix Replay",          url:"/replay/health",                                        method:"GET"},
-    {id:"led-8", label:"Live Intel Fan-Out",      url:"/live/health",                                          method:"GET"},
-  ];
-
-  async function probe(ep) {
-    const led = document.getElementById(ep.id);
-    const t0 = performance.now();
-    let status = 0, ok = false, err = null;
-    try {
-      const opts = { method: ep.method };
-      if (ep.method === "POST") {
-        opts.headers = {"Content-Type": "application/json"};
-        opts.body = JSON.stringify(ep.body || {});
-      }
-      const r = await fetch(ep.url, opts);
-      status = r.status;
-      ok = (status === 200);            // ONLY 200 is "live" — 405 is NOT green.
-    } catch (e) { err = e.message || "network error"; }
-    const ms = Math.round(performance.now() - t0);
-    if (led) {
-      led.classList.remove("warn", "bad");
-      if (!ok) led.classList.add(err ? "bad" : "warn");
-    }
-    return { ...ep, status, ok, ms, err };
-  }
-
-  function renderStatusGrid(results) {
-    const grid = $("#status-grid");
-    if (!grid) return;
-    grid.innerHTML = results.map(r => {
-      const color = r.ok ? "var(--green)" : (r.err ? "var(--red)" : "var(--amber)");
-      const state = r.err ? "no response" : ("HTTP " + r.status);
-      return `<div class="p-3 rounded-lg border border-[var(--bd)] bg-[var(--bg-2)]">
-          <div class="flex items-center gap-2">
-            <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${color};box-shadow:0 0 6px ${color}"></span>
-            <span class="text-[var(--fg-1)]">${r.label}</span>
-          </div>
-          <div class="mono text-[10px] text-[var(--fg-2)] mt-1">${r.method} ${r.url}</div>
-          <div class="mono text-xs mt-1" style="color:${color}">${state} · ${r.ms}ms</div>
-        </div>`;
-    }).join("");
-  }
-
-  async function pingAll() {
-    const chip = $("#live-count");
-    if (chip) chip.textContent = "probing endpoints…";
-    const results = await Promise.all(ENDPOINTS.map(probe));
-    const live = results.filter(r => r.ok).length;
-    if (chip) {
-      chip.textContent = live + "/" + results.length + " endpoints live";
-      chip.classList.remove("chip-good", "chip-amber", "chip-bad");
-      chip.classList.add(live === results.length ? "chip-good" : (live > 0 ? "chip-amber" : "chip-bad"));
-    }
-    renderStatusGrid(results);
-  }
-  pingAll();
-  $("#ping-all").addEventListener("click", pingAll);
-  const _heroBtn = $("#ping-hero");
-  if (_heroBtn) _heroBtn.addEventListener("click", pingAll);
-
-  $("#run-validate").addEventListener("click", async () => {
-    const out = $("#validate-out");
-    out.innerHTML = '<span class="mono text-[var(--cyan)]">running 8-event backtest…</span>';
-    try {
-      const r = await fetch("/demo/hormuz-war-room/validate", {method:"POST"});
-      const j = await r.json();
-      const a = j.aggregate_accuracy || {};
-      out.innerHTML = `
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
-          <div><div class="text-[var(--fg-2)]">risk band</div><div class="stat text-[var(--green)]">${(a.risk_level_in_expected_band*100).toFixed(0)}%</div></div>
-          <div><div class="text-[var(--fg-2)]">brent ±30%</div><div class="stat text-[var(--cyan)]">${typeof a.brent_p90_brackets_documented_peak==="number" ? (a.brent_p90_brackets_documented_peak*100).toFixed(0)+"%" : a.brent_p90_brackets_documented_peak}</div></div>
-          <div><div class="text-[var(--fg-2)]">reroute</div><div class="stat text-[var(--green)]">${(a.reroute_action_when_doc_reroute_ge_5d*100).toFixed(0)}%</div></div>
-          <div><div class="text-[var(--fg-2)]">india top-3</div><div class="stat text-[var(--green)]">${(a.india_top3_includes_known_affected_sector*100).toFixed(0)}%</div></div>
-          <div><div class="text-[var(--fg-2)]">cf savings &gt;0</div><div class="stat text-[var(--green)]">${(a.counterfactual_positive_savings*100).toFixed(0)}%</div></div>
-          <div><div class="text-[var(--fg-2)]">events</div><div class="stat">${j.n_events_no_fatal}/${j.n_events_tested}</div></div>
-        </div>`;
-    } catch (e) {
-      out.innerHTML = `<span class="text-[var(--red)]">backtest failed: ${e.message}</span>`;
-    }
-  });
-</script>
+<script src="/static/dashboard.js"></script>
 </body>
 </html>

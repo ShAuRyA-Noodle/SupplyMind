@@ -11,6 +11,7 @@ US ports (Long Beach, Houston, NY/NJ, etc.).
 from __future__ import annotations
 
 import logging
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta, timezone
 
 from ._common import cached_get, http_get_json, standard_event
@@ -61,10 +62,20 @@ def fetch_port_water_level(station_id: str) -> dict:
 
 
 def fetch_chokepoint_ports() -> list[dict]:
-    """Fetch all chokepoint ports; one event per port."""
+    """Fetch all chokepoint ports concurrently; one event per port.
+
+    Each port is an independent cached HTTP fetch; fanning them out on a small
+    thread pool removes the serial ~12x20s cold long-pole while ``cached_get``
+    keeps the polling polite.
+    """
+    sids = list(PORT_STATIONS)
+    with ThreadPoolExecutor(max_workers=len(sids) or 1) as pool:
+        recs = dict(zip(sids, pool.map(fetch_port_water_level, sids)))
+
     out: list[dict] = []
-    for sid, (name, lat, lon) in PORT_STATIONS.items():
-        rec = fetch_port_water_level(sid)
+    for sid in sids:
+        name, lat, lon = PORT_STATIONS[sid]
+        rec = recs.get(sid)
         obs = (rec or {}).get("data") or []
         if not obs: continue
         latest = obs[-1]

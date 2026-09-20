@@ -1,7 +1,15 @@
 """
-Create and register custom Ollama models for SupplyMind.
+Create and register custom Ollama models for SupplyMind — EDGE-MODE tooling.
 
-This module covers the full local-model lineage:
+This module is the explicit edge-model AUTHORING step (CLAUDE.md §7.1: Ollama is
+a labeled local/edge mode). It registers Modelfiles with the ``ollama create``
+CLI — building an edge model can only be done through that CLI, so the subprocess
+call here is legitimate authoring, NOT a hidden inference dependency on a
+production path. Runtime inference elsewhere goes through the single gateway
+``supplymind.llm.providers``; the post-build smoke test below likewise routes
+through the gateway's Ollama edge backend rather than importing ``ollama``.
+
+Covers the full local-model lineage:
   - supplymind-analyst:v1 through supplymind-analyst:v5
   - qwen25-14b-local
   - qwen25-coder-local
@@ -9,9 +17,8 @@ This module covers the full local-model lineage:
   - deepseek-r1-local-q4
 
 The analyst versions are prompt, format, and calibration upgrades built from
-committed Modelfiles. They are local Ollama models, not hidden API calls.
-Creation forces OLLAMA_MAX_LOADED_MODELS=1 to avoid VRAM contention on the
-12 GB demo machine.
+committed Modelfiles. Creation forces OLLAMA_MAX_LOADED_MODELS=1 to avoid VRAM
+contention on the 12 GB demo machine. See ``rl.lora.edge_capability_matrix``.
 
 Usage:
     python -m rl.lora.create_ollama_model --version v5
@@ -211,13 +218,16 @@ def create_all() -> dict[str, bool]:
 
 
 def test_model(model_name: str = "supplymind-analyst:v5") -> str | None:
-    """Smoke-test a created model. v5 is additionally JSON-schema checked."""
+    """Smoke-test a created model via the gateway Ollama edge backend. v5 is
+    additionally JSON-schema checked. Returns None (loud-logged) if the edge
+    daemon/model is unavailable — never a fabricated response."""
     try:
-        import ollama as ollama_pkg
+        from supplymind.llm.providers import get_provider
 
-        response = ollama_pkg.chat(
-            model=model_name,
-            messages=[{
+        from rl.lora.edge_capability_matrix import run_coro_sync
+
+        resp = run_coro_sync(get_provider("ollama").complete(
+            [{
                 "role": "user",
                 "content": (
                     "STATE: Day 3/30. TSMC Fab 14 offline (risk=0.85). "
@@ -227,9 +237,12 @@ def test_model(model_name: str = "supplymind-analyst:v5") -> str | None:
                     "Return the required SupplyMind decision object."
                 ),
             }],
-            options={"temperature": 0.0},
-        )
-        content = response["message"]["content"]
+            model=model_name, schema=None, max_tokens=512, temperature=0.0,
+        ))
+        if not resp.content:
+            reason = resp.degrade_reason or resp.error or "empty response"
+            raise RuntimeError(f"edge model '{model_name}' unavailable: {reason}")
+        content = resp.content
         if model_name.endswith(":v5"):
             start, end = content.index("{"), content.rindex("}") + 1
             parsed = json.loads(content[start:end])

@@ -1,11 +1,19 @@
 """
 LLM-RL Hybrid Explainability for SupplyMind.
 
-Uses LOCAL Ollama (qwen2.5:14b) — zero API limits, ~3-4 sec per explanation
-on RTX 4080. After each RL action, decodes state to text and calls Ollama
-for natural-language explanation of why the agent chose that action.
+Routes through the single gateway ``supplymind.llm.providers`` (CLAUDE.md §0.4,
+§7.1). After each RL action, decodes state to text and asks the configured
+provider for a natural-language explanation of why the agent chose that action.
 
-Pre-populates 50 common scenarios to cache/explanations.json for demo speed.
+Provider is env-driven (``SUPPLYMIND_LLM_PROVIDER``): ``openrouter`` (default,
+cloud) or ``ollama`` (local edge mode). Ollama is selectable EDGE MODE only — it
+is never a hidden hard dependency. When no provider is available (revoked key /
+stopped daemon), the explainer degrades LOUDLY by raising :class:`ExplainerError`
+with the provider's surfaced reason; it never fabricates an explanation.
+
+See ``rl.lora.edge_capability_matrix`` for the per-feature cloud/edge/local map.
+
+Pre-populates common scenarios to cache/explanations.json for demo speed.
 
 Usage:
     from rl.explainer import explain_action
@@ -160,7 +168,8 @@ def _passes_quality_gate(text: str) -> bool:
 
 
 class ExplainerError(RuntimeError):
-    """Raised when Ollama is unavailable or fails quality gate. No fallback."""
+    """Raised when the provider is unavailable or output fails the quality gate.
+    No fabricated fallback — the failure is surfaced loud (CLAUDE.md §0/§3)."""
 
 
 def explain_action(
@@ -168,21 +177,30 @@ def explain_action(
     action_type: str,
     target_node: str | None = None,
     reward_components: dict | None = None,
-    model_name: str = "qwen2.5:14b",
+    model_name: str | None = None,
     shap_top: list | None = None,
     counterfactual_p50: float | None = None,
     rag_precedent: str | None = None,
     max_regen: int = 2,
 ) -> str:
-    """Generate structured 4-section explanation via Ollama.
+    """Generate a structured 4-section explanation via the LLM gateway.
 
-    PRODUCTION PATH: Ollama is mandatory. No heuristic fallback.
-    Raises ExplainerError if Ollama is unreachable or output fails quality gate
-    after max_regen attempts.
+    PRODUCTION PATH: routes through ``supplymind.llm.providers`` — provider is
+    env-driven (``openrouter`` default | ``ollama`` edge). No heuristic fallback.
+    Raises ExplainerError if no provider is available (degraded, reason surfaced)
+    or the output fails the quality gate after max_regen attempts.
+
+    ``model_name`` is an OPTIONAL explicit slug (e.g. an Ollama edge tag). When
+    None the gateway resolves the model from the provider's env var; there is no
+    hardcoded default slug (a silent wrong-model default is a fake per §0).
 
     For legacy heuristic output (tests/comparison only), import from
     rl.legacy.fallbacks.explainer_heuristic.
     """
+    from supplymind.llm.providers import get_provider
+
+    from rl.lora.edge_capability_matrix import run_coro_sync
+
     state_text = decode_state_to_text(obs)
     cache = _load_cache()
     key = _cache_key(state_text[:200], action_type)
@@ -190,38 +208,35 @@ def explain_action(
     if key in cache and _passes_quality_gate(cache[key]):
         return cache[key]
 
-    try:
-        import ollama
-    except ImportError as e:
-        raise ExplainerError(
-            "ollama package not installed. Run: pip install ollama"
-        ) from e
-
     prompt = _build_prompt(
         state_text, action_type, target_node, reward_components,
         shap_top=shap_top, counterfactual_p50=counterfactual_p50, rag_precedent=rag_precedent,
     )
 
+    provider = get_provider()
     last_output = ""
     for attempt in range(max_regen + 1):
-        try:
-            response = ollama.chat(
-                model=model_name,
-                messages=[{"role": "user", "content": prompt}],
-                options={"temperature": 0.2, "top_p": 0.9},
+        resp = run_coro_sync(provider.complete(
+            [{"role": "user", "content": prompt}],
+            model=model_name, schema=None, max_tokens=768, temperature=0.2,
+            retries=0,
+        ))
+        if not resp.content:
+            # No usable content: surface the provider's honest reason loud.
+            reason = resp.degrade_reason or resp.error or "provider returned empty content"
+            raise ExplainerError(
+                f"explainer provider '{resp.provider}' unavailable: {reason}"
             )
-            text = response["message"]["content"].strip()
-            last_output = text
-            if _passes_quality_gate(text):
-                cache[key] = text
-                _save_cache(cache)
-                return text
-            logger.warning(
-                "Quality gate fail (attempt %d): missing section. Regenerating...", attempt + 1,
-            )
-            prompt += "\n\nYour previous answer omitted a required section. Produce ALL FOUR section headers exactly: ## Decision, ## Evidence, ## Counterfactual, ## Precedent."
-        except Exception as e:
-            raise ExplainerError(f"Ollama call failed: {e}") from e
+        text = resp.content.strip()
+        last_output = text
+        if _passes_quality_gate(text):
+            cache[key] = text
+            _save_cache(cache)
+            return text
+        logger.warning(
+            "Quality gate fail (attempt %d): missing section. Regenerating...", attempt + 1,
+        )
+        prompt += "\n\nYour previous answer omitted a required section. Produce ALL FOUR section headers exactly: ## Decision, ## Evidence, ## Counterfactual, ## Precedent."
 
     raise ExplainerError(
         f"Explainer failed quality gate after {max_regen + 1} attempts. "
@@ -233,9 +248,10 @@ def pre_populate_cache(n_scenarios: int = 50) -> int:
     """Pre-populate the explanation cache with common scenarios.
 
     Runs the scripted agent on all 3 tasks and calls explain_action() for each
-    action taken, caching the result. explain_action() is Ollama-mandatory, so
-    a running Ollama model (default qwen2.5:14b) is REQUIRED — this does not use
-    heuristic explanations and will raise ExplainerError if Ollama is missing.
+    action taken, caching the result. explain_action() routes through the LLM
+    gateway, so a live provider (OpenRouter key, or an Ollama edge daemon with a
+    pulled model) is REQUIRED — this does not use heuristic explanations and will
+    raise ExplainerError if no provider is available.
 
     Returns number of explanations cached.
     """

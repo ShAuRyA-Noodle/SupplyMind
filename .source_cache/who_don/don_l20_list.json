@@ -9,7 +9,7 @@
     "lon": null,
     "severity_proxy": 0.85,
     "raw_url": "https://www.who.int/2026-DON612",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -22,7 +22,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON611",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -35,7 +35,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON609",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -48,7 +48,7 @@
     "lon": null,
     "severity_proxy": 0.6,
     "raw_url": "https://www.who.int/2026-DON610",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -61,7 +61,7 @@
     "lon": null,
     "severity_proxy": 0.85,
     "raw_url": "https://www.who.int/2026-DON608",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -74,7 +74,7 @@
     "lon": null,
     "severity_proxy": 0.85,
     "raw_url": "https://www.who.int/2026-DON607",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -87,7 +87,7 @@
     "lon": null,
     "severity_proxy": 0.85,
     "raw_url": "https://www.who.int/2026-DON606",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -100,7 +100,7 @@
     "lon": null,
     "severity_proxy": 0.85,
     "raw_url": "https://www.who.int/2026-DON605",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -113,7 +113,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON604",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -126,7 +126,7 @@
     "lon": null,
     "severity_proxy": 0.85,
     "raw_url": "https://www.who.int/2026-DON603",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -139,7 +139,7 @@
     "lon": null,
     "severity_proxy": 0.85,
     "raw_url": "https://www.who.int/2026-DON602",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -152,7 +152,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON601",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -165,7 +165,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON600",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -178,7 +178,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON599",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -191,7 +191,7 @@
     "lon": null,
     "severity_proxy": 0.6,
     "raw_url": "https://www.who.int/2026-DON598",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -204,7 +204,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON597",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -217,7 +217,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON596",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -230,7 +230,7 @@
     "lon": null,
     "severity_proxy": 0.85,
     "raw_url": "https://www.who.int/2026-DON595",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -243,7 +243,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON594",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   },
   {
@@ -256,7 +256,7 @@
     "lon": null,
     "severity_proxy": 0.4,
     "raw_url": "https://www.who.int/2026-DON593",
-    "fetched_at_utc": "2026-07-14T23:19:01Z",
+    "fetched_at_utc": "2026-07-17T14:55:57Z",
     "inference_type": "live_who_don"
   }
 ]

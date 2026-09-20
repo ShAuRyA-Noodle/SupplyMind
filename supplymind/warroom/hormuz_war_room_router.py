@@ -121,6 +121,76 @@ def _stable_hash(payload: dict) -> str:
     return hashlib.sha256(blob).hexdigest()
 
 
+def _run_frontier_panel_via_gateway(
+    scenario_text: str, severity: float, brent: float, duration: int,
+    top_analog: str,
+) -> dict:
+    """Frontier judge panel, routed through the ONE LLM gateway
+    (``supplymind.llm.panel`` -> ``providers``), NOT a bespoke client (CLAUDE.md
+    §0.4, §7.2; WP6.1 follow-up).
+
+    Judge slugs are env-driven (``SUPPLYMIND_PANEL_MODELS``) — no hardcoded
+    panel. With no models configured or no live key the block is returned
+    DEGRADED LOUD with the real reason (never a fabricated verdict). The moment a
+    valid key + ``SUPPLYMIND_PANEL_MODELS`` exist, this same path goes live with
+    zero edits. Shape stays compatible with ``_aggregate_meta_judges`` +
+    ``data_source_flags`` (``results`` / ``panel_size`` / ``n_succeeded`` /
+    ``consensus_risk`` / ``krippendorff_alpha_ordinal``).
+    """
+    from supplymind.llm.panel import JudgePanel, resolve_panel_models
+
+    routed = "supplymind.llm.panel -> providers (one gateway)"
+    models = resolve_panel_models()
+    if not models:
+        return {
+            "routed_through": routed,
+            "degraded": True,
+            "degrade_reason": ("no panel judges configured: set "
+                               "SUPPLYMIND_PANEL_MODELS (comma-separated slugs) — "
+                               "no slugs are hardcoded per CLAUDE.md §0"),
+            "panel_size": 0, "n_succeeded": 0, "n_429_or_failed": 0,
+            "consensus_risk": None, "krippendorff_alpha_ordinal": None,
+            "mean_confidence": None, "results": [], "judges_used": [],
+        }
+
+    prompt = (
+        f"Scenario: {scenario_text[:600]}\n\n"
+        f"Operator-asserted parameters: severity(0-1)={round(severity, 2)}, "
+        f"Brent target(USD/bbl)={round(brent, 1)}, duration(days)={duration}.\n"
+        f"Top historical analog: {top_analog[:120]}"
+    )
+    result = JudgePanel(models=models).run_sync(prompt).to_dict()
+
+    n_ok = result.get("n_ok", 0)
+    n_failed = result.get("n_failed", 0) + result.get("n_unparseable", 0)
+    mapped_results = []
+    for j in result.get("per_judge", []):
+        ok = j.get("status") == "ok"
+        mapped_results.append({
+            "model": j.get("model"),
+            "ok": ok,
+            "risk_level": j.get("risk_level"),
+            "confidence": j.get("confidence"),
+            "reason": j.get("reason") or j.get("degrade_reason"),
+            "latency_s": j.get("latency_s"),
+        })
+    return {
+        "routed_through": routed,
+        "degraded": n_ok == 0,
+        "degrade_reason": (None if n_ok else
+                           "every gateway judge failed/unparseable (see results) — "
+                           "likely no live key; no consensus fabricated"),
+        "consensus_risk": result.get("consensus_risk"),
+        "panel_size": result.get("panel_size", len(models)),
+        "n_succeeded": n_ok,
+        "n_429_or_failed": n_failed,
+        "krippendorff_alpha_ordinal": result.get("krippendorff_alpha_ordinal"),
+        "mean_confidence": result.get("mean_confidence"),
+        "results": mapped_results,
+        "judges_used": result.get("judges", models),
+    }
+
+
 def _aggregate_confidence(judges: list, sector_scores_india: list,
                            sector_scores_gulf: list, signals_used: int) -> dict:
     """Aggregate confidence from real signals — no vibes.
@@ -347,15 +417,15 @@ if router is not None:
         # ---- Stage 3: chokepoint graph (static, IEA-cited)
         chokepoint = graph_mod.get_graph()
 
-        # ---- Stage 3b (optional): 6-judge OpenRouter frontier cross-check
+        # ---- Stage 3b (optional): frontier judge panel, via the ONE gateway
+        # (supplymind.llm.panel -> providers). Env-driven slugs; degrades LOUD
+        # with no key. No bespoke client bypass (CLAUDE.md §0.4, §7.2).
         openrouter_panel: dict | None = None
         if req.enable_openrouter_panel:
             try:
-                from supplymind.warroom.openrouter_war_room_panel \
-                    import run_panel_sync
                 top_analog = (live.analogs[0]["name"] if live.analogs
                               else "(no analog)")
-                openrouter_panel = run_panel_sync(
+                openrouter_panel = _run_frontier_panel_via_gateway(
                     scenario_text=req.scenario_text,
                     severity=req.severity,
                     brent=req.brent_price_usd_bbl,
@@ -363,7 +433,7 @@ if router is not None:
                     top_analog=top_analog,
                 )
             except Exception as e:  # noqa: BLE001
-                logger.warning("[war-room] OpenRouter panel failed: %s", e)
+                logger.warning("[war-room] frontier gateway panel failed: %s", e)
                 openrouter_panel = {"error": str(e)[:300]}
 
         # ---- Stage 3c: 10 specialist judges (deterministic, ~50ms)

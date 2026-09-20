@@ -10,6 +10,7 @@ We pull the 5-day "realtime2" feed for buoys near critical chokepoints:
 from __future__ import annotations
 
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
 from ._common import cached_get, http_get_text, standard_event
 
@@ -43,10 +44,20 @@ def fetch_buoy(station_id: str) -> dict:
 
 
 def fetch_chokepoint_buoys() -> list[dict]:
-    """Fetch all chokepoint buoys; one event per buoy."""
+    """Fetch all chokepoint buoys concurrently; one event per buoy.
+
+    Each buoy is an independent cached HTTP fetch, so we fan them out on a small
+    thread pool instead of looping serially (a cold serial loop was ~8x20s worst
+    case — a long pole in the fan-out). ``cached_get`` keeps each fetch polite.
+    """
+    sids = list(CHOKE_BUOYS)
+    with ThreadPoolExecutor(max_workers=len(sids) or 1) as pool:
+        recs = dict(zip(sids, pool.map(fetch_buoy, sids)))
+
     out: list[dict] = []
-    for sid, (descr, lat, lon) in CHOKE_BUOYS.items():
-        rec = fetch_buoy(sid)
+    for sid in sids:
+        descr, lat, lon = CHOKE_BUOYS[sid]
+        rec = recs.get(sid)
         if not rec or "latest" not in rec:
             continue
         latest = rec["latest"]

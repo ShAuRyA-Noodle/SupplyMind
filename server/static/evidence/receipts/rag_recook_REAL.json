@@ -1,0 +1,137 @@
+{
+  "task": "rag_recook_world_bank_ingestion",
+  "generated_at_utc": "2026-07-02T23:07:44Z",
+  "git_sha": "a50d87569c9a117ad3aa79ab8032068bcb0a77d2",
+  "bug_fixed": {
+    "file": "versions/v3_arcadia/40_granite/r5_rag_beast.py",
+    "symptom": "World Bank API JSON is a top-level list [meta, rows]; loader assumed dict -> 0 WB chunks",
+    "evidence_before": "versions/v3_arcadia/results/R5_GRANITE.json -> corpus_breakdown.world_bank == 0"
+  },
+  "embedder": "mxbai-embed-large (single embedder, local models/mxbai-embed-large)",
+  "device": "cuda",
+  "corpus": {
+    "n_chunks_total": 6602,
+    "source_breakdown": {
+      "wiki_crisis": 711,
+      "sec_10k": 5790,
+      "policy": 81,
+      "world_bank": 20
+    },
+    "world_bank_chunks_before": 0,
+    "world_bank_chunks_after": 20,
+    "world_bank_docs": [
+      "wb_Container_throughput__CHN",
+      "wb_Container_throughput__DEU",
+      "wb_Container_throughput__IND",
+      "wb_Exports_pct_GDP__CHN",
+      "wb_Exports_pct_GDP__DEU",
+      "wb_Exports_pct_GDP__IND",
+      "wb_Exports_pct_GDP__JPN",
+      "wb_GDP_USD__CHN",
+      "wb_GDP_USD__DEU",
+      "wb_GDP_USD__IND",
+      "wb_GDP_growth__CHN",
+      "wb_GDP_growth__DEU",
+      "wb_GDP_growth__IND",
+      "wb_Imports_pct_GDP__CHN",
+      "wb_Imports_pct_GDP__DEU",
+      "wb_Imports_pct_GDP__IND",
+      "wb_Imports_pct_GDP__JPN",
+      "wb_Inflation_CPI__CHN",
+      "wb_Inflation_CPI__DEU",
+      "wb_Inflation_CPI__IND"
+    ]
+  },
+  "retrieval_crisis_queries": {
+    "n_queries": 53,
+    "note": "gold = wiki/SEC docs; measures whether WB distractors degrade existing retrieval",
+    "before_wb0": {
+      "p1": 0.9622641509433962,
+      "p3": 0.9182389937106917,
+      "p5": 0.8452830188679245,
+      "mrr": 0.9779874213836477,
+      "ndcg10": 0.958021829212048
+    },
+    "after_wb": {
+      "p1": 0.9622641509433962,
+      "p3": 0.9182389937106917,
+      "p5": 0.8452830188679245,
+      "mrr": 0.9779874213836477,
+      "ndcg10": 0.958021829212048
+    },
+    "p1_delta": 0.0,
+    "mrr_delta": 0.0
+  },
+  "retrieval_wb_queries": {
+    "n_queries": 8,
+    "note": "gold = WB docs; before the fix these are un-retrievable (0 WB chunks indexed)",
+    "before_wb0": {
+      "p1": 0.0,
+      "p3": 0.0,
+      "p5": 0.0,
+      "mrr": 0.0,
+      "ndcg10": 0.0
+    },
+    "after_wb": {
+      "p1": 1.0,
+      "p3": 0.3333333333333333,
+      "p5": 0.2,
+      "mrr": 1.0,
+      "ndcg10": 1.0
+    },
+    "p1_delta": 1.0,
+    "mrr_delta": 1.0,
+    "per_query_after": [
+      {
+        "q": "What is China's GDP in current US dollars?",
+        "gold": "wb_GDP_USD__CHN",
+        "top1_doc": "wb_GDP_USD__CHN",
+        "p1": 1.0
+      },
+      {
+        "q": "What is India's GDP in current US dollars?",
+        "gold": "wb_GDP_USD__IND",
+        "top1_doc": "wb_GDP_USD__IND",
+        "p1": 1.0
+      },
+      {
+        "q": "What is India's annual GDP growth rate?",
+        "gold": "wb_GDP_growth__IND",
+        "top1_doc": "wb_GDP_growth__IND",
+        "p1": 1.0
+      },
+      {
+        "q": "What is Germany's GDP growth rate?",
+        "gold": "wb_GDP_growth__DEU",
+        "top1_doc": "wb_GDP_growth__DEU",
+        "p1": 1.0
+      },
+      {
+        "q": "What is Germany's consumer price inflation rate?",
+        "gold": "wb_Inflation_CPI__DEU",
+        "top1_doc": "wb_Inflation_CPI__DEU",
+        "p1": 1.0
+      },
+      {
+        "q": "What are China's exports as a percentage of GDP?",
+        "gold": "wb_Exports_pct_GDP__CHN",
+        "top1_doc": "wb_Exports_pct_GDP__CHN",
+        "p1": 1.0
+      },
+      {
+        "q": "What are India's imports as a share of GDP?",
+        "gold": "wb_Imports_pct_GDP__IND",
+        "top1_doc": "wb_Imports_pct_GDP__IND",
+        "p1": 1.0
+      },
+      {
+        "q": "What is China's container port traffic in TEU?",
+        "gold": "wb_Container_throughput__CHN",
+        "top1_doc": "wb_Container_throughput__CHN",
+        "p1": 1.0
+      }
+    ]
+  },
+  "artifacts_dir": "C:\\Users\\Dell\\Desktop\\Sleep-Token\\scripts\\crisis_library\\_recook_artifacts",
+  "elapsed_s": 509.13
+}

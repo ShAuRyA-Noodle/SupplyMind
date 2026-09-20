@@ -6,9 +6,14 @@ Writes: a proposed new version of candidate_train.py (full replacement) plus
         a metadata JSON {experiment_name, hypothesis, expected_metric_delta,
         justification, references}.
 
-Two backends:
-    - "ollama"   : local Qwen-14B via Ollama HTTP (no API key required)
-    - "claude"   : Anthropic API (set ANTHROPIC_API_KEY or pass via env)
+Two backends, BOTH via the single gateway ``supplymind.llm.providers``
+(CLAUDE.md §0.4, §7.1) — nothing talks to a daemon or a vendor API directly:
+    - agent="ollama"                        : local edge model (Ollama daemon)
+    - agent="openrouter" (or "cloud"/"claude"): OpenRouter cloud model
+
+The model slug is env-driven (no hardcoded default per §0); calls degrade LOUD
+when unavailable and never fabricate a hypothesis. See
+``rl.lora.edge_capability_matrix`` for the cloud/edge/local map.
 
 Guardrails (enforced post-generation):
     - Must preserve SAFE-TO-MODIFY markers.
@@ -20,15 +25,12 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import re
 import sys
 from dataclasses import dataclass
 from difflib import unified_diff
 from pathlib import Path
 from typing import Optional
-
-import requests
 
 logger = logging.getLogger(__name__)
 
@@ -143,44 +145,40 @@ in the system prompt. Remember: full file content in proposed_code, not a diff.
 """
 
 
-def _call_ollama(prompt: str, model: str = "qwen2.5:14b") -> str:
-    """Local Qwen-14B via Ollama. Requires ollama serve running."""
-    url = "http://127.0.0.1:11434/api/chat"
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": prompt},
-        ],
-        "format": "json",
-        "stream": False,
-        "options": {"temperature": 0.7, "num_ctx": 32768},
-    }
-    resp = requests.post(url, json=payload, timeout=300)
-    resp.raise_for_status()
-    return resp.json()["message"]["content"]
+_CLOUD_AGENTS = {"openrouter", "cloud", "claude"}
 
 
-def _call_claude(prompt: str, model: str = "claude-opus-4-7") -> str:
-    """Anthropic Claude API. Requires ANTHROPIC_API_KEY env."""
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        raise RuntimeError("ANTHROPIC_API_KEY not set")
-    url = "https://api.anthropic.com/v1/messages"
-    headers = {
-        "x-api-key": api_key,
-        "anthropic-version": "2023-06-01",
-        "content-type": "application/json",
-    }
-    payload = {
-        "model": model,
-        "max_tokens": 8000,
-        "system": SYSTEM_PROMPT,
-        "messages": [{"role": "user", "content": prompt}],
-    }
-    resp = requests.post(url, headers=headers, json=payload, timeout=300)
-    resp.raise_for_status()
-    return resp.json()["content"][0]["text"]
+def _agent_to_provider(agent: str) -> str:
+    """Map the historical ``agent`` name to a gateway provider. 'ollama' is the
+    local edge backend; every other name routes to OpenRouter cloud (which can
+    itself serve Claude-family slugs). Unknown -> loud."""
+    a = agent.strip().lower()
+    if a == "ollama":
+        return "ollama"
+    if a in _CLOUD_AGENTS:
+        return "openrouter"
+    raise ValueError(f"unknown agent {agent!r}: expected 'ollama' or 'openrouter'")
+
+
+def _call_gateway(prompt: str, agent: str, model: Optional[str]) -> str:
+    """One hypothesis round-trip through the gateway. Returns raw model text or
+    raises loud on an unavailable/degraded provider (never fabricates)."""
+    from supplymind.llm.providers import get_provider
+
+    from rl.lora.edge_capability_matrix import run_coro_sync
+
+    provider = get_provider(_agent_to_provider(agent))
+    resp = run_coro_sync(provider.complete(
+        [{"role": "system", "content": SYSTEM_PROMPT},
+         {"role": "user", "content": prompt}],
+        model=model, schema=None, max_tokens=8000, temperature=0.7, retries=0,
+    ))
+    if not resp.content:
+        reason = resp.degrade_reason or resp.error or "empty response"
+        raise RuntimeError(
+            f"hypothesis provider '{resp.provider}' unavailable: {reason}"
+        )
+    return resp.content
 
 
 def _extract_json(text: str) -> dict:
@@ -262,12 +260,7 @@ def propose_hypothesis(
     last_err = None
     for attempt in range(retries):
         try:
-            if agent == "ollama":
-                raw = _call_ollama(prompt, model or "qwen2.5:14b")
-            elif agent == "claude":
-                raw = _call_claude(prompt, model or "claude-opus-4-7")
-            else:
-                raise ValueError(f"unknown agent: {agent}")
+            raw = _call_gateway(prompt, agent, model)
 
             parsed = _extract_json(raw)
             proposed_code = parsed.get("proposed_code", "")
@@ -301,8 +294,12 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--agent", default="ollama", choices=["ollama", "claude"])
-    parser.add_argument("--model", default=None)
+    parser.add_argument("--agent", default="ollama",
+                        choices=["ollama", "openrouter", "claude"],
+                        help="gateway backend: 'ollama' edge | 'openrouter'/'claude' cloud")
+    parser.add_argument("--model", default=None,
+                        help="explicit model slug; default None -> gateway resolves from env "
+                             "(SUPPLYMIND_OLLAMA_MODEL / SUPPLYMIND_LLM_MODEL). No hardcoded slug.")
     parser.add_argument("--history", type=str, default="state.json")
     args = parser.parse_args()
 

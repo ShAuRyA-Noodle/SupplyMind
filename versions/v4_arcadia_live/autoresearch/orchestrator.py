@@ -317,7 +317,8 @@ def main() -> None:
 
     parser = argparse.ArgumentParser(description="SupplyMind Karpathy-style autoresearch loop")
     parser.add_argument("--budget", type=str, default="6h", help="LLM-phase budget (e.g. 6h, 30m, 3600s)")
-    parser.add_argument("--agent", type=str, default="ollama", choices=["ollama", "claude"])
+    parser.add_argument("--agent", type=str, default="ollama",
+                        choices=["ollama", "openrouter", "claude"])
     parser.add_argument("--model", type=str, default=None)
     parser.add_argument("--seeds-only", action="store_true", help="Run only the 5 seed hypotheses, skip LLM phase")
     parser.add_argument("--skip-seeds", action="store_true", help="Skip seeds, go straight to LLM loop")
