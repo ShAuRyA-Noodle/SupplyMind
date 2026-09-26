@@ -34,7 +34,7 @@ tags:
 - Wilcoxon paired one-sided greater p = **9.39 × 10⁻³⁵**
 - Cohen d = **+4.77** (very large)
 - Adversarial defense: **257/257 = 100% blocked**
-- HF Space rollout: 20/20 steps 200 OK · FRED real Brent: 8/8 historical events
+- Historical HF Space rollout: 20/20 steps 200 OK · FRED real Brent: 8/8 historical events
 - Wallclock: **4.4 minutes on free Colab CPU** / 36 min on T4 full
 
 ### Theme hat-trick
@@ -67,6 +67,11 @@ tags:
 
 > *"Even in Arcadia, supply chains break. SupplyMind sees it coming."*
 
+**Deployment status:** Current `main` is intentionally undeployed. The existing
+[HF Space](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) serves an
+older build and is stale/unverified against this commit. Deployment is manual
+only; see [the current deployment guide](docs/DEPLOY_HF_SPACE.md).
+
 ![SupplyMind v3.0-arcadia hero result card](versions/v3_arcadia/plots/hero_result_card.png)
 
 ---
@@ -81,11 +86,11 @@ tags:
 |---|---|---|---|
 | 1 | OpenEnv (latest release) | ✅ | `openenv-core>=0.2.3` (latest PyPI) · [server/app.py](server/app.py) exposes `/reset` `/step` `/state` `/tasks` `/grader` `/health` `/schema` `/metadata` `/mcp` · OpenEnv `Environment[ActT,ObsT,StateT]` subclass + `TrajectoryRubric` composition at [server/openenv_adapter.py](server/openenv_adapter.py) · [openenv.yaml](openenv.yaml) manifest |
 | 2 | Minimal training script using **Unsloth or HF TRL in Colab** | ✅ | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ShAuRyA-Noodle/Sleep-Token/blob/main/notebooks/06_trl_training_colab.ipynb) [`notebooks/06_trl_training_colab.ipynb`](notebooks/06_trl_training_colab.ipynb) - TRL `DPOTrainer` on 21 real preference pairs, Qwen-2.5-0.5B, runs in ~15 min on free T4, plots loss + implicit reward margins |
-| 3 | OpenEnv env hosted on HF Spaces | ✅ | [huggingface.co/spaces/Shaurya-Noodle/Supplymind](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) - live Docker deploy |
+| 3 | OpenEnv env hosted on HF Spaces | Historical | [Existing Space](https://huggingface.co/spaces/Shaurya-Noodle/Supplymind) serves an older build; current `main` is intentionally undeployed. |
 | 4 | Mini-blog on HF or <2-min video | 📹 | Script ready at [demo/DEMO_VIDEO_SCRIPT.md](demo/DEMO_VIDEO_SCRIPT.md); record & link after onsite |
 | 5 | Observable reward improvement | ✅ | [versions/v3_arcadia/plots/gethsemane/learning_curves.png](versions/v3_arcadia/plots/gethsemane/learning_curves.png) · autoresearch +0.148 CI95 lift in [versions/v4_arcadia_live/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md](versions/v4_arcadia_live/autoresearch/AUTORESEARCH_LAB_NOTEBOOK.md) · A/B lift 0 % → 80 % in [versions/v4_arcadia_live/features/R9_ANALYST_AB_V5.json](versions/v4_arcadia_live/features/R9_ANALYST_AB_V5.json) |
 | 6 | Training loop connects to the live env (not a static dataset) | ✅ | [versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py](versions/v5_phoenix/roll_integration/dpo_judge/train_grpo_live_env.py) - every reward comes via HTTP `POST /analyst/grade` on the running server. Dry-run log: correct=0.900, wrong=0.200, gap=0.700 |
-| 7 | Client/server separation | ✅ | [client/supplymind_client.py](client/supplymind_client.py) - zero `from server` imports; verified live against HF Space (`health: True`, metadata matches) |
+| 7 | Client/server separation | ✅ | [client/supplymind_client.py](client/supplymind_client.py) - zero `from server` imports; historical live check against the older HF Space build. |
 | 8 | **RLVE adaptive curriculum** (FAQ §22-23, §35) | ✅ | `POST /analyst/next-scenario` picks training scenarios at the policy's zone of proximal development using REAL R4 3-judge-disagreement as difficulty oracle. Trainer flag `--adaptive` pre-computes an easy→hard curriculum from the endpoint. |
 | 9 | **Sealed holdout evaluator** (FAQ §44, §52) | ✅ | `GET /analyst/scenarios?split=holdout` returns 6 sealed scenarios never served to the trainer; `POST /analyst/holdout-eval` batch-scores the policy against them with `mean_reward / exact_match_rate / adjacent_or_exact_rate`. Trainer auto-excludes holdout from `--adaptive` sampler. |
 | 10 | **Adversarial reward-hacking audit** (FAQ §57) | ✅ | [tests/test_reward_hacking_adversarial.py](tests/test_reward_hacking_adversarial.py) - 6 attack vectors (short-circuit, long-spam, over-length, adjacent-guess, wrong-tier, empty) all rejected by the layered reward; committed receipt at [tests/receipts/adversarial_reward_audit.json](tests/receipts/adversarial_reward_audit.json). 8/8 tests pass. |

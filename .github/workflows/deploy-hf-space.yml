@@ -1,31 +1,13 @@
 name: Deploy to HuggingFace Space
 
-# Pushes repo contents to the HuggingFace Space via the huggingface_hub upload API.
+# Manual deployment only. The current GitHub main is intentionally not deployed.
+# Uploads repo contents to the Hugging Face Space via the huggingface_hub API.
 # Uses upload_folder (not git push) so LFS is handled automatically and any
 # historical divergence on the HF side is overwritten cleanly.
 #
 # REQUIRES: repo secret HF_TOKEN with Write access.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'server/**'
-      - 'models.py'
-      - 'openenv.yaml'
-      - 'versions/v3_arcadia/**'
-      - 'versions/v5_phoenix/roll_integration/env/**'
-      - 'rl/rag/**'
-      - 'README.md'
-      - 'docs/**'
-      - 'Dockerfile*'
-      - 'requirements*.txt'
-      - 'pyproject.toml'
-      - 'tests/**'
-      - 'scripts/**'
-      - 'demo/**'
-      - 'FINAL_SUBMIT/**'
-      - '.github/workflows/deploy-hf-space.yml'
   workflow_dispatch:
 
 jobs:
@@ -41,6 +23,30 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install huggingface_hub
+        run: pip install -U "huggingface_hub>=0.25"
+
+      - name: Verify manual deployment credential
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          python - <<'PY'
+          import os
+          from huggingface_hub import HfApi
+
+          token = os.environ.get("HF_TOKEN")
+          if not token:
+              raise SystemExit("HF_TOKEN repository secret is missing; no deployment attempted")
+          try:
+              identity = HfApi(token=token).whoami()
+          except Exception as exc:
+              raise SystemExit(f"HF_TOKEN was rejected by Hugging Face ({type(exc).__name__}); no deployment attempted") from None
+          role = identity.get("auth", {}).get("accessToken", {}).get("role")
+          if role == "read":
+              raise SystemExit("HF_TOKEN has read-only access; a write-capable token is required")
+          print(f"Authenticated to Hugging Face as {identity.get('name')}; checking code before upload")
+          PY
+
       - uses: astral-sh/setup-uv@v10.2.0
 
       - name: Verify before deployment
@@ -48,16 +54,12 @@ jobs:
           uv sync --locked --extra dev
           uv run --locked --extra dev pytest -q --tb=short
 
-      - name: Install huggingface_hub
-        run: pip install -U "huggingface_hub>=0.25"
-
       - name: Write deploy script
         run: |
           cat > /tmp/hf_deploy.py <<'PY'
           import os, sys, traceback
           from huggingface_hub import HfApi
           token = os.environ.get("HF_TOKEN")
-          print(f"HF_TOKEN present: {bool(token)}, length: {len(token) if token else 0}", flush=True)
           if not token:
               print("ERROR: HF_TOKEN is empty")
               sys.exit(1)
@@ -70,7 +72,7 @@ jobs:
               traceback.print_exc()
               sys.exit(1)
           try:
-              api.upload_folder(
+              commit = api.upload_folder(
                   folder_path=".",
                   repo_id="Shaurya-Noodle/Supplymind",
                   repo_type="space",
@@ -97,7 +99,7 @@ jobs:
                       "plots/v3/**.npy",
                   ],
               )
-              print("HF Space upload complete.", flush=True)
+              print(f"HF Space upload complete: {commit.oid}", flush=True)
           except Exception as e:
               print(f"UPLOAD FAIL: {type(e).__name__}: {e}", flush=True)
               traceback.print_exc()
@@ -123,6 +125,11 @@ jobs:
       - name: Smoke test
         if: success()
         run: |
-          sleep 45
-          curl -fsS https://shaurya-noodle-supplymind.hf.space/health || \
-            echo "WARN: health check returned non-200 (Space may still be rebuilding)"
+          for attempt in $(seq 1 24); do
+            if curl -fsS --max-time 15 https://shaurya-noodle-supplymind.hf.space/health; then
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "Space health check did not pass after upload"
+          exit 1

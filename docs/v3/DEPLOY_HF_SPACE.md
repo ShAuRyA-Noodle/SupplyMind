@@ -1,5 +1,9 @@
 # Phoenix HF Space deploy — complete walkthrough
 
+> Historical v3 instructions. Current `main` is intentionally undeployed;
+> the existing Space is stale/unverified against it. Automatic deployment is
+> disabled. Use [the current manual deployment guide](../DEPLOY_HF_SPACE.md).
+
 Push the v3.0-arcadia release to `huggingface.co/spaces/Shaurya-Noodle/Supplymind` in one sitting. The user said they restarted the Space; this doc is the complete rebuild-from-ashes playbook.
 
 **Expected time**: 15 minutes. **Requires**: your HF token.
@@ -52,7 +56,7 @@ curl -X POST "https://shaurya-noodle-supplymind.hf.space/reset?task_id=easy_typh
 
 ---
 
-## Option B — automated via GitHub Action (set it and forget it)
+## Option B — manual GitHub Action
 
 ### 1. Add HF_TOKEN as a GitHub secret
 1. GitHub repo → **Settings** → **Secrets and variables** → **Actions**
@@ -62,10 +66,10 @@ curl -X POST "https://shaurya-noodle-supplymind.hf.space/reset?task_id=easy_typh
 5. Save
 
 ### 2. Trigger the workflow
-The workflow at `.github/workflows/deploy-hf-space.yml` is already committed. Trigger options:
-
-- **Auto**: any push to `main` that touches server/, models.py, openenv.yaml, versions/v3_arcadia/, or top-level MD files will trigger deploy.
-- **Manual**: GitHub repo → **Actions** tab → "Deploy to HuggingFace Space" → **Run workflow** → `main` branch → Run.
+The workflow at `.github/workflows/deploy-hf-space.yml` runs only when selected
+manually: GitHub repo → **Actions** tab → "Deploy to HuggingFace Space" →
+**Run workflow** → `main` branch → Run. It checks the secret before tests or
+upload. See [the current guide](../DEPLOY_HF_SPACE.md).
 
 ### 3. Watch it run
 Takes ~3 min for git push + ~8 min for HF Docker rebuild.
