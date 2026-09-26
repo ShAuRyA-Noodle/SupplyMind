@@ -39,13 +39,14 @@ sentence-transformers>=2.2.0
 PyPDF2>=3.0.0
 
 # Forecasting
-pytorch-forecasting==1.7.0
+pytorch-forecasting==1.8.0
 pytorch-lightning>=2.6.6
 
 # Optimization
-pymoo>=0.6.0
+pymoo>=0.6.2
 optuna>=3.4.0
 
 # ONNX export
-onnx>=1.15.0
-onnxruntime>=1.16.0
+# ONNX Runtime 1.30 uses ONNX 1.22; keep exporter and runtime compatible.
+onnx==1.22.0
+onnxruntime>=1.30.0
