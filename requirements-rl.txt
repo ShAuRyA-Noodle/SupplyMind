@@ -34,9 +34,7 @@ wandb>=0.16.0
 ollama>=0.1.0
 
 # RAG
-# No patched ChromaDB release is listed for the current advisories.
-# This local-only RAG dependency remains pinned until a verified fix is available.
-chromadb==0.6.3
+# RAG uses a local SQLite vector store; the legacy Chroma index migrates on read.
 sentence-transformers>=2.2.0
 PyPDF2>=3.0.0
 

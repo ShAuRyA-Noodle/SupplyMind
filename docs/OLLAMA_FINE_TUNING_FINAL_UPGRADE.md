@@ -81,17 +81,17 @@ single 12 GB GPU.
 
 ## A.5 ROLL Integration
 
-The ROLL integration plan has three pieces. The environment adapter is not
-shipped; the other two are source/config drafts and do not establish a working
-agentic training pipeline:
+The ROLL integration plan has three pieces. The GEM environment adapter now
+ships and passed a local `gem.make()` reset/step smoke test. The other two are
+source/config drafts and do not establish a working agentic training pipeline:
 
-- `env/supplymind_roll_env.py`: planned `SupplyMindRollEnv` adapter; this file is absent and its step/trajectory reward behavior is unverified.
+- `env/supplymind_roll_env.py`: `SupplyMindRollEnv` wraps the real simulation with JSON actions, dense step rewards, text observations, and explicit GEM registration.
 - `reward_bridge/supplymind_judge_worker.py`: `SupplyMind3JudgeRewardWorker`, using DeepSeek/Qwen/Mistral local judges with guarded ROLL registration.
 - `configs/agentic_supplymind_gigpo.yaml`: GiGPO multi-turn config with `forecast`, `rag`, and `rl_act` tools and `step_reward: true`.
 
-The repository's evidence verifier deliberately reports the missing adapter as
-a failure. ROLL agentic training has not been validated. The standalone TRL
-path is separate from this unshipped ROLL environment integration.
+The repository's evidence verifier checks the adapter source; unit tests cover
+its episode behavior. A full ROLL worker/training run has not been validated.
+The standalone TRL path is separate from this GEM environment adapter.
 
 ## A.6 Quantization + Memory Engineering
 

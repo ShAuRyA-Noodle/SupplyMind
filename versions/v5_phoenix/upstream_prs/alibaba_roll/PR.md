@@ -2,8 +2,9 @@
 
 **Target**: https://github.com/alibaba/ROLL
 **Branch name**: `add-supplymind-crisis-agentic-example`
-**Status**: incomplete local draft. Do not submit: the environment adapter and
-the example tests listed below are not shipped or validated.
+**Status**: incomplete local draft. The GEM environment adapter has a local
+reset/step smoke test, but the ROLL training pipeline and example tests listed
+below are not shipped or validated. Do not submit this as a working example.
 
 ---
 
@@ -20,8 +21,8 @@ pipeline infrastructure applied to a supply-chain risk environment. The
 following features require implementation and tests before this text can be
 used as a pull request description:
 
-- **Custom env integration** via `supplymind_roll_env.py` (registers with
-  ROLL's agentic env factory).
+- **Custom env integration** via `supplymind_roll_env.py` (local GEM adapter
+  exists; ROLL worker-side registration is still needed).
 - **GiGPO step-wise training** on a multi-turn decision task.
 - **Custom `LLMJudgeRewardWorker` bridging a 3-judge panel** (DeepSeek-R1,
   Qwen-2.5-14B, Mistral-Nemo) as the reward signal.

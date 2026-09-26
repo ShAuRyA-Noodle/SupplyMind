@@ -6,8 +6,9 @@ SupplyMind, so this example cannot currently be built or run.
 
 ## Env
 
-The proposed `supplymind_roll_env.py` would register SupplyMind as a ROLL
-agentic env (`env_id: supplymind_crisis`). Three planned tasks:
+`supplymind_roll_env.py` now implements and locally registers a GEM env
+(`env_id: supplymind_crisis`). ROLL worker-side registration and training have
+not been validated. Three available SupplyMind tasks:
 
 - `easy_typhoon_response` — 12 nodes, 30 steps, $5 M budget
 - `medium_multi_front` — 25 nodes, 45 steps, $8 M budget

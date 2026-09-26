@@ -26,15 +26,16 @@ Both produce the same adapter format, so downstream `evaluate_delta.py` is path-
 
 ### 2. SupplyMind as a ROLL env (`env/`)
 
-**Status: not shipped.** The proposed `env/supplymind_roll_env.py` wrapper is
-absent from this repository. The GiGPO config and upstream PR materials are
-design drafts, not a working ROLL environment. The existing
-`server.supply_environment.SupplyMindEnvironment` supplies the simulation, but
-the adapter to ROLL's environment interface and its registration have not been
-implemented or tested.
+`env/supplymind_roll_env.py` now implements the `gem.Env` reset/step contract
+on top of the real `SupplyMindEnvironment`. It emits bounded text observations,
+dense simulation rewards, and a JSON action schema. Invalid JSON advances the
+episode as `do_nothing` with a penalty. `register_env()` registers
+`supplymind_crisis` explicitly with `gem-llm==0.0.4`; a local `gem.make()`
+reset/step smoke test passed. The main server can import it without GEM.
 
-Implement and test the adapter against ROLL before using the proposed
-**Alibaba/ROLL upstream PR** (see `upstream_prs/alibaba_roll/`).
+The GiGPO config and **Alibaba/ROLL upstream PR** remain drafts. A full ROLL
+training run, worker-side registration, reward bridge, and GPU result have not
+been validated. Do not submit the upstream proposal as a working pipeline yet.
 
 ### 3. Reward bridge (`reward_bridge/`)
 
