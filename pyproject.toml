@@ -26,10 +26,11 @@ dependencies = [
     "httpx>=0.25.0",
     "openai>=1.0.0",
     "openenv-core>=0.2.3",
+    "anyio>=4.14.2",
     # Security pins (transitive advisory chain): bump to the first patched
     # version of each, otherwise uv.lock pulls in the vulnerable line.
     "authlib>=1.6.12",
-    "cryptography>=48.0.1",
+    "cryptography>=50.0.0",
     "python-multipart>=0.0.31",
     "urllib3>=2.7.0",
 ]
@@ -47,20 +48,18 @@ dev = [
     "httpx>=0.25.0",
 ]
 rl = [
-    "torch>=2.1.0",
-    "gymnasium==0.29.1",
+    "torch>=2.13.0",
+    "gymnasium==1.0.0",
     "stable-baselines3==2.9.0",
     "sb3-contrib==2.9.0",
     "d3rlpy==2.8.1",
-    "transformers>=4.36.0",
+    "transformers>=5.10.0",
     "scipy>=1.11.0",
-    # Forecasting module imports `pytorch_lightning`. Pinning >=2.4.0 closes
-    # the path-traversal advisory chain; the residual DoS advisories have no
-    # patched version published yet (tracked, dismissed as "no fix yet").
-    "pytorch-lightning>=2.4.0",
+    # Forecasting imports `pytorch_lightning`; keep the patched release floor.
+    "pytorch-lightning>=2.6.6",
     "fredapi>=0.5.0",
     "shap>=0.43.0",
-    "mlflow>=2.10.0",
+    "mlflow>=3.16.1",
     "wandb>=0.16.0",
 ]
 dashboard = [
@@ -69,7 +68,7 @@ dashboard = [
 ]
 
 [build-system]
-requires = ["setuptools>=68.0", "wheel"]
+requires = ["setuptools>=83.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
