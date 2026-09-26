@@ -26,12 +26,15 @@ Both produce the same adapter format, so downstream `evaluate_delta.py` is path-
 
 ### 2. SupplyMind as a ROLL env (`env/`)
 
-`supplymind_roll_env.py` wraps `server.supply_environment.SupplyMindEnvironment`
-in ROLL's expected agentic-env interface (`reset/step/grade` + `env_id`, `tags`,
-`supports_step_reward`). Auto-registers with ROLL at import time if ROLL is
-present; works standalone for testing if ROLL is absent.
+**Status: not shipped.** The proposed `env/supplymind_roll_env.py` wrapper is
+absent from this repository. The GiGPO config and upstream PR materials are
+design drafts, not a working ROLL environment. The existing
+`server.supply_environment.SupplyMindEnvironment` supplies the simulation, but
+the adapter to ROLL's environment interface and its registration have not been
+implemented or tested.
 
-This is the basis of the **Alibaba/ROLL upstream PR** (see `upstream_prs/alibaba_roll/`).
+Implement and test the adapter against ROLL before using the proposed
+**Alibaba/ROLL upstream PR** (see `upstream_prs/alibaba_roll/`).
 
 ### 3. Reward bridge (`reward_bridge/`)
 

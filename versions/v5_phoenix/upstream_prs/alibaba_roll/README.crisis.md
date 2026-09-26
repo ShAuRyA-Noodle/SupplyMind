@@ -1,12 +1,13 @@
 # examples/supplymind_crisis
 
-An agentic RL example that uses ROLL to train a supply-chain risk analyst
-LLM on a real-data env with a 3-judge LLM panel as the reward signal.
+Draft proposal for an agentic RL example using ROLL to train a supply-chain
+risk analyst. The environment adapter referenced below is not present in
+SupplyMind, so this example cannot currently be built or run.
 
 ## Env
 
-`supplymind_roll_env.py` registers SupplyMind as a ROLL agentic env
-(`env_id: supplymind_crisis`). Three difficulty-calibrated tasks:
+The proposed `supplymind_roll_env.py` would register SupplyMind as a ROLL
+agentic env (`env_id: supplymind_crisis`). Three planned tasks:
 
 - `easy_typhoon_response` — 12 nodes, 30 steps, $5 M budget
 - `medium_multi_front` — 25 nodes, 45 steps, $8 M budget

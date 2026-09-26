@@ -81,15 +81,17 @@ single 12 GB GPU.
 
 ## A.5 ROLL Integration
 
-ROLL integration is represented by three pieces:
+The ROLL integration plan has three pieces. The environment adapter is not
+shipped; the other two are source/config drafts and do not establish a working
+agentic training pipeline:
 
-- `env/supplymind_roll_env.py`: `SupplyMindRollEnv`, step reward capable, trajectory reward capable, importable even when ROLL is absent.
+- `env/supplymind_roll_env.py`: planned `SupplyMindRollEnv` adapter; this file is absent and its step/trajectory reward behavior is unverified.
 - `reward_bridge/supplymind_judge_worker.py`: `SupplyMind3JudgeRewardWorker`, using DeepSeek/Qwen/Mistral local judges with guarded ROLL registration.
 - `configs/agentic_supplymind_gigpo.yaml`: GiGPO multi-turn config with `forecast`, `rag`, and `rl_act` tools and `step_reward: true`.
 
-The ROLL path is a real integration surface, not a hard dependency for normal
-repo tests. If ROLL is absent, the TRL fallback remains the executable training
-path.
+The repository's evidence verifier deliberately reports the missing adapter as
+a failure. ROLL agentic training has not been validated. The standalone TRL
+path is separate from this unshipped ROLL environment integration.
 
 ## A.6 Quantization + Memory Engineering
 

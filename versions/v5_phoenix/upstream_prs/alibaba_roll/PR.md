@@ -2,7 +2,8 @@
 
 **Target**: https://github.com/alibaba/ROLL
 **Branch name**: `add-supplymind-crisis-agentic-example`
-**Status**: draft (will open during 48 h finals)
+**Status**: incomplete local draft. Do not submit: the environment adapter and
+the example tests listed below are not shipped or validated.
 
 ---
 
@@ -14,9 +15,10 @@
 
 ### Summary
 
-Adds `examples/supplymind_crisis/` — a working agentic-RL example using
-ROLL's pipeline infrastructure applied to a real supply-chain risk
-environment. Demonstrates:
+Proposes `examples/supplymind_crisis/` as an agentic-RL example using ROLL's
+pipeline infrastructure applied to a supply-chain risk environment. The
+following features require implementation and tests before this text can be
+used as a pull request description:
 
 - **Custom env integration** via `supplymind_roll_env.py` (registers with
   ROLL's agentic env factory).
@@ -28,7 +30,7 @@ environment. Demonstrates:
 - **Single-GPU 12 GB VRAM configuration** (HF strategy + LoRA), supplementing
   the existing multi-node configs.
 
-### What's in this PR
+### Planned files (not all present)
 
 ```
 examples/supplymind_crisis/

@@ -38,6 +38,8 @@ def _exists(path: str) -> bool:
 
 
 def _contains(path: str, *needles: str) -> bool:
+    if not _exists(path):
+        return False
     text = _read(path).lower()
     return all(n.lower() in text for n in needles)
 
