@@ -38,6 +38,8 @@ def _exists(path: str) -> bool:
 
 
 def _contains(path: str, *needles: str) -> bool:
+    if not _exists(path):
+        return False
     text = _read(path).lower()
     return all(n.lower() in text for n in needles)
 
@@ -175,8 +177,8 @@ def run_checks() -> list[Check]:
     # A.5: ROLL integration.
     checks.append(Check(
         "A.5.roll_env_importable_without_roll",
-        _contains("versions/v5_phoenix/roll_integration/env/supplymind_roll_env.py", "SupplyMindRollEnv", "supports_step_reward", "register_env", "except Exception"),
-        "SupplyMindRollEnv has step rewards and guarded ROLL registration",
+        _contains("versions/v5_phoenix/roll_integration/env/supplymind_roll_env.py", "SupplyMindRollEnv", "supports_step_reward", "register_env", "gem.register", "GemEnv"),
+        "SupplyMindRollEnv implements the GEM step contract and explicit registration",
     ))
     checks.append(Check(
         "A.5.reward_worker",

@@ -1,44 +1,36 @@
-"""
-RAG crisis documentation retrieval — Ollama-powered, NO fallback.
+"""Persistent local RAG with Ollama embeddings and SQLite cosine search.
 
-Production design:
-  - Embeddings: Ollama `nomic-embed-text` (768-d, runs locally, no HF dependency)
-  - Storage: ChromaDB persistent client at rl/rag/chroma_db/
-  - Retrieval: cosine similarity, min score threshold, or raise
-
-Legacy hardcoded-precedent path preserved in:
-  rl/legacy/fallbacks/rag_indexer_with_fallback.py  (tests/comparison only)
-
-Usage:
-    from rl.rag.indexer import CrisisRAG
-    rag = CrisisRAG()
-    rag.index_text("Supply chain report text...", source="McKinsey 2020")
-    results = rag.retrieve_precedents("TSMC disruption Taiwan earthquake")
-    if not results: raise RAGError("no precedent above threshold")
+The old Chroma index is read once from its SQLite queue when the new store is
+empty. No Chroma package or server is needed, and its source vectors remain
+available for migration on existing installations.
 """
 
 from __future__ import annotations
 
+import json
 import logging
+import sqlite3
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
-RAG_DB_PATH = Path(__file__).resolve().parent.parent.parent / "rl" / "rag" / "chroma_db"
+RAG_DB_PATH = Path(__file__).resolve().parent / "chroma_db"
 EMBEDDING_MODEL = "nomic-embed-text"
 EMBED_DIM = 768
 CHUNK_SIZE_WORDS = 300
-COLLECTION_NAME = "crisis_docs_v2"
-MIN_SCORE = 0.60  # cosine similarity threshold for "valid precedent"
+MIN_SCORE = 0.60
 
 
 class RAGError(RuntimeError):
-    """Raised when RAG cannot serve a query (no precedent above threshold, or backend down)."""
+    """Raised when RAG cannot serve a query or its local index is invalid."""
 
 
 class CrisisRAG:
-    """Production RAG with Ollama embeddings. No heuristic fallback."""
+    """Local persistent vector retrieval with the existing public API."""
 
     def __init__(
         self,
@@ -46,94 +38,122 @@ class CrisisRAG:
         embedding_model: str = EMBEDDING_MODEL,
         min_score: float = MIN_SCORE,
     ) -> None:
-        self.db_path = db_path or RAG_DB_PATH
+        self.db_path = Path(db_path) if db_path is not None else RAG_DB_PATH
         self.embedding_model_name = embedding_model
         self.min_score = min_score
-        self._client = None
-        self._collection = None
+        self._db_file = self.db_path / "vectors.sqlite3"
+        self._initialized = False
 
     def _ensure_initialized(self) -> None:
-        if self._client is not None:
+        if self._initialized:
             return
-        import chromadb
         self.db_path.mkdir(parents=True, exist_ok=True)
-        self._client = chromadb.PersistentClient(path=str(self.db_path))
-        self._collection = self._client.get_or_create_collection(
-            name=COLLECTION_NAME,
-            metadata={"hnsw:space": "cosine"},
-        )
-        logger.info("ChromaDB initialized at %s (%d documents)",
-                    self.db_path, self._collection.count())
+        with sqlite3.connect(self._db_file) as conn:
+            conn.execute(
+                "CREATE TABLE IF NOT EXISTS vectors ("
+                "id TEXT PRIMARY KEY, vector BLOB NOT NULL, "
+                "document TEXT NOT NULL, source TEXT NOT NULL)"
+            )
+            count = conn.execute("SELECT COUNT(*) FROM vectors").fetchone()[0]
+            legacy = self.db_path / "chroma.sqlite3"
+            if count == 0 and legacy.is_file():
+                self._migrate_chroma_queue(conn, legacy)
+        self._initialized = True
+
+    @staticmethod
+    def _migrate_chroma_queue(conn: sqlite3.Connection, legacy: Path) -> None:
+        """Import committed Chroma vectors without importing vulnerable code."""
+        with sqlite3.connect(legacy) as old:
+            rows = old.execute(
+                "SELECT id, vector, metadata FROM embeddings_queue "
+                "WHERE operation = 0 AND vector IS NOT NULL"
+            )
+            migrated = 0
+            for identifier, vector, raw_metadata in rows:
+                if len(vector) != EMBED_DIM * 4:
+                    raise RAGError(f"Legacy vector {identifier} has an unexpected dimension")
+                metadata = json.loads(raw_metadata or "{}")
+                document = metadata.get("chroma:document")
+                if not isinstance(document, str):
+                    raise RAGError(f"Legacy vector {identifier} has no document")
+                conn.execute(
+                    "INSERT OR IGNORE INTO vectors VALUES (?, ?, ?, ?)",
+                    (identifier, vector, document, str(metadata.get("source", "unknown"))),
+                )
+                migrated += 1
+        logger.info("Migrated %d vectors from the legacy Chroma SQLite queue", migrated)
 
     def _embed(self, texts: list[str]) -> list[list[float]]:
-        """Embed with Ollama nomic-embed-text. Raises RAGError on failure."""
+        """Embed with local Ollama; failures are explicit to callers."""
         import ollama
-        out = []
-        for t in texts:
+
+        output = []
+        for text in texts:
             try:
-                r = ollama.embeddings(model=self.embedding_model_name, prompt=t)
-                out.append(r["embedding"])
-            except Exception as e:
-                raise RAGError(f"Ollama embedding failed: {e}") from e
-        return out
+                embedding = ollama.embeddings(model=self.embedding_model_name, prompt=text)["embedding"]
+            except Exception as exc:
+                raise RAGError(f"Ollama embedding failed: {exc}") from exc
+            if len(embedding) != EMBED_DIM:
+                raise RAGError(f"Expected {EMBED_DIM} embedding dimensions, got {len(embedding)}")
+            output.append(embedding)
+        return output
 
     def index_text(self, text: str, source: str = "unknown", metadata: dict | None = None) -> int:
         self._ensure_initialized()
         words = text.split()
         chunks = []
-        for i in range(0, len(words), CHUNK_SIZE_WORDS):
-            chunk = " ".join(words[i:i + CHUNK_SIZE_WORDS])
+        for index in range(0, len(words), CHUNK_SIZE_WORDS):
+            chunk = " ".join(words[index:index + CHUNK_SIZE_WORDS])
             if len(chunk.strip()) > 50:
                 chunks.append(chunk)
         if not chunks:
             return 0
-
         embeddings = self._embed(chunks)
-        existing = self._collection.count()
-        ids = [f"{source}_{existing + i}" for i in range(len(chunks))]
-        metadatas = [{"source": source, "chunk_idx": i, **(metadata or {})} for i in range(len(chunks))]
-        self._collection.add(ids=ids, embeddings=embeddings, documents=chunks, metadatas=metadatas)
+        with sqlite3.connect(self._db_file) as conn:
+            conn.executemany(
+                "INSERT INTO vectors VALUES (?, ?, ?, ?)",
+                [
+                    (str(uuid4()), np.asarray(vector, dtype="<f4").tobytes(), chunk, source)
+                    for vector, chunk in zip(embeddings, chunks)
+                ],
+            )
         logger.info("Indexed %d chunks from '%s'", len(chunks), source)
         return len(chunks)
 
     def retrieve_precedents(self, query: str, n: int = 3) -> list[dict[str, Any]]:
-        """Retrieve top-n precedents. Returns only results with score >= min_score.
-
-        Returns empty list if collection is empty or nothing clears the threshold.
-        Caller should raise RAGError if emptiness is a hard error for their path.
-        """
+        """Return top-n documents whose cosine similarity clears min_score."""
         self._ensure_initialized()
-        if self._collection.count() == 0:
-            logger.warning("RAG collection empty — call build_corpus() to populate.")
+        with sqlite3.connect(self._db_file) as conn:
+            rows = conn.execute("SELECT vector, document, source FROM vectors").fetchall()
+        if not rows or n <= 0:
             return []
-
-        q_emb = self._embed([query])[0]
-        results = self._collection.query(
-            query_embeddings=[q_emb],
-            n_results=min(n, self._collection.count()),
-        )
-
-        precedents = []
-        for i in range(len(results["documents"][0])):
-            score = 1 - results["distances"][0][i]
-            if score < self.min_score:
-                continue
-            precedents.append({
-                "text": results["documents"][0][i],
-                "source": results["metadatas"][0][i].get("source", "unknown"),
-                "relevance_score": round(score, 3),
-            })
-        return precedents
+        query_vector = np.asarray(self._embed([query])[0], dtype=np.float32)
+        query_norm = np.linalg.norm(query_vector)
+        if query_norm == 0:
+            raise RAGError("Ollama returned a zero embedding")
+        vectors = np.stack([np.frombuffer(row[0], dtype="<f4") for row in rows])
+        if vectors.shape[1] != EMBED_DIM:
+            raise RAGError("Local index has an unexpected embedding dimension")
+        norms = np.linalg.norm(vectors, axis=1) * query_norm
+        scores = np.divide(vectors @ query_vector, norms, out=np.zeros(len(rows)), where=norms != 0)
+        top = np.argsort(-scores)[:n]
+        return [
+            {
+                "text": rows[index][1],
+                "source": rows[index][2],
+                "relevance_score": round(float(scores[index]), 3),
+            }
+            for index in top
+            if scores[index] >= self.min_score
+        ]
 
     def require_precedent(self, query: str) -> dict[str, Any]:
-        """Retrieve top precedent or raise RAGError. Use in production paths."""
-        ps = self.retrieve_precedents(query, n=1)
-        if not ps:
-            raise RAGError(
-                f"No precedent above threshold {self.min_score} for query: {query[:80]}"
-            )
-        return ps[0]
+        precedents = self.retrieve_precedents(query, n=1)
+        if not precedents:
+            raise RAGError(f"No precedent above threshold {self.min_score} for query: {query[:80]}")
+        return precedents[0]
 
     def count(self) -> int:
         self._ensure_initialized()
-        return self._collection.count()
+        with sqlite3.connect(self._db_file) as conn:
+            return conn.execute("SELECT COUNT(*) FROM vectors").fetchone()[0]

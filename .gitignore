@@ -9,6 +9,9 @@ __pycache__/
 .venv/
 venv/
 env/
+# The proposed ROLL adapter lives in a source directory named env, not a venv.
+!versions/v5_phoenix/roll_integration/env/
+!versions/v5_phoenix/roll_integration/env/**
 
 # Tooling state
 .claude/
