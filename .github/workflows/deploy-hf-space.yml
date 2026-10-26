@@ -47,7 +47,7 @@ jobs:
           print(f"Authenticated to Hugging Face as {identity.get('name')}; checking code before upload")
           PY
 
-      - uses: astral-sh/setup-uv@v10.2.0
+      - uses: astral-sh/setup-uv@v10.3.2
 
       - name: Verify before deployment
         run: |
