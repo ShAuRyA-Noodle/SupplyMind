@@ -3,11 +3,11 @@
 
 # Core ML
 torch>=2.13.0
-gymnasium==1.0.0
+gymnasium==1.4.0
 
 # RL frameworks
-stable-baselines3==2.9.0
-sb3-contrib==2.9.0
+stable-baselines3==2.9.2
+sb3-contrib==2.9.2
 d3rlpy==2.8.1
 
 # Transformers (for Decision Transformer backbone)
@@ -48,5 +48,5 @@ optuna>=3.4.0
 
 # ONNX export
 # ONNX Runtime 1.30 uses ONNX 1.22; keep exporter and runtime compatible.
-onnx==1.22.0
+onnx==1.23.2
 onnxruntime>=1.30.0

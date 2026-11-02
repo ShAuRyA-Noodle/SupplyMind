@@ -49,9 +49,9 @@ dev = [
 ]
 rl = [
     "torch>=2.13.0",
-    "gymnasium==1.0.0",
-    "stable-baselines3==2.9.0",
-    "sb3-contrib==2.9.0",
+    "gymnasium==1.4.0",
+    "stable-baselines3==2.9.2",
+    "sb3-contrib==2.9.2",
     "d3rlpy==2.8.1",
     "transformers>=5.10.0",
     "scipy>=1.11.0",
